@@ -775,21 +775,21 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
                 rename_skull_mask, 'out_file',
                 datasink, '@skull_mask')
             
-        #if "skull_ct_pipe" in params.keys() and "ct" in ssoft:
+        if "skull_ct_pipe" in params.keys() and "ct" in ssoft:
 
-            #### rename skull_stl
-            #rename_skull_stl = pe.Node(niu.Rename(), name = "rename_skull_stl")
-            #rename_skull_stl.inputs.format_string = pref_deriv + "_space-{}_desc-skull_mask".format(space)
-            #rename_skull_stl.inputs.parse_string = parse_str
-            #rename_skull_stl.inputs.keep_ext = True
+            ### rename skull_stl
+            rename_skull_stl = pe.Node(niu.Rename(), name = "rename_skull_stl")
+            rename_skull_stl.inputs.format_string = pref_deriv + "_space-{}_desc-skull_mask".format(space)
+            rename_skull_stl.inputs.parse_string = parse_str
+            rename_skull_stl.inputs.keep_ext = True
 
-            #main_workflow.connect(
-                #skull_ct_pipe, 'outputnode.skull_stl',
-                #rename_skull_stl, 'in_file')
+            main_workflow.connect(
+                skull_ct_pipe, 'outputnode.skull_stl',
+                rename_skull_stl, 'in_file')
 
-            #main_workflow.connect(
-                #rename_skull_stl, 'out_file',
-                #datasink, '@skull_stl')
+            main_workflow.connect(
+                rename_skull_stl, 'out_file',
+                datasink, '@skull_stl')
             
         #if "skull_ct_pipe" in params.keys() and "ct" in ssoft:
 

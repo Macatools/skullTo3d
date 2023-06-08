@@ -19,7 +19,7 @@ from nipype.interfaces.niftyreg.regutils import RegResample
 
 from macapype.utils.utils_nodes import NodeParams
 
-from nodes.skull import keep_gcc, wrap_nii2mesh, pad_zero_mri
+from nodes.skull import keep_gcc, wrap_nii2mesh, wrap_nii2mesh_old, pad_zero_mri
 
 from macapype.nodes.prepare import average_align
 
@@ -363,36 +363,36 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
                                skull_fov, "in_file")
     #"""
 
-    # creating outputnode #######
-    outputnode = pe.Node(
-        niu.IdentityInterface(
-            fields=["skull_mask"]),
-        name='outputnode')
-
-    skull_segment_pipe.connect(skull_fill_erode, "out_file",
-                               outputnode, "skull_mask")
-
-    ## mesh_skull #######
-    #mesh_skull = pe.Node(
-        #interface=niu.Function(input_names=["nii_file"],
-                               #output_names=["stl_file"],
-                               #function=wrap_nii2mesh),
-        #name="mesh_skull")
-
-    #skull_segment_pipe.connect(skull_fill_erode, "out_file",
-                               #mesh_skull, "nii_file")
-
-    ## creating outputnode #######
+    #creating outputnode #######
     #outputnode = pe.Node(
         #niu.IdentityInterface(
-            #fields=["skull_mask", "skull_stl"]),
+            #fields=["skull_mask"]),
         #name='outputnode')
-
-    #skull_segment_pipe.connect(mesh_skull, "stl_file",
-                               #outputnode, "skull_stl")
 
     #skull_segment_pipe.connect(skull_fill_erode, "out_file",
                                #outputnode, "skull_mask")
+
+    # mesh_skull #######
+    mesh_skull = pe.Node(
+        interface=niu.Function(input_names=["nii_file"],
+                               output_names=["stl_file"],
+                               function=wrap_nii2mesh_old),
+        name="mesh_skull")
+
+    skull_segment_pipe.connect(skull_fill_erode, "out_file",
+                               mesh_skull, "nii_file")
+
+    # creating outputnode #######
+    outputnode = pe.Node(
+        niu.IdentityInterface(
+            fields=["skull_mask", "skull_stl"]),
+        name='outputnode')
+
+    skull_segment_pipe.connect(mesh_skull, "stl_file",
+                               outputnode, "skull_stl")
+
+    skull_segment_pipe.connect(skull_fill_erode, "out_file",
+                               outputnode, "skull_mask")
 
     return skull_segment_pipe
 

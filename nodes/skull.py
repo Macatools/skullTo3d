@@ -75,6 +75,24 @@ def keep_gcc(nii_file):
 
 
 
+def wrap_nii2mesh_old(nii_file):
+
+    import os
+    from nipype.utils.filemanip import split_filename as split_f
+
+    path, fname, ext = split_f(nii_file)
+
+    stl_file = os.path.abspath(fname + ".stl")
+
+    cmd = "nii2mesh_old_gcc {} {}".format(nii_file, stl_file)
+
+    ret = os.system(cmd)
+
+    print(ret)
+
+    assert ret == 0, "Error, cmd {} did not work".format(cmd)
+    return stl_file
+
 def wrap_nii2mesh(nii_file):
 
     import os
