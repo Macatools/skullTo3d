@@ -640,6 +640,9 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
         skull_t1_pipe = create_skull_t1_pipe(
             params=parse_key(params, "skull_t1_pipe"))
 
+        main_workflow.connect(datasource, ('T1', get_first_elem),
+                              skull_t1_pipe, 'inputnode.t1')
+        
         #main_workflow.connect(segment_pnh_pipe,
         #                    "outputnode.cropped_brain_mask",
         #                        skull_t1_pipe, 'inputnode.brainmask')
