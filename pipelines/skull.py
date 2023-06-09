@@ -70,7 +70,7 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
                                #pad_fast2, "img_file")
 
     
-    head_mask
+    # head_mask
     head_mask = NodeParams(interface=Threshold(),
                            params=parse_key(params, "head_mask"),
                            name="head_mask")
@@ -78,7 +78,7 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
     skull_segment_pipe.connect(fast2_t1, "restored_image",
                                head_mask, "in_file")
 
-    head_mask_binary
+    # head_mask_binary
     head_mask_binary = pe.Node(interface=UnaryMaths(),
                                name="head_mask_binary")
 
@@ -88,7 +88,7 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
     skull_segment_pipe.connect(head_mask, "out_file",
                                head_mask_binary, "in_file")
 
-    keep_gcc_head
+    # keep_gcc_head
     keep_gcc_head = pe.Node(
         interface=niu.Function(input_names=["nii_file"],
                                output_names=["gcc_nii_file"],
@@ -98,7 +98,7 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
     skull_segment_pipe.connect(head_mask_binary, "out_file",
                                keep_gcc_head, "nii_file")
 
-    head_dilate
+    # head_dilate
     head_dilate = NodeParams(interface=DilateImage(),
                              params=parse_key(params, "head_dilate"),
                              name="head_dilate")
@@ -106,7 +106,7 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
     skull_segment_pipe.connect(keep_gcc_head, "gcc_nii_file",
                                head_dilate, "in_file")
 
-    head_fill
+    # head_fill
     head_fill = pe.Node(interface=UnaryMaths(),
                         name="head_fill")
 
@@ -115,7 +115,7 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
     skull_segment_pipe.connect(head_dilate, "out_file",
                                head_fill, "in_file")
 
-    head_erode
+    # head_erode
     head_erode = NodeParams(interface=ErodeImage(),
                             params=parse_key(params, "head_erode"),
                             name="head_erode")
@@ -123,7 +123,7 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
     skull_segment_pipe.connect(head_fill, "out_file",
                                head_erode, "in_file")
     
-    padded_fast2_t1_hmasked
+    # padded_fast2_t1_hmasked
     padded_fast2_t1_hmasked = pe.Node(interface=ApplyMask(),
                                  name="padded_fast2_t1_hmasked")
 
@@ -133,7 +133,7 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
     skull_segment_pipe.connect(head_erode, "out_file",
                                padded_fast2_t1_hmasked, "mask_file")
 
-    padded_fast2_t1_hmasked_recip
+    # padded_fast2_t1_hmasked_recip
     padded_fast2_t1_hmasked_recip = pe.Node(interface=UnaryMaths(),
                                             name="padded_fast2_t1_hmasked_recip")
 
@@ -142,7 +142,7 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
     skull_segment_pipe.connect(padded_fast2_t1_hmasked, "out_file",
                                padded_fast2_t1_hmasked_recip, "in_file")
 
-    padded_fast2_t1_hmasked_recip_log
+    # padded_fast2_t1_hmasked_recip_log
     padded_fast2_t1_hmasked_recip_log = pe.Node(
         interface=UnaryMaths(),
         name="padded_fast2_t1_hmasked_recip_log")
@@ -152,7 +152,7 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
     skull_segment_pipe.connect(padded_fast2_t1_hmasked_recip, "out_file",
                                padded_fast2_t1_hmasked_recip_log, "in_file")
 
-    padded_fast2_t1_hmasked_maths
+    # padded_fast2_t1_hmasked_maths
     padded_fast2_t1_hmasked_maths = pe.Node(
         interface=BinaryMaths(),
         params=parse_key(params, "padded_fast2_t1_hmasked_maths"),
@@ -161,7 +161,7 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
     skull_segment_pipe.connect(padded_fast2_t1_hmasked_recip_log, "out_file",
                                padded_fast2_t1_hmasked_maths, "in_file")
 
-    skull_t1
+    # skull_t1
     skull_t1 = NodeParams(
         interface=Threshold(),
         params=parse_key(params, "skull_t1"),
@@ -170,7 +170,7 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
     skull_segment_pipe.connect(padded_fast2_t1_hmasked_maths, "out_file",
                                skull_t1, "in_file")
 
-    skull_t1_gcc
+    # skull_t1_gcc
     skull_t1_gcc = pe.Node(
         interface=niu.Function(
             input_names=["nii_file"],
@@ -181,7 +181,7 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
     skull_segment_pipe.connect(skull_t1, "out_file",
                                skull_t1_gcc, "nii_file")
 
-    skull_t1_gcc_dilated
+    # skull_t1_gcc_dilated
     skull_t1_gcc_dilated = NodeParams(
         interface=DilateImage(),
         params=parse_key(params, "skull_t1_gcc_dilated"),
@@ -190,7 +190,7 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
     skull_segment_pipe.connect(skull_t1_gcc, "gcc_nii_file",
                                skull_t1_gcc_dilated, "in_file")
 
-    skull_t1_fill
+    # skull_t1_fill
     skull_t1_fill = pe.Node(interface=UnaryMaths(),
                          name="skull_t1_fill")
 
@@ -199,7 +199,7 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
     skull_segment_pipe.connect(skull_t1_gcc_dilated, "out_file",
                                skull_t1_fill, "in_file")
 
-    skull_t1_erode
+    # skull_t1_erode
     skull_t1_erode = NodeParams(interface=ErodeImage(),
                                   params=parse_key(params, "skull_t1_erode"),
                                   name="skull_t1_erode")
@@ -207,7 +207,7 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
     skull_segment_pipe.connect(skull_t1_fill, "out_file",
                                skull_t1_erode, "in_file")
 
-    skull_t1_bin
+    # skull_t1_bin
     skull_t1_bin = pe.Node(interface=UnaryMaths(),
                            name="skull_t1_bin")
 
@@ -217,7 +217,7 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
     skull_segment_pipe.connect(skull_t1_erode, "out_file",
                                skull_t1_bin, "in_file")
 
-    skull_t1_bin_gc
+    # skull_t1_bin_gc
     skull_t1_bin_gcc = pe.Node(
         interface=niu.Function(
             input_names=["nii_file"],
@@ -228,7 +228,7 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
     skull_segment_pipe.connect(skull_t1_bin, "out_file",
                                skull_t1_bin_gcc, "nii_file")
 
-    mesh_skull_t1 #######
+    # mesh_skull_t1 #######
     mesh_skull_t1 = pe.Node(
         interface=niu.Function(input_names=["nii_file"],
                                output_names=["stl_file"],
