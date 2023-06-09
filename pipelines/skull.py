@@ -6,7 +6,8 @@ import nipype.interfaces.utility as niu
 import nipype.pipeline.engine as pe
 
 from nipype.interfaces.fsl.maths import (
-    DilateImage, ErodeImage, ApplyMask, UnaryMaths, Threshold)
+    DilateImage, ErodeImage, BinaryMaths,
+    ApplyMask, UnaryMaths, Threshold)
 
 from nipype.interfaces.ants import DenoiseImage
 
