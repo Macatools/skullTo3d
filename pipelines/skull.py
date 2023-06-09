@@ -253,7 +253,7 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
     skull_segment_pipe.connect(skull_t1_bin_gcc, "gcc_nii_file",
                                outputnode, "skull_mask")
 
-    """
+   
     return skull_segment_pipe
 
 #################################################
