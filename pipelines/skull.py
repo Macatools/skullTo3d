@@ -363,16 +363,6 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
     skull_segment_pipe.connect(skull_bmask_cleaning, "gcc_nii_file",
                                skull_fov, "in_file")
     #"""
-
-    #creating outputnode #######
-    #outputnode = pe.Node(
-        #niu.IdentityInterface(
-            #fields=["skull_mask"]),
-        #name='outputnode')
-
-    #skull_segment_pipe.connect(skull_fill_erode, "out_file",
-                               #outputnode, "skull_mask")
-
     # mesh_skull #######
     mesh_skull = pe.Node(
         interface=niu.Function(input_names=["nii_file"],
@@ -386,14 +376,14 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
     # creating outputnode #######
     outputnode = pe.Node(
         niu.IdentityInterface(
-            fields=["skull_mask", "skull_stl"]),
+            fields=["stereo_skull_mask", "skull_stl"]),
         name='outputnode')
 
     skull_segment_pipe.connect(mesh_skull, "stl_file",
                                outputnode, "skull_stl")
 
     skull_segment_pipe.connect(skull_fill_erode, "out_file",
-                               outputnode, "skull_mask")
+                               outputnode, "stereo_skull_mask")
 
     return skull_segment_pipe
 

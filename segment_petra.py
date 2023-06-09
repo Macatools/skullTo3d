@@ -764,13 +764,13 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
 
             ### rename skull_mask
             rename_skull_mask = pe.Node(niu.Rename(), name = "rename_skull_mask")
-            rename_skull_mask.inputs.format_string = pref_deriv + "_space-{}_desc-skull_mask".format(space)
+            rename_skull_mask.inputs.format_string = pref_deriv + "_space-stereo_desc-skull_mask"
             rename_skull_mask.inputs.parse_string = parse_str
             rename_skull_mask.inputs.keep_ext = True
 
 
             main_workflow.connect(
-                    skull_ct_pipe, "outputnode.skull_mask",
+                    skull_ct_pipe, "outputnode.stereo_skull_mask",
                     rename_skull_mask, 'in_file')
 
                 
@@ -778,11 +778,9 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
                 rename_skull_mask, 'out_file',
                 datasink, '@skull_mask')
             
-        if "skull_ct_pipe" in params.keys() and "ct" in ssoft:
-
             ### rename skull_stl
             rename_skull_stl = pe.Node(niu.Rename(), name = "rename_skull_stl")
-            rename_skull_stl.inputs.format_string = pref_deriv + "_space-{}_desc-skull_mask".format(space)
+            rename_skull_stl.inputs.format_string = pref_deriv + "_desc-skull_mask"
             rename_skull_stl.inputs.parse_string = parse_str
             rename_skull_stl.inputs.keep_ext = True
 
