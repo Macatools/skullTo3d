@@ -135,10 +135,11 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
                                padded_fast2_t1_hmasked, "mask_file")
 
     # padded_fast2_t1_hmasked_recip
-    padded_fast2_t1_hmasked_recip = pe.Node(interface=UnaryMaths(),
-                                            name="padded_fast2_t1_hmasked_recip")
+    padded_fast2_t1_hmasked_recip = pe.Node(
+         interface=UnaryMaths(),
+         name="padded_fast2_t1_hmasked_recip")
 
-    padded_fast2_t1_hmasked_recip.inputs.operation = 'fillh'
+    padded_fast2_t1_hmasked_recip.inputs.operation = 'recip'
 
     skull_segment_pipe.connect(padded_fast2_t1_hmasked, "out_file",
                                padded_fast2_t1_hmasked_recip, "in_file")
