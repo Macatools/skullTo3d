@@ -317,16 +317,16 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
     skull_segment_pipe.connect(ct_thr, "out_file",
                                ct_binary, "in_file")
 
-    ## skull_gcc ####### [okey]
-    #skull_gcc = pe.Node(
-        #interface=niu.Function(
-            #input_names=["nii_file"],
-            #output_names=["gcc_nii_file"],
-            #function=keep_gcc),
-        #name="skull_gcc")
+    # skull_gcc ####### [okey]
+    skull_gcc = pe.Node(
+        interface=niu.Function(
+            input_names=["nii_file"],
+            output_names=["gcc_nii_file"],
+            function=keep_gcc),
+        name="skull_gcc")
 
-    #skull_segment_pipe.connect(ct_binary, "out_file",
-                               #skull_gcc, "nii_file")
+    skull_segment_pipe.connect(ct_binary, "out_file",
+                               skull_gcc, "nii_file")
 
     # skull_gcc_dilated ####### [okey][json]
     skull_gcc_dilated = NodeParams(
@@ -334,7 +334,8 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
         params=parse_key(params, "skull_gcc_dilated"),
         name="skull_gcc_dilated")
 
-    skull_segment_pipe.connect(ct_binary, "out_file",
+    # skull_segment_pipe.connect(ct_binary, "out_file",
+    skull_segment_pipe.connect(skull_gcc, "gcc_nii_file",
                                skull_gcc_dilated, "in_file")
 
     # skull_fill #######  [okey]
