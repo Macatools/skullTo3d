@@ -632,27 +632,27 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
                                brainmask_res, "ref_file")
     """
 
-    # brainmask_res_dilated ####### [okey][json]
-    brainmask_res_dilated = NodeParams(
-        interface=DilateImage(),
-        params=parse_key(params, "brainmask_res_dilated"),
-        name="brainmask_res_dilated")
+    #brainmask_res_dilated ####### [okey][json]
+    #brainmask_res_dilated = NodeParams(
+        #interface=DilateImage(),
+        #params=parse_key(params, "brainmask_res_dilated"),
+        #name="brainmask_res_dilated")
 
-    skull_segment_pipe.connect(inputnode, "stereo_native_T1",
-                               brainmask_res_dilated, "in_file")
+    #skull_segment_pipe.connect(inputnode, "stereo_native_T1",
+                               #brainmask_res_dilated, "in_file")
 
-    # skull_segment_pipe.connect(brainmask_res, "out_file",
-    # brainmask_res_dilated, "in_file")
+    #skull_segment_pipe.connect(brainmask_res, "out_file",
+    #brainmask_res_dilated, "in_file")
 
-    # skull_bmask ####### [okey]
-    skull_bmask = pe.Node(interface=ApplyMask(),
-                          name="skull_bmask")
+    #skull_bmask ####### [okey]
+    #skull_bmask = pe.Node(interface=ApplyMask(),
+                          #name="skull_bmask")
 
-    skull_segment_pipe.connect(skull_fill_erode, "out_file",
-                               skull_bmask, "in_file")
+    #skull_segment_pipe.connect(skull_fill_erode, "out_file",
+                               #skull_bmask, "in_file")
 
-    skull_segment_pipe.connect(brainmask_res_dilated, "out_file",
-                               skull_bmask, "mask_file")
+    #skull_segment_pipe.connect(brainmask_res_dilated, "out_file",
+                               #skull_bmask, "mask_file")
 
     # skull_bmask_cleaning ####### [okey]
     skull_bmask_cleaning = pe.Node(
@@ -661,7 +661,7 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
                                function=keep_gcc),
         name="skull_bmask_cleaning")
 
-    skull_segment_pipe.connect(skull_bmask, "out_file",
+    skull_segment_pipe.connect(skull_fill_erode, "out_file",
                                skull_bmask_cleaning, "nii_file")
 
     # skull_fov ####### [okey][json]
