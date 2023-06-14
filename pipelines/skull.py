@@ -155,7 +155,7 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
                                padded_fast2_t1_hmasked_recip_log, "in_file")
 
     # padded_fast2_t1_hmasked_maths
-    padded_fast2_t1_hmasked_maths = pe.Node(
+    padded_fast2_t1_hmasked_maths = NodeParams(
         interface=BinaryMaths(),
         params=parse_key(params, "padded_fast2_t1_hmasked_maths"),
         name="padded_fast2_t1_hmasked_maths")
