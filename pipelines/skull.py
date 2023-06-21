@@ -355,13 +355,12 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
     skull_segment_pipe.connect(skull_fill, "out_file",
                                skull_fill_erode, "in_file")
 
-    # skull_fov ####### [okey][json]
-    """
+    # skull_fov 
     skull_fov = NodeParams(interface=RobustFOV(),
                            params=parse_key(params, "skull_fov"),
                            name="skull_fov")
 
-    skull_segment_pipe.connect(skull_bmask_cleaning, "gcc_nii_file",
+    skull_segment_pipe.connect(skull_fill_erode, "out_file",
                                skull_fov, "in_file")
     #"""
 
@@ -383,15 +382,28 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
 
     skull_segment_pipe.connect(skull_fill_erode, "out_file",
                                mesh_skull, "nii_file")
+    
+    # mesh_skull_fov #######
+    mesh_skull_fov = pe.Node(
+        interface=niu.Function(input_names=["nii_file"],
+                               output_names=["stl_file"],
+                               function=wrap_nii2mesh_old),
+        name="mesh_skull_fov")
+
+    skull_segment_pipe.connect(skull_fov, "out_roi",
+                               mesh_skull_fov, "nii_file")
 
     # creating outputnode #######
     outputnode = pe.Node(
         niu.IdentityInterface(
-            fields=["skull_mask", "skull_stl"]),
+            fields=["skull_mask", "skull_stl", "skull_fov_stl"]),
         name='outputnode')
 
     skull_segment_pipe.connect(mesh_skull, "stl_file",
                                outputnode, "skull_stl")
+    
+    skull_segment_pipe.connect(mesh_skull_fov, "stl_file",
+                               outputnode, "skull_fov_stl")
 
     skull_segment_pipe.connect(skull_fill_erode, "out_file",
                                outputnode, "skull_mask")
