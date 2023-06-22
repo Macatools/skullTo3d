@@ -39,15 +39,30 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
     # Creating input node
     inputnode = pe.Node(
         niu.IdentityInterface(fields=['brainmask', 't1', 'debiased_T1',
-                                      'indiv_params']),
+                                      'indiv_params','stereo_native_T1',
+                                      'native_to_stereo_trans']),
         name='inputnode')
+    
+    
+    # align_on_stereo_native_T1
+    align_on_stereo_native_T1 = pe.Node(interface=RegResample(pad_val=0.0),
+                                           name="align_on_stereo_native_T1")
+
+    skull_segment_pipe.connect(inputnode, 't1',
+                               align_on_stereo_native_T1, "flo_file")
+
+    skull_segment_pipe.connect(inputnode, 'native_to_stereo_trans',
+                               align_on_stereo_native_T1, "trans_file")
+
+    skull_segment_pipe.connect(inputnode, "stereo_native_T1",
+                               align_on_stereo_native_T1, "ref_file")
 
     # fast_t1
     fast_t1 = NodeParams(interface=FAST(),
                          params=parse_key(params, "fast_t1"),
                          name="fast_t1")
 
-    skull_segment_pipe.connect(inputnode, "t1",
+    skull_segment_pipe.connect(align_on_stereo_native_T1, "out_file",
                                fast_t1, "in_files")
 
     # fast2_t1

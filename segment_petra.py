@@ -643,6 +643,14 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
         main_workflow.connect(datasource, ('T1', get_first_elem),
                               skull_t1_pipe, 'inputnode.t1')
         
+        main_workflow.connect(segment_pnh_pipe,
+                              "outputnode.stereo_native_T1",
+                              skull_t1_pipe, 'inputnode.stereo_native_T1')
+        
+        main_workflow.connect(segment_pnh_pipe,
+                              "outputnode.native_to_stereo_trans",
+                              skull_t1_pipe, 'inputnode.native_to_stereo_trans')
+        
         #main_workflow.connect(segment_pnh_pipe,
         #                    "outputnode.cropped_brain_mask",
         #                        skull_t1_pipe, 'inputnode.brainmask')
