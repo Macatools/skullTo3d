@@ -394,7 +394,7 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
             input_names=["nii_file"],
             output_names=["gcc_nii_file"],
             function=keep_gcc),
-        name="skull_gcc")
+        name="skull_fov_gcc")
 
     skull_segment_pipe.connect(skull_fov, "out_roi",
                                skull_fov_gcc, "nii_file")
