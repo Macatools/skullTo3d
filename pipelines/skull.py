@@ -11,7 +11,7 @@ from nipype.interfaces.fsl.maths import (
 
 from nipype.interfaces.ants import DenoiseImage
 
-# from nipype.interfaces.fsl.utils import RobustFOV, ExtractROI
+from nipype.interfaces.fsl.utils import RobustFOV
 from nipype.interfaces.fsl.preprocess import FAST, FLIRT
 
 
