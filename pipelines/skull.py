@@ -370,14 +370,6 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
     skull_segment_pipe.connect(skull_fill, "out_file",
                                skull_fill_erode, "in_file")
 
-    # skull_fov
-    skull_fov = NodeParams(interface=RobustFOV(),
-                           params=parse_key(params, "skull_fov"),
-                           name="skull_fov")
-
-    skull_segment_pipe.connect(skull_fill_erode, "out_file",
-                               skull_fov, "in_file")
-
     # mesh_skull #######
     mesh_skull = pe.Node(
         interface=niu.Function(input_names=["nii_file"],
@@ -388,6 +380,25 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
     skull_segment_pipe.connect(skull_fill_erode, "out_file",
                                mesh_skull, "nii_file")
 
+    # skull_fov
+    skull_fov = NodeParams(interface=RobustFOV(),
+                           params=parse_key(params, "skull_fov"),
+                           name="skull_fov")
+
+    skull_segment_pipe.connect(skull_fill_erode, "out_file",
+                               skull_fov, "in_file")
+
+    # skull_gcc ####### [okey]
+    skull_fov_gcc = pe.Node(
+        interface=niu.Function(
+            input_names=["nii_file"],
+            output_names=["gcc_nii_file"],
+            function=keep_gcc),
+        name="skull_gcc")
+
+    skull_segment_pipe.connect(skull_fov, "out_roi",
+                               skull_fov_gcc, "nii_file")
+
     # mesh_skull_fov #######
     mesh_skull_fov = pe.Node(
         interface=niu.Function(input_names=["nii_file"],
@@ -395,7 +406,7 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
                                function=wrap_nii2mesh_old),
         name="mesh_skull_fov")
 
-    skull_segment_pipe.connect(skull_fov, "out_roi",
+    skull_segment_pipe.connect(skull_fov_gcc, "gcc_nii_file",
                                mesh_skull_fov, "nii_file")
 
     # creating outputnode #######
