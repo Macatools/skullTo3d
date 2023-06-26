@@ -788,7 +788,7 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
             
             ### rename skull_stl
             rename_skull_stl = pe.Node(niu.Rename(), name = "rename_skull_stl")
-            rename_skull_stl.inputs.format_string = pref_deriv + "_desc-skull_mask"
+            rename_skull_stl.inputs.format_string = pref_deriv + "_space-stereo_desc-skull_mask"
             rename_skull_stl.inputs.parse_string = parse_str
             rename_skull_stl.inputs.keep_ext = True
 
@@ -804,7 +804,7 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
 
             ### rename skull_fov_stl
             rename_skull_fov_stl = pe.Node(niu.Rename(), name = "rename_skull_fov_stl")
-            rename_skull_fov_stl.inputs.format_string = pref_deriv + "_space-{}_desc-skullfov_mask".format(space)
+            rename_skull_fov_stl.inputs.format_string = pref_deriv + "_space-stereo_desc-skullfov_mask"
             rename_skull_fov_stl.inputs.parse_string = parse_str
             rename_skull_fov_stl.inputs.keep_ext = True
 
@@ -815,7 +815,6 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
             main_workflow.connect(
                 rename_skull_fov_stl, 'out_file',
                 datasink, '@skull_fov_stl')
-            
             
         #if "skull_ct_pipe" in params.keys() and "ct" in ssoft:
 
