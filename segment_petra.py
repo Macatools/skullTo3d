@@ -400,10 +400,15 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
             "datatype": "anat", "suffix": "T2w",
             "extension": ["nii", ".nii.gz"]}
 
+    #if 'petra' in ssoft:
+        #output_query['PETRA'] = {
+            #"datatype": "anat", "suffix": "T2star",
+            #"acquisition": "petra",
+            #"extension": ["nii", ".nii.gz"]}
+
     if 'petra' in ssoft:
         output_query['PETRA'] = {
             "datatype": "anat", "suffix": "PDw",
-            "acquisition": "petra",
             "extension": ["nii", ".nii.gz"]}
 
     if 'ct' in ssoft:
