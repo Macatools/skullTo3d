@@ -60,9 +60,7 @@ from nipype.interfaces.niftyreg.regutils import RegResample
 from macapype.pipelines.full_pipelines import (
     create_full_spm_subpipes,
     create_full_ants_subpipes,
-    create_full_T1_ants_subpipes,
-    create_transfo_FLAIR_pipe,
-    create_transfo_MD_pipe)
+    create_full_T1_ants_subpipes,)
 
 from macapype.utils.utils_bids import (create_datasource,
                                        create_datasource_indiv_params,
@@ -76,7 +74,8 @@ from macapype.utils.misc import show_files, get_first_elem, parse_key
 
 from macapype.pipelines.rename import rename_all_derivatives
 
-from pipelines.skull import create_skull_petra_pipe
+from pipelines.skull import create_skull_petra_pipe, create_skull_petra_T1_pipe
+
 from pipelines.skull import create_skull_ct_pipe
 from pipelines.skull import create_skull_t1_pipe
 
@@ -496,45 +495,46 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
         if "skull_petra_pipe" in params.keys():
             print("Found skull_petra_pipe")
 
-        skull_petra_pipe = create_skull_petra_pipe(
-            params=parse_key(params, "skull_petra_pipe"))
 
-        main_workflow.connect(datasource, ('PETRA', show_files), 
-                              skull_petra_pipe, 'inputnode.petra')
-        
-        #main_workflow.connect(segment_pnh_pipe,
-                              #"outputnode.stereo_smooth_bias",
-                              #skull_petra_pipe, 'inputnode.stereo_smooth_bias')
-        
-        main_workflow.connect(segment_pnh_pipe,
-                              "outputnode.native_T1",
-                              skull_petra_pipe, 'inputnode.native_T1')
-        
-        main_workflow.connect(segment_pnh_pipe,
-                              "outputnode.native_T2",
-                              skull_petra_pipe, 'inputnode.native_T2')
+        if "T1" in ssoft:
+            skull_petra_pipe = create_skull_petra_T1_pipe(
+                params=parse_key(params, "skull_petra_T1_pipe"))
 
-        #main_workflow.connect(segment_pnh_pipe,
-                              #"outputnode.stereo_brain_mask",
-                              #skull_petra_pipe, 'inputnode.stereo_brain_mask')
-                              
-        main_workflow.connect(segment_pnh_pipe,
-                              "outputnode.stereo_native_T1",
-                              skull_petra_pipe, 'inputnode.stereo_native_T1')
-        
-        main_workflow.connect(segment_pnh_pipe,
-                              "outputnode.native_to_stereo_trans",
-                              skull_petra_pipe, 'inputnode.native_to_stereo_trans')
-            
-                    
-        #main_workflow.connect(segment_pnh_pipe,
-                              #"outputnode.cropped_brain_mask",
-                              #skull_petra_pipe, 'inputnode.brainmask')
+            main_workflow.connect(datasource, ('PETRA', show_files),
+                                skull_petra_pipe, 'inputnode.petra')
 
-        #main_workflow.connect(segment_pnh_pipe,
-                              #"outputnode.cropped_debiased_T1",
-                              #skull_petra_pipe, 'inputnode.cropped_debiased_T1')
-            
+            main_workflow.connect(segment_pnh_pipe,
+                                "outputnode.native_T1",
+                                skull_petra_pipe, 'inputnode.native_T1')
+
+            main_workflow.connect(segment_pnh_pipe,
+                                "outputnode.stereo_native_T1",
+                                skull_petra_pipe, 'inputnode.stereo_native_T1')
+
+            main_workflow.connect(segment_pnh_pipe,
+                                "outputnode.native_to_stereo_trans",
+                                skull_petra_pipe, 'inputnode.native_to_stereo_trans')
+
+        else:
+
+            skull_petra_pipe = create_skull_petra_pipe(
+                params=parse_key(params, "skull_petra_pipe"))
+
+            main_workflow.connect(datasource, ('PETRA', show_files),
+                                skull_petra_pipe, 'inputnode.petra')
+
+            main_workflow.connect(segment_pnh_pipe,
+                                "outputnode.native_T1",
+                                skull_petra_pipe, 'inputnode.native_T2')
+
+            main_workflow.connect(segment_pnh_pipe,
+                                "outputnode.stereo_native_T1",
+                                skull_petra_pipe, 'inputnode.stereo_native_T1')
+
+            main_workflow.connect(segment_pnh_pipe,
+                                "outputnode.native_to_stereo_trans",
+                                skull_petra_pipe, 'inputnode.native_to_stereo_trans')
+
         if pad and space == "native":
             if "short_preparation_pipe" in params.keys():
                 if "crop_T1" in params["short_preparation_pipe"].keys():

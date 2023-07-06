@@ -433,7 +433,7 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
 ####################################################
 
 
-def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
+def create_skull_petra_T1_pipe(name="skull_petra_pipe", params={}):
 
     # creating pipeline
     skull_segment_pipe = pe.Workflow(name=name)
@@ -441,8 +441,7 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
     # Creating input node
     inputnode = pe.Node(
         niu.IdentityInterface(fields=['petra', 'stereo_native_T1', 'native_T1',
-                                      'native_T2', 'native_to_stereo_trans',
-                                      #'stereo_smooth_bias',
+                                      'native_to_stereo_trans',
                                       'indiv_params']),
         name='inputnode'
     )
@@ -457,7 +456,7 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
     skull_segment_pipe.connect(inputnode, 'petra',
                                av_PETRA, "list_img")
 
-    """
+
     # align_petra_on_T1
     align_petra_on_T1 = pe.Node(interface=FLIRT(),
                                 name="align_petra_on_T1")
@@ -471,28 +470,13 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
 
     skull_segment_pipe.connect(inputnode, "native_T1",
                                align_petra_on_T1, "reference")
-    """
-
-    # align_petra_on_T2
-    align_petra_on_T2 = pe.Node(interface=FLIRT(),
-                                name="align_petra_on_T2")
-
-    align_petra_on_T2.inputs.apply_xfm = True
-    align_petra_on_T2.inputs.uses_qform = True
-    align_petra_on_T2.inputs.interp = 'spline'
-
-    skull_segment_pipe.connect(av_PETRA, 'avg_img',
-                               align_petra_on_T2, "in_file")
-
-    skull_segment_pipe.connect(inputnode, "native_T2",
-                               align_petra_on_T2, "reference")
 
     # align_petra_on_stereo_native_T1
     align_petra_on_stereo_native_T1 = pe.Node(
         interface=RegResample(pad_val=0.0),
         name="align_petra_on_stereo_native_T1")
 
-    skull_segment_pipe.connect(align_petra_on_T2, 'out_file',
+    skull_segment_pipe.connect(align_petra_on_T1, 'out_file',
                                align_petra_on_stereo_native_T1, "flo_file")
 
     skull_segment_pipe.connect(inputnode, 'native_to_stereo_trans',
