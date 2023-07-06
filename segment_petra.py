@@ -400,33 +400,16 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
             "datatype": "anat", "suffix": "T2w",
             "extension": ["nii", ".nii.gz"]}
 
-    # FLAIR is optional, if "_FLAIR" is added in the -soft arg
-    if 'flair' in ssoft:
-        output_query['FLAIR'] = {
-            "datatype": "anat", "suffix": "FLAIR",
-            "extension": ["nii", ".nii.gz"]}
-
-    # FLAIR is optional, if "_FLAIR" is added in the -soft arg
     if 'petra' in ssoft:
         output_query['PETRA'] = {
-            "datatype": "anat", "suffix": "T2star",
+            "datatype": "anat", "suffix": "PDw",
             "acquisition": "petra",
             "extension": ["nii", ".nii.gz"]}
-        
+
     if 'ct' in ssoft:
         output_query['CT'] = {
             "datatype": "anat", "suffix": "T2star",
             "acquisition": "CT",
-            "extension": ["nii", ".nii.gz"]}
-
-    # MD and b0mean are optional, if "_MD" is added in the -soft arg
-    if 'md' in ssoft:
-        output_query['MD'] = {
-            "datatype": "dwi", "acquisition": "MD", "suffix": "dwi",
-            "extension": ["nii", ".nii.gz"]}
-
-        output_query['b0mean'] = {
-            "datatype": "dwi", "acquisition": "b0mean", "suffix": "dwi",
             "extension": ["nii", ".nii.gz"]}
 
     # indiv_params
