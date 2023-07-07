@@ -710,7 +710,7 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
     return skull_segment_pipe
 
 
-def create_skull_petra_T1_pipe(name="skull_petra_pipe", params={}):
+def create_skull_petra_T1_pipe(name="skull_petra_T1_pipe", params={}):
 
     # creating pipeline
     skull_segment_pipe = pe.Workflow(name=name)
