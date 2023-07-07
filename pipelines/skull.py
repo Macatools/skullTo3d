@@ -322,6 +322,10 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
     skull_segment_pipe.connect(align_ct_on_stereo_native_T1, "out_file",
                                ct_thr, "in_file")
 
+    skull_segment_pipe.connect(inputnode, "indiv_params",
+                               ct_thr, "indiv_params")
+
+
     # ct_binary ####### [okey]
     ct_binary = pe.Node(interface=UnaryMaths(),
                         name="ct_binary")
@@ -773,20 +777,25 @@ def create_skull_petra_T1_pipe(name="skull_petra_pipe", params={}):
     skull_segment_pipe.connect(denoise_petra, 'output_image',
                                fast_petra, "in_files")
 
-    # fast2_petra
-    fast2_petra = NodeParams(interface=FAST(),
-                             params=parse_key(params, "fast2_petra"),
-                             name="fast2_petra")
+    skull_segment_pipe.connect(inputnode, "indiv_params",
+                               fast_petra, "indiv_params")
 
-    skull_segment_pipe.connect(fast_petra, 'restored_image',
-                               fast2_petra, "in_files")
+
+    ## fast2_petra
+    #fast2_petra = NodeParams(interface=FAST(),
+                             #params=parse_key(params, "fast2_petra"),
+                             #name="fast2_petra")
+
+    #skull_segment_pipe.connect(fast_petra, 'restored_image',
+                               #fast2_petra, "in_files")
 
     # head_mask
     head_mask = NodeParams(interface=Threshold(),
                            params=parse_key(params, "head_mask"),
                            name="head_mask")
 
-    skull_segment_pipe.connect(fast2_petra, "restored_image",
+    #skull_segment_pipe.connect(fast2_petra, "restored_image",
+    skull_segment_pipe.connect(fast_petra, "restored_image",
                                head_mask, "in_file")
 
     # head_mask_binary
