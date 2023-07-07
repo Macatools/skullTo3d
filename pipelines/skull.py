@@ -872,7 +872,8 @@ def create_skull_petra_T1_pipe(name="skull_petra_pipe", params={}):
     fast_petra_hmasked = pe.Node(interface=ApplyMask(),
                                  name="fast_petra_hmasked")
 
-    skull_segment_pipe.connect(fast_petra, "restored_image",
+    #skull_segment_pipe.connect(fast_petra, "restored_image",
+    skull_segment_pipe.connect(denoise_petra, 'output_image',
                                fast_petra_hmasked, "in_file")
 
     skull_segment_pipe.connect(head_erode, "out_file",
