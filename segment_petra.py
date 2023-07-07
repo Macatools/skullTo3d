@@ -450,7 +450,7 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
         if "skull_petra_pipe" in params.keys():
             print("Found skull_petra_pipe")
 
-        if "T1" in ssoft:
+        if "t1" in ssoft:
             skull_petra_pipe = create_skull_petra_T1_pipe(
                 params=parse_key(params, "skull_petra_T1_pipe"))
 
