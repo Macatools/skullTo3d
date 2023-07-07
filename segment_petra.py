@@ -441,104 +441,42 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
         main_workflow.connect(datasource, 'T1',
                               segment_pnh_pipe, 'inputnode.list_T2')
 
-    if "flair" in ssoft:
-
-
-        if "transfo_FLAIR_pipe" in params.keys():
-            print("Found transfo_FLAIR_pipe")
-
-        transfo_FLAIR_pipe = create_transfo_FLAIR_pipe(params=parse_key(params, "transfo_FLAIR_pipe"),
-                                                       params_template=params_template)
-
-        if "t1" in ssoft:
-            main_workflow.connect(segment_pnh_pipe, "short_preparation_pipe.outputnode.preproc_T1",
-                                transfo_FLAIR_pipe, 'inputnode.orig_T1')
-
-        else:
-            main_workflow.connect(segment_pnh_pipe, "debias.t1_debiased_file",
-                                transfo_FLAIR_pipe, 'inputnode.orig_T1')
-
-
-        main_workflow.connect(segment_pnh_pipe, "reg.transfo_file",
-                              transfo_FLAIR_pipe, 'inputnode.lin_transfo_file')
-
-        main_workflow.connect(datasource, ('FLAIR', get_first_elem),
-                              transfo_FLAIR_pipe, 'inputnode.FLAIR')
-
-    if 'md' in ssoft:
-
-        if "transfo_MD_pipe" in params.keys():
-            print("Found transfo_MD_pipe")
-
-        transfo_MD_pipe = create_transfo_MD_pipe(params=parse_key(params, "transfo_MD_pipe"),
-                                                 params_template=params_template)
-
-        main_workflow.connect(segment_pnh_pipe,
-                                "old_segment_pipe.outputnode.threshold_wm",
-                                transfo_MD_pipe, 'inputnode.threshold_wm')
-
-        main_workflow.connect(datasource, ('MD', get_first_elem),
-                                transfo_MD_pipe, 'inputnode.MD')
-
-        main_workflow.connect(datasource, ('b0mean', get_first_elem),
-                                transfo_MD_pipe, 'inputnode.b0mean')
-
-        main_workflow.connect(segment_pnh_pipe, "debias.t1_debiased_file",
-                            transfo_MD_pipe, 'inputnode.orig_T1')
-
-        main_workflow.connect(segment_pnh_pipe, "debias.t2_debiased_brain_file",
-                            transfo_MD_pipe, 'inputnode.SS_T2')
-
-        main_workflow.connect(segment_pnh_pipe, "reg.transfo_file",
-                            transfo_MD_pipe, 'inputnode.lin_transfo_file')
-
-        main_workflow.connect(segment_pnh_pipe, "reg.inv_transfo_file",
-                            transfo_MD_pipe, 'inputnode.inv_lin_transfo_file')
-
     if "petra" in ssoft:
 
         if "skull_petra_pipe" in params.keys():
             print("Found skull_petra_pipe")
 
-
         if "T1" in ssoft:
             skull_petra_pipe = create_skull_petra_T1_pipe(
                 params=parse_key(params, "skull_petra_T1_pipe"))
 
-            main_workflow.connect(datasource, ('PETRA', show_files),
-                                skull_petra_pipe, 'inputnode.petra')
-
             main_workflow.connect(segment_pnh_pipe,
-                                "outputnode.native_T1",
-                                skull_petra_pipe, 'inputnode.native_T1')
-
-            main_workflow.connect(segment_pnh_pipe,
-                                "outputnode.stereo_native_T1",
-                                skull_petra_pipe, 'inputnode.stereo_native_T1')
-
-            main_workflow.connect(segment_pnh_pipe,
-                                "outputnode.native_to_stereo_trans",
-                                skull_petra_pipe, 'inputnode.native_to_stereo_trans')
+                                  "outputnode.native_T1",
+                                  skull_petra_pipe, 'inputnode.native_T1')
 
         else:
 
             skull_petra_pipe = create_skull_petra_pipe(
                 params=parse_key(params, "skull_petra_pipe"))
 
-            main_workflow.connect(datasource, ('PETRA', show_files),
-                                skull_petra_pipe, 'inputnode.petra')
-
             main_workflow.connect(segment_pnh_pipe,
-                                "outputnode.native_T1",
-                                skull_petra_pipe, 'inputnode.native_T2')
+                                  "outputnode.native_T1",
+                                  skull_petra_pipe, 'inputnode.native_T2')
 
-            main_workflow.connect(segment_pnh_pipe,
-                                "outputnode.stereo_native_T1",
-                                skull_petra_pipe, 'inputnode.stereo_native_T1')
+        # all remaining connection
+        main_workflow.connect(datasource, ('PETRA', show_files),
+                              skull_petra_pipe, 'inputnode.petra')
 
-            main_workflow.connect(segment_pnh_pipe,
-                                "outputnode.native_to_stereo_trans",
-                                skull_petra_pipe, 'inputnode.native_to_stereo_trans')
+        main_workflow.connect(segment_pnh_pipe,
+                              "outputnode.stereo_native_T1",
+                              skull_petra_pipe, 'inputnode.stereo_native_T1')
+
+        main_workflow.connect(segment_pnh_pipe,
+                              "outputnode.native_to_stereo_trans",
+                              skull_petra_pipe, 'inputnode.native_to_stereo_trans')
+
+        main_workflow.connect(datasource, "indiv_params",
+                              skull_petra_pipe, 'inputnode.indiv_params')
 
         if pad and space == "native":
             if "short_preparation_pipe" in params.keys():
@@ -874,6 +812,7 @@ def main():
                         default=None, help="Records")
     parser.add_argument("-params", dest="params_file", type=str,
                         help="Parameters json file", required=False)
+
     parser.add_argument("-indiv_params", "-indiv", dest="indiv_params_file",
                         type=str, help="Individual parameters json file",
                         required=False)
