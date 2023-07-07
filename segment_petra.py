@@ -234,7 +234,7 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
                 indiv_params_file)
             indiv_params = json.load(open(indiv_params_file))
 
-        print(indiv_params)
+        print("Using indiv_params:", indiv_params)
 
     wf_name += extra_wf_name
 
