@@ -423,7 +423,7 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
             output_query, data_dir, indiv_params, subjects, sessions,
             acquisitions, reconstructions)
 
-        main_workflow.connect(datasource, "indiv_params",
+        main_workflow.connect(datasource, ("indiv_params", show_files),
                               segment_pnh_pipe, 'inputnode.indiv_params')
     else:
         datasource = create_datasource(
