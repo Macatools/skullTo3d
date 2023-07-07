@@ -423,7 +423,7 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
             output_query, data_dir, indiv_params, subjects, sessions,
             acquisitions, reconstructions)
 
-        main_workflow.connect(datasource, ("indiv_params", show_files),
+        main_workflow.connect(datasource, "indiv_params",
                               segment_pnh_pipe, 'inputnode.indiv_params')
     else:
         datasource = create_datasource(
@@ -475,7 +475,7 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
                               "outputnode.native_to_stereo_trans",
                               skull_petra_pipe, 'inputnode.native_to_stereo_trans')
 
-        main_workflow.connect(datasource, "indiv_params",
+        main_workflow.connect(datasource, ("indiv_params", show_files),
                               skull_petra_pipe, 'inputnode.indiv_params')
 
         if pad and space == "native":
