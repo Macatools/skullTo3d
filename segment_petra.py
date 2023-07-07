@@ -419,6 +419,8 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
 
     # indiv_params
     if indiv_params:
+        print("Using indiv params")
+
         datasource = create_datasource_indiv_params(
             output_query, data_dir, indiv_params, subjects, sessions,
             acquisitions, reconstructions)
