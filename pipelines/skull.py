@@ -812,6 +812,10 @@ def create_skull_petra_T1_pipe(name="skull_petra_T1_pipe", params={}):
     skull_segment_pipe.connect(denoise_petra, 'output_image',
                                head_mask, "in_file")
 
+    # to use with indiv_params
+    skull_segment_pipe.connect(inputnode, "indiv_params",
+                               head_mask, "indiv_params")
+
     # head_mask_binary
     head_mask_binary = pe.Node(interface=UnaryMaths(),
                                name="head_mask_binary")
@@ -887,6 +891,10 @@ def create_skull_petra_T1_pipe(name="skull_petra_T1_pipe", params={}):
 
     skull_segment_pipe.connect(fast_petra_hmasked, "out_file",
                                fast_petra_hmasked_thr, "in_file")
+
+    # to use with indiv_params
+    skull_segment_pipe.connect(inputnode, "indiv_params",
+                               fast_petra_hmasked_thr, "indiv_params")
 
     # skull_gcc ####### [okey]
     skull_gcc = pe.Node(
