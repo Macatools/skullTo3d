@@ -792,9 +792,9 @@ def create_skull_petra_T1_pipe(name="skull_petra_T1_pipe", params={}):
     skull_segment_pipe.connect(denoise_petra, 'output_image',
                                fast_petra, "in_files")
 
-    skull_segment_pipe.connect(inputnode, "indiv_params",
-                               fast_petra, "indiv_params")
-
+    skull_segment_pipe.connect(
+        inputnode, ("indiv_params", parse_key, "fast_petra"),
+        fast_petra, "indiv_params")
 
     ### fast2_petra
     ##fast2_petra = NodeParams(interface=FAST(),
@@ -815,8 +815,9 @@ def create_skull_petra_T1_pipe(name="skull_petra_T1_pipe", params={}):
     #skull_segment_pipe.connect(denoise_petra, 'output_image',
                                head_mask, "in_file")
 
-    skull_segment_pipe.connect(inputnode, "indiv_params",
-                               head_mask, "indiv_params")
+    skull_segment_pipe.connect(
+        inputnode, ("indiv_params", parse_key, "head_mask"),
+        head_mask, "indiv_params")
 
     # head_mask_binary
     head_mask_binary = pe.Node(interface=UnaryMaths(),
@@ -894,8 +895,9 @@ def create_skull_petra_T1_pipe(name="skull_petra_T1_pipe", params={}):
     skull_segment_pipe.connect(fast_petra_hmasked, "out_file",
                                fast_petra_hmasked_thr, "in_file")
 
-    skull_segment_pipe.connect(inputnode, "indiv_params",
-                               fast_petra_hmasked_thr, "indiv_params")
+    skull_segment_pipe.connect(
+        inputnode, ("indiv_params", parse_key, "fast_petra_hmasked_thr"),
+        fast_petra_hmasked_thr, "indiv_params")
 
     # skull_gcc ####### [okey]
     skull_gcc = pe.Node(
