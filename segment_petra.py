@@ -440,6 +440,7 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
     if not "t1" in ssoft:
         main_workflow.connect(datasource, 'T2',
                               segment_pnh_pipe, 'inputnode.list_T2')
+
     elif "t1" in ssoft and "spm" in ssoft:
         # cheating using T2 as T1
         main_workflow.connect(datasource, 'T1',
