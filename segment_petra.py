@@ -479,7 +479,7 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
                               "outputnode.native_to_stereo_trans",
                               skull_petra_pipe, 'inputnode.native_to_stereo_trans')
 
-        main_workflow.connect(datasource, ("indiv_params", show_files),
+        main_workflow.connect(datasource, "indiv_params",
                               skull_petra_pipe, 'inputnode.indiv_params')
 
         if pad and space == "native":
