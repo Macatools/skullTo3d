@@ -560,7 +560,7 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
                     pad_robustskull_mask = pe.Node(RegResample(inter_val="NN"),
                                         name="pad_robustskull_mask")
 
-                    main_workflow.connect(robustskull_petra_pipe,
+                    main_workflow.connect(skull_petra_pipe,
                                     "outputnode.robustskull_mask",
                                     pad_robustskull_mask, "flo_file")
 
@@ -584,8 +584,7 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
                             #function=padding_cropped_img),
                         #name="pad_head_mask")
 
-                    #head_pipe.connect(brain_headment_pipe,
-                                    #"outputnode.headmented_file",
+                    #head_pipe.connect(skull_petra_pipe, "outputnode.head_mask",
                                     #pad_head_mask, "cropped_img_file")
 
                     #head_pipe.connect(data_preparation_pipe, "outputnode.native_T1",
@@ -603,7 +602,7 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
                     pad_head_mask = pe.Node(RegResample(inter_val="NN"),
                                         name="pad_head_mask")
 
-                    main_workflow.connect(head_petra_pipe,
+                    main_workflow.connect(skull_petra_pipe,
                                     "outputnode.head_mask",
                                     pad_head_mask, "flo_file")
 
