@@ -793,7 +793,7 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
 
             ### rename stereo_head_mask
             rename_stereo_head_mask = pe.Node(niu.Rename(), name = "rename_stereo_head_mask")
-            rename_stereo_head_mask.inputs.format_string = pref_deriv + "_space-stereo_desc-stereo_head_mask"
+            rename_stereo_head_mask.inputs.format_string = pref_deriv + "_space-stereo_desc-head_mask"
             rename_stereo_head_mask.inputs.parse_string = parse_str
             rename_stereo_head_mask.inputs.keep_ext = True
 
