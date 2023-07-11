@@ -991,7 +991,7 @@ def create_skull_petra_T1_pipe(name="skull_petra_T1_pipe", params={}):
                                function=wrap_nii2mesh_old),
         name="mesh_robustskull")
 
-    robustskull_segment_pipe.connect(skull_fov, "out_roi",
+    skull_segment_pipe.connect(skull_fov, "out_roi",
                                mesh_robustskull, "nii_file")
 
     # creating outputnode #######
