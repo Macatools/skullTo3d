@@ -667,8 +667,6 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
                 rename_skull_mask, 'out_file',
                 datasink, '@skull_mask')
             
-        if "skull_petra_pipe" in params.keys() and "petra" in ssoft:
-
             ### rename skull_stl
             rename_skull_stl = pe.Node(niu.Rename(), name = "rename_skull_stl")
             rename_skull_stl.inputs.format_string = pref_deriv + "_space-{}_desc-skull_mask".format(space)
@@ -683,7 +681,39 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
                 rename_skull_stl, 'out_file',
                 datasink, '@skull_stl')
             
-        if "skull_petra_pipe" in params.keys() and "petra" in ssoft:
+            ### rename robustskull_mask
+            rename_robustskull_mask = pe.Node(niu.Rename(), name = "rename_robustskull_mask")
+            rename_robustskull_mask.inputs.format_string = pref_deriv + "_space-{}_desc-robustskull_mask".format(space)
+            rename_robustskull_mask.inputs.parse_string = parse_str
+            rename_robustskull_mask.inputs.keep_ext = True
+
+            if pad:
+
+                main_workflow.connect(
+                        pad_robustskull_mask, "out_file",
+                        rename_robustskull_mask, 'in_file')
+            else:
+                main_workflow.connect(
+                        robustskull_petra_pipe, 'outputnode.robustskull_mask',
+                        rename_robustskull_mask, 'in_file')
+
+            main_workflow.connect(
+                rename_robustskull_mask, 'out_file',
+                datasink, '@robustskull_mask')
+
+            ### rename robustskull_stl
+            rename_robustskull_stl = pe.Node(niu.Rename(), name = "rename_robustskull_stl")
+            rename_robustskull_stl.inputs.format_string = pref_deriv + "_space-{}_desc-robustskull_mask".format(space)
+            rename_robustskull_stl.inputs.parse_string = parse_str
+            rename_robustskull_stl.inputs.keep_ext = True
+
+            main_workflow.connect(
+                robustskull_petra_pipe, 'outputnode.robustskull_stl',
+                rename_robustskull_stl, 'in_file')
+
+            main_workflow.connect(
+                rename_robustskull_stl, 'out_file',
+                datasink, '@robustskull_stl')
 
             ### rename head_mask
             rename_head_mask = pe.Node(niu.Rename(), name = "rename_head_mask")
