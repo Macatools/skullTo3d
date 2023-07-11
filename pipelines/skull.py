@@ -1012,7 +1012,7 @@ def create_skull_petra_T1_pipe(name="skull_petra_T1_pipe", params={}):
                                outputnode, "robustskull_mask")
 
     skull_segment_pipe.connect(mesh_robustskull, "stl_file",
-                               outputnode, "skull_stl")
+                               outputnode, "robustskull_stl")
 
     skull_segment_pipe.connect(skull_bmask_cleaning, "gcc_nii_file",
                                outputnode, "skull_mask")
