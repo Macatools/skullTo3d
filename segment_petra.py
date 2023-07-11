@@ -769,7 +769,7 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
             rename_stereo_skull_mask.inputs.keep_ext = True
 
             main_workflow.connect(
-                stereo_skull_petra_pipe, 'outputnode.skull_mask',
+                skull_petra_pipe, 'outputnode.skull_mask',
                 rename_stereo_skull_mask, 'in_file')
 
             main_workflow.connect(
