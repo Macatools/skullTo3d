@@ -781,7 +781,8 @@ def create_skull_petra_T1_pipe(name="skull_petra_T1_pipe", params={}):
     skull_segment_pipe.connect(denoise_petra, 'output_image',
                                 N4debias_petra, "input_image")
 
-    skull_segment_pipe.connect(inputnode, "indiv_params",
+    skull_segment_pipe.connect(inputnode,
+                               ("indiv_params", parse_key, "N4debias_petra"),
                                 N4debias_petra, "indiv_params")
 
     ## fast_petra
