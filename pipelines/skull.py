@@ -954,24 +954,8 @@ def create_skull_petra_T1_pipe(name="skull_petra_T1_pipe", params={}):
                                   params=parse_key(params, "skull_fill_erode"),
                                   name="skull_fill_erode")
 
-    # skull_fill_erode.inputs.kernel_shape = 'boxv'
-    # skull_fill_erode.inputs.kernel_size = 7.0
-
     skull_segment_pipe.connect(skull_fill, "out_file",
                                skull_fill_erode, "in_file")
-
-    # brainmask_res
-    """
-    brainmask_res = pe.Node(interface=RegResample(),
-                            name="brainmask_res")
-    brainmask_res.inputs.inter_val = 'NN'
-
-    skull_segment_pipe.connect(pad_brainmask, "img_padded_file",
-                               brainmask_res, "flo_file")
-
-    skull_segment_pipe.connect(skull_fill_erode, "out_file",
-                               brainmask_res, "ref_file")
-    """
 
     # skull_bmask_cleaning ####### [okey]
     skull_bmask_cleaning = pe.Node(
@@ -992,7 +976,6 @@ def create_skull_petra_T1_pipe(name="skull_petra_T1_pipe", params={}):
 
     skull_segment_pipe.connect(skull_bmask_cleaning, "gcc_nii_file",
                                mesh_skull, "nii_file")
-
 
     # skull_fov ####### [okey][json]
 
