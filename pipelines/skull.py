@@ -842,29 +842,30 @@ def create_skull_petra_T1_pipe(name="skull_petra_T1_pipe", params={}):
                                denoise_petra, 'input_image')
 
     # ### debias petra
-    # N4debias_petra
-    N4debias_petra = NodeParams(interface=N4BiasFieldCorrection(),
-                            params=parse_key(params, "N4debias_petra"),
-                            name="N4debias_petra")
 
-    skull_segment_pipe.connect(denoise_petra, 'output_image',
-                                N4debias_petra, "input_image")
-
-    skull_segment_pipe.connect(inputnode,
-                               ("indiv_params", parse_key, "N4debias_petra"),
-                                N4debias_petra, "indiv_params")
-
-    ## fast_petra
-    #fast_petra = NodeParams(interface=FAST(),
-                            #params=parse_key(params, "fast_petra"),
-                            #name="fast_petra")
+    ## N4debias_petra
+    #N4debias_petra = NodeParams(interface=N4BiasFieldCorrection(),
+                            #params=parse_key(params, "N4debias_petra"),
+                            #name="N4debias_petra")
 
     #skull_segment_pipe.connect(denoise_petra, 'output_image',
-                               #fast_petra, "in_files")
+                                #N4debias_petra, "input_image")
 
-    #skull_segment_pipe.connect(
-        #inputnode, ("indiv_params", parse_key, "fast_petra"),
-        #fast_petra, "indiv_params")
+    #skull_segment_pipe.connect(inputnode,
+                               #("indiv_params", parse_key, "N4debias_petra"),
+                                #N4debias_petra, "indiv_params")
+
+    # fast_petra
+    fast_petra = NodeParams(interface=FAST(),
+                            params=parse_key(params, "fast_petra"),
+                            name="fast_petra")
+
+    skull_segment_pipe.connect(denoise_petra, 'output_image',
+                               fast_petra, "in_files")
+
+    skull_segment_pipe.connect(
+        inputnode, ("indiv_params", parse_key, "fast_petra"),
+        fast_petra, "indiv_params")
 
     ### fast2_petra
     ##fast2_petra = NodeParams(interface=FAST(),
@@ -894,8 +895,8 @@ def create_skull_petra_T1_pipe(name="skull_petra_T1_pipe", params={}):
         name="fast_petra_hmasked_thr")
 
     #skull_segment_pipe.connect(fast2_petra, "restored_image",
-    #skull_segment_pipe.connect(fast_petra, "restored_image",
-    skull_segment_pipe.connect(N4debias_petra, "output_image",
+    skull_segment_pipe.connect(fast_petra, "restored_image",
+    #skull_segment_pipe.connect(N4debias_petra, "output_image",
     #skull_segment_pipe.connect(denoise_petra, 'output_image',
                                fast_petra_hmasked_thr, "in_file")
 
