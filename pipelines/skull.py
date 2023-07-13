@@ -820,7 +820,7 @@ def create_skull_petra_T1_pipe(name="skull_petra_T1_pipe", params={}):
                             params=parse_key(params, "head_erode"),
                             name="head_erode")
 
-    skull_segment_pipe.connect(head_fill, "gcc_nii_file",
+    skull_segment_pipe.connect(head_fill, "out_file",
                                head_erode, "in_file")
 
     # ### Masking with head mask
