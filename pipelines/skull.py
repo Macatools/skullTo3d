@@ -815,23 +815,12 @@ def create_skull_petra_T1_pipe(name="skull_petra_T1_pipe", params={}):
     skull_segment_pipe.connect(head_dilate, "out_file",
                                head_fill, "in_file")
 
-    # keep_gcc_head2 ####### This step is useless i must take it off
-    keep_gcc_head2 = pe.Node(
-        interface=niu.Function(
-            input_names=["nii_file"],
-            output_names=["gcc_nii_file"],
-            function=keep_gcc),
-        name="keep_gcc_head2")
-
-    skull_segment_pipe.connect(head_fill, "out_file",
-                               keep_gcc_head2, "nii_file")
-
     # head_erode ####### [okey][json]
     head_erode = NodeParams(interface=ErodeImage(),
                             params=parse_key(params, "head_erode"),
                             name="head_erode")
 
-    skull_segment_pipe.connect(keep_gcc_head2, "gcc_nii_file",
+    skull_segment_pipe.connect(head_fill, "gcc_nii_file",
                                head_erode, "in_file")
 
     # ### Masking with head mask
@@ -845,15 +834,9 @@ def create_skull_petra_T1_pipe(name="skull_petra_T1_pipe", params={}):
     skull_segment_pipe.connect(head_erode, "out_file",
                                fast_petra_hmasked, "mask_file")
 
-
-
-
-
-
     # denoise_petra
     denoise_petra = pe.Node(interface=DenoiseImage(),
                             name='denoise_petra')
-
 
     skull_segment_pipe.connect(fast_petra_hmasked, "out_file",
                                denoise_petra, 'input_image')
