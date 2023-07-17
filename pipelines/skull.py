@@ -671,15 +671,6 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
     skull_segment_pipe.connect(skull_fill_erode, "out_file",
                                skull_bmask_cleaning, "nii_file")
 
-    # skull_fov ####### [okey][json]
-    """
-    skull_fov = NodeParams(interface=RobustFOV(),
-                           params=parse_key(params, "skull_fov"),
-                           name="skull_fov")
-
-    skull_segment_pipe.connect(skull_bmask_cleaning, "gcc_nii_file",
-                               skull_fov, "in_file")
-    """
     # mesh_skull #######
     mesh_skull = pe.Node(
         interface=niu.Function(input_names=["nii_file"],
@@ -690,10 +681,31 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
     skull_segment_pipe.connect(skull_bmask_cleaning, "gcc_nii_file",
                                mesh_skull, "nii_file")
 
+
+    # skull_fov ####### [okey][json]
+    skull_fov = NodeParams(interface=RobustFOV(),
+                           params=parse_key(params, "skull_fov"),
+                           name="skull_fov")
+
+    skull_segment_pipe.connect(skull_bmask_cleaning, "gcc_nii_file",
+                               skull_fov, "in_file")
+
+    # mesh_skull #######
+    mesh_robustskull = pe.Node(
+        interface=niu.Function(input_names=["nii_file"],
+                               output_names=["stl_file"],
+                               function=wrap_nii2mesh),
+        name="mesh_robustskull")
+
+    skull_segment_pipe.connect(skull_fov, "out_roi",
+                               mesh_robustskull, "nii_file")
+
     # creating outputnode #######
     outputnode = pe.Node(
         niu.IdentityInterface(
-            fields=["skull_mask", "skull_stl", "head_mask"]),
+            fields=["skull_mask", "skull_stl",
+                    "robustskull_mask", "robustskull_stl",
+                    "head_mask"]),
         name='outputnode')
 
     skull_segment_pipe.connect(head_erode, "out_file",
@@ -704,6 +716,12 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
 
     skull_segment_pipe.connect(skull_bmask_cleaning, "gcc_nii_file",
                                outputnode, "skull_mask")
+
+    skull_segment_pipe.connect(skull_fov, "out_roi",
+                               outputnode, 'robustskull_mask')
+
+    skull_segment_pipe.connect(mesh_robustskull, "stl_file",
+                               outputnode, "robustskull_stl")
 
     return skull_segment_pipe
 
@@ -765,54 +783,13 @@ def create_skull_petra_T1_pipe(name="skull_petra_T1_pipe", params={}):
     skull_segment_pipe.connect(inputnode, "stereo_native_T1",
                                align_petra_on_stereo_native_T1, "ref_file")
 
-    # denoise_petra
-    denoise_petra = pe.Node(interface=DenoiseImage(),
-                            name='denoise_petra')
-
-    skull_segment_pipe.connect(align_petra_on_stereo_native_T1, "out_file",
-                               denoise_petra, 'input_image')
-
-    # debias petra
-    ## N4debias_petra
-    #N4debias_petra = NodeParams(interface=N4BiasFieldCorrection(),
-                            #params=parse_key(params, "N4debias_petra"),
-                            #name="N4debias_petra")
-
-    #skull_segment_pipe.connect(denoise_petra, 'output_image',
-                                #N4debias_petra, "input_image")
-
-    #skull_segment_pipe.connect(inputnode, "indiv_params",
-                                #N4debias_petra, "indiv_params")
-
-    # fast_petra
-    fast_petra = NodeParams(interface=FAST(),
-                            params=parse_key(params, "fast_petra"),
-                            name="fast_petra")
-
-    skull_segment_pipe.connect(denoise_petra, 'output_image',
-                               fast_petra, "in_files")
-
-    skull_segment_pipe.connect(
-        inputnode, ("indiv_params", parse_key, "fast_petra"),
-        fast_petra, "indiv_params")
-
-    ### fast2_petra
-    ##fast2_petra = NodeParams(interface=FAST(),
-                             ##params=parse_key(params, "fast2_petra"),
-                             ##name="fast2_petra")
-
-    ##skull_segment_pipe.connect(fast_petra, 'restored_image',
-                               ##fast2_petra, "in_files")
-
+    # ### head mask
     # head_mask
     head_mask = NodeParams(interface=Threshold(),
                            params=parse_key(params, "head_mask"),
                            name="head_mask")
 
-    #skull_segment_pipe.connect(fast2_petra, "restored_image",
-    skull_segment_pipe.connect(fast_petra, "restored_image",
-    #skull_segment_pipe.connect(N4debias_petra, "output_image",
-    #skull_segment_pipe.connect(denoise_petra, 'output_image',
+    skull_segment_pipe.connect(align_petra_on_stereo_native_T1, "out_file",
                                head_mask, "in_file")
 
     skull_segment_pipe.connect(
@@ -856,35 +833,67 @@ def create_skull_petra_T1_pipe(name="skull_petra_T1_pipe", params={}):
     skull_segment_pipe.connect(head_dilate, "out_file",
                                head_fill, "in_file")
 
-    # keep_gcc_head2 ####### This step is useless i must take it off
-    keep_gcc_head2 = pe.Node(
-        interface=niu.Function(
-            input_names=["nii_file"],
-            output_names=["gcc_nii_file"],
-            function=keep_gcc),
-        name="keep_gcc_head2")
-
-    skull_segment_pipe.connect(head_fill, "out_file",
-                               keep_gcc_head2, "nii_file")
-
     # head_erode ####### [okey][json]
     head_erode = NodeParams(interface=ErodeImage(),
                             params=parse_key(params, "head_erode"),
                             name="head_erode")
 
-    skull_segment_pipe.connect(keep_gcc_head2, "gcc_nii_file",
+    skull_segment_pipe.connect(head_fill, "out_file",
                                head_erode, "in_file")
 
+    # ### Masking with head mask
     # fast_petra_hmasked ####### [okey]
     fast_petra_hmasked = pe.Node(interface=ApplyMask(),
                                  name="fast_petra_hmasked")
 
-    skull_segment_pipe.connect(fast_petra, "restored_image",
-    #skull_segment_pipe.connect(denoise_petra, 'output_image',
+    skull_segment_pipe.connect(align_petra_on_stereo_native_T1, "out_file",
                                fast_petra_hmasked, "in_file")
 
     skull_segment_pipe.connect(head_erode, "out_file",
                                fast_petra_hmasked, "mask_file")
+
+    ## denoise_petra
+    #denoise_petra = pe.Node(interface=DenoiseImage(),
+                            #name='denoise_petra')
+
+    #skull_segment_pipe.connect(fast_petra_hmasked, "out_file",
+                               #denoise_petra, 'input_image')
+
+    # ### debias petra
+
+    ## N4debias_petra
+    #N4debias_petra = NodeParams(interface=N4BiasFieldCorrection(),
+                            #params=parse_key(params, "N4debias_petra"),
+                            #name="N4debias_petra")
+
+    #skull_segment_pipe.connect(denoise_petra, 'output_image',
+                                #N4debias_petra, "input_image")
+
+    #skull_segment_pipe.connect(inputnode,
+                               #("indiv_params", parse_key, "N4debias_petra"),
+                                #N4debias_petra, "indiv_params")
+
+    # fast_petra
+    fast_petra = NodeParams(interface=FAST(),
+                            params=parse_key(params, "fast_petra"),
+                            name="fast_petra")
+
+    #skull_segment_pipe.connect(denoise_petra, 'output_image',
+    skull_segment_pipe.connect(fast_petra_hmasked, "out_file",
+                               fast_petra, "in_files")
+
+    skull_segment_pipe.connect(
+        inputnode, ("indiv_params", parse_key, "fast_petra"),
+        fast_petra, "indiv_params")
+
+    ### fast2_petra
+    ##fast2_petra = NodeParams(interface=FAST(),
+                             ##params=parse_key(params, "fast2_petra"),
+                             ##name="fast2_petra")
+
+    ##skull_segment_pipe.connect(fast_petra, 'restored_image',
+                               ##fast2_petra, "in_files")
+
 
     # fast_petra_hmasked_thr ####### [okey][json]
     fast_petra_hmasked_thr = NodeParams(
@@ -892,7 +901,10 @@ def create_skull_petra_T1_pipe(name="skull_petra_T1_pipe", params={}):
         params=parse_key(params, "fast_petra_hmasked_thr"),
         name="fast_petra_hmasked_thr")
 
-    skull_segment_pipe.connect(fast_petra_hmasked, "out_file",
+    #skull_segment_pipe.connect(fast2_petra, "restored_image",
+    skull_segment_pipe.connect(fast_petra, "restored_image",
+    #skull_segment_pipe.connect(N4debias_petra, "output_image",
+    #skull_segment_pipe.connect(denoise_petra, 'output_image',
                                fast_petra_hmasked_thr, "in_file")
 
     skull_segment_pipe.connect(
@@ -934,24 +946,8 @@ def create_skull_petra_T1_pipe(name="skull_petra_T1_pipe", params={}):
                                   params=parse_key(params, "skull_fill_erode"),
                                   name="skull_fill_erode")
 
-    # skull_fill_erode.inputs.kernel_shape = 'boxv'
-    # skull_fill_erode.inputs.kernel_size = 7.0
-
     skull_segment_pipe.connect(skull_fill, "out_file",
                                skull_fill_erode, "in_file")
-
-    # brainmask_res
-    """
-    brainmask_res = pe.Node(interface=RegResample(),
-                            name="brainmask_res")
-    brainmask_res.inputs.inter_val = 'NN'
-
-    skull_segment_pipe.connect(pad_brainmask, "img_padded_file",
-                               brainmask_res, "flo_file")
-
-    skull_segment_pipe.connect(skull_fill_erode, "out_file",
-                               brainmask_res, "ref_file")
-    """
 
     # skull_bmask_cleaning ####### [okey]
     skull_bmask_cleaning = pe.Node(
@@ -963,29 +959,41 @@ def create_skull_petra_T1_pipe(name="skull_petra_T1_pipe", params={}):
     skull_segment_pipe.connect(skull_fill_erode, "out_file",
                                skull_bmask_cleaning, "nii_file")
 
+    # mesh_skull #######
+    mesh_skull = pe.Node(
+        interface=niu.Function(input_names=["nii_file"],
+                               output_names=["stl_file"],
+                               function=wrap_nii2mesh_old),
+        name="mesh_skull")
+
+    skull_segment_pipe.connect(skull_bmask_cleaning, "gcc_nii_file",
+                               mesh_skull, "nii_file")
+
     # skull_fov ####### [okey][json]
-    """
+
     skull_fov = NodeParams(interface=RobustFOV(),
                            params=parse_key(params, "skull_fov"),
                            name="skull_fov")
 
     skull_segment_pipe.connect(skull_bmask_cleaning, "gcc_nii_file",
                                skull_fov, "in_file")
-    """
-    # mesh_skull #######
-    mesh_skull = pe.Node(
+
+    # mesh_robustskull #######
+    mesh_robustskull = pe.Node(
         interface=niu.Function(input_names=["nii_file"],
                                output_names=["stl_file"],
-                               function=wrap_nii2mesh),
-        name="mesh_skull")
+                               function=wrap_nii2mesh_old),
+        name="mesh_robustskull")
 
-    skull_segment_pipe.connect(skull_bmask_cleaning, "gcc_nii_file",
-                               mesh_skull, "nii_file")
+    skull_segment_pipe.connect(skull_fov, "out_roi",
+                               mesh_robustskull, "nii_file")
 
     # creating outputnode #######
     outputnode = pe.Node(
         niu.IdentityInterface(
-            fields=["skull_mask", "skull_stl", "head_mask"]),
+            fields=["skull_mask", "skull_stl",
+                    "robustskull_mask", "robustskull_stl",
+                    "head_mask"]),
         name='outputnode')
 
     skull_segment_pipe.connect(head_erode, "out_file",
@@ -993,6 +1001,12 @@ def create_skull_petra_T1_pipe(name="skull_petra_T1_pipe", params={}):
 
     skull_segment_pipe.connect(mesh_skull, "stl_file",
                                outputnode, "skull_stl")
+
+    skull_segment_pipe.connect(skull_fov, "out_roi",
+                               outputnode, "robustskull_mask")
+
+    skull_segment_pipe.connect(mesh_robustskull, "stl_file",
+                               outputnode, "robustskull_stl")
 
     skull_segment_pipe.connect(skull_bmask_cleaning, "gcc_nii_file",
                                outputnode, "skull_mask")
