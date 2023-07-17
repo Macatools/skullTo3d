@@ -517,20 +517,12 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
     skull_segment_pipe.connect(denoise_petra, 'output_image',
                                fast_petra, "in_files")
 
-    # fast2_petra
-    fast2_petra = NodeParams(interface=FAST(),
-                             params=parse_key(params, "fast2_petra"),
-                             name="fast2_petra")
-
-    skull_segment_pipe.connect(fast_petra, 'restored_image',
-                               fast2_petra, "in_files")
-
     # head_mask
     head_mask = NodeParams(interface=Threshold(),
                            params=parse_key(params, "head_mask"),
                            name="head_mask")
 
-    skull_segment_pipe.connect(fast2_petra, "restored_image",
+    skull_segment_pipe.connect(fast_petra, "restored_image",
                                head_mask, "in_file")
 
     # head_mask_binary
