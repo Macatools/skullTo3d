@@ -508,7 +508,6 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
                            name="head_mask")
 
     skull_segment_pipe.connect(align_petra_on_stereo_native_T1, "out_file",
-    #skull_segment_pipe.connect(fast_petra, "restored_image",
                                head_mask, "in_file")
 
     skull_segment_pipe.connect(
@@ -578,19 +577,20 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
     skull_segment_pipe.connect(head_erode, "out_file",
                                fast_petra_hmasked, "mask_file")
 
-    # denoise_petra
-    denoise_petra = pe.Node(interface=DenoiseImage(),
-                            name='denoise_petra')
+    ## denoise_petra
+    #denoise_petra = pe.Node(interface=DenoiseImage(),
+                            #name='denoise_petra')
 
-    skull_segment_pipe.connect(fast_petra_hmasked, "out_file",
-                               denoise_petra, 'input_image')
+    #skull_segment_pipe.connect(fast_petra_hmasked, "out_file",
+                               #denoise_petra, 'input_image')
 
     # fast_petra
     fast_petra = NodeParams(interface=FAST(),
                             params=parse_key(params, "fast_petra"),
                             name="fast_petra")
 
-    skull_segment_pipe.connect(denoise_petra, 'output_image',
+    skull_segment_pipe.connect(fast_petra_hmasked, "out_file",
+    #skull_segment_pipe.connect(denoise_petra, 'output_image',
                                fast_petra, "in_files")
 
     # fast_petra_hmasked_thr ####### [okey][json]
