@@ -450,7 +450,7 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
 
     # average if multiple PETRA
     av_PETRA = pe.Node(
-        niu.Function(input_names=['list_img'],
+        niu.Function(input_names=['list_img', "reorient"],
                      output_names=['avg_img'],
                      function=average_align),
         name="av_PETRA")
@@ -577,20 +577,12 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
     skull_segment_pipe.connect(head_erode, "out_file",
                                fast_petra_hmasked, "mask_file")
 
-    ## denoise_petra
-    #denoise_petra = pe.Node(interface=DenoiseImage(),
-                            #name='denoise_petra')
-
-    #skull_segment_pipe.connect(fast_petra_hmasked, "out_file",
-                               #denoise_petra, 'input_image')
-
     # fast_petra
     fast_petra = NodeParams(interface=FAST(),
                             params=parse_key(params, "fast_petra"),
                             name="fast_petra")
 
     skull_segment_pipe.connect(fast_petra_hmasked, "out_file",
-    #skull_segment_pipe.connect(denoise_petra, 'output_image',
                                fast_petra, "in_files")
 
     # fast_petra_hmasked_thr ####### [okey][json]
@@ -744,13 +736,17 @@ def create_skull_petra_T1_pipe(name="skull_petra_T1_pipe", params={}):
 
     # average if multiple PETRA
     av_PETRA = pe.Node(
-        niu.Function(input_names=['list_img'],
+        niu.Function(input_names=['list_img', 'reorient'],
                      output_names=['avg_img'],
                      function=average_align),
         name="av_PETRA")
 
     skull_segment_pipe.connect(inputnode, 'petra',
                                av_PETRA, "list_img")
+
+    skull_segment_pipe.connect(inputnode,
+                                  ('indiv_params', parse_key, "av_PETRA"),
+                                  av_PETRA, 'indiv_params')
 
 
     # align_petra_on_T1
