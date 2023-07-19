@@ -735,7 +735,7 @@ def create_skull_petra_T1_pipe(name="skull_petra_T1_pipe", params={}):
     )
 
     # average if multiple PETRA
-    av_PETRA = pe.Node(
+    av_PETRA = NodeParams(
         niu.Function(input_names=['list_img', 'reorient'],
                      output_names=['avg_img'],
                      function=average_align),
