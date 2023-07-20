@@ -741,7 +741,7 @@ def create_skull_petra_T1_pipe(name="skull_petra_T1_pipe", params={}):
                                av_PETRA, "inputnode.list_img")
 
     skull_segment_pipe.connect(inputnode, 'indiv_params',
-                                  av_PETRA, 'indiv_params')
+                                  av_PETRA, 'inputnode.indiv_params')
 
 
     # align_petra_on_T1
