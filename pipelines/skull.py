@@ -735,7 +735,7 @@ def create_skull_petra_T1_pipe(name="skull_petra_T1_pipe", params={}):
     )
 
     # average if multiple PETRA
-    av_PETRA = _create_avg_reorient_pipe(name="av_PETRA")
+    av_PETRA = _create_avg_reorient_pipeline(name="av_PETRA")
 
     skull_segment_pipe.connect(inputnode, 'petra',
                                av_PETRA, "inputnode.list_img")
