@@ -22,7 +22,7 @@ from macapype.utils.utils_nodes import NodeParams
 
 from nodes.skull import keep_gcc, wrap_nii2mesh, wrap_nii2mesh_old, pad_zero_mri
 
-from macapype.nodes.prepare import average_align
+from macapype.pipelines.prepare import _create_avg_reorient_pipe
 
 from macapype.utils.misc import parse_key
 
@@ -735,17 +735,12 @@ def create_skull_petra_T1_pipe(name="skull_petra_T1_pipe", params={}):
     )
 
     # average if multiple PETRA
-    av_PETRA = NodeParams(
-        niu.Function(input_names=['list_img', 'reorient'],
-                     output_names=['avg_img'],
-                     function=average_align),
-        name="av_PETRA")
+    av_PETRA = _create_avg_reorient_pipe(name="av_PETRA")
 
     skull_segment_pipe.connect(inputnode, 'petra',
-                               av_PETRA, "list_img")
+                               av_PETRA, "inputnode.list_img")
 
-    skull_segment_pipe.connect(inputnode,
-                                  ('indiv_params', parse_key, "av_PETRA"),
+    skull_segment_pipe.connect(inputnode, 'indiv_params',
                                   av_PETRA, 'indiv_params')
 
 
@@ -757,7 +752,7 @@ def create_skull_petra_T1_pipe(name="skull_petra_T1_pipe", params={}):
     align_petra_on_T1.inputs.uses_qform = True
     align_petra_on_T1.inputs.interp = 'spline'
 
-    skull_segment_pipe.connect(av_PETRA, 'avg_img',
+    skull_segment_pipe.connect(av_PETRA, 'outputnode.std_img',
                                align_petra_on_T1, "in_file")
 
     skull_segment_pipe.connect(inputnode, "native_T1",
