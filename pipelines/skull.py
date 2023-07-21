@@ -449,14 +449,25 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
     )
 
     # average if multiple PETRA
-    av_PETRA = pe.Node(
-        niu.Function(input_names=['list_img', "reorient"],
-                     output_names=['avg_img'],
-                     function=average_align),
-        name="av_PETRA")
+    if "avg_reorient_pipe" in params.keys():
+        av_PETRA = _create_avg_reorient_pipeline(
+            name="av_PETRA", params = parse_key(params, "avg_reorient_pipe"))
 
-    skull_segment_pipe.connect(inputnode, 'petra',
-                               av_PETRA, "list_img")
+        skull_segment_pipe.connect(inputnode, 'petra',
+                                   av_PETRA, "inputnode.list_img")
+
+        skull_segment_pipe.connect(inputnode, 'indiv_params',
+                                   av_PETRA, "inputnode.indiv_params")
+    else:
+        av_PETRA = pe.Node(
+            niu.Function(input_names=['list_img', "reorient"],
+                        output_names=['avg_img'],
+                        function=average_align),
+            name="av_PETRA")
+
+        skull_segment_pipe.connect(inputnode, 'petra',
+                                av_PETRA, "list_img")
+
 
     """
     # align_petra_on_T1
@@ -482,8 +493,12 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
     align_petra_on_T2.inputs.uses_qform = True
     align_petra_on_T2.inputs.interp = 'spline'
 
-    skull_segment_pipe.connect(av_PETRA, 'avg_img',
-                               align_petra_on_T2, "in_file")
+    if "avg_reorient_pipe" in params.keys():
+        skull_segment_pipe.connect(av_PETRA, 'outputnode.std_img',
+                                   align_petra_on_T2, "in_file")
+    else:
+        skull_segment_pipe.connect(av_PETRA, 'avg_img',
+                                   align_petra_on_T2, "in_file")
 
     skull_segment_pipe.connect(inputnode, "native_T2",
                                align_petra_on_T2, "reference")
