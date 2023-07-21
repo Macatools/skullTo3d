@@ -469,7 +469,7 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
         av_PETRA = pe.Node(
             niu.Function(input_names=['list_img', "reorient"],
                          output_names=['avg_img'],
-                         function=av_PETRA),
+                         function=average_align),
             name="av_PETRA")
 
         skull_segment_pipe.connect(inputnode, 'petra',
