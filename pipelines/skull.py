@@ -24,6 +24,8 @@ from nodes.skull import keep_gcc, wrap_nii2mesh, wrap_nii2mesh_old, pad_zero_mri
 
 from macapype.pipelines.prepare import _create_avg_reorient_pipeline
 
+from macapype.nodes.prepare import average_align
+
 from macapype.utils.misc import parse_key
 
 #################################################
