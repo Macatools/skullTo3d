@@ -452,8 +452,10 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
 
     # average if multiple PETRA
     if "avg_reorient_pipe" in params.keys():
+        print("Found avg_reorient_pipe for av_PETRA")
+
         av_PETRA = _create_avg_reorient_pipeline(
-            name="av_PETRA", params = parse_key(params, "avg_reorient_pipe"))
+            name="av_PETRA", params=parse_key(params, "avg_reorient_pipe"))
 
         skull_segment_pipe.connect(inputnode, 'petra',
                                    av_PETRA, "inputnode.list_img")
@@ -461,15 +463,16 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
         skull_segment_pipe.connect(inputnode, 'indiv_params',
                                    av_PETRA, "inputnode.indiv_params")
     else:
+        print("Using average_align for av_PETRA")
+
         av_PETRA = pe.Node(
             niu.Function(input_names=['list_img', "reorient"],
-                        output_names=['avg_img'],
-                        function=average_align),
+                         output_names=['avg_img'],
+                         function=av_PETRA),
             name="av_PETRA")
 
         skull_segment_pipe.connect(inputnode, 'petra',
-                                av_PETRA, "list_img")
-
+                                   av_PETRA, "list_img")
 
     """
     # align_petra_on_T1
