@@ -464,6 +464,7 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
                                    av_PETRA, "inputnode.indiv_params")
     else:
         print("Using average_align for av_PETRA")
+        print(params)
 
         av_PETRA = pe.Node(
             niu.Function(input_names=['list_img', "reorient"],
