@@ -790,7 +790,7 @@ def create_skull_petra_T1_pipe(name="skull_petra_T1_pipe", params={}):
         name="headmask_threshold_value"
         
     skull_segment_pipe.connect(align_petra_on_stereo_native_T1, "out_file",
-                               headmask_threshold_value,"img_file")
+                               headmask_threshold_value, "img_file")
     
     # head_mask
     head_mask = pe.Node(interface=Threshold(),
