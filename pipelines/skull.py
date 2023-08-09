@@ -909,7 +909,7 @@ def create_skull_petra_T1_pipe(name="skull_petra_T1_pipe", params={}):
         interface=niu.Function(input_names=["img_file"],
                                output_names=["skull_extraction_threshold"],
                                function=automatic_threshold),
-        name="skull_extraction_threshold_value"
+        name="skull_extraction_threshold_value")
         
     skull_segment_pipe.connect(align_petra_on_stereo_native_T1, "out_file",
                                skull_extraction_threshold_value,"img_file")
