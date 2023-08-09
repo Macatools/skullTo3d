@@ -796,7 +796,7 @@ def create_skull_petra_T1_pipe(name="skull_petra_T1_pipe", params={}):
     head_mask = pe.Node(interface=Threshold(),
                         name="head_mask")
     
-    head_mask.inputs.thresh = 'headmask_threshold'
+    head_mask.inputs.thresh = headmask_threshold
     #head_mask.inputs.direction = 'above'
     
     skull_segment_pipe.connect(align_petra_on_stereo_native_T1, "out_file",
@@ -919,7 +919,7 @@ def create_skull_petra_T1_pipe(name="skull_petra_T1_pipe", params={}):
         interface=Threshold(),
         name="fast_petra_hmasked_thr")
 
-    fast_petra_hmasked_thr.inputs.thresh = 'skull_extraction_threshold'
+    fast_petra_hmasked_thr.inputs.thresh = skull_extraction_threshold
     fast_petra_hmasked_thr.inputs.direction = 'above'
 
     #skull_segment_pipe.connect(fast2_petra, "restored_image",
