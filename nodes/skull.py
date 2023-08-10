@@ -1,5 +1,5 @@
 
-def automatic_threshold(img_file):
+def headmask_auto_threshold(img_file):
     import os
     import numpy as np
     import nibabel as nib
@@ -13,12 +13,6 @@ def automatic_threshold(img_file):
         count = len(data)
         mean = total / count
         return mean
-
-    ## Import of the MRI image
-    # CENIR
-    #img_file = '/envau/work/nit/users/sghari.a/AutomaticThreshold/sub-Darwin_PDw_flirt_res_masked_restore.nii.gz'
-    # CERIMED
-    #img_file = '/envau/work/nit/users/sghari.a/AutomaticThreshold/sub-Ebdo_ses-01_rec-mean_petra_roi_restore_masked.nii.gz'
 
     img_nii = nib.load(img_file)
     img_arr = np.array(img_nii.dataobj)
@@ -37,6 +31,59 @@ def automatic_threshold(img_file):
 
     ## Fit the model to the data and predict cluster labels
     cluster_labels = kmeans.fit_predict(X)
+
+    ## Split data into groups based on cluster labels
+    groups = [X[cluster_labels == i].flatten() for i in range(num_clusters)]
+
+    ## Calculate the mean for each group
+    means = [calculate_mean(group) for group in groups]
+
+    ## We must define : the minimum of the second group for the headmask
+    # we create minimums array, we sort and then take the middle value
+    minimums_array = np.array([np.amin(groups[0]),np.amin(groups[1]),np.amin(groups[2])])
+    minimums_array_sorted = np.sort(minimums_array)
+    headmask_threshold = minimums_array_sorted[1]
+
+    ## Print the aminimum value of three groups
+    print("\namin_Group 1:", np.amin(groups[0]))
+    print("amin_Group 2:", np.amin(groups[1]))
+    print("amin_Group 3:", np.amin(groups[2]))
+
+    print("headmask_threshold : ",headmask_threshold)
+
+    return headmask_threshold
+
+
+def skull_auto_threshold(img_file):
+    import os
+    import numpy as np
+    import nibabel as nib
+    import matplotlib.pyplot as plt
+    from sklearn.cluster import KMeans
+    from nipype.utils.filemanip import split_filename as split_f
+
+    ## Mean function
+    def calculate_mean(data):
+        total = sum(data)
+        count = len(data)
+        mean = total / count
+        return mean
+
+    img_nii = nib.load(img_file)
+    img_arr = np.array(img_nii.dataobj)
+    img_arr_copy = np.copy(img_arr)
+    img_arr1d_copy = img_arr_copy.flatten()
+    data = img_arr1d_copy
+
+    ## Reshape data to a 2D array (required by k-means)
+    X = np.array(data).reshape(-1, 1)
+
+    ## Create a k-means clustering model with 3 clusters using k-means++ initialization
+    num_clusters = 3
+    kmeans = KMeans(n_clusters=num_clusters, random_state=0)
+
+    ## Fit the model to the data and predict cluster labels
+    cluster_labels = kmeans.fit_predict(X)
     print('cluster_labels:',cluster_labels)
 
     ## Split data into groups based on cluster labels
@@ -45,39 +92,19 @@ def automatic_threshold(img_file):
     ## Calculate the mean for each group
     means = [calculate_mean(group) for group in groups]
 
-    ## We must define : 
-        ## 
-        ## the minimum of the second group for the headmask
-        ## and the mean of the second group for the skull extraction
-    # we create minimums array, we sort and then take the middle value
-    minimums_array = np.array([np.amin(groups[0]),np.amin(groups[1]),np.amin(groups[2])])
-    minimums_array_sorted = np.sort(minimums_array)
-    headmask_threshold = minimums_array_sorted[1]
+    ## We must define : and the mean of the second group for the skull extraction
     # we create means array, we sort and then take the middle value
     means_array = np.array([means[0],means[1],means[2]])
     means_array_sorted = np.sort(means_array)
     skull_extraction_threshold = means_array_sorted[1]
     
-    ## Print the three groups
-    #print("\nGroup 1:", groups[0])
-    #print("Group 2:", groups[1])
-    #print("Group 3:", groups[2])
     ## Print the three means
     print("Mean1:", means[0])
     print("Mean2:", means[1])
     print("Mean3:", means[2])
-    ## Print the aminimum value of three groups
-    print("\namin_Group 1:", np.amin(groups[0]))
-    print("amin_Group 2:", np.amin(groups[1]))
-    print("amin_Group 3:", np.amin(groups[2]))
-    ## Print the maximum value of three groups
-    #print("\namax_Group 1:", np.amax(groups[0]))
-    #print("amax_Group 2:", np.amax(groups[1]))
-    #print("amax_Group 3:", np.amax(groups[2]))
-    print("headmask_threshold : ",headmask_threshold)
     print("skull_extraction_threshold : ",skull_extraction_threshold)
     
-    return headmask_threshold, skull_extraction_threshold
+    return skull_extraction_threshold
 
 
 def pad_zero_mri(img_file, pad_val=10):

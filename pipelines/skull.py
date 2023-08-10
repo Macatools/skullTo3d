@@ -780,13 +780,13 @@ def create_skull_petra_T1_pipe(name="skull_petra_T1_pipe", params={}):
 
     skull_segment_pipe.connect(inputnode, "stereo_native_T1",
                                align_petra_on_stereo_native_T1, "ref_file")
-
+    
     # ### head mask
     # headmask_threshold
     headmask_threshold_value = pe.Node(
         interface=niu.Function(input_names=["img_file"],
                                output_names=["headmask_threshold"],
-                               function=automatic_threshold),
+                               function=headmask_auto_threshold),
         name="headmask_threshold_value")
         
     skull_segment_pipe.connect(align_petra_on_stereo_native_T1, "out_file",
@@ -796,9 +796,8 @@ def create_skull_petra_T1_pipe(name="skull_petra_T1_pipe", params={}):
     head_mask = pe.Node(interface=Threshold(),
                         name="head_mask")
     
-    head_mask.inputs.thresh = headmask_threshold_value.headmask_threshold
-    #head_mask.inputs.direction = 'above'
-    
+    skull_segment_pipe.connect(headmask_threshold_value, "headmask_threshold",
+                               head_mask,"thresh")
     skull_segment_pipe.connect(align_petra_on_stereo_native_T1, "out_file",
                                head_mask, "in_file")
 
@@ -908,10 +907,10 @@ def create_skull_petra_T1_pipe(name="skull_petra_T1_pipe", params={}):
     skull_extraction_threshold_value = pe.Node(
         interface=niu.Function(input_names=["img_file"],
                                output_names=["skull_extraction_threshold"],
-                               function=automatic_threshold),
+                               function=skull_auto_threshold),
         name="skull_extraction_threshold_value")
         
-    skull_segment_pipe.connect(align_petra_on_stereo_native_T1, "out_file",
+    skull_segment_pipe.connect(fast_petra, "restored_image",
                                skull_extraction_threshold_value,"img_file")
     
     # fast_petra_hmasked_thr ####### [okey][json]
@@ -919,9 +918,10 @@ def create_skull_petra_T1_pipe(name="skull_petra_T1_pipe", params={}):
         interface=Threshold(),
         name="fast_petra_hmasked_thr")
 
-    fast_petra_hmasked_thr.inputs.thresh = skull_extraction_threshold_value.skull_extraction_threshold
     fast_petra_hmasked_thr.inputs.direction = 'above'
-
+    
+    skull_segment_pipe.connect(skull_extraction_threshold_value, "skull_extraction_threshold",
+                               fast_petra_hmasked_thr,"thresh")
     #skull_segment_pipe.connect(fast2_petra, "restored_image",
     skull_segment_pipe.connect(fast_petra, "restored_image",
     #skull_segment_pipe.connect(N4debias_petra, "output_image",
