@@ -20,7 +20,10 @@ from nipype.interfaces.niftyreg.regutils import RegResample
 
 from macapype.utils.utils_nodes import NodeParams
 
-from nodes.skull import automatic_threshold, keep_gcc, wrap_nii2mesh, wrap_nii2mesh_old, pad_zero_mri
+from nodes.skull import (
+    headmask_auto_threshold, skull_auto_threshold,
+    keep_gcc, wrap_nii2mesh, wrap_nii2mesh_old, 
+    pad_zero_mri)
 
 from macapype.nodes.prepare import average_align
 
