@@ -691,7 +691,7 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
     skull_segment_pipe.connect(skull_bmask_cleaning, "gcc_nii_file",
                                skull_fov, "in_file")
 
-    # mesh_skull #######
+    # mesh_robustskull #######
     mesh_robustskull = pe.Node(
         interface=niu.Function(input_names=["nii_file"],
                                output_names=["stl_file"],
