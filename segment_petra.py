@@ -88,7 +88,7 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
                          sessions, acquisitions, reconstructions,
                          params_file, indiv_params_file, mask_file,
                          template_path, template_files, nprocs,
-                         wf_name="macapype", deriv=False, pad=False):
+                         wf_name="macapype", deriv=False, pad=False, reorient = ""):
 
     # macapype_pipeline
     """ Set up the segmentatiopn pipeline based on ANTS
@@ -235,6 +235,20 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
             indiv_params = json.load(open(indiv_params_file))
 
         print("Using indiv_params:", indiv_params)
+
+    # modifying is reorient
+    if len(reorient) != 0:
+        print(reorient)
+
+        if "skull_petra_pipe" in params.keys():
+            params["skull_petra_pipe"]["avg_reorient_pipe"] = {
+                "reorient":
+                    {"origin": reorient, "deoblique": True}}
+
+        if "short_preparation_pipe" in params.keys():
+            params["short_preparation_pipe"]["avg_reorient_pipe"] = {
+                "reorient":
+                    {"origin": reorient, "deoblique": True}}
 
     wf_name += extra_wf_name
 
@@ -988,6 +1002,9 @@ def main():
                         help="output derivatives in BIDS orig directory",
                         required=False)
 
+    parser.add_argument("-reorient", dest="reorient", type=str,
+                        help="reorient initial image", required=False)
+
     parser.add_argument("-pad", dest="pad", action='store_true',
                         help="padding mask and seg_mask",
                         required=False)
@@ -1013,6 +1030,7 @@ def main():
         template_files=args.template_files,
         nprocs=args.nprocs,
         deriv=args.deriv,
+        reorient=args.reorient,
         pad=args.pad)
 
 if __name__ == '__main__':
