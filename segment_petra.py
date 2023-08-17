@@ -74,7 +74,7 @@ from macapype.utils.misc import show_files, get_first_elem, parse_key
 
 from macapype.pipelines.rename import rename_all_derivatives
 
-from pipelines.skull import create_skull_petra_pipe, create_skull_petra_T1_pipe
+from pipelines.skull import create_skull_petra_pipe
 
 from pipelines.skull import create_skull_ct_pipe
 from pipelines.skull import create_skull_t1_pipe
@@ -451,22 +451,19 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
         if "skull_petra_pipe" in params.keys():
             print("Found skull_petra_pipe")
 
+        skull_petra_pipe = create_skull_petra_pipe(
+            params=parse_key(params, "skull_petra_pipe"))
+
         if "t1" in ssoft:
-            skull_petra_pipe = create_skull_petra_T1_pipe(
-                params=parse_key(params, "skull_petra_pipe"))
 
             main_workflow.connect(segment_pnh_pipe,
                                   "outputnode.native_T1",
-                                  skull_petra_pipe, 'inputnode.native_T1')
+                                  skull_petra_pipe, 'inputnode.native_img')
 
         else:
-
-            skull_petra_pipe = create_skull_petra_pipe(
-                params=parse_key(params, "skull_petra_pipe"))
-
             main_workflow.connect(segment_pnh_pipe,
                                   "outputnode.native_T2",
-                                  skull_petra_pipe, 'inputnode.native_T2')
+                                  skull_petra_pipe, 'inputnode.native_img')
 
         # all remaining connection
         main_workflow.connect(datasource, ('PETRA', show_files),
