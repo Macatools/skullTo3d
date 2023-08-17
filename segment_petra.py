@@ -88,7 +88,7 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
                          sessions, acquisitions, reconstructions,
                          params_file, indiv_params_file, mask_file,
                          template_path, template_files, nprocs,
-                         wf_name="macapype", deriv=False, pad=False, reorient = ""):
+                         wf_name="macapype", deriv=False, pad=False, reorient):
 
     # macapype_pipeline
     """ Set up the segmentatiopn pipeline based on ANTS
@@ -237,8 +237,8 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
         print("Using indiv_params:", indiv_params)
 
     # modifying is reorient
-    if len(reorient) != 0:
-        print(reorient)
+    if reorient is not None:
+        print("reorient: ", reorient)
 
         if "skull_petra_pipe" in params.keys():
             params["skull_petra_pipe"]["avg_reorient_pipe"] = {
