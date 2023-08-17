@@ -544,7 +544,7 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
     head_mask = pe.Node(interface=Threshold(),
                         name="head_mask")
 
-    skull_segment_pipe.connect(headmask_threshold_value, "headmask_threshold",
+    skull_segment_pipe.connect(headmask_threshold_value, "mask_threshold",
                                head_mask, "thresh")
     skull_segment_pipe.connect(align_petra_on_stereo_native_T1, "out_file",
                                head_mask, "in_file")
@@ -605,33 +605,11 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
     skull_segment_pipe.connect(head_erode, "out_file",
                                fast_petra_hmasked, "mask_file")
 
-    ## denoise_petra
-    #denoise_petra = pe.Node(interface=DenoiseImage(),
-                            #name='denoise_petra')
-
-    #skull_segment_pipe.connect(fast_petra_hmasked, "out_file",
-                               #denoise_petra, 'input_image')
-
-    # ### debias petra
-
-    ## N4debias_petra
-    #N4debias_petra = NodeParams(interface=N4BiasFieldCorrection(),
-                            #params=parse_key(params, "N4debias_petra"),
-                            #name="N4debias_petra")
-
-    #skull_segment_pipe.connect(denoise_petra, 'output_image',
-                                #N4debias_petra, "input_image")
-
-    #skull_segment_pipe.connect(inputnode,
-                               #("indiv_params", parse_key, "N4debias_petra"),
-                                #N4debias_petra, "indiv_params")
-
     # fast_petra
     fast_petra = NodeParams(interface=FAST(),
                             params=parse_key(params, "fast_petra"),
                             name="fast_petra")
 
-    #skull_segment_pipe.connect(denoise_petra, 'output_image',
     skull_segment_pipe.connect(fast_petra_hmasked, "out_file",
                                fast_petra, "in_files")
 
@@ -639,40 +617,31 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
         inputnode, ("indiv_params", parse_key, "fast_petra"),
         fast_petra, "indiv_params")
 
-    ### fast2_petra
-    ##fast2_petra = NodeParams(interface=FAST(),
-                             ##params=parse_key(params, "fast2_petra"),
-                             ##name="fast2_petra")
-
-    ##skull_segment_pipe.connect(fast_petra, 'restored_image',
-                               ##fast2_petra, "in_files")
-
     # skull_extraction_threshold_value
     skull_extraction_threshold_value = pe.Node(
         interface=niu.Function(input_names=["img_file", "operation", "index"],
-                               output_names=["skull_extraction_threshold"],
+                               output_names=["mask_threshold"],
                                function=mask_auto_threshold),
         name="skull_extraction_threshold_value")
-        
+
     skull_extraction_threshold_value.inputs.operation = "mean"
     skull_extraction_threshold_value.inputs.index = 1
 
     skull_segment_pipe.connect(fast_petra, "restored_image",
-                               skull_extraction_threshold_value,"img_file")
-    
+                               skull_extraction_threshold_value, "img_file")
+
     # fast_petra_hmasked_thr ####### [okey][json]
     fast_petra_hmasked_thr = pe.Node(
         interface=Threshold(),
         name="fast_petra_hmasked_thr")
 
     fast_petra_hmasked_thr.inputs.direction = 'above'
-    
-    skull_segment_pipe.connect(skull_extraction_threshold_value, "skull_extraction_threshold",
-                               fast_petra_hmasked_thr,"thresh")
-    #skull_segment_pipe.connect(fast2_petra, "restored_image",
+
+    skull_segment_pipe.connect(skull_extraction_threshold_value,
+                               "mask_threshold",
+                               fast_petra_hmasked_thr, "thresh")
+
     skull_segment_pipe.connect(fast_petra, "restored_image",
-    #skull_segment_pipe.connect(N4debias_petra, "output_image",
-    #skull_segment_pipe.connect(denoise_petra, 'output_image',
                                fast_petra_hmasked_thr, "in_file")
 
   #  skull_segment_pipe.connect(
