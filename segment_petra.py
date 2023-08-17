@@ -87,8 +87,8 @@ fsl.FSLCommand.set_default_output_type('NIFTI_GZ')
 def create_main_workflow(data_dir, process_dir, soft, species, subjects,
                          sessions, acquisitions, reconstructions,
                          params_file, indiv_params_file, mask_file,
-                         template_path, template_files, nprocs,
-                         wf_name="macapype", deriv=False, pad=False, reorient):
+                         template_path, template_files, nprocs, reorient,
+                         deriv, pad, wf_name="macapype"):
 
     # macapype_pipeline
     """ Set up the segmentatiopn pipeline based on ANTS
@@ -998,12 +998,12 @@ def main():
     parser.add_argument("-nprocs", dest="nprocs", type=int,
                         help="number of processes to allocate", required=False)
 
+    parser.add_argument("-reorient", dest="reorient", type=str,
+                        help="reorient initial image", required=False)
+
     parser.add_argument("-deriv", dest="deriv", action='store_true',
                         help="output derivatives in BIDS orig directory",
                         required=False)
-
-    parser.add_argument("-reorient", dest="reorient", type=str,
-                        help="reorient initial image", required=False)
 
     parser.add_argument("-pad", dest="pad", action='store_true',
                         help="padding mask and seg_mask",
