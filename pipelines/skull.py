@@ -644,11 +644,6 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
     skull_segment_pipe.connect(fast_petra, "restored_image",
                                fast_petra_hmasked_thr, "in_file")
 
-  #  skull_segment_pipe.connect(
-   #     inputnode, ("indiv_params", parse_key, "fast_petra_hmasked_thr"),
-    #    fast_petra_hmasked_thr, "indiv_params")
-    
-
     # skull_gcc ####### [okey]
     skull_gcc = pe.Node(
         interface=niu.Function(
