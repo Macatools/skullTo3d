@@ -39,36 +39,30 @@ def mask_auto_threshold(img_file, operation, index):
 
     avail_operations = ["min", "mean"]
 
-    assert operation in , "Error, {} is not in {}".format(operation, avail_operations)
-    assert 0 <= index and index < num_clusters-1, "Error with index {}".format(index)
+    assert operation in avail_operations, "Error, \
+        {} is not in {}".format(operation, avail_operations)
 
-    if operation == "min": # for headmask
-        ## We must define : the minimum of the second group for the headmask
+    assert 0 <= index and index < num_clusters-1, "Error \
+        with index {}".format(index)
+
+    if operation == "min":  # for head mask
+        # We must define : the minimum of the second group for the headmask
         # we create minimums array, we sort and then take the middle value
-        minimums_array = np.array([np.amin(groups[0]),np.amin(groups[1]),np.amin(groups[2])])
+        minimums_array = np.array([np.amin(group) for group in groups])
         minimums_array_sorted = np.sort(minimums_array)
         mask_threshold = minimums_array_sorted[index]
 
-        ## Print the aminimum value of three groups
-        print("\namin_Group 1:", np.amin(groups[0]))
-        print("amin_Group 2:", np.amin(groups[1]))
-        print("amin_Group 3:", np.amin(groups[2]))
+        print("headmask_threshold : ", mask_threshold)
 
-        print("headmask_threshold : ",mask_threshold)
+    elif operation == "mean":  # for skull mask
 
-    elif operation == "mean": # for skull mask
-
-        ## We must define : and the mean of the second group for the skull extraction
+        # We must define :  mean of the second group for the skull extraction
         # we create means array, we sort and then take the middle value
         means_array = np.array([calculate_mean(group) for group in groups])
         means_array_sorted = np.sort(means_array)
         mask_threshold = means_array_sorted[index]
 
-        ## Print the three means
-        print("Mean1:", means[0])
-        print("Mean2:", means[1])
-        print("Mean3:", means[2])
-        print("skull_extraction_threshold : ",mask_threshold)
+        print("skull_extraction_threshold : ", mask_threshold)
 
     return mask_threshold
 
