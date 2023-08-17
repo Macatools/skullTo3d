@@ -21,8 +21,8 @@ from nipype.interfaces.niftyreg.regutils import RegResample
 from macapype.utils.utils_nodes import NodeParams
 
 from nodes.skull import (
-    headmask_auto_threshold, skull_auto_threshold,
-    keep_gcc, wrap_nii2mesh, wrap_nii2mesh_old, 
+    mask_auto_threshold,
+    keep_gcc, wrap_nii2mesh, wrap_nii2mesh_old,
     pad_zero_mri)
 
 from macapype.pipelines.prepare import _create_avg_reorient_pipeline
@@ -496,7 +496,7 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
 
     # align_petra_on_native
     align_petra_on_native = pe.Node(interface=FLIRT(),
-                                name="align_petra_on_T2")
+                                name="align_petra_on_native")
 
     align_petra_on_native.inputs.apply_xfm = True
     align_petra_on_native.inputs.uses_qform = True
@@ -529,10 +529,13 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
     # ### head mask
     # headmask_threshold
     headmask_threshold_value = pe.Node(
-        interface=niu.Function(input_names=["img_file"],
-                               output_names=["headmask_threshold"],
-                               function=headmask_auto_threshold),
+        interface=niu.Function(input_names=["img_file", "operation", "index"],
+                               output_names=["mask_threshold"],
+                               function=mask_auto_threshold),
         name="headmask_threshold_value")
+
+    headmask_threshold_value.inputs.operation = "min"
+    headmask_threshold_value.inputs.index = 1
 
     skull_segment_pipe.connect(align_petra_on_stereo_native_T1, "out_file",
                                headmask_threshold_value, "img_file")
@@ -646,11 +649,14 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
 
     # skull_extraction_threshold_value
     skull_extraction_threshold_value = pe.Node(
-        interface=niu.Function(input_names=["img_file"],
+        interface=niu.Function(input_names=["img_file", "operation", "index"],
                                output_names=["skull_extraction_threshold"],
-                               function=skull_auto_threshold),
+                               function=mask_auto_threshold),
         name="skull_extraction_threshold_value")
         
+    skull_extraction_threshold_value.inputs.operation = "mean"
+    skull_extraction_threshold_value.inputs.index = 1
+
     skull_segment_pipe.connect(fast_petra, "restored_image",
                                skull_extraction_threshold_value,"img_file")
     
