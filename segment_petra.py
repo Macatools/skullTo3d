@@ -236,7 +236,7 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
 
         print("Using indiv_params:", indiv_params)
 
-    # modifying is reorient
+    # modifying if reorient
     if reorient is not None:
         print("reorient: ", reorient)
 
@@ -1029,8 +1029,8 @@ def main():
         template_path=args.template_path,
         template_files=args.template_files,
         nprocs=args.nprocs,
-        deriv=args.deriv,
         reorient=args.reorient,
+        deriv=args.deriv,
         pad=args.pad)
 
 if __name__ == '__main__':
