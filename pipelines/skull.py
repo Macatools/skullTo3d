@@ -684,7 +684,7 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
             function=keep_gcc),
         name="skull_gcc")
 
-    skull_segment_pipe.connect(fast_petra_hmasked_thr, "out_file",
+    skull_segment_pipe.connect(skull_mask_thr, "out_file",
                                skull_gcc, "nii_file")
 
     # skull_gcc_dilated ####### [okey][json]
