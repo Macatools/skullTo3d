@@ -534,8 +534,6 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
                             params=parse_key(params, 'head_mask'),
                             name="head_mask")
 
-        skull_segment_pipe.connect(headmask_threshold_value, "mask_threshold",
-                                head_mask, "thresh")
         skull_segment_pipe.connect(align_petra_on_stereo_native_T1, "out_file",
                                 head_mask, "in_file")
 
