@@ -632,31 +632,50 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
                                fast_petra, "in_files")
 
     # skull_extraction_threshold_value
-    skull_extraction_threshold_value = pe.Node(
-        interface=niu.Function(input_names=["img_file", "operation", "index"],
-                               output_names=["mask_threshold"],
-                               function=mask_auto_threshold),
-        name="skull_extraction_threshold_value")
+    if "skull_mask_thr" in params.keys():
 
-    skull_extraction_threshold_value.inputs.operation = "mean"
-    skull_extraction_threshold_value.inputs.index = 1
+        # skull_mask_thr ####### [okey][json]
+        skull_mask_thr = NodeParams(
+            interface=Threshold(),
+            params = parse_key(params, "skull_mask_thr")
 
-    skull_segment_pipe.connect(fast_petra, "restored_image",
-                               skull_extraction_threshold_value, "img_file")
+            name="skull_mask_thr")
 
-    # fast_petra_hmasked_thr ####### [okey][json]
-    fast_petra_hmasked_thr = pe.Node(
-        interface=Threshold(),
-        name="fast_petra_hmasked_thr")
+        skull_mask_thr.inputs.direction = 'above'
 
-    fast_petra_hmasked_thr.inputs.direction = 'above'
+        skull_segment_pipe.connect(
+            inputnode, ("indiv_params", parse_key, "skull_mask_thr"),
+            skull_mask_thr, "indiv_params")
 
-    skull_segment_pipe.connect(skull_extraction_threshold_value,
-                               "mask_threshold",
-                               fast_petra_hmasked_thr, "thresh")
+        skull_segment_pipe.connect(fast_petra, "restored_image",
+                                   skull_mask_thr, "in_file")
+    else:
 
-    skull_segment_pipe.connect(fast_petra, "restored_image",
-                               fast_petra_hmasked_thr, "in_file")
+        skull_extraction_threshold_value = pe.Node(
+            interface=niu.Function(input_names=["img_file", "operation", "index"],
+                                output_names=["mask_threshold"],
+                                function=mask_auto_threshold),
+            name="skull_extraction_threshold_value")
+
+        skull_extraction_threshold_value.inputs.operation = "mean"
+        skull_extraction_threshold_value.inputs.index = 1
+
+        skull_segment_pipe.connect(fast_petra, "restored_image",
+                                skull_extraction_threshold_value, "img_file")
+
+        # skull_mask_thr ####### [okey][json]
+        skull_mask_thr = pe.Node(
+            interface=Threshold(),
+            name="skull_mask_thr")
+
+        skull_mask_thr.inputs.direction = 'above'
+
+        skull_segment_pipe.connect(skull_extraction_threshold_value,
+                                "mask_threshold",
+                                skull_mask_thr, "thresh")
+
+        skull_segment_pipe.connect(fast_petra, "restored_image",
+                                skull_mask_thr, "in_file")
 
     # skull_gcc ####### [okey]
     skull_gcc = pe.Node(
