@@ -637,8 +637,7 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
         # skull_mask_thr ####### [okey][json]
         skull_mask_thr = NodeParams(
             interface=Threshold(),
-            params = parse_key(params, "skull_mask_thr")
-
+            params=parse_key(params, "skull_mask_thr"),
             name="skull_mask_thr")
 
         skull_mask_thr.inputs.direction = 'above'
