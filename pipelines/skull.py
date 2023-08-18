@@ -528,44 +528,46 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
 
     # ### head mask
     # headmask_threshold
-    headmask_threshold_value = pe.Node(
-        interface=niu.Function(input_names=["img_file", "operation", "index"],
-                               output_names=["mask_threshold"],
-                               function=mask_auto_threshold),
-        name="headmask_threshold_value")
+    if "head_mask" in params.keys():
+        # head_mask
+        head_mask = NodeParams(interface=Threshold(),
+                            params=parse_key(params, 'head_mask'),
+                            name="head_mask")
 
-    headmask_threshold_value.inputs.operation = "min"
-    headmask_threshold_value.inputs.index = 1
+        skull_segment_pipe.connect(headmask_threshold_value, "mask_threshold",
+                                head_mask, "thresh")
+        skull_segment_pipe.connect(align_petra_on_stereo_native_T1, "out_file",
+                                head_mask, "in_file")
 
-    skull_segment_pipe.connect(align_petra_on_stereo_native_T1, "out_file",
-                               headmask_threshold_value, "img_file")
+        skull_segment_pipe.connect(inputnode,
+                                ('indiv_params', parse_key, "head_mask"),
+                                head_mask, "indiv_params")
+    else:
+        # headmask_threshold_value
+        headmask_threshold_value = pe.Node(
+            interface=niu.Function(input_names=["img_file", "operation", "index"],
+                                output_names=["mask_threshold"],
+                                function=mask_auto_threshold),
+            name="headmask_threshold_value")
 
-    # head_mask
-    head_mask = NodeParams(interface=Threshold(),
-                           params=parse_key(params, 'head_mask'),
-                           name="head_mask")
+        headmask_threshold_value.inputs.operation = "min"
+        headmask_threshold_value.inputs.index = 1
 
-    skull_segment_pipe.connect(headmask_threshold_value, "mask_threshold",
-                               head_mask, "thresh")
-    skull_segment_pipe.connect(align_petra_on_stereo_native_T1, "out_file",
-                               head_mask, "in_file")
+        skull_segment_pipe.connect(align_petra_on_stereo_native_T1, "out_file",
+                                headmask_threshold_value, "img_file")
 
-    skull_segment_pipe.connect(inputnode,
-                               ('indiv_params', parse_key, "head_mask"),
-                               head_mask, "indiv_params")
+        # head_mask
+        head_mask = pe.Node(interface=Threshold(),
+                            name="head_mask")
 
-    ## head_mask
-    #head_mask = pe.Node(interface=Threshold(),
-                        #name="head_mask")
+        skull_segment_pipe.connect(headmask_threshold_value, "mask_threshold",
+                                head_mask, "thresh")
+        skull_segment_pipe.connect(align_petra_on_stereo_native_T1, "out_file",
+                                head_mask, "in_file")
 
-    #skull_segment_pipe.connect(headmask_threshold_value, "mask_threshold",
-                               #head_mask, "thresh")
-    #skull_segment_pipe.connect(align_petra_on_stereo_native_T1, "out_file",
-                               #head_mask, "in_file")
-
-    #skull_segment_pipe.connect(inputnode,
-                               #('indiv_params', parse_key, "head_mask"),
-                               #head_mask, "indiv_params")
+        skull_segment_pipe.connect(inputnode,
+                                ('indiv_params', parse_key, "head_mask"),
+                                head_mask, "indiv_params")
 
     # head_mask_binary
     head_mask_binary = pe.Node(interface=UnaryMaths(),
