@@ -541,13 +541,31 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
                                headmask_threshold_value, "img_file")
 
     # head_mask
-    head_mask = pe.Node(interface=Threshold(),
-                        name="head_mask")
+    head_mask = NodeParams(interface=Threshold(),
+                           params=parse_key(params, 'head_mask'),
+                           name="head_mask")
 
     skull_segment_pipe.connect(headmask_threshold_value, "mask_threshold",
                                head_mask, "thresh")
     skull_segment_pipe.connect(align_petra_on_stereo_native_T1, "out_file",
                                head_mask, "in_file")
+
+    skull_segment_pipe.connect(inputnode,
+                               ('indiv_params', parse_key, "head_mask"),
+                               head_mask, "indiv_params")
+
+    ## head_mask
+    #head_mask = pe.Node(interface=Threshold(),
+                        #name="head_mask")
+
+    #skull_segment_pipe.connect(headmask_threshold_value, "mask_threshold",
+                               #head_mask, "thresh")
+    #skull_segment_pipe.connect(align_petra_on_stereo_native_T1, "out_file",
+                               #head_mask, "in_file")
+
+    #skull_segment_pipe.connect(inputnode,
+                               #('indiv_params', parse_key, "head_mask"),
+                               #head_mask, "indiv_params")
 
     # head_mask_binary
     head_mask_binary = pe.Node(interface=UnaryMaths(),
