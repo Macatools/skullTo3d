@@ -613,10 +613,6 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
     skull_segment_pipe.connect(fast_petra_hmasked, "out_file",
                                fast_petra, "in_files")
 
-    skull_segment_pipe.connect(
-        inputnode, ("indiv_params", parse_key, "fast_petra"),
-        fast_petra, "indiv_params")
-
     # skull_extraction_threshold_value
     skull_extraction_threshold_value = pe.Node(
         interface=niu.Function(input_names=["img_file", "operation", "index"],
