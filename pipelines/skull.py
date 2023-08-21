@@ -652,7 +652,7 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
                                 function=mask_auto_threshold),
             name="skull_extraction_threshold_value")
 
-        skull_extraction_threshold_value.inputs.operation = "mean"
+        skull_extraction_threshold_value.inputs.operation = "max"
         skull_extraction_threshold_value.inputs.index = 1
 
         skull_segment_pipe.connect(fast_petra, "restored_image",
