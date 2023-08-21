@@ -49,6 +49,7 @@ import os.path as op
 
 import argparse
 import json
+import pprint
 
 import nipype.pipeline.engine as pe
 import nipype.interfaces.utility as niu
@@ -250,6 +251,9 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
                 "reorient":
                     {"origin": reorient, "deoblique": True}}
 
+    pprint.pprint(params)
+
+    # Workflow
     wf_name += extra_wf_name
 
     # soft
