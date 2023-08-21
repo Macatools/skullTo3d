@@ -50,19 +50,19 @@ def mask_auto_threshold(img_file, operation, index):
     minimums_array = np.array([np.amin(group) for group in groups])
     minimums_array_sorted = np.sort(minimums_array)
 
-    print("Min : {}".format("".join(val for val in minimums_array_sorted)))
+    print("Min : {}".format("".join(str(val) for val in minimums_array_sorted)))
 
     # We must define :  mean of the second group for the skull extraction
     # we create means array, we sort and then take the middle value
     means_array = np.array([calculate_mean(group) for group in groups])
     means_array_sorted = np.sort(means_array)
 
-    print("Mean : {}".format("".join(val for val in means_array_sorted)))
+    print("Mean : {}".format("".join(str(val) for val in means_array_sorted)))
 
     maximums_array = np.array([np.amax(group) for group in groups])
     maximums_array_sorted = np.sort(maximums_array)
 
-    print("Min : {}".format("".join(val for val in maximums_array_sorted)))
+    print("Min : {}".format("".join(str(val) for val in maximums_array_sorted)))
 
     if operation == "min":  # for head mask
         mask_threshold = minimums_array_sorted[index]
