@@ -609,22 +609,22 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
                                head_erode, "in_file")
 
     # ### Masking with head mask
-    # fast_petra_hmasked ####### [okey]
-    fast_petra_hmasked = pe.Node(interface=ApplyMask(),
-                                 name="fast_petra_hmasked")
+    # petra_hmasked ####### [okey]
+    petra_hmasked = pe.Node(interface=ApplyMask(),
+                                 name="petra_hmasked")
 
     skull_segment_pipe.connect(align_petra_on_stereo_native_T1, "out_file",
-                               fast_petra_hmasked, "in_file")
+                               petra_hmasked, "in_file")
 
     skull_segment_pipe.connect(head_erode, "out_file",
-                               fast_petra_hmasked, "mask_file")
+                               petra_hmasked, "mask_file")
 
     # fast_petra
     fast_petra = NodeParams(interface=FAST(),
                             params=parse_key(params, "fast_petra"),
                             name="fast_petra")
 
-    skull_segment_pipe.connect(fast_petra_hmasked, "out_file",
+    skull_segment_pipe.connect(petra_hmasked, "out_file",
                                fast_petra, "in_files")
 
     # skull_extraction_threshold_value
