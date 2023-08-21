@@ -563,10 +563,6 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
         skull_segment_pipe.connect(align_petra_on_stereo_native_T1, "out_file",
                                 head_mask_thr, "in_file")
 
-        skull_segment_pipe.connect(inputnode,
-                                ('indiv_params', parse_key, "head_mask_thr"),
-                                head_mask_thr, "indiv_params")
-
     # head_mask_binary
     head_mask_binary = pe.Node(interface=UnaryMaths(),
                                name="head_mask_binary")
