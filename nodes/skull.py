@@ -45,24 +45,38 @@ def mask_auto_threshold(img_file, operation, index):
     assert 0 <= index and index < num_clusters-1, "Error \
         with index {}".format(index)
 
-    if operation == "min":  # for head mask
-        # We must define : the minimum of the second group for the headmask
-        # we create minimums array, we sort and then take the middle value
-        minimums_array = np.array([np.amin(group) for group in groups])
-        minimums_array_sorted = np.sort(minimums_array)
-        mask_threshold = minimums_array_sorted[index]
+    # We must define : the minimum of the second group for the headmask
+    # we create minimums array, we sort and then take the middle value
+    minimums_array = np.array([np.amin(group) for group in groups])
+    minimums_array_sorted = np.sort(minimums_array)
 
+    print("Min : {}".format("".join(val for val in minimums_array_sorted)))
+
+    # We must define :  mean of the second group for the skull extraction
+    # we create means array, we sort and then take the middle value
+    means_array = np.array([calculate_mean(group) for group in groups])
+    means_array_sorted = np.sort(means_array)
+
+    print("Mean : {}".format("".join(val for val in means_array_sorted)))
+
+    maximums_array = np.array([np.amax(group) for group in groups])
+    maximums_array_sorted = np.sort(maximums_array)
+
+    print("Min : {}".format("".join(val for val in maximums_array_sorted)))
+
+    if operation == "min":  # for head mask
+        mask_threshold = minimums_array_sorted[index]
         print("headmask_threshold : ", mask_threshold)
 
     elif operation == "mean":  # for skull mask
 
-        # We must define :  mean of the second group for the skull extraction
-        # we create means array, we sort and then take the middle value
-        means_array = np.array([calculate_mean(group) for group in groups])
-        means_array_sorted = np.sort(means_array)
         mask_threshold = means_array_sorted[index]
-
         print("skull_extraction_threshold : ", mask_threshold)
+
+    elif operation == "max":  # unused
+
+        mask_threshold = maximums_array_sorted[index]
+        print("max threshold : ", mask_threshold)
 
     return mask_threshold
 
