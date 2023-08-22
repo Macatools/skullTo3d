@@ -531,35 +531,47 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
     if "head_mask_thr" in params.keys():
         # head_mask_thr
         head_mask_thr = NodeParams(interface=Threshold(),
-                            params=parse_key(params, 'head_mask_thr'),
-                            name="head_mask_thr")
+                                   params=parse_key(params, 'head_mask_thr'),
+                                   name="head_mask_thr")
 
         skull_segment_pipe.connect(align_petra_on_stereo_native_T1, "out_file",
-                                head_mask_thr, "in_file")
+                                   head_mask_thr, "in_file")
 
-        skull_segment_pipe.connect(inputnode,
-                                ('indiv_params', parse_key, "head_mask_thr"),
-                                head_mask_thr, "indiv_params")
+        skull_segment_pipe.connect(
+            inputnode, ('indiv_params', parse_key, "head_mask_thr"),
+            head_mask_thr, "indiv_params")
     else:
-        # headmask_threshold_value
-        headmask_threshold_value = pe.Node(
-            interface=niu.Function(input_names=["img_file", "operation", "index"],
-                                output_names=["mask_threshold"],
-                                function=mask_auto_threshold),
-            name="headmask_threshold_value")
+        if "head_auto_thresh" in params.keys():
+            # head_auto_thresh
+            head_auto_thresh = NodeParams(
+                interface=niu.Function(
+                    input_names=["img_file", "operation", "index"],
+                    output_names=["mask_threshold"],
+                    function=mask_auto_threshold),
+                params=parse_key(params, "head_auto_thresh"),
+                name="head_auto_thresh")
 
-        #headmask_threshold_value.inputs.operation = "max"
-        headmask_threshold_value.inputs.operation = "min"
-        headmask_threshold_value.inputs.index = 1
+
+        else:
+            # head_auto_thresh
+            head_auto_thresh = pe.Node(
+                interface=niu.Function(input_names=["img_file", "operation", "index"],
+                                    output_names=["mask_threshold"],
+                                    function=mask_auto_threshold),
+                name="head_auto_thresh")
+
+            #head_auto_thresh.inputs.operation = "max"
+            head_auto_thresh.inputs.operation = "min"
+            head_auto_thresh.inputs.index = 1
 
         skull_segment_pipe.connect(align_petra_on_stereo_native_T1, "out_file",
-                                headmask_threshold_value, "img_file")
+                                head_auto_thresh, "img_file")
 
         # head_mask_thr
         head_mask_thr = pe.Node(interface=Threshold(),
                             name="head_mask_thr")
 
-        skull_segment_pipe.connect(headmask_threshold_value, "mask_threshold",
+        skull_segment_pipe.connect(head_auto_thresh, "mask_threshold",
                                 head_mask_thr, "thresh")
         skull_segment_pipe.connect(align_petra_on_stereo_native_T1, "out_file",
                                 head_mask_thr, "in_file")
@@ -628,7 +640,7 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
     skull_segment_pipe.connect(petra_hmasked, "out_file",
                                fast_petra, "in_files")
 
-    # skull_extraction_threshold_value
+    # skull_auto_thresh
     if "skull_mask_thr" in params.keys():
 
         # skull_mask_thr ####### [okey][json]
@@ -646,19 +658,32 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
         skull_segment_pipe.connect(fast_petra, "restored_image",
                                    skull_mask_thr, "in_file")
     else:
+        if "skull_auto_thresh" in params.keys():
 
-        skull_extraction_threshold_value = pe.Node(
-            interface=niu.Function(input_names=["img_file", "operation", "index"],
-                                output_names=["mask_threshold"],
-                                function=mask_auto_threshold),
-            name="skull_extraction_threshold_value")
+            skull_auto_thresh = NodeParams(
+                interface=niu.Function(input_names=["img_file", "operation", "index"],
+                                    output_names=["mask_threshold"],
+                                    function=mask_auto_threshold),
+                params=parse_key(params, "skull_auto_thresh"),
+                name="skull_auto_thresh")
 
-        #skull_extraction_threshold_value.inputs.operation = "max"
-        skull_extraction_threshold_value.inputs.operation = "min"
-        skull_extraction_threshold_value.inputs.index = 1
+            skull_segment_pipe.connect(
+                inputnode, ("indiv_params", parse_key, "skull_auto_thresh"),
+                skull_auto_thresh, "indiv_params")
+
+        else:
+            skull_auto_thresh = pe.Node(
+                interface=niu.Function(input_names=["img_file", "operation", "index"],
+                                    output_names=["mask_threshold"],
+                                    function=mask_auto_threshold),
+                name="skull_auto_thresh")
+
+            #skull_auto_thresh.inputs.operation = "max"
+            skull_auto_thresh.inputs.operation = "min"
+            skull_auto_thresh.inputs.index = 1
 
         skull_segment_pipe.connect(fast_petra, "restored_image",
-                                skull_extraction_threshold_value, "img_file")
+                                skull_auto_thresh, "img_file")
 
         # skull_mask_thr ####### [okey][json]
         skull_mask_thr = pe.Node(
@@ -667,7 +692,7 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
 
         skull_mask_thr.inputs.direction = 'above'
 
-        skull_segment_pipe.connect(skull_extraction_threshold_value,
+        skull_segment_pipe.connect(skull_auto_thresh,
                                 "mask_threshold",
                                 skull_mask_thr, "thresh")
 
