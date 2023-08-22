@@ -548,7 +548,8 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
                                 function=mask_auto_threshold),
             name="headmask_threshold_value")
 
-        headmask_threshold_value.inputs.operation = "max"
+        #headmask_threshold_value.inputs.operation = "max"
+        headmask_threshold_value.inputs.operation = "min"
         headmask_threshold_value.inputs.index = 1
 
         skull_segment_pipe.connect(align_petra_on_stereo_native_T1, "out_file",
