@@ -704,23 +704,24 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
     # skull_auto_thresh
     if "head_erode_skin" in params.keys():
 
-        head_erode_skin = NodeParams(interface=ErodeImage(),
-                            params=parse_key(params, "head_erode_skin"),
-                            name="head_erode_skin")
+        head_erode_skin = NodeParams(
+            interface=ErodeImage(),
+            params=parse_key(params, "head_erode_skin"),
+            name="head_erode_skin")
 
         skull_segment_pipe.connect(head_erode, "out_file",
-                               head_erode_skin, "in_file")
+                                   head_erode_skin, "in_file")
 
         # ### Masking with head mask
         # petra_hmasked ####### [okey]
         petra_skin_masked = pe.Node(interface=ApplyMask(),
-                                name="petra_skin_masked")
+                                    name="petra_skin_masked")
 
         skull_segment_pipe.connect(skull_mask_thr, "out_file",
-                                petra_skin_masked, "in_file")
+                                   petra_skin_masked, "in_file")
 
         skull_segment_pipe.connect(head_erode_skin, "out_file",
-                                petra_skin_masked, "mask_file")
+                                   petra_skin_masked, "mask_file")
 
     # skull_gcc ####### [okey]
     skull_gcc = pe.Node(
@@ -734,7 +735,7 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
 
         skull_segment_pipe.connect(petra_skin_masked, "out_file",
                                    skull_gcc, "nii_file")
-    else
+    else:
         skull_segment_pipe.connect(skull_mask_thr, "out_file",
                                    skull_gcc, "nii_file")
 
