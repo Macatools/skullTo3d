@@ -77,19 +77,6 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
     skull_segment_pipe.connect(fast_t1, "restored_image",
                                fast2_t1, "in_files")
 
-    #pad_fast2
-    #pad_fast2 = NodeParams(
-        #interface=niu.Function(
-            #input_names=["img_file", "pad_val"],
-            #output_names=["img_padded_file"],
-            #function=pad_zero_mri),
-        #params=parse_key(params, "pad_fast2"),
-        #name="pad_fast2")
-
-    #skull_segment_pipe.connect(fast2_t1, "restored_image",
-                               #pad_fast2, "img_file")
-
-    
     # head_mask
     head_mask = NodeParams(interface=Threshold(),
                            params=parse_key(params, "head_mask"),
