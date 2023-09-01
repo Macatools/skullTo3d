@@ -103,10 +103,10 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
     head_mask_binary.inputs.output_type = 'NIFTI_GZ'
 
     if "head_mask" in params.keys():
-        skull_segment_pipe.connect(head_mask, "out_file",
+        skull_segment_pipe.connect(head_mask, "mask_img",
                                    head_mask_binary, "in_file")
     else:
-        skull_segment_pipe.connect(head_auto_thresh, "out_file",
+        skull_segment_pipe.connect(head_auto_mask, "out_file",
                                    head_mask_binary, "in_file")
 
     # keep_gcc_head
