@@ -69,20 +69,12 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
     skull_segment_pipe.connect(align_on_stereo_native_T1, "out_file",
                                fast_t1, "in_files")
 
-    # fast2_t1
-    fast2_t1 = NodeParams(interface=FAST(),
-                          params=parse_key(params, "fast2_t1"),
-                          name="fast2_t1")
-
-    skull_segment_pipe.connect(fast_t1, "restored_image",
-                               fast2_t1, "in_files")
-
     # head_mask
     head_mask = NodeParams(interface=Threshold(),
                            params=parse_key(params, "head_mask"),
                            name="head_mask")
 
-    skull_segment_pipe.connect(fast2_t1, "restored_image",
+    skull_segment_pipe.connect(fast_t1, "restored_image",
                                head_mask, "in_file")
 
     # head_mask_binary
