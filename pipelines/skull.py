@@ -126,7 +126,7 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
     padded_fast2_t1_hmasked = pe.Node(interface=ApplyMask(),
                                  name="padded_fast2_t1_hmasked")
 
-    skull_segment_pipe.connect(fast2_t1, "restored_image",
+    skull_segment_pipe.connect(fast_t1, "restored_image",
                                padded_fast2_t1_hmasked, "in_file")
 
     skull_segment_pipe.connect(head_erode, "out_file",
