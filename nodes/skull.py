@@ -81,6 +81,62 @@ def mask_auto_threshold(img_file, operation, index):
     return mask_threshold
 
 
+def mask_auto_img(img_file, index=1):
+
+    import os
+    import numpy as np
+    import nibabel as nib
+    import matplotlib.pyplot as plt
+    from sklearn.cluster import KMeans
+    from nipype.utils.filemanip import split_filename as split_f
+
+    ## Mean function
+    def calculate_mean(data):
+        total = sum(data)
+        count = len(data)
+        mean = total / count
+        return mean
+
+    img_nii = nib.load(img_file)
+    img_arr = np.array(img_nii.dataobj)
+    img_arr_copy = np.copy(img_arr)
+    img_arr1d_copy = img_arr_copy.flatten()
+    data = img_arr1d_copy
+    print("data shape : ", data.shape)
+
+    # Reshape data to a 2D array (required by k-means)
+    X = np.array(data).reshape(-1, 1)
+    print("X shape : ", X.shape)
+
+    # Create a k-means clustering model with 3 clusters
+    # using k-means++ initialization
+
+    num_clusters = 3
+    kmeans = KMeans(n_clusters=num_clusters, random_state=0)
+
+    # Fit the model to the data and predict cluster labels
+    cluster_labels = kmeans.fit_predict(X)
+
+    # Split data into groups based on cluster labels
+    groups = [X[cluster_labels == i].flatten() for i in range(num_clusters)]
+
+    assert 0 <= index and index < num_clusters-1, "Error \
+        with index {}".format(index)
+
+    # We must define :  mean of the second group for the skull extraction
+    # we create means array, we sort and then take the middle value
+    means_array = np.array([calculate_mean(group) for group in groups])
+    mean_sorted = np.sort(means_array)
+    print("Mean : {}".format(" ".join(str(int(val)) for val in mean_sorted)))
+
+    index_sorted = np.argsort(means_array)
+    print("Index : {}".format(" ".join(str(val) for val in index_sorted)))
+
+    print (groups[index])
+
+    return mask_threshold
+
+
 def pad_zero_mri(img_file, pad_val=10):
 
     import os
