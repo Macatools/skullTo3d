@@ -16,13 +16,10 @@ def mask_auto_threshold(img_file, operation, index):
 
     img_nii = nib.load(img_file)
     img_arr = np.array(img_nii.dataobj)
-    img_arr_copy = np.copy(img_arr)
-    img_arr1d_copy = img_arr_copy.flatten()
-    data = img_arr1d_copy
-    print("data shape : ", data.shape)
 
-    # Reshape data to a 2D array (required by k-means)
-    X = np.array(data).reshape(-1, 1)
+    # Reshape data to a 1D array (required by k-means)
+    X = np.copy(img_arr).flatten().reshape(-1, 1)
+
     print("X shape : ", X.shape)
 
     # Create a k-means clustering model with 3 clusters
@@ -99,13 +96,10 @@ def mask_auto_img(img_file, index=1):
 
     img_nii = nib.load(img_file)
     img_arr = np.array(img_nii.dataobj)
-    img_arr_copy = np.copy(img_arr)
-    img_arr1d_copy = img_arr_copy.flatten()
-    data = img_arr1d_copy
-    print("data shape : ", data.shape)
 
-    # Reshape data to a 2D array (required by k-means)
-    X = np.array(data).reshape(-1, 1)
+    # Reshape data to a 1D array (required by k-means)
+    X = np.copy(img_arr).flatten().reshape(-1, 1)
+
     print("X shape : ", X.shape)
 
     # Create a k-means clustering model with 3 clusters

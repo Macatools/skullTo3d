@@ -21,7 +21,7 @@ from nipype.interfaces.niftyreg.regutils import RegResample
 from macapype.utils.utils_nodes import NodeParams
 
 from nodes.skull import (
-    mask_auto_threshold, mask_auto_img,
+    mask_auto_threshold,
     keep_gcc, wrap_nii2mesh, wrap_nii2mesh_old,
     pad_zero_mri)
 
@@ -70,30 +70,39 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
                                fast_t1, "in_files")
 
     # head_mask
-    if "head_mask" in params.keys():
+    if "head_mask_thr" in params.keys():
 
-        head_mask = NodeParams(interface=Threshold(),
-                               params=parse_key(params, "head_mask"),
-                               name="head_mask")
+        head_mask_thr = NodeParams(interface=Threshold(),
+                                   params=parse_key(params, "head_mask_thr"),
+                                   name="head_mask_thr")
 
         skull_segment_pipe.connect(fast_t1, "restored_image",
-                                   head_mask, "in_file")
+                                   head_mask_thr, "in_file")
 
     else:
-
         # head_auto_thresh
-        head_auto_mask = pe.Node(
+        head_auto_thresh = pe.Node(
             interface=niu.Function(
                 input_names=["img_file", "operation", "index"],
-                output_names=["mask_img"],
-                function=mask_auto_img),
+                output_names=["mask_threshold"],
+                function=mask_auto_threshold),
             name="head_auto_thresh")
 
         # head_auto_thresh.inputs.operation = "max"
-        head_auto_mask.inputs.index = 1
+        head_auto_thresh.inputs.operation = "min"
+        head_auto_thresh.inputs.index = 1
 
         skull_segment_pipe.connect(fast_t1, "restored_image",
-                                   head_auto_mask, "img_file")
+                                   head_auto_thresh, "img_file")
+
+        # head_mask_thr
+        head_mask_thr = pe.Node(interface=Threshold(),
+                                name="head_mask_thr")
+
+        skull_segment_pipe.connect(head_auto_thresh, "mask_threshold",
+                                   head_mask_thr, "thresh")
+        skull_segment_pipe.connect(fast_t1, "restored_image",
+                                   head_mask_thr, "in_file")
 
     # head_mask_binary
     head_mask_binary = pe.Node(interface=UnaryMaths(),
@@ -102,12 +111,8 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
     head_mask_binary.inputs.operation = 'bin'
     head_mask_binary.inputs.output_type = 'NIFTI_GZ'
 
-    if "head_mask" in params.keys():
-        skull_segment_pipe.connect(head_mask, "mask_img",
-                                   head_mask_binary, "in_file")
-    else:
-        skull_segment_pipe.connect(head_auto_mask, "out_file",
-                                   head_mask_binary, "in_file")
+    skull_segment_pipe.connect(head_mask_thr, "out_file",
+                               head_mask_binary, "in_file")
 
     # keep_gcc_head
     keep_gcc_head = pe.Node(
