@@ -170,24 +170,27 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
     skull_segment_pipe.connect(fast_t1, "restored_image",
                                t1_hmasked_recip, "in_file")
 
-    # t1_hmasked_recip_log
-    t1_hmasked_recip_log = pe.Node(
+    # t1_hmasked_log
+    t1_hmasked_log = pe.Node(
         interface=UnaryMaths(),
-        name="t1_hmasked_recip_log")
+        name="t1_hmasked_log")
 
-    t1_hmasked_recip_log.inputs.operation = 'log'
+    t1_hmasked_log.inputs.operation = 'log'
 
     skull_segment_pipe.connect(t1_hmasked_recip, "out_file",
-                               t1_hmasked_recip_log, "in_file")
+                               t1_hmasked_log, "in_file")
 
     # t1_hmasked_inv
-    t1_hmasked_inv = NodeParams(
+    t1_hmasked_inv = pe.Node(
         interface=BinaryMaths(),
-        params=parse_key(params, "t1_hmasked_inv"),
         name="t1_hmasked_inv")
 
-    skull_segment_pipe.connect(t1_hmasked_recip_log, "out_file",
+    skull_segment_pipe.connect(t1_hmasked_log, "out_file",
                                t1_hmasked_inv, "in_file")
+
+    t1_hmasked_inv.inputs.operation = 'mul'
+    t1_hmasked_inv.inputs.operand_value = -1
+
 
     # skull_t1
     skull_t1 = NodeParams(
