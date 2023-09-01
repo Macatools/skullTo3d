@@ -85,16 +85,15 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
         head_auto_mask = pe.Node(
             interface=niu.Function(
                 input_names=["img_file", "operation", "index"],
-                output_names=["mask_img", ],
+                output_names=["mask_img"],
                 function=mask_auto_img),
             name="head_auto_thresh")
 
         # head_auto_thresh.inputs.operation = "max"
-        head_auto_thresh.inputs.operation = "min"
-        head_auto_thresh.inputs.index = 1
+        head_auto_mask.inputs.index = 1
 
         skull_segment_pipe.connect(fast_t1, "restored_image",
-                                   head_auto_thresh, "img_file")
+                                   head_auto_mask, "img_file")
 
     # head_mask_binary
     head_mask_binary = pe.Node(interface=UnaryMaths(),
