@@ -192,51 +192,14 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
     t1_hmasked_inv.inputs.operand_value = -1
 
 
-    # skull_t1
-    skull_t1 = NodeParams(
+    # skull_thr
+    skull_thr = NodeParams(
         interface=Threshold(),
-        params=parse_key(params, "skull_t1"),
+        params=parse_key(params, "skull_thr"),
         name="skull_t1")
 
     skull_segment_pipe.connect(t1_hmasked_inv, "out_file",
-                               skull_t1, "in_file")
-
-    # skull_t1_gcc
-    skull_t1_gcc = pe.Node(
-        interface=niu.Function(
-            input_names=["nii_file"],
-            output_names=["gcc_nii_file"],
-            function=keep_gcc),
-        name="skull_t1_gcc")
-
-    skull_segment_pipe.connect(skull_t1, "out_file",
-                               skull_t1_gcc, "nii_file")
-
-    # skull_t1_gcc_dilated
-    skull_t1_gcc_dilated = NodeParams(
-        interface=DilateImage(),
-        params=parse_key(params, "skull_t1_gcc_dilated"),
-        name="skull_t1_gcc_dilated")
-
-    skull_segment_pipe.connect(skull_t1_gcc, "gcc_nii_file",
-                               skull_t1_gcc_dilated, "in_file")
-
-    # skull_t1_fill
-    skull_t1_fill = pe.Node(interface=UnaryMaths(),
-                         name="skull_t1_fill")
-
-    skull_t1_fill.inputs.operation = 'fillh'
-
-    skull_segment_pipe.connect(skull_t1_gcc_dilated, "out_file",
-                               skull_t1_fill, "in_file")
-
-    # skull_t1_erode
-    skull_t1_erode = NodeParams(interface=ErodeImage(),
-                                  params=parse_key(params, "skull_t1_erode"),
-                                  name="skull_t1_erode")
-
-    skull_segment_pipe.connect(skull_t1_fill, "out_file",
-                               skull_t1_erode, "in_file")
+                               skull_thr, "in_file")
 
     # skull_t1_bin
     skull_t1_bin = pe.Node(interface=UnaryMaths(),
@@ -245,19 +208,45 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
     skull_t1_bin.inputs.operation = 'bin'
     skull_t1_bin.inputs.output_type = 'NIFTI_GZ'
 
-    skull_segment_pipe.connect(skull_t1_erode, "out_file",
+    skull_segment_pipe.connect(skull_thr, "out_file",
                                skull_t1_bin, "in_file")
 
-    # skull_t1_bin_gc
-    skull_t1_bin_gcc = pe.Node(
+    # skull_t1_gcc
+    skull_gcc = pe.Node(
         interface=niu.Function(
             input_names=["nii_file"],
             output_names=["gcc_nii_file"],
             function=keep_gcc),
-        name="skull_t1_bin_gcc")
+        name="skull_gcc")
 
     skull_segment_pipe.connect(skull_t1_bin, "out_file",
-                               skull_t1_bin_gcc, "nii_file")
+                               skull_gcc, "nii_file")
+
+    # skull_t1_gcc_dilated
+    skull_dilate = NodeParams(
+        interface=DilateImage(),
+        params=parse_key(params, "skull_dilate"),
+        name="skull_t1_gcc_dilated")
+
+    skull_segment_pipe.connect(skull_gcc, "gcc_nii_file",
+                               skull_dilate, "in_file")
+
+    # skull_t1_fill
+    skull_fill = pe.Node(interface=UnaryMaths(),
+                         name="skull_fill")
+
+    skull_fill.inputs.operation = 'fillh'
+
+    skull_segment_pipe.connect(skull_dilate, "out_file",
+                               skull_fill, "in_file")
+
+    # skull_t1_erode
+    skull_erode = NodeParams(interface=ErodeImage(),
+                             params=parse_key(params, "skull_erode"),
+                             name="skull_erode")
+
+    skull_segment_pipe.connect(skull_fill, "out_file",
+                               skull_erode, "in_file")
 
     # mesh_skull_t1 #######
     mesh_skull_t1 = pe.Node(
@@ -266,10 +255,10 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
                                function=wrap_nii2mesh),
         name="mesh_skull_t1")
 
-    skull_segment_pipe.connect(skull_t1_bin_gcc, "gcc_nii_file",
+    skull_segment_pipe.connect(skull_erode, "out_file",
                                mesh_skull_t1, "nii_file")
 
-    #creating outputnode #######
+    # creating outputnode #######
     outputnode = pe.Node(
         niu.IdentityInterface(
             fields=["skull_mask", "skull_stl", "head_mask"]),
@@ -281,7 +270,7 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
     skull_segment_pipe.connect(mesh_skull_t1, "stl_file",
                                outputnode, "skull_stl")
 
-    skull_segment_pipe.connect(skull_t1_bin_gcc, "gcc_nii_file",
+    skull_segment_pipe.connect(skull_erode, "out_file",
                                outputnode, "skull_mask")
 
     return skull_segment_pipe
