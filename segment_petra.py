@@ -677,7 +677,7 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
                 rename_skull_stl, 'out_file',
                 datasink, '@skull_stl')
 
-            ### rename robustskull_stl
+            # rename robustskull_stl
             rename_robustskull_stl = pe.Node(niu.Rename(), name = "rename_robustskull_stl")
             rename_robustskull_stl.inputs.format_string = pref_deriv + "_space-stereo_desc-robustskull_mask"
             rename_robustskull_stl.inputs.parse_string = parse_str
@@ -691,9 +691,11 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
                 rename_robustskull_stl, 'out_file',
                 datasink, '@robustskull_stl')
 
-            ### rename stereo_skull_mask
-            rename_stereo_skull_mask = pe.Node(niu.Rename(), name = "rename_stereo_skull_mask")
-            rename_stereo_skull_mask.inputs.format_string = pref_deriv + "_space-stereo_desc-skull_mask"
+            # rename stereo_skull_mask
+            rename_stereo_skull_mask = pe.Node(niu.Rename(),
+                                               name="rename_stereo_skull_mask")
+            rename_stereo_skull_mask.inputs.format_string =\
+                pref_deriv + "_space-stereo_desc-skull_mask"
             rename_stereo_skull_mask.inputs.parse_string = parse_str
             rename_stereo_skull_mask.inputs.keep_ext = True
 
@@ -705,10 +707,11 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
                 rename_stereo_skull_mask, 'out_file',
                 datasink, '@stereo_skull_mask')
 
-
-            ### rename stereo_robustskull_mask
-            rename_stereo_robustskull_mask = pe.Node(niu.Rename(), name = "rename_stereo_robustskull_mask")
-            rename_stereo_robustskull_mask.inputs.format_string = pref_deriv + "_space-stereo_desc-robustskull_mask"
+            # rename stereo_robustskull_mask
+            rename_stereo_robustskull_mask = pe.Node(
+                niu.Rename(), name="rename_stereo_robustskull_mask")
+            rename_stereo_robustskull_mask.inputs.format_string = \
+                pref_deriv + "_space-stereo_desc-robustskull_mask"
             rename_stereo_robustskull_mask.inputs.parse_string = parse_str
             rename_stereo_robustskull_mask.inputs.keep_ext = True
 
@@ -722,8 +725,10 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
 
 
             ### rename stereo_head_mask
-            rename_stereo_head_mask = pe.Node(niu.Rename(), name = "rename_stereo_head_mask")
-            rename_stereo_head_mask.inputs.format_string = pref_deriv + "_space-stereo_desc-head_mask"
+            rename_stereo_head_mask = pe.Node(niu.Rename(),
+                                              name="rename_stereo_head_mask")
+            rename_stereo_head_mask.inputs.format_string =\
+                pref_deriv + "_space-stereo_desc-head_mask"
             rename_stereo_head_mask.inputs.parse_string = parse_str
             rename_stereo_head_mask.inputs.keep_ext = True
 
@@ -735,12 +740,13 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
                 rename_stereo_head_mask, 'out_file',
                 datasink, '@stereo_head_mask')
 
-
             if pad and space == "native":
 
-                ### rename skull_mask
-                rename_skull_mask = pe.Node(niu.Rename(), name = "rename_skull_mask")
-                rename_skull_mask.inputs.format_string = pref_deriv + "_space-{}_desc-skull_mask".format(space)
+                # rename skull_mask
+                rename_skull_mask = pe.Node(niu.Rename(),
+                                            name="rename_skull_mask")
+                rename_skull_mask.inputs.format_string = \
+                    pref_deriv + "_space-{}_desc-skull_mask".format(space)
                 rename_skull_mask.inputs.parse_string = parse_str
                 rename_skull_mask.inputs.keep_ext = True
 
@@ -752,9 +758,12 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
                     rename_skull_mask, 'out_file',
                     datasink, '@skull_mask')
 
-                ### rename robustskull_mask
-                rename_robustskull_mask = pe.Node(niu.Rename(), name = "rename_robustskull_mask")
-                rename_robustskull_mask.inputs.format_string = pref_deriv + "_space-{}_desc-robustskull_mask".format(space)
+                # rename robustskull_mask
+                rename_robustskull_mask = pe.Node(
+                    niu.Rename(), name="rename_robustskull_mask")
+                rename_robustskull_mask.inputs.format_string = \
+                    pref_deriv + "_space-{}_desc-robustskull_mask".format(
+                        space)
                 rename_robustskull_mask.inputs.parse_string = parse_str
                 rename_robustskull_mask.inputs.keep_ext = True
 
@@ -766,9 +775,11 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
                     rename_robustskull_mask, 'out_file',
                     datasink, '@robustskull_mask')
 
-                ### rename head_mask
-                rename_head_mask = pe.Node(niu.Rename(), name = "rename_head_mask")
-                rename_head_mask.inputs.format_string = pref_deriv + "_space-{}_desc-head_mask".format(space)
+                # rename head_mask
+                rename_head_mask = pe.Node(niu.Rename(),
+                                           name="rename_head_mask")
+                rename_head_mask.inputs.format_string = \
+                    pref_deriv + "_space-{}_desc-head_mask".format(space)
                 rename_head_mask.inputs.parse_string = parse_str
                 rename_head_mask.inputs.keep_ext = True
 
@@ -832,7 +843,7 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
                 datasink, '@skull_fov_stl')
 
         # Rename in skull_t1_pipe
-        if "skull_t1_pipe" in params.keys() and "t1" in ssoft:
+        if "skull_t1_pipe" in params.keys():
 
             # rename t1skull_mask
             rename_t1skull_mask = pe.Node(niu.Rename(),
