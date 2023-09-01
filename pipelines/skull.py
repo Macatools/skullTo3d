@@ -44,7 +44,7 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
     # Creating input node
     inputnode = pe.Node(
         niu.IdentityInterface(fields=['brainmask', 't1', 'debiased_T1',
-                                      'indiv_params','stereo_native_T1',
+                                      'indiv_params', 'stereo_native_T1',
                                       'native_to_stereo_trans']),
         name='inputnode')
 
@@ -93,7 +93,8 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
 
         skull_segment_pipe.connect(head_auto_thresh, "mask_threshold",
                                    head_mask_thr, "thresh")
-        skull_segment_pipe.connect(fast_t1, "restored_image",
+
+        skull_segment_pipe.connect(align_on_stereo_native_T1, "out_file",
                                    head_mask_thr, "in_file")
 
     # head_mask_binary
@@ -140,12 +141,12 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
 
     skull_segment_pipe.connect(head_fill, "out_file",
                                head_erode, "in_file")
-    
+
     # t1_hmasked
     t1_hmasked = pe.Node(interface=ApplyMask(),
-                                 name="t1_hmasked")
+                         name="t1_hmasked")
 
-    skull_segment_pipe.connect(fast_t1, "restored_image",
+    skull_segment_pipe.connect(align_on_stereo_native_T1, "out_file",
                                t1_hmasked, "in_file")
 
     skull_segment_pipe.connect(head_erode, "out_file",
