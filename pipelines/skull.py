@@ -61,14 +61,6 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
     skull_segment_pipe.connect(inputnode, "stereo_native_T1",
                                align_on_stereo_native_T1, "ref_file")
 
-    # fast_t1
-    fast_t1 = NodeParams(interface=FAST(),
-                         params=parse_key(params, "fast_t1"),
-                         name="fast_t1")
-
-    skull_segment_pipe.connect(align_on_stereo_native_T1, "out_file",
-                               fast_t1, "in_files")
-
     # head_mask
     if "head_mask_thr" in params.keys():
 
@@ -76,7 +68,7 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
                                    params=parse_key(params, "head_mask_thr"),
                                    name="head_mask_thr")
 
-        skull_segment_pipe.connect(fast_t1, "restored_image",
+        skull_segment_pipe.connect(align_on_stereo_native_T1, "out_file",
                                    head_mask_thr, "in_file")
 
     else:
@@ -92,7 +84,7 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
         head_auto_thresh.inputs.operation = "min"
         head_auto_thresh.inputs.index = 1
 
-        skull_segment_pipe.connect(fast_t1, "restored_image",
+        skull_segment_pipe.connect(align_on_stereo_native_T1, "out_file",
                                    head_auto_thresh, "img_file")
 
         # head_mask_thr
@@ -149,44 +141,52 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
     skull_segment_pipe.connect(head_fill, "out_file",
                                head_erode, "in_file")
     
-    # padded_fast2_t1_hmasked
-    padded_fast2_t1_hmasked = pe.Node(interface=ApplyMask(),
-                                 name="padded_fast2_t1_hmasked")
+    # t1_hmasked
+    t1_hmasked = pe.Node(interface=ApplyMask(),
+                                 name="t1_hmasked")
 
     skull_segment_pipe.connect(fast_t1, "restored_image",
-                               padded_fast2_t1_hmasked, "in_file")
+                               t1_hmasked, "in_file")
 
     skull_segment_pipe.connect(head_erode, "out_file",
-                               padded_fast2_t1_hmasked, "mask_file")
+                               t1_hmasked, "mask_file")
 
-    # padded_fast2_t1_hmasked_recip
-    padded_fast2_t1_hmasked_recip = pe.Node(
+    # fast_t1
+    fast_t1 = NodeParams(interface=FAST(),
+                         params=parse_key(params, "fast_t1"),
+                         name="fast_t1")
+
+    skull_segment_pipe.connect(t1_hmasked, "out_file",
+                               fast_t1, "in_files")
+
+    # t1_hmasked_recip
+    t1_hmasked_recip = pe.Node(
          interface=UnaryMaths(),
-         name="padded_fast2_t1_hmasked_recip")
+         name="t1_hmasked_recip")
 
-    padded_fast2_t1_hmasked_recip.inputs.operation = 'recip'
+    t1_hmasked_recip.inputs.operation = 'recip'
 
-    skull_segment_pipe.connect(padded_fast2_t1_hmasked, "out_file",
-                               padded_fast2_t1_hmasked_recip, "in_file")
+    skull_segment_pipe.connect(fast_t1, "restored_image",
+                               t1_hmasked_recip, "in_file")
 
-    # padded_fast2_t1_hmasked_recip_log
-    padded_fast2_t1_hmasked_recip_log = pe.Node(
+    # t1_hmasked_recip_log
+    t1_hmasked_recip_log = pe.Node(
         interface=UnaryMaths(),
-        name="padded_fast2_t1_hmasked_recip_log")
+        name="t1_hmasked_recip_log")
 
-    padded_fast2_t1_hmasked_recip_log.inputs.operation = 'log'
+    t1_hmasked_recip_log.inputs.operation = 'log'
 
-    skull_segment_pipe.connect(padded_fast2_t1_hmasked_recip, "out_file",
-                               padded_fast2_t1_hmasked_recip_log, "in_file")
+    skull_segment_pipe.connect(t1_hmasked_recip, "out_file",
+                               t1_hmasked_recip_log, "in_file")
 
-    # padded_fast2_t1_hmasked_maths
-    padded_fast2_t1_hmasked_maths = NodeParams(
+    # t1_hmasked_inv
+    t1_hmasked_inv = NodeParams(
         interface=BinaryMaths(),
-        params=parse_key(params, "padded_fast2_t1_hmasked_maths"),
-        name="padded_fast2_t1_hmasked_maths")
+        params=parse_key(params, "t1_hmasked_inv"),
+        name="t1_hmasked_inv")
 
-    skull_segment_pipe.connect(padded_fast2_t1_hmasked_recip_log, "out_file",
-                               padded_fast2_t1_hmasked_maths, "in_file")
+    skull_segment_pipe.connect(t1_hmasked_recip_log, "out_file",
+                               t1_hmasked_inv, "in_file")
 
     # skull_t1
     skull_t1 = NodeParams(
@@ -194,7 +194,7 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
         params=parse_key(params, "skull_t1"),
         name="skull_t1")
 
-    skull_segment_pipe.connect(padded_fast2_t1_hmasked_maths, "out_file",
+    skull_segment_pipe.connect(t1_hmasked_inv, "out_file",
                                skull_t1, "in_file")
 
     # skull_t1_gcc
