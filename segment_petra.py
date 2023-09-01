@@ -853,11 +853,11 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
             rename_t1skull_mask.inputs.parse_string = parse_str
             rename_t1skull_mask.inputs.keep_ext = True
 
-            main_workflow.connet1(
+            main_workflow.connect(
                     skull_t1_pipe, "outputnode.stereo_skull_mask",
                     rename_t1skull_mask, 'in_file')
 
-            main_workflow.connet1(
+            main_workflow.connect(
                 rename_t1skull_mask, 'out_file',
                 datasink, '@t1skull_mask')
 
@@ -869,11 +869,11 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
             rename_t1skull_stl.inputs.parse_string = parse_str
             rename_t1skull_stl.inputs.keep_ext = True
 
-            main_workflow.connet1(
+            main_workflow.connect(
                 skull_t1_pipe, 'outputnode.skull_stl',
                 rename_t1skull_stl, 'in_file')
 
-            main_workflow.connet1(
+            main_workflow.connect(
                 rename_t1skull_stl, 'out_file',
                 datasink, '@t1skull_stl')
 
@@ -885,11 +885,11 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
             rename_t1head_mask.inputs.parse_string = parse_str
             rename_t1head_mask.inputs.keep_ext = True
 
-            main_workflow.connet1(
+            main_workflow.connect(
                 skull_t1_pipe, 'outputnode.head_mask',
                 rename_t1head_mask, 'in_file')
 
-            main_workflow.connet1(
+            main_workflow.connect(
                 rename_t1head_mask, 'out_file',
                 datasink, '@t1head_mask')
 
