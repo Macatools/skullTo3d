@@ -664,13 +664,15 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
         if "skull_petra_pipe" in params.keys() and "petra" in ssoft:
 
             ### rename petra_skull_stl
-            rename_petra_skull_stl = pe.Node(niu.Rename(), name = "rename_petra_skull_stl")
-            rename_petra_skull_stl.inputs.format_string = pref_deriv + "_space-stereo_desc-petra_skullmask"
+            rename_petra_skull_stl = pe.Node(niu.Rename(),
+                                             name="rename_petra_skull_stl")
+            rename_petra_skull_stl.inputs.format_string = \
+                pref_deriv + "_space-stereo_desc-petra_skullmask"
             rename_petra_skull_stl.inputs.parse_string = parse_str
             rename_petra_skull_stl.inputs.keep_ext = True
 
             main_workflow.connect(
-                petra_skull_petra_pipe, 'outputnode.petra_skull_stl',
+                skull_petra_pipe, 'outputnode.petra_skull_stl',
                 rename_petra_skull_stl, 'in_file')
 
             main_workflow.connect(
@@ -678,13 +680,16 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
                 datasink, '@petra_skull_stl')
 
             # rename robustpetra_skull_stl
-            rename_robustpetra_skull_stl = pe.Node(niu.Rename(), name = "rename_robustpetra_skull_stl")
-            rename_robustpetra_skull_stl.inputs.format_string = pref_deriv + "_space-stereo_desc-robustpetra_skullmask"
+            rename_robustpetra_skull_stl = pe.Node(
+                niu.Rename(), name="rename_robustpetra_skull_stl")
+
+            rename_robustpetra_skull_stl.inputs.format_string = \
+                pref_deriv + "_space-stereo_desc-robustpetra_skullmask"
             rename_robustpetra_skull_stl.inputs.parse_string = parse_str
             rename_robustpetra_skull_stl.inputs.keep_ext = True
 
             main_workflow.connect(
-                petra_skull_petra_pipe, 'outputnode.robustpetra_skull_stl',
+                skull_petra_pipe, 'outputnode.robustpetra_skull_stl',
                 rename_robustpetra_skull_stl, 'in_file')
 
             main_workflow.connect(
@@ -692,15 +697,16 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
                 datasink, '@robustpetra_skull_stl')
 
             # rename stereo_petra_skull_mask
-            rename_stereo_petra_skull_mask = pe.Node(niu.Rename(),
-                                               name="rename_stereo_petra_skull_mask")
+            rename_stereo_petra_skull_mask = pe.Node(
+                niu.Rename(), name="rename_stereo_petra_skull_mask")
+
             rename_stereo_petra_skull_mask.inputs.format_string =\
                 pref_deriv + "_space-stereo_desc-petra_skullmask"
             rename_stereo_petra_skull_mask.inputs.parse_string = parse_str
             rename_stereo_petra_skull_mask.inputs.keep_ext = True
 
             main_workflow.connect(
-                petra_skull_petra_pipe, 'outputnode.petra_skull_mask',
+                skull_petra_pipe, 'outputnode.petra_skull_mask',
                 rename_stereo_petra_skull_mask, 'in_file')
 
             main_workflow.connect(
@@ -710,13 +716,17 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
             # rename stereo_robustpetra_skull_mask
             rename_stereo_robustpetra_skull_mask = pe.Node(
                 niu.Rename(), name="rename_stereo_robustpetra_skullmask")
+
             rename_stereo_robustpetra_skull_mask.inputs.format_string = \
                 pref_deriv + "_space-stereo_desc-robustpetra_skullmask"
-            rename_stereo_robustpetra_skull_mask.inputs.parse_string = parse_str
+
+            rename_stereo_robustpetra_skull_mask.inputs.parse_string = \
+                parse_str
+
             rename_stereo_robustpetra_skull_mask.inputs.keep_ext = True
 
             main_workflow.connect(
-                petra_skull_petra_pipe, 'outputnode.robustpetra_skull_mask',
+                skull_petra_pipe, 'outputnode.robustpetra_skull_mask',
                 rename_stereo_robustpetra_skull_mask, 'in_file')
 
             main_workflow.connect(
@@ -733,7 +743,7 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
             rename_stereo_petra_head_mask.inputs.keep_ext = True
 
             main_workflow.connect(
-                petra_skull_petra_pipe, 'outputnode.petra_headmask',
+                skull_petra_pipe, 'outputnode.petra_headmask',
                 rename_stereo_petra_head_mask, 'in_file')
 
             main_workflow.connect(
