@@ -288,7 +288,7 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
     # creating outputnode #######
     outputnode = pe.Node(
         niu.IdentityInterface(
-            fields=["t1_skull_mask", "t1_skull_stl", "head_mask"]),
+            fields=["t1_skull_mask", "t1_skull_stl", "t1_head_mask"]),
         name='outputnode')
 
     skull_t1_pipe.connect(t1_head_erode, "out_file",
