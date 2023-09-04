@@ -859,7 +859,7 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
             rename_t1_skull_mask.inputs.keep_ext = True
 
             main_workflow.connect(
-                    skull_t1_pipe, "outputnode.skull_mask",
+                    skull_t1_pipe, "outputnode.t1_skull_mask",
                     rename_t1_skull_mask, 'in_file')
 
             main_workflow.connect(
@@ -875,7 +875,7 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
             rename_t1_skull_stl.inputs.keep_ext = True
 
             main_workflow.connect(
-                skull_t1_pipe, 'outputnode.skull_stl',
+                skull_t1_pipe, 'outputnode.t1_skull_stl',
                 rename_t1_skull_stl, 'in_file')
 
             main_workflow.connect(
@@ -891,7 +891,7 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
             rename_t1_head_mask.inputs.keep_ext = True
 
             main_workflow.connect(
-                skull_t1_pipe, 'outputnode.head_mask',
+                skull_t1_pipe, 'outputnode.t1_head_mask',
                 rename_t1_head_mask, 'in_file')
 
             main_workflow.connect(
