@@ -192,26 +192,48 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
     t1_hmasked_inv.inputs.operand_value = -1
 
 
-    # skull_t1_thr
-    skull_t1_thr = NodeParams(
+    # skull_mask_thr
+    skull_mask_thr = NodeParams(
         interface=Threshold(),
-        params=parse_key(params, "skull_t1_thr"),
-        name="skull_t1_thr")
+        params=parse_key(params, "skull_mask_thr"),
+        name="skull_mask_thr")
 
     skull_segment_pipe.connect(t1_hmasked_inv, "out_file",
-                               skull_t1_thr, "in_file")
+                               skull_mask_thr, "in_file")
 
-    # skull_t1_bin
-    skull_t1_bin = pe.Node(interface=UnaryMaths(),
-                           name="skull_t1_bin")
+    # skull_mask_bin
+    skull_mask_bin = pe.Node(interface=UnaryMaths(),
+                           name="skull_mask_bin")
 
-    skull_t1_bin.inputs.operation = 'bin'
-    skull_t1_bin.inputs.output_type = 'NIFTI_GZ'
+    skull_mask_bin.inputs.operation = 'bin'
+    skull_mask_bin.inputs.output_type = 'NIFTI_GZ'
 
-    skull_segment_pipe.connect(skull_t1_thr, "out_file",
-                               skull_t1_bin, "in_file")
+    skull_segment_pipe.connect(skull_mask_thr, "out_file",
+                               skull_mask_bin, "in_file")
 
-    # skull_t1_gcc
+    # head_erode_skin
+    if "head_erode_skin" in params.keys():
+
+        head_erode_skin = NodeParams(
+            interface=ErodeImage(),
+            params=parse_key(params, "head_erode_skin"),
+            name="head_erode_skin")
+
+        skull_segment_pipe.connect(head_erode, "out_file",
+                                   head_erode_skin, "in_file")
+
+        # ### Masking with head mask
+        # head_hmasked ####### [okey]
+        head_skin_masked = pe.Node(interface=ApplyMask(),
+                                    name="head_skin_masked")
+
+        skull_segment_pipe.connect(skull_mask_bin, "out_file",
+                                   head_skin_masked, "in_file")
+
+        skull_segment_pipe.connect(head_erode_skin, "out_file",
+                                   head_skin_masked, "mask_file")
+
+    # skull_gcc ####### [okey]
     skull_gcc = pe.Node(
         interface=niu.Function(
             input_names=["nii_file"],
@@ -219,10 +241,17 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
             function=keep_gcc),
         name="skull_gcc")
 
-    skull_segment_pipe.connect(skull_t1_bin, "out_file",
-                               skull_gcc, "nii_file")
+    if "head_erode_skin" in params.keys():
 
-    # skull_t1_gcc_dilated
+        skull_segment_pipe.connect(head_skin_masked, "out_file",
+                                   skull_gcc, "nii_file")
+    else:
+        skull_segment_pipe.connect(skull_mask_bin, "out_file",
+                                   skull_gcc, "nii_file")
+
+
+
+    # skull_dilate
     skull_dilate = NodeParams(
         interface=DilateImage(),
         params=parse_key(params, "skull_dilate"),
