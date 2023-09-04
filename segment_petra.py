@@ -505,56 +505,56 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
                 else:
                     print("Using reg_aladin transfo to pad skull_mask back")
 
-                    pad_skull_mask = pe.Node(RegResample(inter_val="NN"),
-                                        name="pad_skull_mask")
+                    pad_petra_skull_mask = pe.Node(RegResample(inter_val="NN"),
+                                        name="pad_petra_skull_mask")
 
                     main_workflow.connect(
                         skull_petra_pipe, "outputnode.petra_skull_mask",
-                        pad_skull_mask, "flo_file")
+                        pad_petra_skull_mask, "flo_file")
 
                     main_workflow.connect(
                         segment_pnh_pipe, "outputnode.native_T1",
-                        pad_skull_mask, "ref_file")
+                        pad_petra_skull_mask, "ref_file")
 
                     main_workflow.connect(
                         segment_pnh_pipe, "outputnode.cropped_to_native_trans",
-                        pad_skull_mask, "trans_file")
+                        pad_petra_skull_mask, "trans_file")
 
                     print("Using reg_aladin transfo \
                         to pad robustpetra_skull_mask back")
 
-                    pad_robustskull_mask = pe.Node(RegResample(inter_val="NN"),
-                                                   name="pad_robustskull_mask")
+                    pad_robustpetra_skull_mask = pe.Node(RegResample(inter_val="NN"),
+                                                   name="pad_robustpetra_skull_mask")
 
                     main_workflow.connect(
                         skull_petra_pipe,
                         "outputnode.robustpetra_skull_mask",
-                        pad_robustskull_mask, "flo_file")
+                        pad_robustpetra_skull_mask, "flo_file")
 
                     main_workflow.connect(segment_pnh_pipe,
                                           "outputnode.native_T1",
-                                          pad_robustskull_mask, "ref_file")
+                                          pad_robustpetra_skull_mask, "ref_file")
 
                     main_workflow.connect(segment_pnh_pipe,
                                           "outputnode.cropped_to_native_trans",
-                                          pad_robustskull_mask, "trans_file")
+                                          pad_robustpetra_skull_mask, "trans_file")
 
                     print("Using reg_aladin transfo to pad head_mask back")
 
-                    pad_head_mask = pe.Node(RegResample(inter_val="NN"),
-                                            name="pad_head_mask")
+                    pad_petra_head_mask = pe.Node(RegResample(inter_val="NN"),
+                                            name="pad_petra_head_mask")
 
                     main_workflow.connect(skull_petra_pipe,
                                           "outputnode.petra_head_mask",
-                                          pad_head_mask, "flo_file")
+                                          pad_petra_head_mask, "flo_file")
 
                     main_workflow.connect(segment_pnh_pipe,
                                           "outputnode.native_T1",
-                                          pad_head_mask, "ref_file")
+                                          pad_petra_head_mask, "ref_file")
 
                     main_workflow.connect(segment_pnh_pipe,
                                           "outputnode.cropped_to_native_trans",
-                                          pad_head_mask, "trans_file")
+                                          pad_petra_head_mask, "trans_file")
 
     if "ct" in ssoft:
 
@@ -613,14 +613,14 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
 
     #if pad:
         #print("Using reg_aladin transfo to pad seg_mask back")
-        #pad_skull_mask = pe.Node(RegResample(inter_val="NN"),
-                                 #name="pad_skull_mask")
+        #pad_petra_skull_mask = pe.Node(RegResample(inter_val="NN"),
+                                 #name="pad_petra_skull_mask")
         #main_workflow.connect(skull_petra_pipe, 'outputnode.skull_mask',
-                         #pad_skull_mask , "flo_file")
+                         #pad_petra_skull_mask , "flo_file")
         #main_workflow.connect(segment_pnh_pipe, "data_preparation_pipe.av_T1.avg_img",
-                         #pad_skull_mask , "ref_file")
+                         #pad_petra_skull_mask , "ref_file")
         #main_workflow.connect(segment_pnh_pipe, "data_preparation_pipe.inv_tranfo.out_file",
-                         #pad_skull_mask , "trans_file")
+                         #pad_petra_skull_mask , "trans_file")
 
     if deriv:
 
@@ -782,14 +782,14 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
 
                 # rename petra_head_mask
                 rename_petra_head_mask = pe.Node(niu.Rename(),
-                                           name="rename_petra_head_mask")
+                                                 name="rename_petra_head_mask")
                 rename_petra_head_mask.inputs.format_string = \
                     pref_deriv + "_space-{}_desc-petra_head_mask".format(space)
                 rename_petra_head_mask.inputs.parse_string = parse_str
                 rename_petra_head_mask.inputs.keep_ext = True
 
                 main_workflow.connect(
-                    petra_skull_petra_pipe, 'outputnode.petra_head_mask',
+                    pad_petra_head_mask, 'out_file',
                     rename_petra_head_mask, 'in_file')
 
                 main_workflow.connect(
