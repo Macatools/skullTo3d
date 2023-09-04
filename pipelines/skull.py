@@ -192,14 +192,14 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
     t1_hmasked_inv.inputs.operand_value = -1
 
 
-    # skull_thr
-    skull_thr = NodeParams(
+    # skull_t1_thr
+    skull_t1_thr = NodeParams(
         interface=Threshold(),
-        params=parse_key(params, "skull_thr"),
-        name="skull_t1")
+        params=parse_key(params, "skull_t1_thr"),
+        name="skull_t1_thr")
 
     skull_segment_pipe.connect(t1_hmasked_inv, "out_file",
-                               skull_thr, "in_file")
+                               skull_t1_thr, "in_file")
 
     # skull_t1_bin
     skull_t1_bin = pe.Node(interface=UnaryMaths(),
@@ -208,7 +208,7 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
     skull_t1_bin.inputs.operation = 'bin'
     skull_t1_bin.inputs.output_type = 'NIFTI_GZ'
 
-    skull_segment_pipe.connect(skull_thr, "out_file",
+    skull_segment_pipe.connect(skull_t1_thr, "out_file",
                                skull_t1_bin, "in_file")
 
     # skull_t1_gcc
