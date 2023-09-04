@@ -842,11 +842,11 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
         niu.IdentityInterface(
             fields=["petra_skull_mask", "petra_skull_stl",
                     "robustpetra_skull_mask", "robustpetra_skull_stl",
-                    "head_mask"]),
+                    "petra_head_mask"]),
         name='outputnode')
 
     skull_petra_pipe.connect(petra_head_erode, "out_file",
-                             outputnode, "head_mask")
+                             outputnode, "petra_head_mask")
 
     skull_petra_pipe.connect(mesh_petra_skull, "stl_file",
                              outputnode, "petra_skull_stl")
