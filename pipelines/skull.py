@@ -226,7 +226,7 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
     skull_dilate = NodeParams(
         interface=DilateImage(),
         params=parse_key(params, "skull_dilate"),
-        name="skull_t1_gcc_dilated")
+        name="skull_dilate")
 
     skull_segment_pipe.connect(skull_gcc, "gcc_nii_file",
                                skull_dilate, "in_file")
