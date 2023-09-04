@@ -249,8 +249,6 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
         skull_segment_pipe.connect(skull_mask_bin, "out_file",
                                    skull_gcc, "nii_file")
 
-
-
     # skull_dilate
     skull_dilate = NodeParams(
         interface=DilateImage(),

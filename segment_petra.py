@@ -879,7 +879,7 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
 
             # rename t1head_mask
             rename_t1head_mask = pe.Node(niu.Rename(),
-                                         name="rename_head_mask")
+                                         name="rename_t1head_mask")
             rename_t1head_mask.inputs.format_string = \
                 pref_deriv + "_space-{}_desc-t1head_mask".format(space)
             rename_t1head_mask.inputs.parse_string = parse_str
