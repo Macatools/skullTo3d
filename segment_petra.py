@@ -81,7 +81,9 @@ from pipelines.skull import create_skull_ct_pipe
 from pipelines.skull import create_skull_t1_pipe
 
 
-from pipelines.rename import rename_all_skull_derivatives
+from pipelines.rename import (rename_all_skull_petra_derivatives,
+                              rename_all_skull_t1_derivatives,
+                              rename_all_skull_ct_derivatives)
 
 
 fsl.FSLCommand.set_default_output_type('NIFTI_GZ')
@@ -633,12 +635,22 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
             parse_str = r"sub-(?P<sub>\w*)_ses-(?P<ses>\w*)_.*"
 
         rename_all_derivatives(params, main_workflow, segment_pnh_pipe,
-                               skull_petra_pipe, skull_ct_pipe, skull_t1_pipe,
                                datasink, pref_deriv, parse_str, space, ssoft)
 
-        rename_all_skull_derivatives(
-            params, main_workflow, segment_pnh_pipe,
-            datasink, pref_deriv, parse_str, space, pad, ssoft)
+        if "petra" in ssoft and "skull_petra_pipe" in params.keys():
+            rename_all_skull_petra_derivatives(
+                params, main_workflow, segment_pnh_pipe, skull_petra_pipe,
+                datasink, pref_deriv, parse_str, space, pad, ssoft)
+
+        if "skull_t1_pipe" in params.keys():
+            rename_all_skull_t1_derivatives(
+                params, main_workflow, segment_pnh_pipe, skull_t1_pipe,
+                datasink, pref_deriv, parse_str, space, pad, ssoft)
+
+        if "ct" in ssoft and "skull_ct_pipe" in params.keys():
+            rename_all_skull_ct_derivatives(
+                params, main_workflow, segment_pnh_pipe, skull_ct_pipe,
+                datasink, pref_deriv, parse_str, space, pad, ssoft)
 
     main_workflow.write_graph(graph2use="colored")
     main_workflow.config['execution'] = {'remove_unnecessary_outputs': 'false'}
