@@ -7,8 +7,8 @@ import nipype.pipeline.engine as pe
 
 
 def rename_all_skull_petra_derivatives(params, main_workflow, skull_petra_pipe,
-                                       datasink, pref_deriv, parse_str, space,
-                                       pad, ssoft):
+                                       segment_pnh_pipe, datasink, pref_deriv,
+                                       parse_str, space, pad, ssoft):
 
     # Rename in skull_petra_pipe
     if "skull_petra_pipe" in params.keys() and "petra" in ssoft:
@@ -152,9 +152,9 @@ def rename_all_skull_petra_derivatives(params, main_workflow, skull_petra_pipe,
                 datasink, '@petra_head_mask')
 
 
-def rename_all_skull_ct_derivatives(params, main_workflow, skull_ct_pipe,
-                                    datasink, pref_deriv, parse_str, space,
-                                    pad, ssoft):
+def rename_all_skull_ct_derivatives(params, main_workflow, segment_pnh_pipe,
+                                    skull_ct_pipe, datasink, pref_deriv,
+                                    parse_str, space, pad, ssoft):
 
     # Rename in skull_ct_pipe
     if "skull_ct_pipe" in params.keys() and "ct" in ssoft:
