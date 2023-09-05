@@ -815,7 +815,7 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
             rename_t1_skull_mask = pe.Node(niu.Rename(),
                                            name="rename_t1_skull_mask")
             rename_t1_skull_mask.inputs.format_string = \
-                pref_deriv + "_space-stereo_desc-t1_skull_mask"
+                pref_deriv + "_space-stereo_desc-t1_skullmask"
             rename_t1_skull_mask.inputs.parse_string = parse_str
             rename_t1_skull_mask.inputs.keep_ext = True
 
