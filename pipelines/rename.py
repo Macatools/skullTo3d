@@ -192,9 +192,9 @@ def rename_all_skull_ct_derivatives(params, main_workflow, skull_ct_pipe,
             datasink, '@ct_skull_stl')
 
 
-def rename_all_skull_t1_derivatives(params, main_workflow, skull_t1_pipe,
-                                    datasink, pref_deriv, parse_str, space,
-                                    pad, ssoft):
+def rename_all_skull_t1_derivatives(params, main_workflow, segment_pnh_pipe,
+                                    skull_t1_pipe, datasink, pref_deriv,
+                                    parse_str, space, pad, ssoft):
 
     # Rename in skull_t1_pipe
     if "skull_t1_pipe" in params.keys():
