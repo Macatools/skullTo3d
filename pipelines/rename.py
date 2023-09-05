@@ -6,8 +6,8 @@ import nipype.interfaces.utility as niu
 import nipype.pipeline.engine as pe
 
 
-def rename_all_skull_petra_derivatives(params, main_workflow, skull_petra_pipe,
-                                       segment_pnh_pipe, datasink, pref_deriv,
+def rename_all_skull_petra_derivatives(params, main_workflow, segment_pnh_pipe,
+                                       skull_petra_pipe, datasink, pref_deriv,
                                        parse_str, space, pad, ssoft):
 
     # Rename in skull_petra_pipe
