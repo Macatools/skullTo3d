@@ -8,7 +8,7 @@ import nipype.pipeline.engine as pe
 
 def rename_all_skull_derivatives(params, main_workflow, skull_petra_pipe,
                                  skull_ct_pipe, skull_t1_pipe, datasink,
-                                 pref_deriv, parse_str, space, ssoft):
+                                 pref_deriv, parse_str, space, pad, ssoft):
 
     # Rename in skull_petra_pipe
     if "skull_petra_pipe" in params.keys() and "petra" in ssoft:

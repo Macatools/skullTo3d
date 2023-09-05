@@ -635,8 +635,9 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
         rename_all_derivatives(params, main_workflow, segment_pnh_pipe,
                                datasink, pref_deriv, parse_str, space, ssoft)
 
-        rename_all_skull_derivatives(params, main_workflow, segment_pnh_pipe,
-                               datasink, pref_deriv, parse_str, space, ssoft)
+        rename_all_skull_derivatives(
+            params, main_workflow, segment_pnh_pipe,
+            datasink, pref_deriv, parse_str, space, pad, ssoft)
 
     main_workflow.write_graph(graph2use="colored")
     main_workflow.config['execution'] = {'remove_unnecessary_outputs': 'false'}
