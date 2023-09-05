@@ -5,40 +5,10 @@
 import nipype.interfaces.utility as niu
 import nipype.pipeline.engine as pe
 
-from nipype.interfaces.fsl.maths import (
-    DilateImage, ErodeImage, BinaryMaths,
-    ApplyMask, UnaryMaths, Threshold)
 
-from nipype.interfaces.ants import DenoiseImage, N4BiasFieldCorrection
-
-from nipype.interfaces.fsl.utils import RobustFOV
-from nipype.interfaces.fsl.preprocess import FAST, FLIRT
-
-
-from nipype.interfaces.niftyreg.reg import RegAladin
-from nipype.interfaces.niftyreg.regutils import RegResample
-
-from macapype.utils.utils_nodes import NodeParams
-
-from nodes.skull import (
-    mask_auto_threshold,
-    keep_gcc, wrap_nii2mesh, wrap_nii2mesh_old,
-    pad_zero_mri)
-
-from macapype.pipelines.prepare import _create_avg_reorient_pipeline
-
-from macapype.nodes.prepare import average_align
-
-from macapype.utils.misc import parse_key
-
-#################################################
-# ####################  T1  #####################
-#################################################
-
-
-def rename_all_skull_derivatives(params, main_workflow,
-                                 skull_petra_pipe, skull_ct_pipe, skull_t1_pipe
-                                 datasink, pref_deriv, parse_str, space, ssoft):
+def rename_all_skull_derivatives(params, main_workflow, skull_petra_pipe,
+                                 skull_ct_pipe, skull_t1_pipe, datasink,
+                                 pref_deriv, parse_str, space, ssoft):
 
     # Rename in skull_petra_pipe
     if "skull_petra_pipe" in params.keys() and "petra" in ssoft:
