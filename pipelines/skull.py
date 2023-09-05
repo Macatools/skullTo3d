@@ -9,8 +9,6 @@ from nipype.interfaces.fsl.maths import (
     DilateImage, ErodeImage, BinaryMaths,
     ApplyMask, UnaryMaths, Threshold)
 
-from nipype.interfaces.ants import DenoiseImage, N4BiasFieldCorrection
-
 from nipype.interfaces.fsl.utils import RobustFOV
 from nipype.interfaces.fsl.preprocess import FAST, FLIRT
 
@@ -22,8 +20,7 @@ from macapype.utils.utils_nodes import NodeParams
 
 from nodes.skull import (
     mask_auto_threshold,
-    keep_gcc, wrap_nii2mesh, wrap_nii2mesh_old,
-    pad_zero_mri)
+    keep_gcc, wrap_nii2mesh, wrap_nii2mesh_old)
 
 from macapype.pipelines.prepare import _create_avg_reorient_pipeline
 
@@ -412,47 +409,15 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
     skull_ct_pipe.connect(ct_skull_erode, "out_file",
                           mesh_ct_skull, "nii_file")
 
-    # ct_skull_fov
-    ct_skull_fov = NodeParams(interface=RobustFOV(),
-                              params=parse_key(params, "ct_skull_fov"),
-                              name="ct_skull_fov")
-
-    skull_ct_pipe.connect(ct_skull_erode, "out_file",
-                          ct_skull_fov, "in_file")
-
-    # ct_skull_gcc ####### [okey]
-    ct_skull_fov_gcc = pe.Node(
-        interface=niu.Function(
-            input_names=["nii_file"],
-            output_names=["gcc_nii_file"],
-            function=keep_gcc),
-        name="ct_skull_fov_gcc")
-
-    skull_ct_pipe.connect(ct_skull_fov, "out_roi",
-                          ct_skull_fov_gcc, "nii_file")
-
-    # mesh_ct_skull_fov #######
-    mesh_ct_skull_fov = pe.Node(
-        interface=niu.Function(input_names=["nii_file"],
-                               output_names=["stl_file"],
-                               function=wrap_nii2mesh_old),
-        name="mesh_ct_skull_fov")
-
-    skull_ct_pipe.connect(ct_skull_fov_gcc, "gcc_nii_file",
-                          mesh_ct_skull_fov, "nii_file")
-
     # creating outputnode #######
     outputnode = pe.Node(
         niu.IdentityInterface(
             fields=["stereo_ct_skull_mask",
-                    "ct_skull_stl", "ct_skull_fov_stl"]),
+                    "ct_skull_stl"]),
         name='outputnode')
 
     skull_ct_pipe.connect(mesh_ct_skull, "stl_file",
                           outputnode, "ct_skull_stl")
-
-    skull_ct_pipe.connect(mesh_ct_skull_fov, "stl_file",
-                          outputnode, "ct_skull_fov_stl")
 
     skull_ct_pipe.connect(ct_skull_erode, "out_file",
                           outputnode, "stereo_ct_skull_mask")
@@ -503,22 +468,6 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
         skull_petra_pipe.connect(inputnode, 'petra',
                                  av_PETRA, "list_img")
 
-    """
-    # align_petra_on_T1
-    align_petra_on_T1 = pe.Node(interface=FLIRT(),
-                                name="align_petra_on_T1")
-
-    align_petra_on_T1.inputs.apply_xfm = True
-    align_petra_on_T1.inputs.uses_qform = True
-    align_petra_on_T1.inputs.interp = 'spline'
-
-    skull_petra_pipe.connect(av_PETRA, 'avg_img',
-                               align_petra_on_T1, "in_file")
-
-    skull_petra_pipe.connect(inputnode, "native_T1",
-                               align_petra_on_T1, "reference")
-    """
-
     # align_petra_on_native
     align_petra_on_native = pe.Node(interface=FLIRT(),
                                     name="align_petra_on_native")
@@ -532,7 +481,7 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
                                  align_petra_on_native, "in_file")
     else:
         skull_petra_pipe.connect(av_PETRA, 'avg_img',
-                                   align_petra_on_native, "in_file")
+                                 align_petra_on_native, "in_file")
 
     skull_petra_pipe.connect(inputnode, "native_img",
                              align_petra_on_native, "reference")
@@ -800,7 +749,6 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
                                output_names=["stl_file"],
                                function=wrap_nii2mesh_old),
         name="mesh_petra_skull")
-
 
     skull_petra_pipe.connect(petra_skull_erode, "out_file",
                              mesh_petra_skull, "nii_file")

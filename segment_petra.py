@@ -464,10 +464,8 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
         main_workflow.connect(datasource, 'T1',
                               segment_pnh_pipe, 'inputnode.list_T2')
 
-    if "petra" in ssoft:
-
-        if "skull_petra_pipe" in params.keys():
-            print("Found skull_petra_pipe")
+    if "petra" in ssoft and "skull_petra_pipe" in params.keys():
+        print("Found skull_petra_pipe")
 
         skull_petra_pipe = create_skull_petra_pipe(
             params=parse_key(params, "skull_petra_pipe"))
@@ -523,22 +521,6 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
                     print("Using reg_aladin transfo \
                         to pad robustpetra_skull_mask back")
 
-                    pad_robustpetra_skull_mask = pe.Node(RegResample(inter_val="NN"),
-                                                   name="pad_robustpetra_skull_mask")
-
-                    main_workflow.connect(
-                        skull_petra_pipe,
-                        "outputnode.robustpetra_skull_mask",
-                        pad_robustpetra_skull_mask, "flo_file")
-
-                    main_workflow.connect(segment_pnh_pipe,
-                                          "outputnode.native_T1",
-                                          pad_robustpetra_skull_mask, "ref_file")
-
-                    main_workflow.connect(segment_pnh_pipe,
-                                          "outputnode.cropped_to_native_trans",
-                                          pad_robustpetra_skull_mask, "trans_file")
-
                     print("Using reg_aladin transfo to pad head_mask back")
 
                     pad_petra_head_mask = pe.Node(RegResample(inter_val="NN"),
@@ -556,10 +538,27 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
                                           "outputnode.cropped_to_native_trans",
                                           pad_petra_head_mask, "trans_file")
 
-    if "ct" in ssoft:
+                    if "petra_skull_fov" in params["skull_petra_pipe"]:
+                        pad_robustpetra_skull_mask = pe.Node(
+                            RegResample(inter_val="NN"),
+                            name="pad_robustpetra_skull_mask")
 
-        if "skull_ct_pipe" in params.keys():
-            print("Found skull_ct_pipe")
+                        main_workflow.connect(
+                            skull_petra_pipe,
+                            "outputnode.robustpetra_skull_mask",
+                            pad_robustpetra_skull_mask, "flo_file")
+
+                        main_workflow.connect(
+                            segment_pnh_pipe, "outputnode.native_T1",
+                            pad_robustpetra_skull_mask, "ref_file")
+
+                        main_workflow.connect(
+                            segment_pnh_pipe,
+                            "outputnode.cropped_to_native_trans",
+                            pad_robustpetra_skull_mask, "trans_file")
+
+    if "ct" in ssoft and "skull_ct_pipe" in params.keys():
+        print("Found skull_ct_pipe")
 
         skull_ct_pipe = create_skull_ct_pipe(
             params=parse_key(params, "skull_ct_pipe"))
@@ -591,36 +590,14 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
 
         main_workflow.connect(datasource, ('T1', get_first_elem),
                               skull_t1_pipe, 'inputnode.t1')
-        
+
         main_workflow.connect(segment_pnh_pipe,
                               "outputnode.stereo_native_T1",
                               skull_t1_pipe, 'inputnode.stereo_native_T1')
-        
-        main_workflow.connect(segment_pnh_pipe,
-                              "outputnode.native_to_stereo_trans",
-                              skull_t1_pipe, 'inputnode.native_to_stereo_trans')
-        
-        #main_workflow.connect(segment_pnh_pipe,
-        #                    "outputnode.cropped_brain_mask",
-        #                        skull_t1_pipe, 'inputnode.brainmask')
 
-        #main_workflow.connect(segment_pnh_pipe,
-                              #"outputnode.cropped_debiased_T1",
-                              #skull_t1_pipe, 'inputnode.cropped_debiased_T1')
-
-        #main_workflow.connect(datasource, ('PETRA', get_first_elem),
-        #                      skull_petra_pipe, 'inputnode.petra')
-
-    #if pad:
-        #print("Using reg_aladin transfo to pad seg_mask back")
-        #pad_petra_skull_mask = pe.Node(RegResample(inter_val="NN"),
-                                 #name="pad_petra_skull_mask")
-        #main_workflow.connect(skull_petra_pipe, 'outputnode.skull_mask',
-                         #pad_petra_skull_mask , "flo_file")
-        #main_workflow.connect(segment_pnh_pipe, "data_preparation_pipe.av_T1.avg_img",
-                         #pad_petra_skull_mask , "ref_file")
-        #main_workflow.connect(segment_pnh_pipe, "data_preparation_pipe.inv_tranfo.out_file",
-                         #pad_petra_skull_mask , "trans_file")
+        main_workflow.connect(
+            segment_pnh_pipe, "outputnode.native_to_stereo_trans",
+            skull_t1_pipe, 'inputnode.native_to_stereo_trans')
 
     if deriv:
 
@@ -751,7 +728,7 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
                 rename_petra_skull_mask = pe.Node(niu.Rename(),
                                             name="rename_petra_skull_mask")
                 rename_petra_skull_mask.inputs.format_string = \
-                    pref_deriv + "_space-{}_desc-petra_skull_mask".format(space)
+                    pref_deriv + "_space-{}_desc-petra_skullmask".format(space)
                 rename_petra_skull_mask.inputs.parse_string = parse_str
                 rename_petra_skull_mask.inputs.keep_ext = True
 
@@ -767,7 +744,7 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
                 rename_robustpetra_skull_mask = pe.Node(
                     niu.Rename(), name="rename_robustpetra_skull_mask")
                 rename_robustpetra_skull_mask.inputs.format_string = \
-                    pref_deriv + "_space-{}_desc-robustpetra_skull_mask".format(
+                    pref_deriv + "_space-{}_desc-robustpetra_skullmask".format(
                         space)
                 rename_robustpetra_skull_mask.inputs.parse_string = parse_str
                 rename_robustpetra_skull_mask.inputs.keep_ext = True
@@ -784,7 +761,7 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
                 rename_petra_head_mask = pe.Node(niu.Rename(),
                                                  name="rename_petra_head_mask")
                 rename_petra_head_mask.inputs.format_string = \
-                    pref_deriv + "_space-{}_desc-petra_head_mask".format(space)
+                    pref_deriv + "_space-{}_desc-petra_headmask".format(space)
                 rename_petra_head_mask.inputs.parse_string = parse_str
                 rename_petra_head_mask.inputs.keep_ext = True
 
@@ -801,9 +778,9 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
 
             # rename ct_skull_mask
             rename_ct_skull_mask = pe.Node(niu.Rename(),
-                                        name="rename_ct_skull_mask")
+                                           name="rename_ct_skull_mask")
             rename_ct_skull_mask.inputs.format_string = \
-                pref_deriv + "_space-stereo_desc-ct_skull_mask"
+                pref_deriv + "_space-stereo_desc-ct_skullmask"
             rename_ct_skull_mask.inputs.parse_string = parse_str
             rename_ct_skull_mask.inputs.keep_ext = True
 
@@ -817,9 +794,9 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
 
             # rename ct_skull_stl
             rename_ct_skull_stl = pe.Node(niu.Rename(),
-                                       name="rename_ct_skull_stl")
+                                          name="rename_ct_skull_stl")
             rename_ct_skull_stl.inputs.format_string = \
-                pref_deriv + "_space-stereo_desc-ct_skull_mask"
+                pref_deriv + "_space-stereo_desc-ct_skullmask"
             rename_ct_skull_stl.inputs.parse_string = parse_str
             rename_ct_skull_stl.inputs.keep_ext = True
 
@@ -831,28 +808,12 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
                 rename_ct_skull_stl, 'out_file',
                 datasink, '@ct_skull_stl')
 
-            # rename ct_skull_fov_stl
-            rename_ct_skull_fov_stl = pe.Node(niu.Rename(),
-                                           name="rename_ct_skull_fov_stl")
-            rename_ct_skull_fov_stl.inputs.format_string = \
-                pref_deriv + "_space-stereo_desc-ct_skullfov_mask"
-            rename_ct_skull_fov_stl.inputs.parse_string = parse_str
-            rename_ct_skull_fov_stl.inputs.keep_ext = True
-
-            main_workflow.connect(
-                skull_ct_pipe, 'outputnode.ct_skull_fov_stl',
-                rename_ct_skull_fov_stl, 'in_file')
-
-            main_workflow.connect(
-                rename_ct_skull_fov_stl, 'out_file',
-                datasink, '@ct_skull_fov_stl')
-
         # Rename in skull_t1_pipe
         if "skull_t1_pipe" in params.keys():
 
             # rename t1_skull_mask
             rename_t1_skull_mask = pe.Node(niu.Rename(),
-                                          name="rename_t1_skull_mask")
+                                           name="rename_t1_skull_mask")
             rename_t1_skull_mask.inputs.format_string = \
                 pref_deriv + "_space-stereo_desc-t1_skull_mask"
             rename_t1_skull_mask.inputs.parse_string = parse_str
@@ -868,9 +829,9 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
 
             # rename t1_skull_stl
             rename_t1_skull_stl = pe.Node(niu.Rename(),
-                                         name="rename_t1_skull_stl")
+                                          name="rename_t1_skull_stl")
             rename_t1_skull_stl.inputs.format_string = \
-                pref_deriv + "_space-stereo_desc-t1_skull_mask"
+                pref_deriv + "_space-stereo_desc-t1_skullmask"
             rename_t1_skull_stl.inputs.parse_string = parse_str
             rename_t1_skull_stl.inputs.keep_ext = True
 
@@ -884,14 +845,14 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
 
             # rename t1_head_mask
             rename_t1_head_mask = pe.Node(niu.Rename(),
-                                         name="rename_t1_head_mask")
+                                          name="rename_t1_head_mask")
             rename_t1_head_mask.inputs.format_string = \
-                pref_deriv + "_space-{}_desc-t1_head_mask".format(space)
+                pref_deriv + "_space-{}_desc-t1_headmask".format(space)
             rename_t1_head_mask.inputs.parse_string = parse_str
             rename_t1_head_mask.inputs.keep_ext = True
 
             main_workflow.connect(
-                skull_t1_pipe, 'outputnode.t1_head_mask',
+                skull_t1_pipe, 'outputnode.t1_headmask',
                 rename_t1_head_mask, 'in_file')
 
             main_workflow.connect(
@@ -912,19 +873,22 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
         except OSError:
             print("process_dir {} already exists".format(process_dir))
 
-        real_params_file = op.join(process_dir, datasink_name, "real_params.json")
+        real_params_file = op.join(process_dir,
+                                   datasink_name, "real_params.json")
         with open(real_params_file, 'w+') as fp:
             json.dump(params, fp)
 
     if nprocs is None:
         nprocs = 4
 
-    if not "test" in ssoft:
-        if "seq" in ssoft or nprocs==0:
+    if "test" not in ssoft:
+        if "seq" in ssoft or nprocs == 0:
             main_workflow.run()
         else:
             main_workflow.run(plugin='MultiProc',
-                              plugin_args={'n_procs' : nprocs})
+                              plugin_args={'n_procs': nprocs})
+
+
 def main():
 
     # Command line parser
