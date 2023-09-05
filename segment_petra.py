@@ -633,6 +633,7 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
             parse_str = r"sub-(?P<sub>\w*)_ses-(?P<ses>\w*)_.*"
 
         rename_all_derivatives(params, main_workflow, segment_pnh_pipe,
+                               skull_petra_pipe, skull_ct_pipe, skull_t1_pipe,
                                datasink, pref_deriv, parse_str, space, ssoft)
 
         rename_all_skull_derivatives(
