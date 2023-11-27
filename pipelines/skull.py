@@ -169,10 +169,10 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
 
     if "t1_debias" in params.keys():
         skull_t1_pipe.connect(t1_debias, "output_image",
-                            t1_fast, "in_files")
+                              t1_fast, "in_files")
     else:
         skull_t1_pipe.connect(t1_hmasked, "out_file",
-                            t1_fast, "in_files")
+                              t1_fast, "in_files")
 
     skull_t1_pipe.connect(
         inputnode, ('indiv_params', parse_key, "t1_fast"),
@@ -453,11 +453,11 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
     if "ct_skull_mask_thr" in params.keys():
 
         skull_ct_pipe.connect(ct_skull_mask_thr, "out_file",
-                                 ct_skull_mask_binary, "in_file")
+                              ct_skull_mask_binary, "in_file")
     else:
 
         skull_ct_pipe.connect(ct_skull_auto_mask, "mask_img_file",
-                                 ct_skull_mask_binary, "in_file")
+                              ct_skull_mask_binary, "in_file")
 
     # ct_skull_gcc ####### [okey]
     ct_skull_gcc = pe.Node(
