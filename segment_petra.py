@@ -498,10 +498,12 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
 
         main_workflow.connect(segment_pnh_pipe,
                               "outputnode.native_to_stereo_trans",
-                              skull_petra_pipe, 'inputnode.native_to_stereo_trans')
+                              skull_petra_pipe,
+                              'inputnode.native_to_stereo_trans')
 
-        main_workflow.connect(datasource, "indiv_params",
-                              skull_petra_pipe, 'inputnode.indiv_params')
+        if indiv_params:
+            main_workflow.connect(datasource, "indiv_params",
+                                  skull_petra_pipe, 'inputnode.indiv_params')
 
         if pad and space == "native":
 
@@ -621,8 +623,9 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
                                   "outputnode.stereo_native_T1",
                                   skull_t1_pipe, 'inputnode.stereo_native_T1')
 
-        main_workflow.connect(datasource, "indiv_params",
-                              skull_t1_pipe, 'inputnode.indiv_params')
+        if indiv_params:
+            main_workflow.connect(datasource, "indiv_params",
+                                  skull_t1_pipe, 'inputnode.indiv_params')
 
     if deriv:
 
@@ -666,7 +669,7 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
 
                 # rename petra_skull_mask
                 rename_petra_skull_mask = pe.Node(niu.Rename(),
-                                                name="rename_petra_skull_mask")
+                                                  name="rename_petra_skull_mask")
                 rename_petra_skull_mask.inputs.format_string = \
                     pref_deriv + "_space-{}_desc-petra_skullmask".format(space)
                 rename_petra_skull_mask.inputs.parse_string = parse_str
