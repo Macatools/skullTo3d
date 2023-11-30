@@ -630,7 +630,7 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
     if "skull_t2_pipe" in params.keys():
         print("Found skull_t2_pipe")
 
-        skull_t2_pipe = create_skull_t1_pipe1(
+        skull_t2_pipe = create_skull_t1_pipe(
             params=parse_key(params, "skull_t2_pipe"))
 
         if use_debiased_t1:
