@@ -484,8 +484,8 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
 
         else:
             main_workflow.connect(segment_pnh_pipe,
-                                  #"outputnode.native_T2",
-                                  "outputnode.native_T1",
+                                  "outputnode.native_T2",
+                                  #"outputnode.native_T1",
                                   skull_petra_pipe, 'inputnode.native_img')
 
         # all remaining connection
