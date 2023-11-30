@@ -639,13 +639,13 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
             print("Using stereo debias T2 for skull_t2_pipe ")
             main_workflow.connect(segment_pnh_pipe,
                                   "outputnode.stereo_debiased_T2",
-                                  skull_t2_pipe, 'inputnode.stereo_native_T2')
+                                  skull_t2_pipe, 'inputnode.stereo_native_T1')
         else:
 
             print("Using stereo native T2 for skull_t2_pipe ")
             main_workflow.connect(segment_pnh_pipe,
                                   "outputnode.stereo_native_T2",
-                                  skull_t2_pipe, 'inputnode.stereo_native_T2')
+                                  skull_t2_pipe, 'inputnode.stereo_native_T1')
 
         if indiv_params:
             main_workflow.connect(datasource, "indiv_params",
