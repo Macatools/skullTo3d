@@ -426,12 +426,6 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
             "datatype": "anat", "suffix": "T2w",
             "extension": ["nii", ".nii.gz"]}
 
-    #if 'petra' in ssoft:
-        #output_query['PETRA'] = {
-            #"datatype": "anat", "suffix": "T2star",
-            #"acquisition": "petra",
-            #"extension": ["nii", ".nii.gz"]}
-
     if 'petra' in ssoft:
         output_query['PETRA'] = {
             "datatype": "anat", "suffix": "PDw",
@@ -484,8 +478,8 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
 
         else:
             main_workflow.connect(segment_pnh_pipe,
-                                  "outputnode.native_T2",
-                                  #"outputnode.native_T1",
+                                  #"outputnode.native_T2",
+                                  "outputnode.native_T1",
                                   skull_petra_pipe, 'inputnode.native_img')
 
         # all remaining connection
