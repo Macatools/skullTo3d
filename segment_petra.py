@@ -160,6 +160,12 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
     if 't1' in ssoft:
         new_ssoft.remove('t1')
 
+    if 'CT' in ssoft:
+        new_ssoft.remove('CT')
+
+    if 'petra' in ssoft:
+        new_ssoft.remove('petra')
+
     if 'native' in ssoft:
         new_ssoft.remove('native')
 
@@ -451,6 +457,11 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
         datasource = create_datasource(
             output_query, data_dir, subjects,  sessions, acquisitions,
             reconstructions)
+
+    print(datasource)
+
+    return main_workflow
+
 
     main_workflow.connect(datasource, 'T1',
                           segment_pnh_pipe, 'inputnode.list_T1')
