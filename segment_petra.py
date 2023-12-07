@@ -458,10 +458,6 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
             output_query, data_dir, subjects,  sessions, acquisitions,
             reconstructions)
 
-    print(datasource)
-    return main_workflow
-
-
     main_workflow.connect(datasource, 'T1',
                           segment_pnh_pipe, 'inputnode.list_T1')
 
