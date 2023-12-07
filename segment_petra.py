@@ -459,7 +459,6 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
             reconstructions)
 
     print(datasource)
-
     return main_workflow
 
 
