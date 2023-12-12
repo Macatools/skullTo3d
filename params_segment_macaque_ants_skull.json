@@ -115,7 +115,7 @@
     {
         "petra_head_auto_mask":
         {
-            "kmeans": false,
+            "kmeans": true,
             "sample_bins": 3,
             "distance": 1,
             "operation": "lower",
@@ -163,7 +163,7 @@
     {
         "t1_head_auto_mask":
         {
-            "kmeans": false,
+            "kmeans": true,
             "sample_bins": 30,
             "distance": 1,
             "operation": "lower",
