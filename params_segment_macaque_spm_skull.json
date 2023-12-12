@@ -68,7 +68,7 @@
     {
         "pad_template_T1":
         {
-            "pad_val": 20
+            "pad_val": 40
         },
         "reg_T1_on_template":
         {
@@ -173,29 +173,29 @@
         }
     },
     "skull_ct_pipe":
+    {
+        "ct_skull_auto_mask":
         {
-            "ct_skull_auto_mask":
-            {
-                "kmeans": false,
-                "sample_bins": 30,
-                "distance": 10,
-            	"operation": "higher",
-            	"index": 3
-            },
-            "ct_skull_dilate":
-            {
-                "operation" : "modal",
-                "kernel_shape" : "boxv",
-                "kernel_size" : 3.0
-            },
-            "ct_skull_erode":
-            {
-                "kernel_shape" : "boxv",
-                "kernel_size" : 3.0
-            },
-            "ct_skull_fov":
-            {
-                "brainsize" : 65
-            }
+            "kmeans": false,
+            "sample_bins": 30,
+            "distance": 10,
+            "operation": "higher",
+            "index": 3
+        },
+        "ct_skull_dilate":
+        {
+            "operation" : "modal",
+            "kernel_shape" : "boxv",
+            "kernel_size" : 3.0
+        },
+        "ct_skull_erode":
+        {
+            "kernel_shape" : "boxv",
+            "kernel_size" : 3.0
+        },
+        "ct_skull_fov":
+        {
+            "brainsize" : 65
+        }
     }
 }
