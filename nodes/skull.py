@@ -101,10 +101,8 @@ def mask_auto_img(img_file, operation, index, sample_bins, distance, kmeans):
     def compute_Kmeans(img_arr, operation, index=1, num_clusters=3):
         import os
         import numpy as np
-        import nibabel as nib
-        import matplotlib.pyplot as plt
         from sklearn.cluster import KMeans
-        ## Mean function
+        # Mean function
         def calculate_mean(data):
             total = sum(data)
             count = len(data)
@@ -118,7 +116,6 @@ def mask_auto_img(img_file, operation, index, sample_bins, distance, kmeans):
         g.write("Running Kmeans with : {} {} {}\n".format(
             operation, index, num_clusters))
 
-
         # Reshape data to a 1D array (required by k-means)
         X = np.copy(img_arr).flatten().reshape(-1, 1)
 
@@ -128,7 +125,8 @@ def mask_auto_img(img_file, operation, index, sample_bins, distance, kmeans):
         cluster_labels = kmeans.fit_predict(X)
 
         # Split data into groups based on cluster labels
-        groups = [X[cluster_labels == i].flatten() for i in range(num_clusters)]
+        groups = [X[cluster_labels == i].flatten()
+                  for i in range(num_clusters)]
 
         avail_operations = ["lower", "interval", "higher"]
 
