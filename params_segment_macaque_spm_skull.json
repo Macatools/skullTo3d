@@ -88,7 +88,7 @@
             "sample_bins": 3,
             "distance": 1,
             "operation": "lower",
-            "index": 0
+            "index": 1
         },
         "petra_head_dilate":
         {
