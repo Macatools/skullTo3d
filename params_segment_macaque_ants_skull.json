@@ -189,7 +189,7 @@
         "t1_head_erode_skin":
         {
             "kernel_shape": "boxv",
-            "kernel_size": 4.0
+            "kernel_size": 14.0
         },
         "t1_skull_dilate":
         {
