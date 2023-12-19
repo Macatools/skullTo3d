@@ -101,7 +101,7 @@
         {
             "pad_val": 60
         },
-        "crop_aladin_T1":
+        "reg_T1_on_template":
         {
             "nac_flag": true,
             "rig_only_flag": true,
