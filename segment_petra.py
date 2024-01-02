@@ -91,7 +91,7 @@ fsl.FSLCommand.set_default_output_type('NIFTI_GZ')
 
 
 def create_main_workflow(data_dir, process_dir, soft, species, subjects,
-                         sessions, acquisitions, reconstructions,
+                         sessions, datatypes, acquisitions, reconstructions,
                          params_file, indiv_params_file, mask_file,
                          template_path, template_files, nprocs, reorient,
                          deriv, pad, use_debiased_t1, wf_name="macapype"):
@@ -142,6 +142,8 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
 
     """
 
+    datatypes = [dt.lower() for dt in datatypes]
+
     soft = soft.lower()
 
     ssoft = soft.split("_")
@@ -156,15 +158,6 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
 
     if 'noseg' in ssoft:
         new_ssoft.remove('noseg')
-
-    if 't1' in ssoft:
-        new_ssoft.remove('t1')
-
-    if 'CT' in ssoft:
-        new_ssoft.remove('CT')
-
-    if 'petra' in ssoft:
-        new_ssoft.remove('petra')
 
     if 'native' in ssoft:
         new_ssoft.remove('native')
@@ -270,8 +263,17 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
     # soft
     wf_name += "_{}".format(soft)
 
-    if 't1' in ssoft:
+    if 't1' in datatypes:
         wf_name += "_t1"
+
+    if 't2' in datatypes:
+        wf_name += "_t2"
+
+    if 'petra' in datatypes:
+        wf_name += "_t2"
+
+    if 'ct' in datatypes:
+        wf_name += "_CT"
 
     if mask_file is not None:
         wf_name += "_mask"
@@ -400,13 +402,14 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
         else:
             space="native"
 
-        if "t1" in ssoft:
+        if "t1" in datatypes and 't2' in datatypes:
             segment_pnh_pipe = create_full_T1_ants_subpipes(
                 params_template=params_template,
                 params_template_aladin=params_template_aladin,
                 params_template_stereo=params_template_stereo,
                 params=params, space=space, pad=pad)
-        else:
+
+        elif "t1" in datatypes:
             segment_pnh_pipe = create_full_ants_subpipes(
                 params_template=params_template,
                 params_template_aladin=params_template_aladin,
@@ -418,26 +421,22 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
 
     # T1 (mandatory, always added)
     # T2 is optional, if "_T1" is added in the -soft arg
-    if 't1' in ssoft:
+    if 't1' in datatypes:
         output_query['T1'] = {
             "datatype": "anat", "suffix": "T1w",
             "extension": ["nii", ".nii.gz"]}
 
-    else:
-        output_query['T1'] = {
-            "datatype": "anat", "suffix": "T1w",
-            "extension": ["nii", ".nii.gz"]}
-
+    if 't2' in datatypes:
         output_query['T2'] = {
             "datatype": "anat", "suffix": "T2w",
             "extension": ["nii", ".nii.gz"]}
 
-    if 'petra' in ssoft:
+    if 'petra' in datatypes:
         output_query['PETRA'] = {
             "datatype": "anat", "suffix": "PDw",
             "extension": ["nii", ".nii.gz"]}
 
-    if 'ct' in ssoft:
+    if 'ct' in datatypes:
         output_query['CT'] = {
             "datatype": "anat", "suffix": "T2star",
             "acquisition": "CT",
@@ -458,34 +457,33 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
             output_query, data_dir, subjects,  sessions, acquisitions,
             reconstructions)
 
-    main_workflow.connect(datasource, 'T1',
-                          segment_pnh_pipe, 'inputnode.list_T1')
+    if "t1" in datatypes:
+        main_workflow.connect(datasource, 'T1',
+                              segment_pnh_pipe, 'inputnode.list_T1')
 
-    if not "t1" in ssoft:
+    if "t2" in datatypes:
         main_workflow.connect(datasource, 'T2',
                               segment_pnh_pipe, 'inputnode.list_T2')
 
-    elif "t1" in ssoft and "spm" in ssoft:
+    elif "t1" in datatypes and "spm" in ssoft:
         # cheating using T2 as T1
         main_workflow.connect(datasource, 'T1',
                               segment_pnh_pipe, 'inputnode.list_T2')
 
-    if "petra" in ssoft and "skull_petra_pipe" in params.keys():
+    if "petra" in datatypes and "skull_petra_pipe" in params.keys():
         print("Found skull_petra_pipe")
 
         skull_petra_pipe = create_skull_petra_pipe(
             params=parse_key(params, "skull_petra_pipe"))
 
-        if "t1" in ssoft:
-
-            main_workflow.connect(segment_pnh_pipe,
-                                  "outputnode.native_T1",
-                                  skull_petra_pipe, 'inputnode.native_img')
-
-        else:
+        if "t1" in datatypes and "t2" in datatypes:
             main_workflow.connect(segment_pnh_pipe,
                                   "outputnode.native_T2",
-                                  #"outputnode.native_T1",
+                                  skull_petra_pipe, 'inputnode.native_img')
+
+        elif "t1" in datatypes:
+            main_workflow.connect(segment_pnh_pipe,
+                                  "outputnode.native_T1",
                                   skull_petra_pipe, 'inputnode.native_img')
 
         # all remaining connection
@@ -579,7 +577,7 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
                             pad_robustpetra_skull_mask, "out_file",
                             outputnode, "native_robustpetra_skull_mask")
 
-    if "ct" in ssoft and "skull_ct_pipe" in params.keys():
+    if "ct" in datatypes and "skull_ct_pipe" in params.keys():
         print("Found skull_ct_pipe")
 
         skull_ct_pipe = create_skull_ct_pipe(
@@ -604,7 +602,7 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
             segment_pnh_pipe, "outputnode.native_to_stereo_trans",
             skull_ct_pipe, 'inputnode.native_to_stereo_trans')
 
-    if "skull_t1_pipe" in params.keys():
+    if 't1' in datatypes and "skull_t1_pipe" in params.keys():
         print("Found skull_t1_pipe")
 
         skull_t1_pipe = create_skull_t1_pipe(
@@ -788,6 +786,11 @@ def main():
     parser.add_argument("-sessions", "-ses", dest="ses",
                         type=str, nargs='+', help="Sessions", required=False)
 
+    parser.add_argument("-datatypes", "-d", dest="datatypes", type=str,
+                        defaut='T1', nargs='+',
+                        help="MRI Datatypes (T1, T2)",
+                        required=False)
+
     parser.add_argument("-acquisitions", "-acq", dest="acq", type=str,
                         nargs='+', default=None, help="Acquisitions")
 
@@ -843,6 +846,7 @@ def main():
         species=args.species,
         subjects=args.sub,
         sessions=args.ses,
+        datatypes=args.datatypes,
         acquisitions=args.acq,
         reconstructions=args.rec,
         params_file=args.params_file,
