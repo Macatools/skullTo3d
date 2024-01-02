@@ -668,8 +668,9 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
             if pad and space == "native":
 
                 # rename petra_skull_mask
-                rename_petra_skull_mask = pe.Node(niu.Rename(),
-                                                  name="rename_petra_skull_mask")
+                rename_petra_skull_mask = pe.Node(
+                    niu.Rename(), name="rename_petra_skull_mask")
+
                 rename_petra_skull_mask.inputs.format_string = \
                     pref_deriv + "_space-{}_desc-petra_skullmask".format(space)
                 rename_petra_skull_mask.inputs.parse_string = parse_str
@@ -708,7 +709,9 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
                         "_space-{}_desc-robustpetra_skullmask".format(
                             space)
 
-                    rename_robustpetra_skull_mask.inputs.parse_string = parse_str
+                    rename_robustpetra_skull_mask.inputs.parse_string = \
+                        parse_str
+
                     rename_robustpetra_skull_mask.inputs.keep_ext = True
 
                     main_workflow.connect(
@@ -767,28 +770,37 @@ def main():
 
     parser.add_argument("-data", dest="data", type=str, required=True,
                         help="Directory containing MRI data (BIDS)")
-    parser.add_argument("-out", dest="out", type=str, #nargs='+',
+
+    parser.add_argument("-out", dest="out", type=str,
                         help="Output dir", required=True)
+
     parser.add_argument("-soft", dest="soft", type=str,
                         help="Sofware of analysis (SPM or ANTS are defined)",
                         required=True)
+
     parser.add_argument("-species", dest="species", type=str,
                         help="Type of PNH to process",
                         required=False)
+
     parser.add_argument("-subjects", "-sub", dest="sub",
                         type=str, nargs='+', help="Subjects", required=False)
+
     parser.add_argument("-sessions", "-ses", dest="ses",
                         type=str, nargs='+', help="Sessions", required=False)
+
     parser.add_argument("-acquisitions", "-acq", dest="acq", type=str,
                         nargs='+', default=None, help="Acquisitions")
+
     parser.add_argument("-records", "-rec", dest="rec", type=str, nargs='+',
                         default=None, help="Records")
+
     parser.add_argument("-params", dest="params_file", type=str,
                         help="Parameters json file", required=False)
 
     parser.add_argument("-indiv_params", "-indiv", dest="indiv_params_file",
                         type=str, help="Individual parameters json file",
                         required=False)
+
     parser.add_argument("-mask", dest="mask_file", type=str,
                         help="precomputed mask file", required=False)
 
@@ -811,14 +823,14 @@ def main():
                         help="output derivatives in BIDS orig directory",
                         required=False)
 
-    parser.add_argument("-use_debiased_t1", dest="use_debiased_t1", action='store_true',
+    parser.add_argument("-use_debiased_t1", dest="use_debiased_t1",
+                        action='store_true',
                         help="output derivatives in BIDS orig directory",
                         required=False)
 
     parser.add_argument("-pad", dest="pad", action='store_true',
                         help="padding mask and seg_mask",
                         required=False)
-
 
     args = parser.parse_args()
 
@@ -843,6 +855,7 @@ def main():
         deriv=args.deriv,
         use_debiased_t1=args.use_debiased_t1,
         pad=args.pad)
+
 
 if __name__ == '__main__':
     main()
