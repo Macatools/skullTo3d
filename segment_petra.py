@@ -787,7 +787,7 @@ def main():
                         type=str, nargs='+', help="Sessions", required=False)
 
     parser.add_argument("-datatypes", "-d", dest="datatypes", type=str,
-                        defaut='T1', nargs='+',
+                        default='T1 petra', nargs='+',
                         help="MRI Datatypes (T1, T2)",
                         required=False)
 
