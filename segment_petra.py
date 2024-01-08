@@ -658,7 +658,7 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
         rename_all_derivatives(params, main_workflow, segment_pnh_pipe,
                                datasink, pref_deriv, parse_str, space, ssoft)
 
-        if "petra" in ssoft and "skull_petra_pipe" in params.keys():
+        if "petra" in datatypes and "skull_petra_pipe" in params.keys():
             rename_all_skull_petra_derivatives(
                 params, main_workflow, segment_pnh_pipe, skull_petra_pipe,
                 datasink, pref_deriv, parse_str, space, pad, ssoft)
@@ -720,12 +720,12 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
                         rename_robustpetra_skull_mask, 'out_file',
                         datasink, '@robustpetra_skull_mask')
 
-        if "skull_t1_pipe" in params.keys():
+        if "t1" in datatypes and "skull_t1_pipe" in params.keys():
             rename_all_skull_t1_derivatives(
                 params, main_workflow, segment_pnh_pipe, skull_t1_pipe,
                 datasink, pref_deriv, parse_str, space, pad, ssoft)
 
-        if "ct" in ssoft and "skull_ct_pipe" in params.keys():
+        if "ct" in datatypes and "skull_ct_pipe" in params.keys():
             rename_all_skull_ct_derivatives(
                 params, main_workflow, segment_pnh_pipe, skull_ct_pipe,
                 datasink, pref_deriv, parse_str, space, pad, ssoft)
