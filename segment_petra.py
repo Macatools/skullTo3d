@@ -270,7 +270,7 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
         wf_name += "_t2"
 
     if 'petra' in datatypes:
-        wf_name += "_t2"
+        wf_name += "_petra"
 
     if 'ct' in datatypes:
         wf_name += "_CT"
