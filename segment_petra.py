@@ -724,6 +724,8 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
                         datasink, '@robustpetra_skull_mask')
 
         if "ct" in datatypes and "skull_ct_pipe" in params.keys():
+            print("rename ct skull pipe")
+
             rename_all_skull_ct_derivatives(
                 params, main_workflow, segment_pnh_pipe, skull_ct_pipe,
                 datasink, pref_deriv, parse_str, space, pad, ssoft)
