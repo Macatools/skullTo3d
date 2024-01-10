@@ -370,10 +370,6 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
         else:
             params_template_stereo = params_template
 
-
-
-
-
     print (params_template)
 
     # main_workflow
@@ -602,7 +598,7 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
             segment_pnh_pipe, "outputnode.native_to_stereo_trans",
             skull_ct_pipe, 'inputnode.native_to_stereo_trans')
 
-    if 't1' in datatypes and "skull_t1_pipe" in params.keys():
+    if 't1' in datatypes and "t1" in ssoft and "skull_t1_pipe" in params.keys():
         print("Found skull_t1_pipe")
 
         skull_t1_pipe = create_skull_t1_pipe(
