@@ -723,14 +723,14 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
                         rename_robustpetra_skull_mask, 'out_file',
                         datasink, '@robustpetra_skull_mask')
 
-        if "t1" in datatypes and "skull_t1_pipe" in params.keys():
-            rename_all_skull_t1_derivatives(
-                params, main_workflow, segment_pnh_pipe, skull_t1_pipe,
-                datasink, pref_deriv, parse_str, space, pad, ssoft)
-
         if "ct" in datatypes and "skull_ct_pipe" in params.keys():
             rename_all_skull_ct_derivatives(
                 params, main_workflow, segment_pnh_pipe, skull_ct_pipe,
+                datasink, pref_deriv, parse_str, space, pad, ssoft)
+
+        if "t1" in datatypes and "t1" in ssoft and "skull_t1_pipe" in params.keys():
+            rename_all_skull_t1_derivatives(
+                params, main_workflow, segment_pnh_pipe, skull_t1_pipe,
                 datasink, pref_deriv, parse_str, space, pad, ssoft)
 
     main_workflow.write_graph(graph2use="colored")
