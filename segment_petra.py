@@ -173,7 +173,6 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
     print("soft: ", soft)
     print("ssoft: ", ssoft)
 
-
     # formating args
     data_dir = op.abspath(data_dir)
 
@@ -185,7 +184,7 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
     except OSError:
         print("process_dir {} already exists".format(process_dir))
 
-    #params
+    # params
     if params_file is None:
 
         # species
@@ -193,7 +192,9 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
 
             species = species.lower()
 
-            rep_species = {"marmoset":"marmo", "marmouset":"marmo", "chimpanzee":"chimp"}
+            rep_species = {"marmoset": "marmo",
+                           "marmouset": "marmo",
+                           "chimpanzee": "chimp"}
 
             if species in list(rep_species.keys()):
                 species = rep_species[species]
@@ -729,6 +730,7 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
             rename_all_skull_ct_derivatives(
                 params, main_workflow, segment_pnh_pipe, skull_ct_pipe,
                 datasink, pref_deriv, parse_str, space, pad, ssoft)
+            0/0
 
         if "t1" in datatypes and "t1" in ssoft and "skull_t1_pipe" in params.keys():
             rename_all_skull_t1_derivatives(
