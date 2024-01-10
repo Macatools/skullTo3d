@@ -216,8 +216,6 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
 
         print("Using default params file:", params_file)
 
-        0/0
-
         params, indiv_params, extra_wf_name = update_params(
             ssoft=ssoft, subjects=subjects, sessions=sessions,
             params_file=params_file, indiv_params_file=indiv_params_file)
