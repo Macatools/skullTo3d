@@ -173,7 +173,6 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
     print("soft: ", soft)
     print("ssoft: ", ssoft)
 
-    0/0
 
     # formating args
     data_dir = op.abspath(data_dir)
@@ -216,6 +215,8 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
             exit(-1)
 
         print("Using default params file:", params_file)
+
+        0/0
 
         params, indiv_params, extra_wf_name = update_params(
             ssoft=ssoft, subjects=subjects, sessions=sessions,
