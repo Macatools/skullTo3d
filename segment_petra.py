@@ -665,7 +665,7 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
         if "petra" in datatypes and "skull_petra_pipe" in params.keys():
             rename_all_skull_petra_derivatives(
                 params, main_workflow, segment_pnh_pipe, skull_petra_pipe,
-                datasink, pref_deriv, parse_str, space, pad, ssoft)
+                datasink, pref_deriv, parse_str, space, pad)
 
             if pad and space == "native":
 
@@ -729,13 +729,12 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
 
             rename_all_skull_ct_derivatives(
                 params, main_workflow, segment_pnh_pipe, skull_ct_pipe,
-                datasink, pref_deriv, parse_str, space, pad, ssoft)
-            0/0
+                datasink, pref_deriv, parse_str, space, pad)
 
         if "t1" in datatypes and "t1" in ssoft and "skull_t1_pipe" in params.keys():
             rename_all_skull_t1_derivatives(
                 params, main_workflow, segment_pnh_pipe, skull_t1_pipe,
-                datasink, pref_deriv, parse_str, space, pad, ssoft)
+                datasink, pref_deriv, parse_str, space, pad)
 
     main_workflow.write_graph(graph2use="colored")
     main_workflow.config['execution'] = {'remove_unnecessary_outputs': 'false'}

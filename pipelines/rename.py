@@ -8,10 +8,10 @@ import nipype.pipeline.engine as pe
 
 def rename_all_skull_petra_derivatives(params, main_workflow, segment_pnh_pipe,
                                        skull_petra_pipe, datasink, pref_deriv,
-                                       parse_str, space, pad, ssoft):
+                                       parse_str, space, pad):
 
     # Rename in skull_petra_pipe
-    if "skull_petra_pipe" in params.keys() and "petra" in ssoft:
+    if "skull_petra_pipe" in params.keys():
 
         # rename petra_skull_stl
         rename_petra_skull_stl = pe.Node(niu.Rename(),
@@ -105,10 +105,10 @@ def rename_all_skull_petra_derivatives(params, main_workflow, segment_pnh_pipe,
 
 def rename_all_skull_ct_derivatives(params, main_workflow, segment_pnh_pipe,
                                     skull_ct_pipe, datasink, pref_deriv,
-                                    parse_str, space, pad, ssoft):
+                                    parse_str, space, pad):
 
     # Rename in skull_ct_pipe
-    if "skull_ct_pipe" in params.keys() and "ct" in ssoft:
+    if "skull_ct_pipe" in params.keys():
 
         # rename ct_skull_mask
         rename_ct_skull_mask = pe.Node(niu.Rename(),
@@ -145,7 +145,7 @@ def rename_all_skull_ct_derivatives(params, main_workflow, segment_pnh_pipe,
 
 def rename_all_skull_t1_derivatives(params, main_workflow, segment_pnh_pipe,
                                     skull_t1_pipe, datasink, pref_deriv,
-                                    parse_str, space, pad, ssoft):
+                                    parse_str, space, pad):
 
     # Rename in skull_t1_pipe
     if "skull_t1_pipe" in params.keys():
