@@ -165,7 +165,15 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
     if 'template' in ssoft:
         new_ssoft.remove('template')
 
+    if 't1' in ssoft:
+        new_ssoft.remove('t1')
+
     soft = "_".join(new_ssoft)
+
+    print("soft: ", soft)
+    print("ssoft: ", ssoft)
+
+    0/0
 
     # formating args
     data_dir = op.abspath(data_dir)
