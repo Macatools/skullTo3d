@@ -147,6 +147,9 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
 
     skull_dt = [dt.lower() for dt in skull_dt]
 
+    print("brain_dt: ", brain_dt)
+    print("skull_dt: ", skull_dt)
+
     soft = soft.lower()
 
     ssoft = soft.split("_")
