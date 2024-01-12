@@ -32,13 +32,13 @@
             "vox": 1
         }
     },
+    "debias":
+    {
+        "s": 4,
+        "k": true
+    },
     "brain_segment_pipe":
     {
-        "debias":
-        {
-            "s": 4,
-            "k": true
-        },
         "register_NMT_pipe": {},
         "segment_atropos_pipe":
         {
