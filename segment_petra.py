@@ -73,7 +73,7 @@ from macapype.utils.utils_params import update_params
 
 from macapype.utils.misc import show_files, get_first_elem, parse_key
 
-from macapype.pipelines.rename import rename_all_derivatives
+from macapype.pipelines.rename import rename_all_brain_derivatives
 
 from pipelines.skull import create_skull_petra_pipe
 
@@ -670,8 +670,10 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
             pref_deriv = "sub-%(sub)s_ses-%(ses)s"
             parse_str = r"sub-(?P<sub>\w*)_ses-(?P<ses>\w*)_.*"
 
-        rename_all_derivatives(params, main_workflow, segment_brain_pipe,
-                               datasink, pref_deriv, parse_str, space, ssoft)
+        rename_all_brain_derivatives(
+            params, main_workflow, segment_brain_pipe,
+            datasink, pref_deriv, parse_str, space, ssoft,
+            brain_datatypes)
 
         if "petra" in skull_dt and "skull_petra_pipe" in params.keys():
             rename_all_skull_petra_derivatives(
