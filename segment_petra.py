@@ -673,7 +673,7 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
         rename_all_brain_derivatives(
             params, main_workflow, segment_brain_pipe,
             datasink, pref_deriv, parse_str, space, ssoft,
-            brain_datatypes)
+            brain_dt)
 
         if "petra" in skull_dt and "skull_petra_pipe" in params.keys():
             rename_all_skull_petra_derivatives(
