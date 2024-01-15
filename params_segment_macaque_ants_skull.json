@@ -5,10 +5,6 @@
     },
     "short_preparation_pipe":
     {
-        "pre_crop_z_T1":
-        {
-            "brainsize": 70
-        },
         "crop_aladin_T1":
         {
             "nac_flag": true,
@@ -97,10 +93,6 @@
         "pad_template_T1":
         {
             "pad_val": 40
-        },
-        "pre_crop_z_T1":
-        {
-            "brainsize": 70
         },
         "reg_T1_on_template":
         {
