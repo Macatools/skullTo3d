@@ -504,7 +504,6 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
         main_workflow.connect(datasource, ('PETRA', show_files),
                               skull_petra_pipe, 'inputnode.petra')
 
-
         main_workflow.connect(segment_brain_pipe,
                               "outputnode.stereo_native_T1",
                               skull_petra_pipe, 'inputnode.stereo_native_T1')
@@ -641,14 +640,14 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
         if "regex_subs" in params.keys():
             params_regex_subs = params["regex_subs"]
         else:
-            params_regex_subs={}
+            params_regex_subs = {}
 
         if "subs" in params.keys():
             params_subs = params["rsubs"]
         else:
-            params_subs={}
+            params_subs = {}
 
-        print (datasource.iterables)
+        print(datasource.iterables)
 
         datasink = create_datasink(iterables=datasource.iterables,
                                    name=datasink_name,
