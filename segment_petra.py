@@ -94,7 +94,7 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
                          sessions, brain_dt, skull_dt, acquisitions,
                          reconstructions, params_file, indiv_params_file,
                          mask_file, template_path, template_files, nprocs,
-                         reorient, deriv, pad, use_debiased_t1,
+                         reorient, deriv, pad,
                          wf_name="macapype"):
 
     # macapype_pipeline
@@ -624,17 +624,11 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
         skull_t1_pipe = create_skull_t1_pipe(
             params=parse_key(params, "skull_t1_pipe"))
 
-        if use_debiased_t1:
-            print("Using stereo debias T1 for skull_t1_pipe ")
-            main_workflow.connect(segment_brain_pipe,
-                                  "outputnode.stereo_debiased_T1",
-                                  skull_t1_pipe, 'inputnode.stereo_native_T1')
-        else:
-
-            print("Using stereo native T1 for skull_t1_pipe ")
-            main_workflow.connect(segment_brain_pipe,
-                                  "outputnode.stereo_native_T1",
-                                  skull_t1_pipe, 'inputnode.stereo_native_T1')
+        print("Using stereo debias T1 for skull_t1_pipe ")
+        main_workflow.connect(
+            segment_brain_pipe,
+            "outputnode.stereo_debiased_T1",
+            skull_t1_pipe, 'inputnode.stereo_native_T1')
 
         if indiv_params:
             main_workflow.connect(datasource, "indiv_params",
@@ -852,11 +846,6 @@ def main():
                         help="output derivatives in BIDS orig directory",
                         required=False)
 
-    parser.add_argument("-use_debiased_t1", dest="use_debiased_t1",
-                        action='store_true',
-                        help="output derivatives in BIDS orig directory",
-                        required=False)
-
     parser.add_argument("-pad", dest="pad", action='store_true',
                         help="padding mask and seg_mask",
                         required=False)
@@ -884,7 +873,6 @@ def main():
         nprocs=args.nprocs,
         reorient=args.reorient,
         deriv=args.deriv,
-        use_debiased_t1=args.use_debiased_t1,
         pad=args.pad)
 
 
