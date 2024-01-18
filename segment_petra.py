@@ -806,13 +806,13 @@ def main():
     parser.add_argument("-sessions", "-ses", dest="ses",
                         type=str, nargs='+', help="Sessions", required=False)
 
-    parser.add_argument("-brain_datatypes", "-brain_dt",
+    parser.add_argument("-brain_datatypes", "-brain_dt", "-brain",
                         dest="brain_dt", type=str,
                         default=['T1'], nargs='+',
                         help="MRI Brain Datatypes (T1, T2)",
                         required=False)
 
-    parser.add_argument("-skull_datatypes", "-skull_dt",
+    parser.add_argument("-skull_datatypes", "-skull_dt", "-skull",
                         dest="skull_dt", type=str,
                         default=['T1'], nargs='+',
                         help="MRI Brain Datatypes (T1, petra, CT)",

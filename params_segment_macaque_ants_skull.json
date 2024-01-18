@@ -176,6 +176,7 @@
         "t1_fast":
         {
             "args": "-l 10",
+            "img_type": 1,
             "output_biascorrected": true,
             "output_biasfield": true
         },
