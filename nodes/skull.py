@@ -225,6 +225,11 @@ def mask_auto_img(img_file, operation, index, sample_bins, distance, kmeans):
 
     print("X: ", X)
     print("X shape : ", X.shape)
+
+    print("nb nan: ", np.sum(np.isnan(X)))
+
+    X[np.isnan(X)] = 0
+
     print("X max : ", np.max(X))
     print("Round X max : ", np.round(np.max(X)))
     nb_bins = (np.rint(np.max(X)/sample_bins)).astype(int)
