@@ -223,9 +223,10 @@ def mask_auto_img(img_file, operation, index, sample_bins, distance, kmeans):
     # Reshape data to a 1D array (required by k-means)
     X = np.copy(img_arr).flatten().reshape(-1, 1)
 
+    print("X: ", X)
     print("X shape : ", X.shape)
-
-    print("X max : ", np.round(np.max(X)))
+    print("X max : ", np.max(X))
+    print("Round X max : ", np.round(np.max(X)))
     nb_bins = (np.rint(np.max(X)/sample_bins)).astype(int)
     print("Nb bins: ", nb_bins)
 
