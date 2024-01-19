@@ -220,15 +220,15 @@ def mask_auto_img(img_file, operation, index, sample_bins, distance, kmeans):
     img_nii = nib.load(img_file)
     img_arr = np.array(img_nii.dataobj)
 
+    print("nb nan: ", np.sum(np.isnan(img_arr)))
+    img_arr[np.isnan(img_arr)] = 0
+
     # Reshape data to a 1D array (required by k-means)
     X = np.copy(img_arr).flatten().reshape(-1, 1)
 
     print("X: ", X)
     print("X shape : ", X.shape)
 
-    print("nb nan: ", np.sum(np.isnan(X)))
-
-    X[np.isnan(X)] = 0
 
     print("X max : ", np.max(X))
     print("Round X max : ", np.round(np.max(X)))
