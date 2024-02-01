@@ -184,7 +184,7 @@
             "sample_bins": 30,
             "distance": 10,
             "operation": "higher",
-            "index": 3
+            "index": 2
         },
         "ct_skull_dilate":
         {
