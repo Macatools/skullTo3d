@@ -3,7 +3,7 @@
     {
         "template_name": "inia19",
         "template_stereo_name": "pad40_NMT_v2.0_asym",
-        "template_aladin_name": "NMT_v2.0_asym"
+        "template_aladin_name": "pad40_NMT_v2.0_asym"
     },
     "short_preparation_pipe":
     {
