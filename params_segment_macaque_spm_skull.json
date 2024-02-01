@@ -2,7 +2,7 @@
     "general":
     {
         "template_name": "inia19",
-        "template_stereo_name": "pad40_NMT_v2.0_asym",
+        "template_stereo_name": "pad40_NMT_v2.0_asym"
     },
     "short_preparation_pipe":
     {
