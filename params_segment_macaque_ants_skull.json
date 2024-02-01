@@ -132,6 +132,7 @@
     },
     "skull_t1_pipe":
     {
+        "use_debiased_t1": {},
         "t1_head_auto_mask":
         {
             "kmeans": true,
@@ -179,7 +180,7 @@
     {
         "ct_skull_auto_mask":
         {
-            "kmeans": false,
+            "kmeans": true,
             "sample_bins": 30,
             "distance": 10,
             "operation": "higher",
