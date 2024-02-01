@@ -1,5 +1,5 @@
 {
-        "general":
+    "general":
     {
         "template_name": "NMT_v2.0_asym",
         "template_stereo_name": "pad40_NMT_v2.0_asym",
@@ -36,34 +36,17 @@
             "nrm": 1
         }
     },
-    "masked_correct_bias_pipe":
+    "debias":
     {
-        "smooth":
-        {
-        "args": "-bin -s 2"
-        },
-        "norm_smooth":
-        {
-            "op_string": "-s 2 -div %s"
-        },
-        "smooth_bias":
-        {
-            "sigma": 2
-        }
+        "s": 4
     },
     "brain_segment_pipe":
     {
-        "register_NMT_pipe":
+        "reg":
         {
-            "norm_intensity":
-            {
-                "dimension": 3,
-                "bspline_fitting_distance": 200,
-                "n_iterations": [50, 50, 40, 30],
-                "convergence_threshold": 1e-08,
-                "shrink_factor": 2,
-                "args": "-r 0 --verbose 1"
-            }
+            "n": 2,
+            "m": "ref",
+            "dof": 12
         },
         "segment_atropos_pipe":
         {
