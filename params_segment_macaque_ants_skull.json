@@ -1,18 +1,18 @@
 {
-    "general":
+        "general":
     {
-        "template_name": "NMT_v2.0_asym"
+        "template_name": "NMT_v2.0_asym",
+        "template_stereo_name": "pad40_NMT_v2.0_asym",
+        "template_aladin_name": "pad40_NMT_v2.0_asym"
     },
     "short_preparation_pipe":
     {
+        "pre_crop_z_T1":
+        {
+            "brainsize": 70
+        },
         "crop_aladin_T1":
         {
-            "nac_flag": true,
-            "rig_only_flag": true,
-            "nosym_flag": true,
-            "ln_val": 12,
-            "lp_val": 10,
-            "smoo_r_val": 1.0
         }
     },
     "N4debias":
@@ -92,16 +92,10 @@
     {
         "pad_template_T1":
         {
-            "pad_val": 40
+            "pad_val": 0
         },
         "reg_T1_on_template":
         {
-            "nac_flag": true,
-            "rig_only_flag": true,
-            "nosym_flag": true,
-            "ln_val": 12,
-            "lp_val": 10,
-            "smoo_r_val": 1.0
         }
     },
     "skull_petra_pipe":
@@ -184,7 +178,7 @@
         "t1_head_erode_skin":
         {
             "kernel_shape": "boxv",
-            "kernel_size": 12.0
+            "kernel_size": 18.0
         },
         "t1_skull_dilate":
         {
@@ -202,11 +196,11 @@
     {
         "ct_skull_auto_mask":
         {
-            "kmeans": true,
+            "kmeans": false,
             "sample_bins": 30,
             "distance": 10,
-            "operation": "lower",
-            "index": 2
+            "operation": "higher",
+            "index": 3
         },
         "ct_skull_dilate":
         {
