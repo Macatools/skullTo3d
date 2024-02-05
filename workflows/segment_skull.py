@@ -75,15 +75,13 @@ from macapype.utils.misc import show_files, get_first_elem, parse_key
 
 from macapype.pipelines.rename import rename_all_brain_derivatives
 
-from pipelines.skull import create_skull_petra_pipe
+from skullTo3d.pipelines.skull import (create_skull_petra_pipe,
+                                       create_skull_ct_pipe,
+                                       create_skull_t1_pipe)
 
-from pipelines.skull import create_skull_ct_pipe
-from pipelines.skull import create_skull_t1_pipe
-
-
-from pipelines.rename import (rename_all_skull_petra_derivatives,
-                              rename_all_skull_t1_derivatives,
-                              rename_all_skull_ct_derivatives)
+from skullTo3d.pipelines.rename import (rename_all_skull_petra_derivatives,
+                                        rename_all_skull_t1_derivatives,
+                                        rename_all_skull_ct_derivatives)
 
 
 fsl.FSLCommand.set_default_output_type('NIFTI_GZ')
