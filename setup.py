@@ -31,7 +31,7 @@ print("*******************************************************")
 setup(
     name="skullTo3d",
     version=verstr,
-    packages=find_packages(),
+    packages=['skullTo3d', 'workflows', 'skullTo3d.nodes', 'skullTo3d.pipelines'],
     author="macatools team",
     description="Pipeline for skull extraction for macaque/marmoset",
     long_description=open('README.md').read(),
