@@ -31,13 +31,13 @@ print("*******************************************************")
 setup(
     name="skullTo3d",
     version=verstr,
-    packages=['skullTo3d', 'workflows', 'skullTo3d.nodes', 'skullTo3d.pipelines'],
+    packages=find_packages(),
     author="macatools team",
     description="Pipeline for skull extraction for macaque/marmoset",
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
     license='BSD 3',
     entry_points = {
-        'console_scripts': ['segment_petra = segment_petra:main']},
+        'console_scripts': ['segment_skull = segment_skull:main']},
     install_requires=required_packages,
     include_package_data=True)
