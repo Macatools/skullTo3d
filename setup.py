@@ -4,9 +4,9 @@
 import re
 from setuptools import find_packages, setup
 
-
-required_packages=[
-    "nipype", "nilearn", "networkx", "pybids", "scikit-image", "nibabel==3.2.2",
+required_packages = [
+    "nipype", "nilearn", "networkx", "pybids", "scikit-image",
+    "nibabel==3.2.2",
     "numpy", "brain-slam", "macapype"]
 
 verstr = "unknown"
@@ -24,6 +24,10 @@ else:
 
 print("Will not build conda module")
 
+print("*******************************************************")
+print(find_packages())
+print("*******************************************************")
+
 setup(
     name="skullTo3d",
     version=verstr,
@@ -35,5 +39,5 @@ setup(
     license='BSD 3',
     entry_points = {
         'console_scripts': ['segment_skull = workflows.segment_skull:main']},
-    install_requires= required_packages,
+    install_requires=required_packages,
     include_package_data=True)
