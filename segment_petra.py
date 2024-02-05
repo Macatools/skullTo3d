@@ -208,7 +208,7 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
 
             package_directory = op.dirname(op.abspath(__file__))
 
-            params_file = "{}/params_segment_{}_{}.json".format(
+            params_file = "{}/workflows/params_segment_{}_{}.json".format(
                 package_directory, species, soft)
 
         else:
