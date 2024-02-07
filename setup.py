@@ -13,7 +13,8 @@ verstr = "unknown"
 try:
     verstrline = open('skullTo3d/_version.py', "rt").read()
 except EnvironmentError:
-    pass # Okay, there is no version file.
+    pass  # Okay, there is no version file.
+
 else:
     VSRE = r"^__version__ = ['\"]([^'\"]*)['\"]"
     mo = re.search(VSRE, verstrline, re.M)
@@ -37,7 +38,7 @@ setup(
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
     license='BSD 3',
-    entry_points = {
+    entry_points={
         'console_scripts': ['segment_skull = segment_skull:main']},
     install_requires=required_packages,
     include_package_data=True)
