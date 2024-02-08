@@ -24,8 +24,7 @@ from macapype.pipelines.prepare import _create_avg_reorient_pipeline
 
 from macapype.nodes.prepare import average_align
 
-from macapype.nodes.surface import (keep_gcc,
-                                    wrap_nii2mesh_old, wrap_afni_IsoSurface)
+from macapype.nodes.surface import (keep_gcc, wrap_afni_IsoSurface)
 
 from skullTo3d.nodes.skull import (
     mask_auto_img)
@@ -441,7 +440,7 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
     mesh_ct_skull = pe.Node(
         interface=niu.Function(input_names=["nii_file"],
                                output_names=["stl_file"],
-                               function=wrap_nii2mesh_old),
+                               function=wrap_afni_IsoSurface),
         name="mesh_ct_skull")
 
     skull_ct_pipe.connect(ct_skull_erode, "out_file",
@@ -773,7 +772,6 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
     mesh_petra_skull = pe.Node(
         interface=niu.Function(input_names=["nii_file"],
                                output_names=["stl_file"],
-                               # function=wrap_nii2mesh_old),
                                function=wrap_afni_IsoSurface),
         name="mesh_petra_skull")
 
@@ -806,7 +804,7 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
         mesh_robustpetra_skull = pe.Node(
             interface=niu.Function(input_names=["nii_file"],
                                    output_names=["stl_file"],
-                                   function=wrap_nii2mesh_old),
+                                   function=wrap_afni_IsoSurface),
             name="mesh_robustpetra_skull")
 
         skull_petra_pipe.connect(petra_skull_clean, "gcc_nii_file",
