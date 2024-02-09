@@ -39,6 +39,8 @@ setup(
     long_description_content_type='text/markdown',
     license='BSD 3',
     entry_points={
-        'console_scripts': ['segment_skull = segment_skull:main']},
+        'console_scripts': ['segment_skull = segment_skull:main',
+                            'segment_petra = workflows.segment_petra:main']
+        },
     install_requires=required_packages,
     include_package_data=True)

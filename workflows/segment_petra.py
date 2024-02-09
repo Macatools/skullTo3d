@@ -90,7 +90,6 @@ from skullTo3d.pipelines.rename import (
 fsl.FSLCommand.set_default_output_type('NIFTI_GZ')
 ##########################################################################
 
-
 def create_main_workflow(data_dir, process_dir, soft, species, subjects,
                          sessions, brain_dt, skull_dt, acquisitions,
                          reconstructions, params_file, indiv_params_file,
