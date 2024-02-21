@@ -94,7 +94,7 @@ jobs:
 
       - name: Running all test pipelines (ANTS cenir macaque petra)
         run: |
-            docker run -i -v /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI:/data macatools/skullto3d:latest segment_skull -data /data/cenir-macaque-petra -out /data/cenir-macaque-petra/results -soft ANTS_prep_skull -species macaque -sub Magneto -brain_dt T1 T2 -skull_dt petra -deriv -pad -nprocs 1
+            docker run -i -v /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI:/data macatools/skullto3d:latest segment_petra -data /data/cenir-macaque-petra -out /data/cenir-macaque-petra/results -soft ANTS_prep_skull -species macaque -sub Magneto -brain_dt T1 T2 -skull_dt petra -deriv -pad -nprocs 1
 
             ls /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI/cenir-macaque-petra/results
 
@@ -140,7 +140,7 @@ jobs:
       - name: Running all test pipelines (ANTS cerimed macaque CT)
         run: |
 
-            docker run -i -v /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI:/data macatools/skullto3d:latest segment_skull  -data /data/cerimed-macaque-ct -out /data/cerimed-macaque-ct/results -soft ANTS_prep_skull -species macaque -sub Marvin -ses 01 -brain_dt T1 T2 -skull_dt CT -deriv -pad -nprocs 1
+            docker run -i -v /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI:/data macatools/skullto3d:latest segment_petra  -data /data/cerimed-macaque-ct -out /data/cerimed-macaque-ct/results -soft ANTS_prep_skull -species macaque -sub Marvin -ses 01 -brain_dt T1 T2 -skull_dt CT -deriv -pad -nprocs 1
 
             ls /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI/cerimed-macaque-ct/results
 
@@ -186,7 +186,7 @@ jobs:
 
       - name: Running all test pipelines (ANTS cerimed marmo petra)
         run: |
-            docker run -i -v /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI:/data macatools/skullto3d:latest segment_skull -data /data/cerimed-marmo-petra -out /data/cerimed-marmo-petra/results -soft ANTS_noseg_skull -species marmo -sub Paolina -ses 01 -brain_dt T1 T2 -skull_dt T1 petra -deriv -pad -nprocs 1
+            docker run -i -v /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI:/data macatools/skullto3d:latest segment_petra -data /data/cerimed-marmo-petra -out /data/cerimed-marmo-petra/results -soft ANTS_noseg_skull -species marmo -sub Paolina -ses 01 -brain_dt T1 T2 -skull_dt T1 petra -deriv -pad -nprocs 1
 
             ls /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI/cerimed-marmo-petra/results
 
