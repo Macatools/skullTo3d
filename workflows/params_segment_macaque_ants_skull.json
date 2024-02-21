@@ -2,22 +2,13 @@
     "general":
     {
         "template_name": "NMT_v2.0_asym",
-        "template_stereo_name": "pad40_NMT_v2.0_asym"
+        "template_stereo_name": "pad40_NMT_v2.0_asym",
+        "template_aladin_name": "pad40_NMT_v2.0_asym"
     },
     "short_preparation_pipe":
     {
-        "pre_crop_z_T1":
-        {
-            "brainsize": 70
-        },
         "crop_aladin_T1":
         {
-    		"nac_flag": true,
-            "rig_only_flag": true,
-            "nosym_flag": true,
-            "ln_val" : 12,
-            "lp_val": 10,
-            "smoo_r_val" : 1.0
         }
     },
     "N4debias":
@@ -68,7 +59,7 @@
             }
         },
         "export_5tt_pipe": {},
-        "nii2mesh_brain_pipe":
+        "IsoSurface_brain_pipe":
         {
             "merge_brain_tissues":
             {
@@ -82,18 +73,8 @@
         {
             "pad_val": 0
         },
-        "pre_crop_z_T1":
-        {
-            "brainsize": 70
-        },
         "reg_T1_on_template":
         {
-    		"nac_flag": true,
-            "rig_only_flag": true,
-            "nosym_flag": true,
-            "ln_val" : 12,
-            "lp_val": 10,
-            "smoo_r_val" : 1.0
         }
     },
     "skull_petra_pipe":
