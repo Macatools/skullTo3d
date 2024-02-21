@@ -446,7 +446,7 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
 
     if 'petra' in skull_dt:
         output_query['PETRA'] = {
-            "datatype": "anat", "suffix": "PDw",
+            "datatype": "anat", "suffix": ["PDw", "petra"],
             "extension": ["nii", ".nii.gz"]}
 
     if 'ct' in skull_dt:
@@ -625,7 +625,7 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
 
         print("Using stereo debias T1 for skull_t1_pipe ")
 
-        if "use_debiased_t1" in params["skull_t1_pipe"].keys():
+        if "use_debiased_t1" in params["skull_t1_pipe"].keys() and pad:
             print("Using stereo debias T1 for skull_t1_pipe ")
             main_workflow.connect(segment_brain_pipe,
                                   "outputnode.stereo_debiased_T1",
