@@ -508,7 +508,7 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
 
         main_workflow.connect(segment_brain_pipe,
                               "outputnode.stereo_padded_T1",
-                              skull_petra_pipe, 'inputnode.stereo_native_T1')
+                              skull_petra_pipe, 'inputnode.stereo_T1')
 
         main_workflow.connect(segment_brain_pipe,
                               "outputnode.native_to_stereo_trans",
@@ -612,8 +612,8 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
                               skull_ct_pipe, 'inputnode.native_T2')
 
         main_workflow.connect(segment_brain_pipe,
-                              "outputnode.stereo_native_T1",
-                              skull_ct_pipe, 'inputnode.stereo_native_T1')
+                              "outputnode.stereo_T1",
+                              skull_ct_pipe, 'inputnode.stereo_T1')
 
         main_workflow.connect(
             segment_brain_pipe, "outputnode.native_to_stereo_trans",
@@ -631,13 +631,13 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
             print("Using stereo debias T1 for skull_t1_pipe ")
             main_workflow.connect(
                 segment_brain_pipe, "outputnode.stereo_padded_T1",
-                skull_t1_pipe, 'inputnode.stereo_native_T1')
+                skull_t1_pipe, 'inputnode.stereo_T1')
         else:
 
             print("Using stereo native T1 for skull_t1_pipe ")
             main_workflow.connect(segment_brain_pipe,
-                                  "outputnode.stereo_native_T1",
-                                  skull_t1_pipe, 'inputnode.stereo_native_T1')
+                                  "outputnode.stereo_T1",
+                                  skull_t1_pipe, 'inputnode.stereo_T1')
 
         if indiv_params:
             main_workflow.connect(datasource, "indiv_params",

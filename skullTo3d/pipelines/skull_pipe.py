@@ -43,7 +43,7 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
 
     # Creating input node
     inputnode = pe.Node(
-        niu.IdentityInterface(fields=['indiv_params', 'stereo_native_T1']),
+        niu.IdentityInterface(fields=['indiv_params', 'stereo_T1']),
         name='inputnode')
 
     # ### head mask
@@ -55,7 +55,7 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
             params=parse_key(params, 't1_head_mask_thr'),
             name="t1_head_mask_thr")
 
-        skull_t1_pipe.connect(inputnode, "stereo_native_T1",
+        skull_t1_pipe.connect(inputnode, "stereo_T1",
                               t1_head_mask_thr, "in_file")
 
         skull_t1_pipe.connect(
@@ -72,7 +72,7 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
                 params=parse_key(params, "t1_head_auto_mask"),
                 name="t1_head_auto_mask")
 
-        skull_t1_pipe.connect(inputnode, "stereo_native_T1",
+        skull_t1_pipe.connect(inputnode, "stereo_T1",
                               t1_head_auto_mask, "img_file")
 
         skull_t1_pipe.connect(
@@ -142,7 +142,7 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
     t1_hmasked = pe.Node(interface=ApplyMask(),
                          name="t1_hmasked")
 
-    skull_t1_pipe.connect(inputnode, "stereo_native_T1",
+    skull_t1_pipe.connect(inputnode, "stereo_T1",
                           t1_hmasked, "in_file")
 
     skull_t1_pipe.connect(t1_head_erode, "out_file",
@@ -315,9 +315,9 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
 
     # Creating input node
     inputnode = pe.Node(
-        niu.IdentityInterface(fields=['ct', 'stereo_native_T1', 'native_T1',
+        niu.IdentityInterface(fields=['ct', 'stereo_T1', 'native_T1',
                                       'native_T2', 'native_to_stereo_trans',
-                                      'stereo_native_T1', 'indiv_params']),
+                                      'stereo_T1', 'indiv_params']),
         name='inputnode'
     )
 
@@ -331,18 +331,18 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
     skull_ct_pipe.connect(inputnode, "native_T1",
                           align_ct_on_T1, "ref_file")
 
-    # align_ct_on_stereo_native_T1
-    align_ct_on_stereo_native_T1 = pe.Node(interface=RegResample(pad_val=0.0),
-                                           name="align_ct_on_stereo_native_T1")
+    # align_ct_on_stereo_T1
+    align_ct_on_stereo_T1 = pe.Node(interface=RegResample(pad_val=0.0),
+                                           name="align_ct_on_stereo_T1")
 
     skull_ct_pipe.connect(align_ct_on_T1, 'res_file',
-                          align_ct_on_stereo_native_T1, "flo_file")
+                          align_ct_on_stereo_T1, "flo_file")
 
     skull_ct_pipe.connect(inputnode, 'native_to_stereo_trans',
-                          align_ct_on_stereo_native_T1, "trans_file")
+                          align_ct_on_stereo_T1, "trans_file")
 
-    skull_ct_pipe.connect(inputnode, "stereo_native_T1",
-                          align_ct_on_stereo_native_T1, "ref_file")
+    skull_ct_pipe.connect(inputnode, "stereo_T1",
+                          align_ct_on_stereo_T1, "ref_file")
 
     # ct_skull_auto_thresh
     if "ct_skull_mask_thr" in params.keys():
@@ -361,7 +361,7 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
             inputnode, ("indiv_params", parse_key, "ct_skull_mask_thr"),
             ct_skull_mask_thr, "indiv_params")
 
-        skull_ct_pipe.connect(align_ct_on_stereo_native_T1, "out_file",
+        skull_ct_pipe.connect(align_ct_on_stereo_T1, "out_file",
                               ct_skull_mask_thr, "in_file")
     else:
 
@@ -376,7 +376,7 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
                 params=parse_key(params, "ct_skull_auto_mask"),
                 name="ct_skull_auto_mask")
 
-        skull_ct_pipe.connect(align_ct_on_stereo_native_T1, "out_file",
+        skull_ct_pipe.connect(align_ct_on_stereo_T1, "out_file",
                               ct_skull_auto_mask, "img_file")
 
         skull_ct_pipe.connect(
@@ -473,7 +473,7 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
 
     # Creating input node
     inputnode = pe.Node(
-        niu.IdentityInterface(fields=['petra', 'stereo_native_T1',
+        niu.IdentityInterface(fields=['petra', 'stereo_T1',
                                       'native_img',
                                       'native_to_stereo_trans',
                                       'indiv_params']),
@@ -523,19 +523,19 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
     skull_petra_pipe.connect(inputnode, "native_img",
                              align_petra_on_native, "reference")
 
-    # align_petra_on_stereo_native_T1
-    align_petra_on_stereo_native_T1 = pe.Node(
+    # align_petra_on_stereo_T1
+    align_petra_on_stereo_T1 = pe.Node(
         interface=RegResample(pad_val=0.0),
-        name="align_petra_on_stereo_native_T1")
+        name="align_petra_on_stereo_T1")
 
     skull_petra_pipe.connect(align_petra_on_native, 'out_file',
-                             align_petra_on_stereo_native_T1, "flo_file")
+                             align_petra_on_stereo_T1, "flo_file")
 
     skull_petra_pipe.connect(inputnode, 'native_to_stereo_trans',
-                             align_petra_on_stereo_native_T1, "trans_file")
+                             align_petra_on_stereo_T1, "trans_file")
 
-    skull_petra_pipe.connect(inputnode, "stereo_native_T1",
-                             align_petra_on_stereo_native_T1, "ref_file")
+    skull_petra_pipe.connect(inputnode, "stereo_T1",
+                             align_petra_on_stereo_T1, "ref_file")
 
     # ### head mask
     # headmask_threshold
@@ -546,7 +546,7 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
             params=parse_key(params, 'petra_head_mask_thr'),
             name="petra_head_mask_thr")
 
-        skull_petra_pipe.connect(align_petra_on_stereo_native_T1, "out_file",
+        skull_petra_pipe.connect(align_petra_on_stereo_T1, "out_file",
                                  petra_head_mask_thr, "in_file")
 
         skull_petra_pipe.connect(
@@ -563,7 +563,7 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
                 params=parse_key(params, "petra_head_auto_mask"),
                 name="petra_head_auto_mask")
 
-        skull_petra_pipe.connect(align_petra_on_stereo_native_T1, "out_file",
+        skull_petra_pipe.connect(align_petra_on_stereo_T1, "out_file",
                                  petra_head_auto_mask, "img_file")
 
         skull_petra_pipe.connect(
@@ -634,7 +634,7 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
     petra_hmasked = pe.Node(interface=ApplyMask(),
                             name="petra_hmasked")
 
-    skull_petra_pipe.connect(align_petra_on_stereo_native_T1, "out_file",
+    skull_petra_pipe.connect(align_petra_on_stereo_T1, "out_file",
                              petra_hmasked, "in_file")
 
     skull_petra_pipe.connect(petra_head_erode, "out_file",
