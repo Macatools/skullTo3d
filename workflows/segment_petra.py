@@ -548,7 +548,7 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
 
                     main_workflow.connect(
                         segment_brain_pipe,
-                        "outputnode.cropped_to_native_trans",
+                        "outputnode.stereo_to_native_trans",
                         pad_petra_skull_mask, "trans_file")
 
                     print("Using reg_aladin transfo \
@@ -568,7 +568,7 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
                                           pad_petra_head_mask, "ref_file")
 
                     main_workflow.connect(segment_brain_pipe,
-                                          "outputnode.cropped_to_native_trans",
+                                          "outputnode.stereo_to_native_trans",
                                           pad_petra_head_mask, "trans_file")
 
                     if "petra_skull_fov" in params["skull_petra_pipe"]:
@@ -587,7 +587,7 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
 
                         main_workflow.connect(
                             segment_brain_pipe,
-                            "outputnode.cropped_to_native_trans",
+                            "outputnode.stereo_to_native_trans",
                             pad_robustpetra_skull_mask, "trans_file")
 
                         main_workflow.connect(
