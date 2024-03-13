@@ -629,9 +629,9 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
 
         if "use_debiased_t1" in params["skull_t1_pipe"].keys() and pad:
             print("Using stereo debias T1 for skull_t1_pipe ")
-            main_workflow.connect(segment_brain_pipe,
-                                  "outputnode.stereo_debiased_T1",
-                                  skull_t1_pipe, 'inputnode.stereo_native_T1')
+            main_workflow.connect(
+                segment_brain_pipe, "outputnode.stereo_padded_T1",
+                skull_t1_pipe, 'inputnode.stereo_native_T1')
         else:
 
             print("Using stereo native T1 for skull_t1_pipe ")
