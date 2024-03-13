@@ -353,6 +353,9 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
             print("Unknown template_files format, should be 3 or 5 files")
             exit(-1)
 
+        params_template_aladin = params_template
+        params_template_stereo = params_template
+
     else:
         ### use template from params
         assert ("general" in params.keys() and \
@@ -458,7 +461,6 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
     # indiv_params
     if indiv_params:
         print("Using indiv params")
-
         datasource = create_datasource_indiv_params(
             output_query, data_dir, indiv_params, subjects, sessions,
             acquisitions, reconstructions)
@@ -505,8 +507,8 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
                               skull_petra_pipe, 'inputnode.petra')
 
         main_workflow.connect(segment_brain_pipe,
-                              "outputnode.stereo_native_T1",
-                              skull_petra_pipe, 'inputnode.stereo_native_T1')
+                              "outputnode.stereo_padded_T1",
+                              skull_petra_pipe, 'inputnode.stereo_padded_T1')
 
         main_workflow.connect(segment_brain_pipe,
                               "outputnode.native_to_stereo_trans",
