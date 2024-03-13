@@ -508,7 +508,7 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
 
         main_workflow.connect(segment_brain_pipe,
                               "outputnode.stereo_padded_T1",
-                              skull_petra_pipe, 'inputnode.stereo_padded_T1')
+                              skull_petra_pipe, 'inputnode.stereo_native_T1')
 
         main_workflow.connect(segment_brain_pipe,
                               "outputnode.native_to_stereo_trans",
