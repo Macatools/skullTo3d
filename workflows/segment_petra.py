@@ -397,13 +397,15 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
 
     main_workflow.base_dir = process_dir
 
+    if "template" in ssoft:
+        space = "template"
+
+    else:
+        space = "native"
+
+
     # which soft is used
     if "spm" in ssoft or "spm12" in ssoft:
-        if 'native' in ssoft:
-            space='native'
-
-        else:
-            space='template'
 
         segment_brain_pipe = create_full_spm_subpipes(
             params_template=params_template,
@@ -412,12 +414,6 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
             params=params, pad=pad, space=space)
 
     elif "ants" in ssoft:
-        if "template" in ssoft:
-            space="template"
-
-        else:
-            space="native"
-
         if "t1" in brain_dt and 't2' in brain_dt:
             segment_brain_pipe = create_full_ants_subpipes(
                 params_template=params_template,
@@ -675,7 +671,7 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
 
         rename_all_brain_derivatives(
             params, main_workflow, segment_brain_pipe,
-            datasink, pref_deriv, parse_str, space, ssoft,
+            datasink, pref_deriv, parse_str, pad, ssoft,
             brain_dt)
 
         if "petra" in skull_dt and "skull_petra_pipe" in params.keys():
