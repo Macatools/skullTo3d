@@ -17,7 +17,7 @@ def rename_all_skull_petra_derivatives(params, main_workflow, segment_pnh_pipe,
         rename_petra_skull_stl = pe.Node(niu.Rename(),
                                          name="rename_petra_skull_stl")
         rename_petra_skull_stl.inputs.format_string = \
-            pref_deriv + "_space-stereo_desc-petra_skullmask"
+            pref_deriv + "_desc-petra_skullmask"
         rename_petra_skull_stl.inputs.parse_string = parse_str
         rename_petra_skull_stl.inputs.keep_ext = True
 
@@ -70,7 +70,7 @@ def rename_all_skull_petra_derivatives(params, main_workflow, segment_pnh_pipe,
                 niu.Rename(), name="rename_robustpetra_skull_stl")
 
             rename_robustpetra_skull_stl.inputs.format_string = \
-                pref_deriv + "_space-stereo_desc-robustpetra_skullmask"
+                pref_deriv + "_desc-robustpetra_skullmask"
             rename_robustpetra_skull_stl.inputs.parse_string = parse_str
             rename_robustpetra_skull_stl.inputs.keep_ext = True
 
@@ -87,7 +87,7 @@ def rename_all_skull_petra_derivatives(params, main_workflow, segment_pnh_pipe,
                 niu.Rename(), name="rename_stereo_robustpetra_skullmask")
 
             rename_stereo_robustpetra_skull_mask.inputs.format_string = \
-                pref_deriv + "_space-stereo_desc-robustpetra_skullmask"
+                pref_deriv + "_desc-robustpetra_skullmask"
 
             rename_stereo_robustpetra_skull_mask.inputs.parse_string = \
                 parse_str
@@ -130,7 +130,7 @@ def rename_all_skull_ct_derivatives(params, main_workflow, segment_pnh_pipe,
         rename_ct_skull_stl = pe.Node(niu.Rename(),
                                       name="rename_ct_skull_stl")
         rename_ct_skull_stl.inputs.format_string = \
-            pref_deriv + "_space-stereo_desc-ct_skullmask"
+            pref_deriv + "_desc-ct_skullmask"
         rename_ct_skull_stl.inputs.parse_string = parse_str
         rename_ct_skull_stl.inputs.keep_ext = True
 
@@ -170,7 +170,7 @@ def rename_all_skull_t1_derivatives(params, main_workflow, segment_pnh_pipe,
         rename_t1_skull_stl = pe.Node(niu.Rename(),
                                       name="rename_t1_skull_stl")
         rename_t1_skull_stl.inputs.format_string = \
-            pref_deriv + "_space-stereo_desc-t1_skullmask"
+            pref_deriv + "_desc-t1_skullmask"
         rename_t1_skull_stl.inputs.parse_string = parse_str
         rename_t1_skull_stl.inputs.keep_ext = True
 
