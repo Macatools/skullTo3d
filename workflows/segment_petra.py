@@ -796,7 +796,7 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
 
                 main_workflow.connect(
                     rename_native_t1_skull_mask, 'out_file',
-                    datasink, '@t1_skull_mask')
+                    datasink, '@t1_native_skull_mask')
 
     main_workflow.write_graph(graph2use="colored")
     main_workflow.config['execution'] = {'remove_unnecessary_outputs': 'false'}
