@@ -87,7 +87,7 @@ def rename_all_skull_petra_derivatives(params, main_workflow, segment_pnh_pipe,
                 niu.Rename(), name="rename_stereo_robustpetra_skullmask")
 
             rename_stereo_robustpetra_skull_mask.inputs.format_string = \
-                pref_deriv + "_desc-robustpetra_skullmask"
+                pref_deriv + "_space-stereo_desc-robustpetra_skullmask"
 
             rename_stereo_robustpetra_skull_mask.inputs.parse_string = \
                 parse_str
