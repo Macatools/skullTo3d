@@ -27,10 +27,7 @@
                 "smoo_r_val": 1.0
             }
         },
-        "resample_T1_pad":
-        {
-            "pad_val": 30
-        }
+        "resample_T1_pad": {}
     },
     "debias":
     {
