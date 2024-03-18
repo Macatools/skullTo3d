@@ -353,7 +353,6 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
             print("Unknown template_files format, should be 3 or 5 files")
             exit(-1)
 
-        params_template_aladin = params_template
         params_template_stereo = params_template
 
     else:
@@ -371,15 +370,6 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
 
         template_dir = load_test_data(template_name, path_to = my_path)
         params_template = format_template(template_dir, template_name)
-
-        if "template_aladin_name" in params["general"].keys():
-
-            template_aladin_name = params["general"]["template_aladin_name"]
-            template_aladin_dir = load_test_data(template_aladin_name, path_to = my_path)
-            params_template_aladin = format_template(template_aladin_dir, template_aladin_name)
-
-        else:
-            params_template_aladin = params_template
 
         if "template_stereo_name" in params["general"].keys():
 
@@ -409,7 +399,6 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
 
         segment_brain_pipe = create_full_spm_subpipes(
             params_template=params_template,
-            params_template_aladin=params_template_aladin,
             params_template_stereo=params_template_stereo,
             params=params, pad=pad, space=space)
 
@@ -417,14 +406,12 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
         if "t1" in brain_dt and 't2' in brain_dt:
             segment_brain_pipe = create_full_ants_subpipes(
                 params_template=params_template,
-                params_template_aladin=params_template_aladin,
                 params_template_stereo=params_template_stereo,
                 params=params, mask_file=mask_file, space=space, pad=pad)
 
         elif "t1" in brain_dt:
             segment_brain_pipe = create_full_T1_ants_subpipes(
                 params_template=params_template,
-                params_template_aladin=params_template_aladin,
                 params_template_stereo=params_template_stereo,
                 params=params, space=space, pad=pad)
 
