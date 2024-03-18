@@ -3,17 +3,34 @@
     {
         "template_name": "MBM_v3.0.1_6seg",
         "template_stereo_name": "bma-1_0p2mm",
-        "template_aladin_name": "bma-1_0p2mm"
     },
      "short_preparation_pipe":
     {
-    	"crop_aladin_T1":
-    	{
-    	},
-        "crop_z_T1":
+        "use_T2":{},
+        "crop_aladin_pipe":
         {
-            "brainsize": 30
-        }
+            "reg_T1_on_template":
+            {
+                "nac_flag": true,
+                "rig_only_flag":true,
+                "nosym_flag": true,
+                "ln_val" : 12,
+                "lp_val": 10,
+                "smoo_r_val" : 1.0
+            },
+            "reg_T1_on_template2":
+            {
+                "rig_only_flag":true,
+                "nosym_flag": true,
+                "ln_val" : 17,
+                "lp_val": 15,
+                "smoo_r_val" : 1.0
+            },
+            "crop_z_T1":
+            {
+                "brainsize": 30
+            }
+    	}
     },
     "fast":
     {
@@ -70,15 +87,6 @@
             }
         }
     },
-    "native_to_stereo_pipe":
-    {
-        "reg_T1_on_template":
-        {
-        },
-        "resample_T1_pad":
-        {
-        }
-    },
     "skull_petra_pipe":
     {
         "petra_head_auto_mask":
@@ -126,7 +134,6 @@
     "skull_t1_pipe":
     {
         "use_debiased_t1":true,
-
         "t1_head_auto_mask":
         {
             "kmeans": true,

@@ -2,13 +2,28 @@
     "general":
     {
         "template_name": "inia19",
-        "template_stereo_name": "pad40_NMT_v2.0_asym",
-        "template_aladin_name": "pad40_NMT_v2.0_asym"
+        "template_stereo_name": "NMT_v2.0_asym"
     },
     "short_preparation_pipe":
     {
-        "crop_aladin_T1":
+
+        "aladin_T2_on_T1":{},
+    	"crop_aladin_pipe":
+    	{
+            "pre_crop_z_T1":
+            {
+                "brainsize": 70
+            },
+            "reg_T1_on_template":
+            {
+            },
+            "reg_T1_on_template2":
+            {
+            }
+        },
+        "resample_T1_pad":
         {
+            "pad_val": 30
         }
     },
     "debias":
@@ -40,6 +55,14 @@
         "threshold_csf":
         {
             "thresh": 0.5
+        },
+        "export_5tt_pipe": {},
+        "IsoSurface_brain_pipe":
+        {
+            "merge_brain_tissues":
+            {
+                "keep_indexes": [1, 2, 3]
+            }
         }
     },
     "mask_from_seg_pipe":
@@ -53,16 +76,6 @@
         {
             "kernel_shape": "sphere",
             "kernel_size": 2
-        }
-    },
-    "native_to_stereo_pipe":
-    {
-        "pad_template_T1":
-        {
-            "pad_val": 0
-        },
-        "reg_T1_on_template":
-        {
         }
     },
     "skull_petra_pipe":
@@ -168,7 +181,7 @@
             "sample_bins": 30,
             "distance": 10,
             "operation": "lower",
-            "index": 2
+            "index": 3
         },
         "ct_skull_dilate":
         {
