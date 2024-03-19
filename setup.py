@@ -4,9 +4,6 @@
 import re
 from setuptools import find_packages, setup
 
-# required_packages = [
-#    "macapype"]
-
 verstr = "unknown"
 try:
     verstrline = open('skullTo3d/_version.py', "rt").read()
@@ -39,5 +36,4 @@ setup(
     entry_points={
         'console_scripts': ['segment_petra = workflows.segment_petra:main']
         },
-    install_requires=required_packages,
     include_package_data=True)
