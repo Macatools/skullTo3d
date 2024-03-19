@@ -1,26 +1,37 @@
 {
-    "general":
+        "general":
     {
-        "template_name": "inia19",
-        "template_stereo_name": "NMT_v2.0_asym"
+        "template_name": "Haiko_v1.5"
     },
-    "short_preparation_pipe":
+     "short_preparation_pipe":
     {
-
         "aladin_T2_on_T1":{},
     	"crop_aladin_pipe":
     	{
-            "pre_crop_z_T1":
-            {
-                "brainsize": 70
-            },
+
             "reg_T1_on_template":
             {
+                "nac_flag": true,
+                "rig_only_flag":true,
+                "nosym_flag": true,
+                "ln_val" : 12,
+                "lp_val": 10,
+                "smoo_r_val" : 1.0
             },
             "reg_T1_on_template2":
             {
+                "rig_only_flag":true,
+                "nosym_flag": true,
+                "ln_val" : 17,
+                "lp_val": 15,
+                "smoo_r_val" : 1.0
+            },
+            "crop_z_T1":
+            {
+                "brainsize": 70
             }
-        },
+    	},
+
         "resample_T1_pad":
         {
             "pad_val": 30

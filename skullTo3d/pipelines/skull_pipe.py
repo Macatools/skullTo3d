@@ -332,8 +332,9 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
                           align_ct_on_T1, "ref_file")
 
     # align_ct_on_stereo_T1
-    align_ct_on_stereo_T1 = pe.Node(interface=RegResample(pad_val=0.0),
-                                           name="align_ct_on_stereo_T1")
+    align_ct_on_stereo_T1 = pe.Node(
+        interface=RegResample(pad_val=0.0),
+        name="align_ct_on_stereo_T1")
 
     skull_ct_pipe.connect(align_ct_on_T1, 'res_file',
                           align_ct_on_stereo_T1, "flo_file")
