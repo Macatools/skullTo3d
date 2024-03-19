@@ -76,6 +76,7 @@ from macapype.utils.misc import show_files, get_first_elem, parse_key
 
 from macapype.pipelines.rename import rename_all_brain_derivatives
 
+
 from skullTo3d.pipelines.skull_pipe import (
     create_skull_petra_pipe,
     create_skull_ct_pipe,
@@ -396,7 +397,6 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
 
     # which soft is used
     if "spm" in ssoft or "spm12" in ssoft:
-
         segment_brain_pipe = create_full_spm_subpipes(
             params_template=params_template,
             params_template_stereo=params_template_stereo,
