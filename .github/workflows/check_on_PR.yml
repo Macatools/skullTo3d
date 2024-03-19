@@ -27,13 +27,12 @@ jobs:
             sudo apt-get install build-essential  graphviz libgraphviz-dev
             pip install --upgrade pygraphviz graphviz
 
+
             # pip install --no-deps --index-url https://test.pypi.org/simple/ --pre macapype
 
             pip install -e .
 
             python -c "import skullTo3d; print(skullTo3d.__version__)"
-
-            python -c "import macapype; print( macapype.__version__)"
 
             cd ..
             git clone https://github.com/macatools/macapype.git
