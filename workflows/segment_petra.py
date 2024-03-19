@@ -634,6 +634,7 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
                     fields=["native_petra_skull_mask",
                             "native_robustpetra_skull_mask",
                             "native_petra_head_mask"]),
+
                 name='outputnode')
 
             if "short_preparation_pipe" in params.keys():
