@@ -609,13 +609,12 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
                               skull_ct_pipe, 'inputnode.native_T2')
 
         main_workflow.connect(segment_brain_pipe,
-                              "outputnode.stereo_T1",
+                              "outputnode.stereo_padded_T1",
                               skull_ct_pipe, 'inputnode.stereo_T1')
 
         main_workflow.connect(
             segment_brain_pipe, "outputnode.native_to_stereo_trans",
             skull_ct_pipe, 'inputnode.native_to_stereo_trans')
-
 
     if "angio" in skull_dt and "angio_pipe" in params.keys():
         print("Found angio_pipe")
@@ -623,7 +622,7 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
         skull_ct_pipe = create_angio_pipe(
             params=parse_key(params, "ANGIO_pipe"))
 
-        main_workflow.connect(datasource, ('ANGIO', get_first_elem),
+        main_workflow.connect(datasource, 'ANGIO',
                               skull_ct_pipe, 'inputnode.angio')
 
         main_workflow.connect(segment_brain_pipe,
@@ -635,7 +634,7 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
                               skull_ct_pipe, 'inputnode.native_T2')
 
         main_workflow.connect(segment_brain_pipe,
-                              "outputnode.stereo_T1",
+                              "outputnode.stereo_padded_T1",
                               skull_ct_pipe, 'inputnode.stereo_T1')
 
         main_workflow.connect(
