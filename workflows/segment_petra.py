@@ -77,6 +77,9 @@ from macapype.utils.misc import show_files, get_first_elem, parse_key
 from macapype.pipelines.rename import rename_all_brain_derivatives
 
 
+from skullTo3d.pipelines.angio_pipe import (
+    create_angio_pipe)
+
 from skullTo3d.pipelines.skull_pipe import (
     create_skull_petra_pipe,
     create_skull_ct_pipe,
@@ -444,6 +447,12 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
             "acquisition": "CT",
             "extension": ["nii", ".nii.gz"]}
 
+    if 'angio' in skull_dt:
+        output_query['ANGIO'] = {
+            "datatype": "anat", "suffix": "angio",
+            "acquisition": "ANGIO",
+            "extension": ["nii", ".nii.gz"]}
+
     # indiv_params
     if indiv_params:
         print("Using indiv params")
@@ -604,6 +613,33 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
         main_workflow.connect(
             segment_brain_pipe, "outputnode.native_to_stereo_trans",
             skull_ct_pipe, 'inputnode.native_to_stereo_trans')
+
+
+    if "angio" in skull_dt and "angio_pipe" in params.keys():
+        print("Found angio_pipe")
+
+        skull_ct_pipe = create_angio_pipe(
+            params=parse_key(params, "ANGIO_pipe"))
+
+        main_workflow.connect(datasource, ('ANGIO', get_first_elem),
+                              skull_ct_pipe, 'inputnode.angio')
+
+        main_workflow.connect(segment_brain_pipe,
+                              "outputnode.native_T1",
+                              skull_ct_pipe, 'inputnode.native_T1')
+
+        main_workflow.connect(segment_brain_pipe,
+                              "outputnode.native_T2",
+                              skull_ct_pipe, 'inputnode.native_T2')
+
+        main_workflow.connect(segment_brain_pipe,
+                              "outputnode.stereo_T1",
+                              skull_ct_pipe, 'inputnode.stereo_T1')
+
+        main_workflow.connect(
+            segment_brain_pipe, "outputnode.native_to_stereo_trans",
+            skull_ct_pipe, 'inputnode.native_to_stereo_trans')
+
 
     if 't1' in skull_dt and "skull_t1_pipe" in params.keys():
         print("Found skull_t1_pipe")
