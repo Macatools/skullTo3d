@@ -51,6 +51,12 @@ def create_angio_pipe(name="angio_pipe", params={}):
         name='inputnode'
     )
 
+    # creating outputnode #######
+    outputnode = pe.Node(
+        niu.IdentityInterface(
+            fields=["stereo_brain_angio"]),
+        name='outputnode')
+
     # align_angio_on_T1
     align_angio_on_T1 = pe.Node(interface=RegAladin(),
                                 name="align_angio_on_T1")
@@ -95,8 +101,8 @@ def create_angio_pipe(name="angio_pipe", params={}):
         angio_denoise, 'input_image')
 
     # outputs
-    #angio_pipe.connect(denoise_T1, 'output_image',
-                                      #outputnode, 'preproc_T1')
+    angio_pipe.connect(angio_denoise, 'output_image',
+                       outputnode, 'stereo_brain_angio')
 
     # angio_auto_thresh
     if "angio_mask_thr" in params.keys():
@@ -115,7 +121,7 @@ def create_angio_pipe(name="angio_pipe", params={}):
             inputnode, ("indiv_params", parse_key, "angio_mask_thr"),
             angio_mask_thr, "indiv_params")
 
-        angio_pipe.connect(denoise_T1, 'output_image',
+        angio_pipe.connect(angio_denoise, 'output_image',
                               angio_mask_thr, "in_file")
     else:
 
@@ -130,7 +136,7 @@ def create_angio_pipe(name="angio_pipe", params={}):
                 params=parse_key(params, "angio_auto_mask"),
                 name="angio_auto_mask")
 
-        angio_pipe.connect(denoise_T1, 'output_image',
+        angio_pipe.connect(denoise_, 'output_image',
                               angio_auto_mask, "img_file")
 
         angio_pipe.connect(
