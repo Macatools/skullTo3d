@@ -281,8 +281,6 @@ def create_quick_angio_pipe(name="quick_angio_pipe", params={}):
             params=parse_key(params, "angio_mask_thr"),
             name="angio_mask_thr")
 
-        angio_mask_thr.inputs.direction = 'above'
-
         angio_pipe.connect(
             inputnode, ("indiv_params", parse_key, "angio_mask_thr"),
             angio_mask_thr, "indiv_params")
