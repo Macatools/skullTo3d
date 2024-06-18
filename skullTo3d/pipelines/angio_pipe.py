@@ -43,7 +43,7 @@ def create_angio_pipe(name="angio_pipe", params={}):
 
     # Creating input node
     inputnode = pe.Node(
-        niu.IdentityInterface(fields=['ct', 'stereo_T1', 'native_T1',
+        niu.IdentityInterface(fields=['angio', 'stereo_T1', 'native_T1',
                                       'native_T2', 'native_to_stereo_trans',
                                       'stereo_T1', 'indiv_params']),
         name='inputnode'
