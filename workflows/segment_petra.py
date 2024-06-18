@@ -78,7 +78,7 @@ from macapype.pipelines.rename import rename_all_brain_derivatives
 
 
 from skullTo3d.pipelines.angio_pipe import (
-    create_angio_pipe)
+    create_angio_pipe, create_quick_angio_pipe)
 
 from skullTo3d.pipelines.skull_pipe import (
     create_skull_petra_pipe,
@@ -636,6 +636,27 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
         main_workflow.connect(segment_brain_pipe,
                               "outputnode.stereo_padded_brain_mask",
                               skull_ct_pipe, 'inputnode.stereo_brain_mask')
+
+        main_workflow.connect(
+            segment_brain_pipe, "outputnode.native_to_stereo_trans",
+            skull_ct_pipe, 'inputnode.native_to_stereo_trans')
+
+    if "angio" in skull_dt and "angio_quick_pipe" in params.keys():
+        print("Found angio_pipe")
+
+        skull_ct_pipe = create_quick_angio_pipe(
+            params=parse_key(params, "ANGIO_pipe"))
+
+        main_workflow.connect(datasource, ('ANGIO', get_first_elem),
+                              skull_ct_pipe, 'inputnode.angio')
+
+        main_workflow.connect(segment_brain_pipe,
+                              "outputnode.native_T1",
+                              skull_ct_pipe, 'inputnode.native_T1')
+
+        main_workflow.connect(segment_brain_pipe,
+                              "outputnode.stereo_padded_T1",
+                              skull_ct_pipe, 'inputnode.stereo_T1')
 
         main_workflow.connect(
             segment_brain_pipe, "outputnode.native_to_stereo_trans",
