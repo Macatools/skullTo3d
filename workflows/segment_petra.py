@@ -287,6 +287,9 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
     if 'petra' in skull_dt:
         wf_name += "_petra"
 
+    if 'angio' in skull_dt:
+        wf_name += "_angio"
+
     if 'ct' in skull_dt:
         wf_name += "_CT"
 
@@ -450,7 +453,6 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
     if 'angio' in skull_dt:
         output_query['ANGIO'] = {
             "datatype": "anat", "suffix": "angio",
-            "acquisition": "ANGIO",
             "extension": ["nii", ".nii.gz"]}
 
     # indiv_params
