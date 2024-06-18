@@ -620,7 +620,7 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
         print("Found angio_pipe")
 
         skull_ct_pipe = create_angio_pipe(
-            params=parse_key(params, "ANGIO_pipe"))
+            params=parse_key(params, "angio_pipe"))
 
         main_workflow.connect(datasource, ('ANGIO', get_first_elem),
                               skull_ct_pipe, 'inputnode.angio')
@@ -645,7 +645,7 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
         print("Found angio_pipe")
 
         skull_ct_pipe = create_quick_angio_pipe(
-            params=parse_key(params, "ANGIO_pipe"))
+            params=parse_key(params, "angio_quick_pipe"))
 
         main_workflow.connect(datasource, ('ANGIO', get_first_elem),
                               skull_ct_pipe, 'inputnode.angio')
