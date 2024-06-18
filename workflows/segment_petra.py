@@ -630,10 +630,6 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
                               skull_ct_pipe, 'inputnode.native_T1')
 
         main_workflow.connect(segment_brain_pipe,
-                              "outputnode.native_T2",
-                              skull_ct_pipe, 'inputnode.native_T2')
-
-        main_workflow.connect(segment_brain_pipe,
                               "outputnode.stereo_padded_T1",
                               skull_ct_pipe, 'inputnode.stereo_T1')
 
