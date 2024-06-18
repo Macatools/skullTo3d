@@ -622,7 +622,7 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
         skull_ct_pipe = create_angio_pipe(
             params=parse_key(params, "ANGIO_pipe"))
 
-        main_workflow.connect(datasource, 'ANGIO',
+        main_workflow.connect(datasource, ('ANGIO', get_first_elem),
                               skull_ct_pipe, 'inputnode.angio')
 
         main_workflow.connect(segment_brain_pipe,
