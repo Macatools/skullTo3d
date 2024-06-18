@@ -136,7 +136,7 @@ def create_angio_pipe(name="angio_pipe", params={}):
                 params=parse_key(params, "angio_auto_mask"),
                 name="angio_auto_mask")
 
-        angio_pipe.connect(denoise_, 'output_image',
+        angio_pipe.connect(angio_denoise, 'output_image',
                               angio_auto_mask, "img_file")
 
         angio_pipe.connect(
