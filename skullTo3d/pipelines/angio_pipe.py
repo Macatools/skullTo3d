@@ -19,6 +19,7 @@ from nipype.interfaces.niftyreg.reg import RegAladin
 from macapype.utils.utils_nodes import NodeParams
 
 from nipype.interfaces.ants import N4BiasFieldCorrection
+from nipype.interfaces.ants.segmentation import DenoiseImage
 
 from macapype.pipelines.prepare import _create_avg_reorient_pipeline
 
@@ -51,13 +52,13 @@ def create_angio_pipe(name="angio_pipe", params={}):
 
     # align_angio_on_T1
     align_angio_on_T1 = pe.Node(interface=RegAladin(),
-                             name="align_angio_on_T1")
+                                name="align_angio_on_T1")
 
     angio_pipe.connect(inputnode, 'angio',
-                          align_angio_on_T1, "flo_file")
+                       align_angio_on_T1, "flo_file")
 
     angio_pipe.connect(inputnode, "native_T1",
-                          align_angio_on_T1, "ref_file")
+                       align_angio_on_T1, "ref_file")
 
     # align_angio_on_stereo_T1
     align_angio_on_stereo_T1 = pe.Node(
@@ -65,13 +66,26 @@ def create_angio_pipe(name="angio_pipe", params={}):
         name="align_angio_on_stereo_T1")
 
     angio_pipe.connect(align_angio_on_T1, 'res_file',
-                          align_angio_on_stereo_T1, "flo_file")
+                       align_angio_on_stereo_T1, "flo_file")
 
     angio_pipe.connect(inputnode, 'native_to_stereo_trans',
-                          align_angio_on_stereo_T1, "trans_file")
+                       align_angio_on_stereo_T1, "trans_file")
 
     angio_pipe.connect(inputnode, "stereo_T1",
-                          align_angio_on_stereo_T1, "ref_file")
+                       align_angio_on_stereo_T1, "ref_file")
+
+    # angio_denoise
+    angio_denoise = NodeParams(interface=DenoiseImage(),
+                               params=parse_key(params, "angio_denoise"),
+                               name="angio_denoise")
+
+    angio_pipe.connect(
+        align_angio_on_stereo_T1, 'out_file',
+        angio_denoise, 'input_image')
+
+    # outputs
+    #angio_pipe.connect(denoise_T1, 'output_image',
+                                      #outputnode, 'preproc_T1')
 
     return angio_pipe
 
