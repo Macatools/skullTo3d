@@ -645,7 +645,6 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
             segment_brain_pipe, "outputnode.native_to_stereo_trans",
             skull_ct_pipe, 'inputnode.native_to_stereo_trans')
 
-
     if 't1' in skull_dt and "skull_t1_pipe" in params.keys():
         print("Found skull_t1_pipe")
 
