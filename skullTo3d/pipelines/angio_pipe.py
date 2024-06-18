@@ -53,7 +53,7 @@ def create_angio_pipe(name="angio_pipe", params={}):
     align_angio_on_T1 = pe.Node(interface=RegAladin(),
                              name="align_angio_on_T1")
 
-    angio_pipe.connect(inputnode, 'ct',
+    angio_pipe.connect(inputnode, 'angio',
                           align_angio_on_T1, "flo_file")
 
     angio_pipe.connect(inputnode, "native_T1",
