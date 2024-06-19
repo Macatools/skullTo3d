@@ -619,48 +619,48 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
     if "angio" in skull_dt and "angio_pipe" in params.keys():
         print("Found angio_pipe")
 
-        skull_ct_pipe = create_angio_pipe(
+        angio_pipe = create_angio_pipe(
             params=parse_key(params, "angio_pipe"))
 
         main_workflow.connect(datasource, ('ANGIO', get_first_elem),
-                              skull_ct_pipe, 'inputnode.angio')
+                              angio_pipe, 'inputnode.angio')
 
         main_workflow.connect(segment_brain_pipe,
                               "outputnode.native_T1",
-                              skull_ct_pipe, 'inputnode.native_T1')
+                              angio_pipe, 'inputnode.native_T1')
 
         main_workflow.connect(segment_brain_pipe,
                               "outputnode.stereo_padded_T1",
-                              skull_ct_pipe, 'inputnode.stereo_T1')
+                              angio_pipe, 'inputnode.stereo_T1')
 
         main_workflow.connect(segment_brain_pipe,
                               "outputnode.stereo_padded_brain_mask",
-                              skull_ct_pipe, 'inputnode.stereo_brain_mask')
+                              angio_pipe, 'inputnode.stereo_brain_mask')
 
         main_workflow.connect(
             segment_brain_pipe, "outputnode.native_to_stereo_trans",
-            skull_ct_pipe, 'inputnode.native_to_stereo_trans')
+            angio_pipe, 'inputnode.native_to_stereo_trans')
 
     if "angio" in skull_dt and "angio_quick_pipe" in params.keys():
         print("Found angio_pipe")
 
-        skull_ct_pipe = create_quick_angio_pipe(
+        angio_pipe = create_quick_angio_pipe(
             params=parse_key(params, "angio_quick_pipe"))
 
         main_workflow.connect(datasource, ('ANGIO', get_first_elem),
-                              skull_ct_pipe, 'inputnode.angio')
+                              angio_pipe, 'inputnode.angio')
 
         main_workflow.connect(segment_brain_pipe,
                               "outputnode.native_T1",
-                              skull_ct_pipe, 'inputnode.native_T1')
+                              angio_pipe, 'inputnode.native_T1')
 
         main_workflow.connect(segment_brain_pipe,
                               "outputnode.stereo_padded_T1",
-                              skull_ct_pipe, 'inputnode.stereo_T1')
+                              angio_pipe, 'inputnode.stereo_T1')
 
         main_workflow.connect(
             segment_brain_pipe, "outputnode.native_to_stereo_trans",
-            skull_ct_pipe, 'inputnode.native_to_stereo_trans')
+            angio_pipe, 'inputnode.native_to_stereo_trans')
 
     if 't1' in skull_dt and "skull_t1_pipe" in params.keys():
         print("Found skull_t1_pipe")
@@ -828,30 +828,11 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
                 params, main_workflow, segment_brain_pipe, skull_ct_pipe,
                 datasink, pref_deriv, parse_str, space, pad)
 
+        if "angio" in skull_dt and ("angio_pipe" in params.keys()
+                                    or "quick_angio_pipe" in params.keys()):
 
-        if "angio" in skull_dt and "angio_pipe" in params.keys():
-            rename_all_angio_derivatives(
-                params, main_workflow, segment_brain_pipe, skull_t1_pipe,
-                datasink, pref_deriv, parse_str, space, pad)
-
-            if pad:
-
-                # rename t1_skull_mask
-                rename_native_t1_skull_mask = pe.Node(
-                    niu.Rename(), name="rename_native_t1_skull_mask")
-
-                rename_native_t1_skull_mask.inputs.format_string = \
-                    pref_deriv + "_space-native_desc-t1_skullmask"
-                rename_native_t1_skull_mask.inputs.parse_string = parse_str
-                rename_native_t1_skull_mask.inputs.keep_ext = True
-
-                main_workflow.connect(
-                    pad_t1_skull_mask, "out_file",
-                    rename_native_t1_skull_mask, 'in_file')
-
-                main_workflow.connect(
-                    rename_native_t1_skull_mask, 'out_file',
-                    datasink, '@t1_native_skull_mask')
+            rename_all_angio_derivatives(params, main_workflow, angio_pipe,
+                                         datasink, pref_deriv, parse_str)
 
     main_workflow.write_graph(graph2use="colored")
     main_workflow.config['execution'] = {'remove_unnecessary_outputs': 'false'}

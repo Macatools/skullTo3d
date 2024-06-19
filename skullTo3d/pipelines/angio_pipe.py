@@ -54,7 +54,8 @@ def create_angio_pipe(name="angio_pipe", params={}):
     # creating outputnode #######
     outputnode = pe.Node(
         niu.IdentityInterface(
-            fields=["stereo_brain_angio", "stereo_angio_mask"]),
+            fields=["stereo_angio", "stereo_brain_angio",
+                    "stereo_angio_mask"]),
         name='outputnode')
 
     # align_angio_on_T1
@@ -80,6 +81,10 @@ def create_angio_pipe(name="angio_pipe", params={}):
 
     angio_pipe.connect(inputnode, "stereo_T1",
                        align_angio_on_stereo_T1, "ref_file")
+
+    # outputs
+    angio_pipe.connect(align_angio_on_stereo_T1, "out_file",
+                       outputnode, 'stereo_angio')
 
     # angio_denoise
     angio_denoise = NodeParams(interface=DenoiseImage(),
@@ -167,7 +172,7 @@ def create_angio_pipe(name="angio_pipe", params={}):
         angio_mask_binary, "out_file",
         angio_gcc, "nii_file")
 
-    angio_pipe.connect(angio_denoise, 'output_image',
+    angio_pipe.connect(angio_gcc, 'gcc_nii_file',
                        outputnode, 'stereo_angio_mask')
 
     return angio_pipe
@@ -189,7 +194,7 @@ def create_quick_angio_pipe(name="quick_angio_pipe", params={}):
     # creating outputnode #######
     outputnode = pe.Node(
         niu.IdentityInterface(
-            fields=["stereo_brain_angio"]),
+            fields=["stereo_angio", "stereo_angio_mask"]),
         name='outputnode')
 
     # align_angio_on_T1
@@ -287,5 +292,8 @@ def create_quick_angio_pipe(name="quick_angio_pipe", params={}):
     angio_pipe.connect(
         angio_mask_binary, "out_file",
         angio_gcc, "nii_file")
+
+    angio_pipe.connect(angio_gcc, 'gcc_nii_file',
+                       outputnode, 'stereo_angio_mask')
 
     return angio_pipe

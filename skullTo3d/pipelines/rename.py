@@ -237,33 +237,12 @@ def rename_all_skull_t1_derivatives(params, main_workflow, segment_pnh_pipe,
                 rename_stereo_robustt1_skull_mask, 'out_file',
                 datasink, '@stereo_robustt1_skullmask')
 
+
 # ############################# ANGIO
-
-def rename_all_angio_derivatives(params, main_workflow,
-                                    angio_pipe, datasink, pref_deriv,
-                                    parse_str):
-
-    "stereo_brain_angio", "stereo_angio_mask"
+def rename_all_angio_derivatives(params, main_workflow, angio_pipe, datasink,
+                                 pref_deriv, parse_str):
     # Rename in skull_t1_pipe
-    if "angio_pipe" in params.keys():
-
-        # rename_stereo_brain_angio
-        rename_stereo_brain_angio = pe.Node(
-            niu.Rename(),
-            name="rename_stereo_brain_angio")
-        rename_stereo_brain_angio.inputs.format_string = \
-            pref_deriv + "_space-stereo_desc-pad_desc-brain_angio"
-        rename_stereo_brain_angio.inputs.parse_string = parse_str
-        rename_stereo_brain_angio.inputs.keep_ext = True
-
-        main_workflow.connect(
-            angio_pipe, 'outputnode.stereo_brain_angio',
-            rename_stereo_brain_angio, 'in_file')
-
-        main_workflow.connect(
-            rename_stereo_brain_angio, 'out_file',
-            datasink, '@stereo_brain_angio')
-
+    if "angio_pipe" in params.keys() or "quick_angio_pipe" in params.keys():
 
         # rename_stereo_angio_mask
         rename_stereo_angio_mask = pe.Node(
@@ -281,3 +260,39 @@ def rename_all_angio_derivatives(params, main_workflow,
         main_workflow.connect(
             rename_stereo_angio_mask, 'out_file',
             datasink, '@stereo_angio_mask')
+
+        # rename_stereo_angio
+        rename_stereo_angio = pe.Node(
+            niu.Rename(),
+            name="rename_stereo_angio")
+        rename_stereo_angio.inputs.format_string = \
+            pref_deriv + "_space-stereo_desc-pad_angio"
+        rename_stereo_angio.inputs.parse_string = parse_str
+        rename_stereo_angio.inputs.keep_ext = True
+
+        main_workflow.connect(
+            angio_pipe, 'outputnode.stereo_angio',
+            rename_stereo_angio, 'in_file')
+
+        main_workflow.connect(
+            rename_stereo_angio, 'out_file',
+            datasink, '@stereo_angio')
+
+        if "angio_pipe" in params.keys():
+
+            # rename_stereo_brain_angio
+            rename_stereo_brain_angio = pe.Node(
+                niu.Rename(),
+                name="rename_stereo_brain_angio")
+            rename_stereo_brain_angio.inputs.format_string = \
+                pref_deriv + "_space-stereo_desc-pad_desc-brain_angio"
+            rename_stereo_brain_angio.inputs.parse_string = parse_str
+            rename_stereo_brain_angio.inputs.keep_ext = True
+
+            main_workflow.connect(
+                angio_pipe, 'outputnode.stereo_brain_angio',
+                rename_stereo_brain_angio, 'in_file')
+
+            main_workflow.connect(
+                rename_stereo_brain_angio, 'out_file',
+                datasink, '@stereo_brain_angio')
