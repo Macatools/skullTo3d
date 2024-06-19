@@ -814,6 +814,30 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
                         rename_robustpetra_skull_mask, 'out_file',
                         datasink, '@robustpetra_skull_mask')
 
+        if "t1" in skull_dt and "skull_t1_pipe" in params.keys():
+            rename_all_skull_t1_derivatives(
+                params, main_workflow, segment_brain_pipe, skull_t1_pipe,
+                datasink, pref_deriv, parse_str, space, pad)
+
+            if pad:
+
+                # rename t1_skull_mask
+                rename_native_t1_skull_mask = pe.Node(
+                    niu.Rename(), name="rename_native_t1_skull_mask")
+
+                rename_native_t1_skull_mask.inputs.format_string = \
+                    pref_deriv + "_space-native_desc-t1_skullmask"
+                rename_native_t1_skull_mask.inputs.parse_string = parse_str
+                rename_native_t1_skull_mask.inputs.keep_ext = True
+
+                main_workflow.connect(
+                    pad_t1_skull_mask, "out_file",
+                    rename_native_t1_skull_mask, 'in_file')
+
+                main_workflow.connect(
+                    rename_native_t1_skull_mask, 'out_file',
+                    datasink, '@t1_native_skull_mask')
+
         if "ct" in skull_dt and "skull_ct_pipe" in params.keys():
             print("rename ct skull pipe")
 
