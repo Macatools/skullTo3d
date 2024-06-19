@@ -88,7 +88,7 @@ from skullTo3d.pipelines.skull_pipe import (
 from skullTo3d.pipelines.rename import (
     rename_all_skull_petra_derivatives,
     rename_all_skull_t1_derivatives,
-    rename_all_skull_ct_derivatives)
+    rename_all_skull_ct_derivatives, rename_all_angio_derivatives)
 
 
 fsl.FSLCommand.set_default_output_type('NIFTI_GZ')
@@ -821,8 +821,16 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
                 params, main_workflow, segment_brain_pipe, skull_ct_pipe,
                 datasink, pref_deriv, parse_str, space, pad)
 
-        if "t1" in skull_dt and "skull_t1_pipe" in params.keys():
-            rename_all_skull_t1_derivatives(
+        if "ct" in skull_dt and "skull_ct_pipe" in params.keys():
+            print("rename ct skull pipe")
+
+            rename_all_skull_ct_derivatives(
+                params, main_workflow, segment_brain_pipe, skull_ct_pipe,
+                datasink, pref_deriv, parse_str, space, pad)
+
+
+        if "angio" in skull_dt and "angio_pipe" in params.keys():
+            rename_all_angio_derivatives(
                 params, main_workflow, segment_brain_pipe, skull_t1_pipe,
                 datasink, pref_deriv, parse_str, space, pad)
 

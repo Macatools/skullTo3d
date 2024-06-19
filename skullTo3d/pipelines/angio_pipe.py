@@ -37,7 +37,6 @@ from macapype.utils.misc import parse_key, get_elem
 # #################### ANGIO  ######################
 ###############################################################################
 
-
 def create_angio_pipe(name="angio_pipe", params={}):
 
     # Creating pipeline
@@ -55,7 +54,7 @@ def create_angio_pipe(name="angio_pipe", params={}):
     # creating outputnode #######
     outputnode = pe.Node(
         niu.IdentityInterface(
-            fields=["stereo_brain_angio"]),
+            fields=["stereo_brain_angio", "stereo_angio_mask"]),
         name='outputnode')
 
     # align_angio_on_T1
@@ -81,17 +80,6 @@ def create_angio_pipe(name="angio_pipe", params={}):
 
     angio_pipe.connect(inputnode, "stereo_T1",
                        align_angio_on_stereo_T1, "ref_file")
-
-    ## angio_bmask
-    #angio_bmask = pe.Node(interface=ApplyMask(),
-                          #name="angio_bmask")
-
-    #angio_pipe.connect(align_angio_on_stereo_T1, "out_file",
-                       #angio_bmask, "in_file")
-
-    #angio_pipe.connect(inputnode, "stereo_brain_mask",
-                       #angio_bmask, "mask_file")
-
 
     # angio_denoise
     angio_denoise = NodeParams(interface=DenoiseImage(),
@@ -124,8 +112,9 @@ def create_angio_pipe(name="angio_pipe", params={}):
             inputnode, ("indiv_params", parse_key, "angio_mask_thr"),
             angio_mask_thr, "indiv_params")
 
-        angio_pipe.connect(angio_denoise, 'output_image',
-                              angio_mask_thr, "in_file")
+        angio_pipe.connect(
+            angio_denoise, 'output_image',
+            angio_mask_thr, "in_file")
     else:
 
         print("*** angio_auto_mask ***")
@@ -139,28 +128,32 @@ def create_angio_pipe(name="angio_pipe", params={}):
                 params=parse_key(params, "angio_auto_mask"),
                 name="angio_auto_mask")
 
-        angio_pipe.connect(angio_denoise, 'output_image',
-                              angio_auto_mask, "img_file")
+        angio_pipe.connect(
+            angio_denoise, 'output_image',
+            angio_auto_mask, "img_file")
 
         angio_pipe.connect(
             inputnode, ("indiv_params", parse_key, "angio_auto_mask"),
             angio_auto_mask, "indiv_params")
 
     # angio_mask_binary
-    angio_mask_binary = pe.Node(interface=UnaryMaths(),
-                                   name="angio_mask_binary")
+    angio_mask_binary = pe.Node(
+        interface=UnaryMaths(),
+        name="angio_mask_binary")
 
     angio_mask_binary.inputs.operation = 'bin'
     angio_mask_binary.inputs.output_type = 'NIFTI_GZ'
 
     if "angio_mask_thr" in params.keys():
 
-        angio_pipe.connect(angio_mask_thr, "out_file",
-                              angio_mask_binary, "in_file")
+        angio_pipe.connect(
+            angio_mask_thr, "out_file",
+            angio_mask_binary, "in_file")
     else:
 
-        angio_pipe.connect(angio_auto_mask, "mask_img_file",
-                              angio_mask_binary, "in_file")
+        angio_pipe.connect(
+            angio_auto_mask, "mask_img_file",
+            angio_mask_binary, "in_file")
 
     # angio_gcc ####### [okey]
     angio_gcc = pe.Node(
@@ -170,60 +163,14 @@ def create_angio_pipe(name="angio_pipe", params={}):
             function=keep_gcc),
         name="angio_gcc")
 
-    angio_pipe.connect(angio_mask_binary, "out_file",
-                          angio_gcc, "nii_file")
+    angio_pipe.connect(
+        angio_mask_binary, "out_file",
+        angio_gcc, "nii_file")
 
-    ## angio_dilate ####### [okey][json]
-    #angio_dilate = NodeParams(
-        #interface=DilateImage(),
-        #params=parse_key(params, "angio_dilate"),
-        #name="angio_dilate")
-
-    #angio_pipe.connect(angio_gcc, "gcc_nii_file",
-                          #angio_dilate, "in_file")
-
-    ## angio_fill #######  [okey]
-    #angio_fill = pe.Node(interface=UnaryMaths(),
-                            #name="angio_fill")
-
-    #angio_fill.inputs.operation = 'fillh'
-
-    #angio_pipe.connect(angio_dilate, "out_file",
-                          #angio_fill, "in_file")
-
-    ## angio_erode ####### [okey][json]
-    #angio_erode = NodeParams(interface=ErodeImage(),
-                                #params=parse_key(params, "angio_erode"),
-                                #name="angio_erode")
-
-    #angio_pipe.connect(angio_fill, "out_file",
-                          #angio_erode, "in_file")
-
-    ## mesh_angio_skull #######
-    #mesh_angio_skull = pe.Node(
-        #interface=niu.Function(input_names=["nii_file"],
-                               #output_names=["stl_file"],
-                               #function=wrap_afni_IsoSurface),
-        #name="mesh_angio_skull")
-
-    #angio_pipe.connect(angio_erode, "out_file",
-                          #mesh_angio_skull, "nii_file")
-
-    ## creating outputnode #######
-    #outputnode = pe.Node(
-        #niu.IdentityInterface(
-            #fields=["stereo_angio_mask",
-                    #"angio_stl"]),
-        #name='outputnode')
-
-    #angio_pipe.connect(mesh_angio_skull, "stl_file",
-                          #outputnode, "angio_stl")
-
-    #angio_pipe.connect(angio_erode, "out_file",
-                          #outputnode, "stereo_angio_mask")
+    angio_pipe.connect(angio_denoise, 'output_image',
+                       outputnode, 'stereo_angio_mask')
 
     return angio_pipe
-
 
 
 def create_quick_angio_pipe(name="quick_angio_pipe", params={}):
@@ -320,12 +267,14 @@ def create_quick_angio_pipe(name="quick_angio_pipe", params={}):
 
     if "angio_mask_thr" in params.keys():
 
-        angio_pipe.connect(angio_mask_thr, "out_file",
-                              angio_mask_binary, "in_file")
+        angio_pipe.connect(
+            angio_mask_thr, "out_file",
+            angio_mask_binary, "in_file")
     else:
 
-        angio_pipe.connect(angio_auto_mask, "mask_img_file",
-                              angio_mask_binary, "in_file")
+        angio_pipe.connect(
+            angio_auto_mask, "mask_img_file",
+            angio_mask_binary, "in_file")
 
     # angio_gcc ####### [okey]
     angio_gcc = pe.Node(
@@ -335,56 +284,8 @@ def create_quick_angio_pipe(name="quick_angio_pipe", params={}):
             function=keep_gcc),
         name="angio_gcc")
 
-    angio_pipe.connect(angio_mask_binary, "out_file",
-                          angio_gcc, "nii_file")
-
-    ## angio_dilate ####### [okey][json]
-    #angio_dilate = NodeParams(
-        #interface=DilateImage(),
-        #params=parse_key(params, "angio_dilate"),
-        #name="angio_dilate")
-
-    #angio_pipe.connect(angio_gcc, "gcc_nii_file",
-                          #angio_dilate, "in_file")
-
-    ## angio_fill #######  [okey]
-    #angio_fill = pe.Node(interface=UnaryMaths(),
-                            #name="angio_fill")
-
-    #angio_fill.inputs.operation = 'fillh'
-
-    #angio_pipe.connect(angio_dilate, "out_file",
-                          #angio_fill, "in_file")
-
-    ## angio_erode ####### [okey][json]
-    #angio_erode = NodeParams(interface=ErodeImage(),
-                                #params=parse_key(params, "angio_erode"),
-                                #name="angio_erode")
-
-    #angio_pipe.connect(angio_fill, "out_file",
-                          #angio_erode, "in_file")
-
-    ## mesh_angio_skull #######
-    #mesh_angio_skull = pe.Node(
-        #interface=niu.Function(input_names=["nii_file"],
-                               #output_names=["stl_file"],
-                               #function=wrap_afni_IsoSurface),
-        #name="mesh_angio_skull")
-
-    #angio_pipe.connect(angio_erode, "out_file",
-                          #mesh_angio_skull, "nii_file")
-
-    ## creating outputnode #######
-    #outputnode = pe.Node(
-        #niu.IdentityInterface(
-            #fields=["stereo_angio_mask",
-                    #"angio_stl"]),
-        #name='outputnode')
-
-    #angio_pipe.connect(mesh_angio_skull, "stl_file",
-                          #outputnode, "angio_stl")
-
-    #angio_pipe.connect(angio_erode, "out_file",
-                          #outputnode, "stereo_angio_mask")
+    angio_pipe.connect(
+        angio_mask_binary, "out_file",
+        angio_gcc, "nii_file")
 
     return angio_pipe
