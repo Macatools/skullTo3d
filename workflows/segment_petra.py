@@ -853,10 +853,9 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
                 datasink, pref_deriv, parse_str, space, pad)
 
         if "angio" in skull_dt and ("angio_pipe" in params.keys()
-                                    or "quick_angio_pipe" in params.keys()):
+                                    or "angio_quick_pipe" in params.keys()):
 
             print("rename_all_angio_derivatives")
-            0/0
             rename_all_angio_derivatives(params, main_workflow, angio_pipe,
                                          datasink, pref_deriv, parse_str)
 
