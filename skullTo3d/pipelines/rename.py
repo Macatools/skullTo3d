@@ -242,7 +242,7 @@ def rename_all_skull_t1_derivatives(params, main_workflow, segment_pnh_pipe,
 def rename_all_angio_derivatives(params, main_workflow, angio_pipe, datasink,
                                  pref_deriv, parse_str):
     # Rename in skull_t1_pipe
-    if "angio_pipe" in params.keys() or "quick_angio_pipe" in params.keys():
+    if "angio_pipe" in params.keys() or "angio_quick_pipe" in params.keys():
 
         # rename_stereo_angio_mask
         rename_stereo_angio_mask = pe.Node(
