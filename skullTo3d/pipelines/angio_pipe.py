@@ -19,7 +19,8 @@ from nipype.interfaces.niftyreg.reg import RegAladin
 from macapype.utils.utils_nodes import NodeParams
 
 from nipype.interfaces.ants import N4BiasFieldCorrection
-from nipype.interfaces.ants.segmentation import DenoiseImage
+
+from macapype.nodes.denoise import DenoiseImage
 
 from macapype.pipelines.prepare import _create_avg_reorient_pipeline
 
@@ -81,15 +82,15 @@ def create_angio_pipe(name="angio_pipe", params={}):
     angio_pipe.connect(inputnode, "stereo_T1",
                        align_angio_on_stereo_T1, "ref_file")
 
-    # angio_bmask
-    angio_bmask = pe.Node(interface=ApplyMask(),
-                          name="angio_bmask")
+    ## angio_bmask
+    #angio_bmask = pe.Node(interface=ApplyMask(),
+                          #name="angio_bmask")
 
-    angio_pipe.connect(align_angio_on_stereo_T1, "out_file",
-                       angio_bmask, "in_file")
+    #angio_pipe.connect(align_angio_on_stereo_T1, "out_file",
+                       #angio_bmask, "in_file")
 
-    angio_pipe.connect(inputnode, "stereo_brain_mask",
-                       angio_bmask, "mask_file")
+    #angio_pipe.connect(inputnode, "stereo_brain_mask",
+                       #angio_bmask, "mask_file")
 
 
     # angio_denoise
@@ -97,8 +98,12 @@ def create_angio_pipe(name="angio_pipe", params={}):
                                params=parse_key(params, "angio_denoise"),
                                name="angio_denoise")
     angio_pipe.connect(
-        angio_bmask, "out_file",
+        align_angio_on_stereo_T1, "out_file",
         angio_denoise, 'input_image')
+
+    angio_pipe.connect(
+        inputnode, "stereo_brain_mask",
+        angio_denoise, 'mask_image')
 
     # outputs
     angio_pipe.connect(angio_denoise, 'output_image',
