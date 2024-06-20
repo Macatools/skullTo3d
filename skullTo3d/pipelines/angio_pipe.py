@@ -5,7 +5,7 @@
 import nipype.interfaces.utility as niu
 import nipype.pipeline.engine as pe
 
-from nipype.interfaces.fsl.maths import (UnaryMaths, Threshold)
+from nipype.interfaces.fsl.maths import (UnaryMaths, Threshold, ApplyMask)
 
 from nipype.interfaces.fsl.preprocess import FAST
 
@@ -146,72 +146,9 @@ def create_angio_pipe(name="angio_pipe", params={}):
             angio_mask_binary, "in_file")
     else:
 
-        #angio_pipe.connect(
-            #angio_auto_mask, "mask_img_file",
-            #angio_mask_binary, "in_file")
-
         angio_pipe.connect(
             angio_fast, ("partial_volume_files", get_elem, 1),
             angio_mask_binary, "in_file")
-
-
-    ## angio_auto_thresh
-    #if "angio_mask_thr" in params.keys():
-
-        #print("*** angio_mask_thr ***")
-
-        ## angio_mask_thr ####### [okey][json]
-        #angio_mask_thr = NodeParams(
-            #interface=Threshold(),
-            #params=parse_key(params, "angio_mask_thr"),
-            #name="angio_mask_thr")
-
-        #angio_pipe.connect(
-            #inputnode, ("indiv_params", parse_key, "angio_mask_thr"),
-            #angio_mask_thr, "indiv_params")
-
-        #angio_pipe.connect(
-            #angio_denoise, 'output_image',
-            #angio_mask_thr, "in_file")
-    #else:
-
-        #print("*** angio_auto_mask ***")
-
-        #angio_auto_mask = NodeParams(
-                #interface=niu.Function(
-                    #input_names=["img_file", "operation",
-                                 #"index", "sample_bins", "distance", "kmeans"],
-                    #output_names=["mask_img_file"],
-                    #function=mask_auto_img),
-                #params=parse_key(params, "angio_auto_mask"),
-                #name="angio_auto_mask")
-
-        #angio_pipe.connect(
-            #angio_denoise, 'output_image',
-            #angio_auto_mask, "img_file")
-
-        #angio_pipe.connect(
-            #inputnode, ("indiv_params", parse_key, "angio_auto_mask"),
-            #angio_auto_mask, "indiv_params")
-
-    ## angio_mask_binary
-    #angio_mask_binary = pe.Node(
-        #interface=UnaryMaths(),
-        #name="angio_mask_binary")
-
-    #angio_mask_binary.inputs.operation = 'bin'
-    #angio_mask_binary.inputs.output_type = 'NIFTI_GZ'
-
-    #if "angio_mask_thr" in params.keys():
-
-        #angio_pipe.connect(
-            #angio_mask_thr, "out_file",
-            #angio_mask_binary, "in_file")
-    #else:
-
-        #angio_pipe.connect(
-            #angio_auto_mask, "mask_img_file",
-            #angio_mask_binary, "in_file")
 
     # angio_gcc ####### [okey]
     angio_gcc = pe.Node(
@@ -225,7 +162,20 @@ def create_angio_pipe(name="angio_pipe", params={}):
         angio_mask_binary, "out_file",
         angio_gcc, "nii_file")
 
-    angio_pipe.connect(angio_gcc, 'gcc_nii_file',
+    # angio_bmasked ####### [okey]
+    angio_bmasked = pe.Node(
+        ApplyMask,
+        name="angio_bmasked")
+
+    angio_pipe.connect(
+        angio_gcc, "gcc_nii_file",
+        angio_bmasked, "in_file")
+
+    angio_pipe.connect(
+        inputnode, "stereo_brain_mask",
+        angio_bmasked, "mask_file")
+
+    angio_pipe.connect(angio_bmasked, 'out_file',
                        outputnode, 'stereo_angio_mask')
 
     return angio_pipe
