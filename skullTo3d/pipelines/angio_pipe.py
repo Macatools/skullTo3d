@@ -151,7 +151,7 @@ def create_angio_pipe(name="angio_pipe", params={}):
             #angio_mask_binary, "in_file")
 
         angio_pipe.connect(
-            angio_fast, ("partial_volume_files", get_elem, 0),
+            angio_fast, ("partial_volume_files", get_elem, 1),
             angio_mask_binary, "in_file")
 
 
