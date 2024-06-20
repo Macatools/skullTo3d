@@ -177,9 +177,6 @@ def create_angio_pipe(name="angio_pipe", params={}):
         inputnode, "stereo_brain_mask",
         angio_bmasked, "mask_file")
 
-
-
-
     # angio_dilate
     angio_dilate = NodeParams(
         interface=DilateImage(),
@@ -187,34 +184,29 @@ def create_angio_pipe(name="angio_pipe", params={}):
         name="angio_dilate")
 
     angio_pipe.connect(angio_bmasked, "out_file",
-                          angio_dilate, "in_file")
+                       angio_dilate, "in_file")
 
     # angio_t1_fill
     angio_fill = pe.Node(interface=UnaryMaths(),
-                            name="angio_fill")
+                         name="angio_fill")
 
     angio_fill.inputs.operation = 'fillh'
 
     angio_pipe.connect(angio_dilate, "out_file",
-                          angio_fill, "in_file")
+                       angio_fill, "in_file")
 
     # angio_t1_erode
-    angio_erode = NodeParams(interface=ErodeImage(),
-                                params=parse_key(params, "angio_erode"),
-                                name="angio_erode")
+    angio_erode = NodeParams(
+        interface=ErodeImage(),
+        params=parse_key(params, "angio_erode"),
+        name="angio_erode")
 
     angio_pipe.connect(angio_fill, "out_file",
-                          angio_erode, "in_file")
+                       angio_erode, "in_file")
 
-    # mesh_angio #######
-    mesh_angio = pe.Node(
-        interface=niu.Function(input_names=["nii_file"],
-                               output_names=["stl_file"],
-                               function=wrap_afni_IsoSurface),
-        name="mesh_angio")
-
+    # outputnode
     angio_pipe.connect(angio_erode, "out_file",
-                          outputnode, 'stereo_angio_mask')
+                       outputnode, 'stereo_angio_mask')
 
     return angio_pipe
 
