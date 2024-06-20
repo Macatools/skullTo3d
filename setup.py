@@ -4,8 +4,7 @@
 import re
 from setuptools import find_packages, setup
 
-required_packages = ["Cython",
-                     "macapype"]
+required_packages = ["macapype"]
 
 verstr = "unknown"
 try:
