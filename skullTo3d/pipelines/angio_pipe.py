@@ -164,7 +164,7 @@ def create_angio_pipe(name="angio_pipe", params={}):
 
     # angio_bmasked ####### [okey]
     angio_bmasked = pe.Node(
-        ApplyMask,
+        ApplyMask(),
         name="angio_bmasked")
 
     angio_pipe.connect(
