@@ -7,7 +7,7 @@ import nipype.pipeline.engine as pe
 
 
 from nipype.interfaces.fsl.maths import (
-    UnaryMaths, Threshold, ApplyMask, ErodeImage, DilateImage)
+    UnaryMaths, Threshold, ApplyMask)
 
 from nipype.interfaces.fsl.preprocess import FAST
 
@@ -17,24 +17,16 @@ from nipype.interfaces.niftyreg.reg import RegAladin
 
 from macapype.utils.utils_nodes import NodeParams
 
-from nipype.interfaces.ants import N4BiasFieldCorrection
-
 from macapype.nodes.denoise import DenoiseImage
 
-from macapype.pipelines.prepare import _create_avg_reorient_pipeline
-
-from macapype.nodes.prepare import average_align
-
-from macapype.nodes.surface import (keep_gcc, wrap_afni_IsoSurface)
-
-from skullTo3d.nodes.skull import (
-    mask_auto_img)
+from macapype.nodes.surface import (keep_gcc)
 
 from macapype.utils.misc import parse_key, get_elem
 
 ###############################################################################
 # #################### ANGIO  ######################
 ###############################################################################
+
 
 def create_angio_pipe(name="angio_pipe", params={}):
 
@@ -123,12 +115,14 @@ def create_angio_pipe(name="angio_pipe", params={}):
 
         print("*** angio_fast ***")
 
-        angio_fast = NodeParams(interface=FAST(),
-                            params=parse_key(params, "angio_fast"),
-                            name="angio_fast")
+        angio_fast = NodeParams(
+            interface=FAST(),
+            params=parse_key(params, "angio_fast"),
+            name="angio_fast")
 
-        angio_pipe.connect(angio_denoise, 'output_image',
-                                angio_fast, "in_files")
+        angio_pipe.connect(
+            angio_denoise, 'output_image',
+            angio_fast, "in_files")
 
         angio_pipe.connect(
             inputnode, ('indiv_params', parse_key, "angio_fast"),
@@ -177,35 +171,8 @@ def create_angio_pipe(name="angio_pipe", params={}):
         inputnode, "stereo_brain_mask",
         angio_bmasked, "mask_file")
 
-    # angio_dilate
-    angio_dilate = NodeParams(
-        interface=DilateImage(),
-        params=parse_key(params, "angio_dilate"),
-        name="angio_dilate")
-
-    angio_pipe.connect(angio_bmasked, "out_file",
-                       angio_dilate, "in_file")
-
-    # angio_t1_fill
-    angio_fill = pe.Node(interface=UnaryMaths(),
-                         name="angio_fill")
-
-    angio_fill.inputs.operation = 'fillh'
-
-    angio_pipe.connect(angio_dilate, "out_file",
-                       angio_fill, "in_file")
-
-    # angio_t1_erode
-    angio_erode = NodeParams(
-        interface=ErodeImage(),
-        params=parse_key(params, "angio_erode"),
-        name="angio_erode")
-
-    angio_pipe.connect(angio_fill, "out_file",
-                       angio_erode, "in_file")
-
     # outputnode
-    angio_pipe.connect(angio_erode, "out_file",
+    angio_pipe.connect(angio_bmasked, "out_file",
                        outputnode, 'stereo_angio_mask')
 
     return angio_pipe
@@ -280,28 +247,14 @@ def create_quick_angio_pipe(name="quick_angio_pipe", params={}):
 
         print("*** angio_auto_mask ***")
 
-        #angio_auto_mask = NodeParams(
-                #interface=niu.Function(
-                    #input_names=["img_file", "operation",
-                                #"index", "sample_bins", "distance", "kmeans"],
-                    #output_names=["mask_img_file"],
-                    #function=mask_auto_img),
-                #params=parse_key(params, "angio_auto_mask"),
-                #name="angio_auto_mask")
+        angio_fast = NodeParams(
+            interface=FAST(),
+            params=parse_key(params, "angio_fast"),
+            name="angio_fast")
 
-        #angio_pipe.connect(align_angio_on_stereo_T1, "out_file",
-                        #angio_auto_mask, "img_file")
-
-        #angio_pipe.connect(
-            #inputnode, ("indiv_params", parse_key, "angio_auto_mask"),
-            #angio_auto_mask, "indiv_params")
-
-        angio_fast = NodeParams(interface=FAST(),
-                            params=parse_key(params, "angio_fast"),
-                            name="angio_fast")
-
-        angio_pipe.connect(align_angio_on_stereo_T1, "out_file",
-                                angio_fast, "in_files")
+        angio_pipe.connect(
+            align_angio_on_stereo_T1, "out_file",
+            angio_fast, "in_files")
 
         angio_pipe.connect(
             inputnode, ('indiv_params', parse_key, "angio_fast"),
@@ -319,12 +272,8 @@ def create_quick_angio_pipe(name="quick_angio_pipe", params={}):
         angio_pipe.connect(
             angio_mask_thr, "out_file",
             angio_mask_binary, "in_file")
+
     else:
-
-        #angio_pipe.connect(
-            #angio_auto_mask, "mask_img_file",
-            #angio_mask_binary, "in_file")
-
         angio_pipe.connect(
             angio_fast, ("partial_volume_files", get_elem, 0),
             angio_mask_binary, "in_file")
