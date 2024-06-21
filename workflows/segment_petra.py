@@ -845,13 +845,6 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
                 params, main_workflow, segment_brain_pipe, skull_ct_pipe,
                 datasink, pref_deriv, parse_str, space, pad)
 
-        if "ct" in skull_dt and "skull_ct_pipe" in params.keys():
-            print("rename ct skull pipe")
-
-            rename_all_skull_ct_derivatives(
-                params, main_workflow, segment_brain_pipe, skull_ct_pipe,
-                datasink, pref_deriv, parse_str, space, pad)
-
         if "angio" in skull_dt and ("angio_pipe" in params.keys()
                                     or "angio_quick_pipe" in params.keys()):
 
