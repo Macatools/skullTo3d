@@ -374,6 +374,8 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
     align_ct_on_T1 = pe.Node(interface=RegAladin(),
                              name="align_ct_on_T1")
 
+    align_ct_on_T1.inputs.rig_only_flag = True
+
     skull_ct_pipe.connect(inputnode, 'ct',
                           align_ct_on_T1, "flo_file")
 
