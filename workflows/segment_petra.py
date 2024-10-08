@@ -839,7 +839,7 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
                     datasink, '@t1_native_skull_mask')
 
         if "ct" in skull_dt and "skull_ct_pipe" in params.keys():
-            print("rename ct skull pipe")
+            print("rename ct skull pipe 1")
 
             rename_all_skull_ct_derivatives(
                 params, main_workflow, segment_brain_pipe, skull_ct_pipe,
