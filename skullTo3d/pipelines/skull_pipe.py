@@ -389,7 +389,7 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
 
     align_ct_on_T1_2.inputs.rig_only_flag = True
 
-    skull_ct_pipe.connect(align_ct_on_T1_2, 'res_file',
+    skull_ct_pipe.connect(align_ct_on_T1, 'res_file',
                           align_ct_on_T1_2, "flo_file")
 
     skull_ct_pipe.connect(inputnode, "native_T1",
