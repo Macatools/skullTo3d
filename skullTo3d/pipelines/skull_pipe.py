@@ -404,7 +404,7 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
     skull_ct_pipe.connect(align_ct_on_T1_2, 'res_file',
                           resample_ct_on_T1, "flo_file")
 
-    skull_ct_pipe.connect(align_ct_on_T1_2, 'trans_file',
+    skull_ct_pipe.connect(align_ct_on_T1_2, 'aff_file',
                           resample_ct_on_T1, "trans_file")
 
     skull_ct_pipe.connect(inputnode, "stereo_T1",
