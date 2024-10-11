@@ -399,7 +399,7 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
 
     # align_ct_on_T1_2
     resample_ct_on_T1 = pe.Node(interface=RegResample(pad_val=0.0),
-                             name="align_ct_on_T1_2")
+                             name="resample_ct_on_T1")
 
     skull_ct_pipe.connect(align_ct_on_T1_2, 'res_file',
                           resample_ct_on_T1, "flo_file")
