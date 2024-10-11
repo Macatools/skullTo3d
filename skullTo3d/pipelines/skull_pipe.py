@@ -447,7 +447,7 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
             ct_skull_mask_thr, "indiv_params")
 
         #skull_ct_pipe.connect(align_ct_on_stereo_T1, "out_file",
-        skull_ct_pipe.connect(resample_ct_on_T1, 'res_file',
+        skull_ct_pipe.connect(resample_ct_on_T1, 'out_file',
                               ct_skull_mask_thr, "in_file")
     else:
 
@@ -463,7 +463,7 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
                 name="ct_skull_auto_mask")
 
         #skull_ct_pipe.connect(align_ct_on_stereo_T1, "out_file",
-        skull_ct_pipe.connect(resample_ct_on_T1, 'res_file',
+        skull_ct_pipe.connect(resample_ct_on_T1, 'out_file',
                               ct_skull_auto_mask, "img_file")
 
         skull_ct_pipe.connect(
