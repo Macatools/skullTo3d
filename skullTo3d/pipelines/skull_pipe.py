@@ -374,6 +374,7 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
     align_ct_on_T1 = pe.Node(interface=RegAladin(),
                              name="align_ct_on_T1")
 
+    align_ct_on_T1.inputs.nac_flag = True
     align_ct_on_T1.inputs.rig_only_flag = True
 
     skull_ct_pipe.connect(inputnode, 'ct',
@@ -383,17 +384,17 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
                           align_ct_on_T1, "ref_file")
 
 
-    # align_ct_on_T1_2
-    align_ct_on_T1_2 = pe.Node(interface=RegAladin(),
-                             name="align_ct_on_T1_2")
+    ## align_ct_on_T1_2
+    #align_ct_on_T1_2 = pe.Node(interface=RegAladin(),
+                             #name="align_ct_on_T1_2")
 
-    align_ct_on_T1_2.inputs.rig_only_flag = True
+    #align_ct_on_T1_2.inputs.rig_only_flag = True
 
-    skull_ct_pipe.connect(align_ct_on_T1, 'res_file',
-                          align_ct_on_T1_2, "flo_file")
+    #skull_ct_pipe.connect(align_ct_on_T1, 'res_file',
+                          #align_ct_on_T1_2, "flo_file")
 
-    skull_ct_pipe.connect(inputnode, "native_T1",
-                          align_ct_on_T1_2, "ref_file")
+    #skull_ct_pipe.connect(inputnode, "native_T1",
+                          #align_ct_on_T1_2, "ref_file")
 
 
 
@@ -402,7 +403,8 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
         interface=RegResample(pad_val=0.0),
         name="align_ct_on_stereo_T1")
 
-    skull_ct_pipe.connect(align_ct_on_T1_2, 'res_file',
+    skull_ct_pipe.connect(align_ct_on_T1, 'res_file',
+    #skull_ct_pipe.connect(align_ct_on_T1_2, 'res_file',
                           align_ct_on_stereo_T1, "flo_file")
 
     skull_ct_pipe.connect(inputnode, 'native_to_stereo_trans',
