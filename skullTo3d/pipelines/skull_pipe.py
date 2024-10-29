@@ -411,8 +411,6 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
     #skull_ct_pipe.connect(inputnode, 'native_to_stereo_trans',
                           #align_ct_on_stereo_T1, "trans_file")
 
-
-
     ## align_ct_on_stereo_T1
     #align_ct_on_stereo_T1 = pe.Node(
         #interface=RegResample(pad_val=0.0),
@@ -871,6 +869,17 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
     skull_petra_pipe.connect(petra_skull_fill, "out_file",
                              petra_skull_erode, "in_file")
 
+
+
+    # petra_skull_erode ####### [okey][json]
+    petra_skull_smooth= NodeParams(
+        interface=Smooth(),
+        params=parse_key(params, "petra_skull_smooth"),
+        name="petra_skull_smooth")
+
+    skull_petra_pipe.connect(petra_skull_erode, "out_file",
+                             petra_skull_smooth, "in_file")
+
     # mesh_petra_skull #######
     mesh_petra_skull = pe.Node(
         interface=niu.Function(input_names=["nii_file"],
@@ -878,7 +887,7 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
                                function=wrap_afni_IsoSurface),
         name="mesh_petra_skull")
 
-    skull_petra_pipe.connect(petra_skull_erode, "out_file",
+    skull_petra_pipe.connect(petra_skull_smooth, "out_file",
                              mesh_petra_skull, "nii_file")
 
     if "petra_skull_fov" in params.keys():
@@ -890,7 +899,7 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
             params=parse_key(params, "petra_skull_fov"),
             name="petra_skull_fov")
 
-        skull_petra_pipe.connect(petra_skull_erode, "out_file",
+        skull_petra_pipe.connect(petra_skull_smooth, "out_file",
                                  petra_skull_fov, "in_file")
 
         # petra_skull_clean ####### [okey]
@@ -927,7 +936,7 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
     skull_petra_pipe.connect(mesh_petra_skull, "stl_file",
                              outputnode, "petra_skull_stl")
 
-    skull_petra_pipe.connect(petra_skull_erode, "out_file",
+    skull_petra_pipe.connect(petra_skull_smooth, "out_file",
                              outputnode, "petra_skull_mask")
 
     if "petra_skull_fov" in params.keys():
