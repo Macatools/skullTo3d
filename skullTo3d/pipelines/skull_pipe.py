@@ -869,9 +869,7 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
     skull_petra_pipe.connect(petra_skull_fill, "out_file",
                              petra_skull_erode, "in_file")
 
-
-
-    # petra_skull_erode ####### [okey][json]
+    # petra_skull_smooth ####### [okey][json]
     petra_skull_smooth= NodeParams(
         interface=Smooth(),
         params=parse_key(params, "petra_skull_smooth"),
@@ -887,7 +885,7 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
                                function=wrap_afni_IsoSurface),
         name="mesh_petra_skull")
 
-    skull_petra_pipe.connect(petra_skull_smooth, "out_file",
+    skull_petra_pipe.connect(petra_skull_smooth, "smoothed_file",
                              mesh_petra_skull, "nii_file")
 
     if "petra_skull_fov" in params.keys():
@@ -899,7 +897,7 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
             params=parse_key(params, "petra_skull_fov"),
             name="petra_skull_fov")
 
-        skull_petra_pipe.connect(petra_skull_smooth, "out_file",
+        skull_petra_pipe.connect(petra_skull_smooth, "smoothed_file",
                                  petra_skull_fov, "in_file")
 
         # petra_skull_clean ####### [okey]
@@ -936,7 +934,7 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
     skull_petra_pipe.connect(mesh_petra_skull, "stl_file",
                              outputnode, "petra_skull_stl")
 
-    skull_petra_pipe.connect(petra_skull_smooth, "out_file",
+    skull_petra_pipe.connect(petra_skull_smooth, "smoothed_file",
                              outputnode, "petra_skull_mask")
 
     if "petra_skull_fov" in params.keys():
