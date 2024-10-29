@@ -7,9 +7,9 @@ import nipype.pipeline.engine as pe
 
 from nipype.interfaces.fsl.maths import (
     DilateImage, ErodeImage,
-    ApplyMask, UnaryMaths, Threshold, Smooth)
+    ApplyMask, UnaryMaths, Threshold)
 
-from nipype.interfaces.fsl.utils import RobustFOV
+from nipype.interfaces.fsl.utils import RobustFOV, Smooth
 from nipype.interfaces.fsl.preprocess import FAST, FLIRT
 
 
