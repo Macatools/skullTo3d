@@ -870,7 +870,7 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
                              petra_skull_erode, "in_file")
 
     # petra_skull_smooth ####### [okey][json]
-    petra_skull_smooth= NodeParams(
+    petra_skull_smooth = NodeParams(
         interface=Smooth(),
         params=parse_key(params, "petra_skull_smooth"),
         name="petra_skull_smooth")
@@ -878,18 +878,16 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
     skull_petra_pipe.connect(petra_skull_erode, "out_file",
                              petra_skull_smooth, "in_file")
 
-
     # petra_skull_bin ####### [okey][json]
-    petra_skull_bin= NodeParams(
-        interface=(interface=UnaryMaths(),
-                                     name="petra_head_mask_binary")
+    petra_skull_bin = NodeParams(
+        interface=UnaryMaths(),
+        name="petra_head_mask_binary")
 
     petra_skull_bin.inputs.operation = 'bin'
     petra_skull_bin.inputs.output_type = 'NIFTI_GZ'
 
     skull_petra_pipe.connect(petra_skull_smooth, "smoothed_file",
                              petra_skull_bin, "in_file")
-
 
     # mesh_petra_skull #######
     mesh_petra_skull = pe.Node(
