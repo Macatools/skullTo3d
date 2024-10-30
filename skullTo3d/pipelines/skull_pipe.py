@@ -881,7 +881,7 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
     # petra_skull_bin ####### [okey][json]
     petra_skull_bin = NodeParams(
         interface=UnaryMaths(),
-        name="petra_head_mask_binary")
+        name="petra_skull_bin")
 
     petra_skull_bin.inputs.operation = 'bin'
     petra_skull_bin.inputs.output_type = 'NIFTI_GZ'
