@@ -9,7 +9,7 @@ from nipype.interfaces.fsl.maths import (
     DilateImage, ErodeImage,
     ApplyMask, UnaryMaths, Threshold)
 
-from nipype.interfaces.fsl.utils import RobustFOV, Smooth
+from nipype.interfaces.fsl.utils import RobustFOV
 from nipype.interfaces.fsl.preprocess import FAST, FLIRT
 
 
@@ -387,7 +387,6 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
                                name="align_ct_on_T1_2")
 
     align_ct_on_T1_2.inputs.rig_only_flag = True
-    #align_ct_on_T1_2.inputs.nac_flag = True
 
     skull_ct_pipe.connect(align_ct_on_T1, 'res_file',
                           align_ct_on_T1_2, "flo_file")
@@ -408,23 +407,6 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
     skull_ct_pipe.connect(inputnode, "stereo_T1",
                           resample_ct_on_T1, "ref_file")
 
-    #skull_ct_pipe.connect(inputnode, 'native_to_stereo_trans',
-                          #align_ct_on_stereo_T1, "trans_file")
-
-    ## align_ct_on_stereo_T1
-    #align_ct_on_stereo_T1 = pe.Node(
-        #interface=RegResample(pad_val=0.0),
-        #name="align_ct_on_stereo_T1")
-
-    #skull_ct_pipe.connect(align_ct_on_T1_2, 'res_file',
-                          #align_ct_on_stereo_T1, "flo_file")
-
-    #skull_ct_pipe.connect(inputnode, 'native_to_stereo_trans',
-                          #align_ct_on_stereo_T1, "trans_file")
-
-    #skull_ct_pipe.connect(inputnode, "stereo_T1",
-                          #align_ct_on_stereo_T1, "ref_file")
-
     # ct_skull_auto_thresh
     if "ct_skull_mask_thr" in params.keys():
 
@@ -442,7 +424,6 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
             inputnode, ("indiv_params", parse_key, "ct_skull_mask_thr"),
             ct_skull_mask_thr, "indiv_params")
 
-        #skull_ct_pipe.connect(align_ct_on_stereo_T1, "out_file",
         skull_ct_pipe.connect(resample_ct_on_T1, 'out_file',
                               ct_skull_mask_thr, "in_file")
     else:
@@ -458,7 +439,6 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
                 params=parse_key(params, "ct_skull_auto_mask"),
                 name="ct_skull_auto_mask")
 
-        #skull_ct_pipe.connect(align_ct_on_stereo_T1, "out_file",
         skull_ct_pipe.connect(resample_ct_on_T1, 'out_file',
                               ct_skull_auto_mask, "img_file")
 
@@ -869,35 +849,6 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
     skull_petra_pipe.connect(petra_skull_fill, "out_file",
                              petra_skull_erode, "in_file")
 
-    ## petra_skull_smooth ####### [okey][json]
-    #petra_skull_smooth = NodeParams(
-        #interface=Smooth(),
-        #params=parse_key(params, "petra_skull_smooth"),
-        #name="petra_skull_smooth")
-
-    #skull_petra_pipe.connect(petra_skull_erode, "out_file",
-                             #petra_skull_smooth, "in_file")
-
-    ## petra_skull_thr
-    #petra_skull_thr = NodeParams(
-        #interface=Threshold(thresh=0.5),
-        #params=parse_key(params, 'petra_skull_thr'),
-        #name="petra_skull_thr")
-
-    #skull_petra_pipe.connect(petra_skull_smooth, "smoothed_file",
-                             #petra_skull_thr, "in_file")
-
-    ## petra_skull_bin ####### [okey][json]
-    #petra_skull_bin = NodeParams(
-        #interface=UnaryMaths(),
-        #name="petra_skull_bin")
-
-    #petra_skull_bin.inputs.operation = 'bin'
-    #petra_skull_bin.inputs.output_type = 'NIFTI_GZ'
-
-    #skull_petra_pipe.connect(petra_skull_thr, "out_file",
-                             #petra_skull_bin, "in_file")
-
     # mesh_petra_skull #######
     mesh_petra_skull = pe.Node(
         interface=niu.Function(input_names=["nii_file"],
@@ -906,7 +857,6 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
         name="mesh_petra_skull")
 
     skull_petra_pipe.connect(petra_skull_erode, "out_file",
-    #skull_petra_pipe.connect(petra_skull_bin, "out_file",
                              mesh_petra_skull, "nii_file")
 
     if "petra_skull_fov" in params.keys():
@@ -917,7 +867,6 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
             params=parse_key(params, "petra_skull_fov"),
             name="petra_skull_fov")
 
-        #skull_petra_pipe.connect(petra_skull_bin, "out_file",
         skull_petra_pipe.connect(petra_skull_erode, "out_file",
                                  petra_skull_fov, "in_file")
 
@@ -956,7 +905,6 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
                              outputnode, "petra_skull_stl")
 
     skull_petra_pipe.connect(petra_skull_erode, "out_file",
-    #skull_petra_pipe.connect(petra_skull_bin, "out_file",
                              outputnode, "petra_skull_mask")
 
     if "petra_skull_fov" in params.keys():
