@@ -77,7 +77,7 @@ jobs:
       - name: Download dataset
         run: |
 
-            wget --no-check-certificate --content-disposition  "https://amubox.univ-amu.fr/public.php?service=files&t=swYxNZ3P6LjfqN4&download" -O skullTo3d_CI.zip
+            curl https://amubox.univ-amu.fr/public.php/dav/files/swYxNZ3P6LjfqN4 --output skullTo3d_CI.zip
             unzip -o skullTo3d_CI.zip -d skullTo3d_CI
 
             pwd
@@ -121,7 +121,7 @@ jobs:
       - name: Download dataset
         run: |
 
-            wget --no-check-certificate --content-disposition  "https://amubox.univ-amu.fr/public.php?service=files&t=swYxNZ3P6LjfqN4&download" -O skullTo3d_CI.zip
+            curl https://amubox.univ-amu.fr/public.php/dav/files/swYxNZ3P6LjfqN4 --output skullTo3d_CI.zip
             unzip -o skullTo3d_CI.zip -d skullTo3d_CI
 
             pwd
@@ -168,7 +168,7 @@ jobs:
       - name: Download dataset
         run: |
 
-            wget --no-check-certificate --content-disposition  "https://amubox.univ-amu.fr/public.php?service=files&t=swYxNZ3P6LjfqN4&download" -O skullTo3d_CI.zip
+            curl https://amubox.univ-amu.fr/public.php/dav/files/swYxNZ3P6LjfqN4 --output skullTo3d_CI.zip
             unzip -o skullTo3d_CI.zip -d skullTo3d_CI
 
             pwd
