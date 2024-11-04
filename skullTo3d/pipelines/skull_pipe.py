@@ -388,7 +388,7 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
         interface=RegResample(pad_val=0.0),
         name="align_ct_on_stereo_T1")
 
-    skull_ct_pipe.connect(align_ct_on_T1, 'out_file',
+    skull_ct_pipe.connect(align_ct_on_T1, 'res_file',
                           align_ct_on_stereo_T1, "flo_file")
 
     skull_ct_pipe.connect(inputnode, 'native_to_stereo_trans',
@@ -414,7 +414,7 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
             inputnode, ("indiv_params", parse_key, "ct_skull_mask_thr"),
             ct_skull_mask_thr, "indiv_params")
 
-        skull_ct_pipe.connect(align_ct_on_stereo_T1, 'res_file',
+        skull_ct_pipe.connect(align_ct_on_stereo_T1, 'out_file',
                               ct_skull_mask_thr, "in_file")
     else:
 
@@ -429,7 +429,7 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
                 params=parse_key(params, "ct_skull_auto_mask"),
                 name="ct_skull_auto_mask")
 
-        skull_ct_pipe.connect(align_ct_on_stereo_T1, 'res_file',
+        skull_ct_pipe.connect(align_ct_on_stereo_T1, 'out_file',
                               ct_skull_auto_mask, "img_file")
 
         skull_ct_pipe.connect(
