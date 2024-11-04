@@ -388,7 +388,7 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
         interface=RegResample(pad_val=0.0),
         name="align_ct_on_stereo_T1")
 
-    skull_ct_pipe.connect(align_ct_on_T1, 'res_file',
+    skull_ct_pipe.connect(align_ct_on_T1, 'out_file',
                           align_ct_on_stereo_T1, "flo_file")
 
     skull_ct_pipe.connect(inputnode, 'native_to_stereo_trans',
