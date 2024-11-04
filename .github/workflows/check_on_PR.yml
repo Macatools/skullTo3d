@@ -55,7 +55,7 @@ jobs:
 
       - name: Download dataset
         run: |
-            wget --no-check-certificate --content-disposition  "https://amubox.univ-amu.fr/public.php?service=files&t=swYxNZ3P6LjfqN4&download" -O skullTo3d_CI.zip
+            curl https://amubox.univ-amu.fr/public.php/dav/files/KJ2L5j6L6orPXxM --output skullTo3d_CI.zip
             unzip -o skullTo3d_CI.zip -d skullTo3d_CI
 
       - name: Running all test pipelines (ANTS SPM)
