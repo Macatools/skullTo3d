@@ -281,8 +281,8 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
     # soft
     wf_name += "_{}".format(soft)
 
-    #if 't1' in skull_dt:
-        #wf_name += "_t1"
+    if 't1' in skull_dt:
+        wf_name += "_t1"
 
     if 'petra' in skull_dt:
         wf_name += "_petra"
