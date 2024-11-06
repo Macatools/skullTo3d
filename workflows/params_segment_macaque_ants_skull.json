@@ -198,7 +198,7 @@
         },
         "ct_skull_fov":
         {
-            "brainsize" : 65
+            "brainsize" : 45
         }
     },
     "angio_pipe":
