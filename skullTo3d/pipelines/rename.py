@@ -142,6 +142,45 @@ def rename_all_skull_ct_derivatives(params, main_workflow, segment_pnh_pipe,
             rename_ct_skull_stl, 'out_file',
             datasink, '@ct_skull_stl')
 
+        if "ct_skull_fov" in params["skull_ct_pipe"]:
+
+            # rename robustct_skull_stl
+            rename_robustct_skull_stl = pe.Node(
+                niu.Rename(), name="rename_robustct_skull_stl")
+
+            rename_robustct_skull_stl.inputs.format_string = \
+                pref_deriv + "_desc-robustct_skullmask"
+            rename_robustct_skull_stl.inputs.parse_string = parse_str
+            rename_robustct_skull_stl.inputs.keep_ext = True
+
+            main_workflow.connect(
+                skull_ct_pipe, 'outputnode.robustct_skull_stl',
+                rename_robustct_skull_stl, 'in_file')
+
+            main_workflow.connect(
+                rename_robustct_skull_stl, 'out_file',
+                datasink, '@robustct_skull_stl')
+
+            # rename stereo_robustct_skull_mask
+            rename_stereo_robustct_skull_mask = pe.Node(
+                niu.Rename(), name="rename_stereo_robustct_skullmask")
+
+            rename_stereo_robustct_skull_mask.inputs.format_string = \
+                pref_deriv + "_space-stereo_desc-robustct_skullmask"
+
+            rename_stereo_robustct_skull_mask.inputs.parse_string = \
+                parse_str
+
+            rename_stereo_robustct_skull_mask.inputs.keep_ext = True
+
+            main_workflow.connect(
+                skull_ct_pipe, 'outputnode.robustct_skull_mask',
+                rename_stereo_robustct_skull_mask, 'in_file')
+
+            main_workflow.connect(
+                rename_stereo_robustct_skull_mask, 'out_file',
+                datasink, '@stereo_robustct_skullmask')
+
 
 def rename_all_skull_t1_derivatives(params, main_workflow, segment_pnh_pipe,
                                     skull_t1_pipe, datasink, pref_deriv,

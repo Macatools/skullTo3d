@@ -498,10 +498,42 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
     skull_ct_pipe.connect(ct_skull_erode, "out_file",
                           mesh_ct_skull, "nii_file")
 
+    if "ct_skull_fov" in params.keys():
+
+        # ct_skull_fov ####### [okey][json]
+        ct_skull_fov = NodeParams(
+            interface=RobustFOV(),
+            params=parse_key(params, "ct_skull_fov"),
+            name="ct_skull_fov")
+
+        skull_ct_pipe.connect(ct_skull_erode, "out_file",
+                              ct_skull_fov, "in_file")
+
+        # ct_skull_clean ####### [okey]
+        ct_skull_clean = pe.Node(
+            interface=niu.Function(input_names=["nii_file"],
+                                   output_names=["gcc_nii_file"],
+                                   function=keep_gcc),
+            name="ct_skull_clean")
+
+        skull_ct_pipe.connect(ct_skull_fov, "out_roi",
+                              ct_skull_clean, "nii_file")
+
+        # mesh_robustct_skull #######
+        mesh_robustct_skull = pe.Node(
+            interface=niu.Function(input_names=["nii_file"],
+                                   output_names=["stl_file"],
+                                   function=wrap_afni_IsoSurface),
+            name="mesh_robustct_skull")
+
+        skull_ct_pipe.connect(ct_skull_clean, "gcc_nii_file",
+                              mesh_robustct_skull, "nii_file")
+
     # creating outputnode #######
     outputnode = pe.Node(
         niu.IdentityInterface(
             fields=["stereo_ct_skull_mask",
+                    "robustct_skull_mask", "robustct_skull_stl",
                     "ct_skull_stl"]),
         name='outputnode')
 
@@ -510,6 +542,13 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
 
     skull_ct_pipe.connect(ct_skull_erode, "out_file",
                           outputnode, "stereo_ct_skull_mask")
+
+    if "ct_skull_fov" in params.keys():
+        skull_ct_pipe.connect(ct_skull_fov, "out_roi",
+                                 outputnode, "robustct_skull_mask")
+
+        skull_ct_pipe.connect(mesh_robustct_skull, "stl_file",
+                                 outputnode, "robustct_skull_stl")
 
     return skull_ct_pipe
 
