@@ -545,10 +545,10 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
 
     if "ct_skull_fov" in params.keys():
         skull_ct_pipe.connect(ct_skull_fov, "out_roi",
-                                 outputnode, "robustct_skull_mask")
+                              outputnode, "robustct_skull_mask")
 
         skull_ct_pipe.connect(mesh_robustct_skull, "stl_file",
-                                 outputnode, "robustct_skull_stl")
+                              outputnode, "robustct_skull_stl")
 
     return skull_ct_pipe
 
