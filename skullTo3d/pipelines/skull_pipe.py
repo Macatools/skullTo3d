@@ -723,6 +723,31 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
     skull_petra_pipe.connect(petra_head_erode, "out_file",
                              petra_hmasked, "mask_file")
 
+    if "petra_debias" in params.keys():
+
+        # N4 intensity normalization over T1
+        petra_debias = NodeParams(N4BiasFieldCorrection(),
+                                  params=parse_key(params, "petra_debias"),
+                                  name='petra_debias')
+
+        skull_petra_pipe.connect(petra_hmasked, "out_file",
+                                 petra_debias, "input_image")
+
+        skull_petra_pipe.connect(
+            inputnode, ('indiv_params', parse_key, "petra_debias"),
+            petra_debias, "indiv_params")
+
+    petra_fast = NodeParams(interface=FAST(),
+                            params=parse_key(params, "petra_fast"),
+                            name="petra_fast")
+
+    if "petra_debias" in params.keys():
+        skull_petra_pipe.connect(petra_debias, "output_image",
+                                 petra_fast, "in_files")
+    else:
+        skull_petra_pipe.connect(petra_hmasked, "out_file",
+                                 petra_fast, "in_files")
+
     # petra_fast
     if "petra_fast" in params.keys():
         petra_fast = NodeParams(interface=FAST(),
@@ -735,21 +760,6 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
         skull_petra_pipe.connect(
             inputnode, ('indiv_params', parse_key, "petra_fast"),
             petra_fast, "indiv_params")
-
-    elif "petra_debias" in params.keys():
-        # N4 intensity normalization over T1
-        petra_debias = NodeParams(N4BiasFieldCorrection(),
-                                  params=parse_key(params, "petra_debias"),
-                                  name='petra_debias')
-
-        skull_petra_pipe.connect(petra_hmasked, "out_file",
-                                 petra_debias, "input_image")
-
-        skull_petra_pipe.connect(
-            inputnode, ('indiv_params', parse_key, "petra_debias"),
-            petra_debias, "indiv_params")
-    else:
-        print("Warning, no debias was applied to petra")
 
     if "petra_skull_auto_mask" in params.keys():
 
@@ -766,6 +776,10 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
 
         skull_petra_pipe.connect(petra_fast, "restored_image",
                                  petra_skull_auto_mask, "img_file")
+
+        skull_petra_pipe.connect(
+            inputnode, ('indiv_params', parse_key, "petra_fast"),
+            petra_skull_auto_mask, "indiv_params")
 
     elif "petra_skull_mask_thr" in params.keys():
 
