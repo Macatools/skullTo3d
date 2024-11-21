@@ -295,7 +295,6 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
     if "t1_skull_fov" in params.keys():
 
         # t1_skull_fov ####### [okey][json]
-
         t1_skull_fov = NodeParams(
             interface=RobustFOV(),
             params=parse_key(params, "t1_skull_fov"),
@@ -304,6 +303,10 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
         skull_t1_pipe.connect(
             t1_skull_erode, "out_file",
             t1_skull_fov, "in_file")
+
+        skull_t1_pipe.connect(
+            inputnode, ('indiv_params', parse_key, "t1_skull_fov"),
+            t1_skull_fov, "indiv_params")
 
         # t1_skull_clean ####### [okey]
         t1_skull_clean = pe.Node(
@@ -474,6 +477,10 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
 
     skull_ct_pipe.connect(ct_skull_gcc, "gcc_nii_file",
                           ct_skull_dilate, "in_file")
+
+    skull_ct_pipe.connect(
+        inputnode, ("indiv_params", parse_key, "skull_ct_pipe"),
+        skull_ct_pipe, "indiv_params")
 
     # ct_skull_fill #######  [okey]
     ct_skull_fill = pe.Node(interface=UnaryMaths(),
