@@ -259,6 +259,10 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
     skull_t1_pipe.connect(t1_skull_gcc, "gcc_nii_file",
                           t1_skull_dilate, "in_file")
 
+    skull_t1_pipe.connect(
+        inputnode, ('indiv_params', parse_key, "t1_skull_dilate"),
+        t1_skull_dilate, "indiv_params")
+
     # t1_skull_t1_fill
     t1_skull_fill = pe.Node(interface=UnaryMaths(),
                             name="t1_skull_fill")
@@ -275,6 +279,10 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
 
     skull_t1_pipe.connect(t1_skull_fill, "out_file",
                           t1_skull_erode, "in_file")
+
+    skull_t1_pipe.connect(
+        inputnode, ('indiv_params', parse_key, "t1_skull_erode"),
+        t1_skull_erode, "indiv_params")
 
     # mesh_t1_skull #######
     mesh_t1_skull = pe.Node(
