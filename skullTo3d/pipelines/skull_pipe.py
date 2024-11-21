@@ -905,6 +905,10 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
     skull_petra_pipe.connect(petra_skull_gcc, "gcc_nii_file",
                              petra_skull_dilate, "in_file")
 
+    skull_petra_pipe.connect(
+        inputnode, ('indiv_params', parse_key, "petra_skull_dilate"),
+        petra_skull_dilate, "indiv_params")
+
     # petra_skull_fill #######  [okey]
     petra_skull_fill = pe.Node(interface=UnaryMaths(),
                                name="petra_skull_fill")
@@ -922,6 +926,10 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
 
     skull_petra_pipe.connect(petra_skull_fill, "out_file",
                              petra_skull_erode, "in_file")
+
+    skull_petra_pipe.connect(
+        inputnode, ('indiv_params', parse_key, "petra_skull_erode"),
+        petra_skull_erode, "indiv_params")
 
     # mesh_petra_skull #######
     mesh_petra_skull = pe.Node(
@@ -941,6 +949,10 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
 
         skull_petra_pipe.connect(petra_skull_erode, "out_file",
                                  petra_skull_fov, "in_file")
+
+        skull_petra_pipe.connect(
+            inputnode, ('indiv_params', parse_key, "petra_skull_fov"),
+            petra_skull_fov, "indiv_params")
 
         # petra_skull_clean ####### [okey]
         petra_skull_clean = pe.Node(
