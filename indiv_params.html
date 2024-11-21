@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Individual Parameters &#8212; SkullTo3d 0.0.4.3 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/bootstrap-sphinx.css?v=284a2d1d" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <script src="_static/documentation_options.js?v=11212001"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Parameters" href="params.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="_static/bootstrap-3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="index.html">
+          SkullTo3d</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.0.4.3</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="https://github.com/davidmeunier79/skullTo3d">Github</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quick_install.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quick_install.html#dependancies">Dependancies</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="quick_install.html#external-software-dependancies">External software dependancies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="quick_install.html#python-packages-dependancies">Python packages dependancies</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="quick_install.html#creating-environment-with-all-packages">Creating environment with all packages</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="quick_install.html#install-skullto3d-package">Install skullTo3d package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="quick_install.html#from-github">from github</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="quick_install.html#using-git">Using git</a></li>
+<li class="toctree-l4"><a class="reference internal" href="quick_install.html#using-pip">Using pip</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="quick_install.html#from-pypi">from pypi</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="quick_install.html#testing-the-install">Testing the install</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="docker_install.html">Container install</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="docker_install.html#dockerfile">Dockerfile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docker_install.html#docker-image">Docker image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docker_install.html#note-on-singularity">Note on Singularity</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="command.html">Launching a processing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="command.html#commands">Commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="command.html#expected-input-data">Expected input data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="command.html#command-line-parameters">Command line parameters</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="command.html#the-following-parameters-are-mandatory">The following parameters are mandatory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="command.html#the-following-parameters-are-exclusive">The following parameters are exclusive</a></li>
+<li class="toctree-l3"><a class="reference internal" href="command.html#the-following-parameters-are-optional">The following parameters are optional</a></li>
+<li class="toctree-l3"><a class="reference internal" href="command.html#id1">The following parameters are optional</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="command.html#command-line-examples">Command line examples</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="params.html">Parameters</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="params.html#adding-params">Adding -params</a></li>
+<li class="toctree-l2"><a class="reference internal" href="params.html#advanced-parameters-settings">Advanced parameters settings</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Individual Parameters</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#adding-indiv">Adding -indiv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#advanced-parameters-settings">Advanced parameters settings</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quick_install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="docker_install.html">Container install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command.html">Launching a processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="params.html">Parameters</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Individual Parameters</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#adding-indiv">Adding -indiv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#advanced-parameters-settings">Advanced parameters settings</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+            
+            
+            
+              <li class="hidden-sm">
+<div id="sourcelink">
+  <a href="_sources/indiv_params.rst.txt"
+     rel="nofollow">Source</a>
+</div></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quick_install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="docker_install.html">Container install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command.html">Launching a processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="params.html">Parameters</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Individual Parameters</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#adding-indiv">Adding -indiv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#advanced-parameters-settings">Advanced parameters settings</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    <div class="body col-md-9 content" role="main">
+      
+  <section id="individual-parameters">
+<span id="indiv-params"></span><h1>Individual Parameters<a class="headerlink" href="#individual-parameters" title="Link to this heading">¶</a></h1>
+<section id="adding-indiv">
+<h2>Adding -indiv<a class="headerlink" href="#adding-indiv" title="Link to this heading">¶</a></h2>
+<p>You can include “-indiv indiv_params.json” in the python command, for specifiying parameters specific parameters:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>python<span class="w"> </span>workflows/segment_petra.py<span class="w"> </span>-data<span class="w"> </span>~/Data_maca<span class="w"> </span>-out<span class="w"> </span>./local_test<span class="w"> </span>-soft<span class="w"> </span>SPM<span class="w"> </span>-params<span class="w"> </span>params.json<span class="w"> </span>-indiv<span class="w"> </span>indiv_params.json
+</pre></div>
+</div>
+</section>
+<section id="advanced-parameters-settings">
+<h2>Advanced parameters settings<a class="headerlink" href="#advanced-parameters-settings" title="Link to this heading">¶</a></h2>
+<p>Here is json file with all possible nodes to be tuned in indiv_params; In particular, the specifications of sub- and ses- are mandatory before the specification of nodes; Also note that, as for <a class="reference external" href="https://macatools.github.io/macapype/indiv_params.html">macapype individual paramters</a>, the nodes are specified directly, without specifiying the sub-pipelines they belong to.</p>
+<p>Please refer to the <a class="reference external" href="params">parameter page</a> for more explanation on the possible structure of nodes.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;sub-test&quot;</span><span class="p">:</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;ses-01&quot;</span><span class="p">:</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;corresponds to skull_t1_pipe (skull_pipe.py)&quot;</span><span class="p">,</span>
+
+            <span class="s2">&quot;t1_head_mask_thr&quot;</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;thr&quot;</span><span class="p">:</span> <span class="s2">&quot;300&quot;</span>
+
+            <span class="p">},</span>
+            <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;OR&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;t1_head_auto_mask&quot;</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;kmeans&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+                <span class="s2">&quot;operation&quot;</span><span class="p">:</span> <span class="s2">&quot;lower&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;index&quot;</span><span class="p">:</span> <span class="mi">2</span>
+            <span class="p">},</span>
+
+            <span class="s2">&quot;t1_head_dilate&quot;</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;operation&quot;</span> <span class="p">:</span> <span class="s2">&quot;modal&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;kernel_shape&quot;</span> <span class="p">:</span> <span class="s2">&quot;boxv&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;kernel_size&quot;</span> <span class="p">:</span> <span class="mf">13.0</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;t1_head_erode&quot;</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;kernel_shape&quot;</span> <span class="p">:</span> <span class="s2">&quot;boxv&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;kernel_size&quot;</span> <span class="p">:</span> <span class="mf">13.0</span>
+            <span class="p">},</span>
+
+            <span class="s2">&quot;t1_debias&quot;</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;if t1_debias is defined in params&quot;</span>
+            <span class="p">},</span>
+
+            <span class="s2">&quot;t1_fast&quot;</span><span class="p">:</span>
+            <span class="p">{</span>
+            <span class="p">},</span>
+
+
+            <span class="s2">&quot;t1_skull_auto_mask&quot;</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;if t1_skull_auto_mask is defined in params&quot;</span><span class="p">,</span>
+
+                <span class="s2">&quot;kmeans&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+                <span class="s2">&quot;operation&quot;</span><span class="p">:</span> <span class="s2">&quot;lower&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;index&quot;</span><span class="p">:</span> <span class="mi">2</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;OR&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;t1_skull_mask_thr&quot;</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;if t1_skull_mask_thr is defined in params&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;thr&quot;</span><span class="p">:</span> <span class="s2">&quot;300&quot;</span>
+
+            <span class="p">},</span>
+
+            <span class="s2">&quot;t1_head_erode_skin&quot;</span><span class="p">:</span>
+            <span class="p">{</span>
+
+                <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;if t1_head_erode_skin is defined in params&quot;</span><span class="p">,</span>
+
+                <span class="s2">&quot;kernel_shape&quot;</span> <span class="p">:</span> <span class="s2">&quot;boxv&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;kernel_size&quot;</span> <span class="p">:</span> <span class="mf">14.0</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;t1_skull_dilate&quot;</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;operation&quot;</span> <span class="p">:</span> <span class="s2">&quot;modal&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;kernel_shape&quot;</span> <span class="p">:</span> <span class="s2">&quot;boxv&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;kernel_size&quot;</span> <span class="p">:</span> <span class="mf">13.0</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;t1_skull_erode&quot;</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;kernel_shape&quot;</span> <span class="p">:</span> <span class="s2">&quot;boxv&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;kernel_size&quot;</span> <span class="p">:</span> <span class="mf">13.0</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;t1_skull_fov&quot;</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;if t1_skull_fov is defined in params&quot;</span><span class="p">,</span>
+
+                <span class="s2">&quot;brainsize&quot;</span><span class="p">:</span> <span class="mi">45</span>
+            <span class="p">},</span>
+
+
+            <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;corresponds to skull_ct_pipe (skull_pipe.py)&quot;</span><span class="p">,</span>
+
+            <span class="s2">&quot;ct_head_mask_thr&quot;</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;thr&quot;</span><span class="p">:</span> <span class="s2">&quot;300&quot;</span>
+
+            <span class="p">},</span>
+            <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;OR&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;ct_head_auto_mask&quot;</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;kmeans&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+                <span class="s2">&quot;operation&quot;</span><span class="p">:</span> <span class="s2">&quot;lower&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;index&quot;</span><span class="p">:</span> <span class="mi">2</span>
+            <span class="p">},</span>
+
+            <span class="s2">&quot;ct_skull_dilate&quot;</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;operation&quot;</span> <span class="p">:</span> <span class="s2">&quot;modal&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;kernel_shape&quot;</span> <span class="p">:</span> <span class="s2">&quot;boxv&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;kernel_size&quot;</span> <span class="p">:</span> <span class="mf">13.0</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;ct_skull_erode&quot;</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;kernel_shape&quot;</span> <span class="p">:</span> <span class="s2">&quot;boxv&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;kernel_size&quot;</span> <span class="p">:</span> <span class="mf">13.0</span>
+            <span class="p">},</span>
+
+            <span class="s2">&quot;ct_skull_fov&quot;</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;if ct_skull_fov is defined in params&quot;</span><span class="p">,</span>
+
+                <span class="s2">&quot;brainsize&quot;</span><span class="p">:</span> <span class="mi">45</span>
+            <span class="p">},</span>
+
+
+            <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;corresponds to skull_petra_pipe (skull_pipe.py)&quot;</span><span class="p">,</span>
+
+            <span class="s2">&quot;avg_reorient_pipe&quot;</span><span class="p">:</span>
+            <span class="p">{</span>
+
+                <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;if avg_reorient_pipe is defined in params&quot;</span><span class="p">,</span>
+
+            <span class="p">},</span>
+
+            <span class="s2">&quot;petra_head_mask_thr&quot;</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;thr&quot;</span><span class="p">:</span> <span class="s2">&quot;300&quot;</span>
+
+            <span class="p">},</span>
+            <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;OR&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;petra_head_auto_mask&quot;</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;kmeans&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+                <span class="s2">&quot;operation&quot;</span><span class="p">:</span> <span class="s2">&quot;lower&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;index&quot;</span><span class="p">:</span> <span class="mi">2</span>
+            <span class="p">},</span>
+
+
+            <span class="s2">&quot;petra_head_dilate&quot;</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;operation&quot;</span> <span class="p">:</span> <span class="s2">&quot;modal&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;kernel_shape&quot;</span> <span class="p">:</span> <span class="s2">&quot;boxv&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;kernel_size&quot;</span> <span class="p">:</span> <span class="mf">13.0</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;petra_head_erode&quot;</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;kernel_shape&quot;</span> <span class="p">:</span> <span class="s2">&quot;boxv&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;kernel_size&quot;</span> <span class="p">:</span> <span class="mf">13.0</span>
+            <span class="p">},</span>
+
+            <span class="s2">&quot;petra_debias&quot;</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;if petra_debias is defined in params&quot;</span>
+            <span class="p">},</span>
+
+            <span class="s2">&quot;petra_fast&quot;</span><span class="p">:</span>
+            <span class="p">{</span>
+            <span class="p">},</span>
+
+
+            <span class="s2">&quot;petra_skull_auto_mask&quot;</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;if petra_skull_auto_mask is defined in params&quot;</span><span class="p">,</span>
+
+                <span class="s2">&quot;kmeans&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+                <span class="s2">&quot;operation&quot;</span><span class="p">:</span> <span class="s2">&quot;lower&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;index&quot;</span><span class="p">:</span> <span class="mi">2</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;OR&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;petra_skull_mask_thr&quot;</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;if petra_skull_mask_thr is defined in params&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;thr&quot;</span><span class="p">:</span> <span class="s2">&quot;300&quot;</span>
+
+            <span class="p">},</span>
+
+            <span class="s2">&quot;petra_head_erode_skin&quot;</span><span class="p">:</span>
+            <span class="p">{</span>
+
+                <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;if petra_head_erode_skin is defined in params&quot;</span><span class="p">,</span>
+
+                <span class="s2">&quot;kernel_shape&quot;</span> <span class="p">:</span> <span class="s2">&quot;boxv&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;kernel_size&quot;</span> <span class="p">:</span> <span class="mf">14.0</span>
+            <span class="p">},</span>
+
+
+            <span class="s2">&quot;petra_skull_dilate&quot;</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;operation&quot;</span> <span class="p">:</span> <span class="s2">&quot;modal&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;kernel_shape&quot;</span> <span class="p">:</span> <span class="s2">&quot;boxv&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;kernel_size&quot;</span> <span class="p">:</span> <span class="mf">13.0</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;petra_skull_erode&quot;</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;kernel_shape&quot;</span> <span class="p">:</span> <span class="s2">&quot;boxv&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;kernel_size&quot;</span> <span class="p">:</span> <span class="mf">13.0</span>
+            <span class="p">},</span>
+
+            <span class="s2">&quot;petra_skull_fov&quot;</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;if petra_skull_fov is defined in params&quot;</span><span class="p">,</span>
+
+                <span class="s2">&quot;brainsize&quot;</span><span class="p">:</span> <span class="mi">45</span>
+            <span class="p">},</span>
+
+
+            <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;corresponds to angio_pipe (angio_pipe.py)&quot;</span><span class="p">,</span>
+
+            <span class="s2">&quot;angio_mask_thr&quot;</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;thr&quot;</span><span class="p">:</span> <span class="s2">&quot;300&quot;</span>
+
+            <span class="p">},</span>
+            <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;OR&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;angio_auto_mask&quot;</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="s2">&quot;FAST (FSL)&quot;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2024, SkullTo3d Developers (macatools). Last updated on 2024-11-21.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 8.1.3.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
