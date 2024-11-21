@@ -193,6 +193,21 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
         skull_t1_pipe.connect(t1_fast, "restored_image",
                               t1_skull_auto_mask, "img_file")
 
+    elif "t1_skull_mask_thr" in params.keys():
+
+        # t1_skull_mask_thr
+        t1_skull_mask_thr = NodeParams(
+            interface=Threshold(),
+            params=parse_key(params, 't1_skull_mask_thr'),
+            name="t1_skull_mask_thr")
+
+        skull_t1_pipe.connect(t1_fast, "restored_image",
+                                 t1_skull_mask_thr, "in_file")
+
+        skull_t1_pipe.connect(
+            inputnode, ('indiv_params', parse_key, "t1_skull_mask_thr"),
+            t1_skull_mask_thr, "indiv_params")
+
     # t1_skull_mask_binary
     t1_skull_mask_binary = pe.Node(interface=UnaryMaths(),
                                    name="t1_skull_mask_binary")
@@ -202,6 +217,9 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
 
     if "t1_skull_auto_mask" in params.keys():
         skull_t1_pipe.connect(t1_skull_auto_mask, "mask_img_file",
+                              t1_skull_mask_binary, "in_file")
+    elif "t1_skull_mask_thr" in params.keys():
+        skull_t1_pipe.connect(t1_skull_mask_thr, "out_file",
                               t1_skull_mask_binary, "in_file")
     else:
         skull_t1_pipe.connect(t1_fast,
@@ -479,8 +497,8 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
                           ct_skull_dilate, "in_file")
 
     skull_ct_pipe.connect(
-        inputnode, ("indiv_params", parse_key, "skull_ct_pipe"),
-        skull_ct_pipe, "indiv_params")
+        inputnode, ("indiv_params", parse_key, "ct_skull_dilate"),
+        ct_skull_dilate, "indiv_params")
 
     # ct_skull_fill #######  [okey]
     ct_skull_fill = pe.Node(interface=UnaryMaths(),
@@ -498,6 +516,10 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
 
     skull_ct_pipe.connect(ct_skull_fill, "out_file",
                           ct_skull_erode, "in_file")
+
+    skull_ct_pipe.connect(
+        inputnode, ("indiv_params", parse_key, "ct_skull_erode"),
+        ct_skull_erode, "indiv_params")
 
     # mesh_ct_skull #######
     mesh_ct_skull = pe.Node(
@@ -517,6 +539,10 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
 
         skull_ct_pipe.connect(ct_skull_erode, "out_file",
                               ct_skull_fov, "in_file")
+
+        skull_ct_pipe.connect(
+            inputnode, ('indiv_params', parse_key, "ct_skull_fov"),
+            ct_skull_fov, "indiv_params")
 
         # ct_skull_clean ####### [okey]
         ct_skull_clean = pe.Node(
