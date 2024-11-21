@@ -202,7 +202,7 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
             name="t1_skull_mask_thr")
 
         skull_t1_pipe.connect(t1_fast, "restored_image",
-                                 t1_skull_mask_thr, "in_file")
+                              t1_skull_mask_thr, "in_file")
 
         skull_t1_pipe.connect(
             inputnode, ('indiv_params', parse_key, "t1_skull_mask_thr"),
