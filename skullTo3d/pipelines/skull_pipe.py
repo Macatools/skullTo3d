@@ -778,9 +778,14 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
             inputnode, ('indiv_params', parse_key, "petra_debias"),
             petra_debias, "indiv_params")
 
+    # petra_fast
     petra_fast = NodeParams(interface=FAST(),
                             params=parse_key(params, "petra_fast"),
                             name="petra_fast")
+
+    skull_petra_pipe.connect(
+        inputnode, ('indiv_params', parse_key, "petra_fast"),
+        petra_fast, "indiv_params")
 
     if "petra_debias" in params.keys():
         skull_petra_pipe.connect(petra_debias, "output_image",
@@ -788,18 +793,6 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
     else:
         skull_petra_pipe.connect(petra_hmasked, "out_file",
                                  petra_fast, "in_files")
-
-    # petra_fast
-    petra_fast = NodeParams(interface=FAST(),
-                            params=parse_key(params, "petra_fast"),
-                            name="petra_fast")
-
-    skull_petra_pipe.connect(petra_hmasked, "out_file",
-                             petra_fast, "in_files")
-
-    skull_petra_pipe.connect(
-        inputnode, ('indiv_params', parse_key, "petra_fast"),
-        petra_fast, "indiv_params")
 
     if "petra_skull_auto_mask" in params.keys():
 
