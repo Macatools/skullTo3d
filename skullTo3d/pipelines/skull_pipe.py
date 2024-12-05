@@ -26,6 +26,8 @@ from macapype.nodes.prepare import average_align
 
 from macapype.nodes.surface import (keep_gcc, IsoSurface)
 
+from macapype.nodes.correct_bias import itk_debias
+
 from skullTo3d.nodes.skull import (
     mask_auto_img)
 
@@ -661,6 +663,18 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
     skull_petra_pipe.connect(inputnode, "stereo_T1",
                              align_petra_on_stereo_T1, "ref_file")
 
+    ### Adding early petra_debias
+    petra_itk_debias = NodeParams(
+            interface=niu.Function(
+                input_names=["img_file"],
+                output_names=["cor_img_file, bias_img_file"],
+                function=itk_debias),
+            params=parse_key(params, "petra_itk_debias"),
+            name="petra_itk_debias")
+
+    skull_petra_pipe.connect(align_petra_on_stereo_T1, "out_file",
+                             petra_itk_debias, "img_file")
+
     # ### head mask
     # headmask_threshold
     if "petra_head_mask_thr" in params.keys():
@@ -670,7 +684,7 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
             params=parse_key(params, 'petra_head_mask_thr'),
             name="petra_head_mask_thr")
 
-        skull_petra_pipe.connect(align_petra_on_stereo_T1, "out_file",
+        skull_petra_pipe.connect(petra_itk_debias, "cor_img_file",
                                  petra_head_mask_thr, "in_file")
 
         skull_petra_pipe.connect(
@@ -687,7 +701,7 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
                 params=parse_key(params, "petra_head_auto_mask"),
                 name="petra_head_auto_mask")
 
-        skull_petra_pipe.connect(align_petra_on_stereo_T1, "out_file",
+        skull_petra_pipe.connect(petra_itk_debias, "cor_img_file",
                                  petra_head_auto_mask, "img_file")
 
         skull_petra_pipe.connect(
@@ -758,7 +772,7 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
     petra_hmasked = pe.Node(interface=ApplyMask(),
                             name="petra_hmasked")
 
-    skull_petra_pipe.connect(align_petra_on_stereo_T1, "out_file",
+    skull_petra_pipe.connect(petra_itk_debias, "cor_img_file",
                              petra_hmasked, "in_file")
 
     skull_petra_pipe.connect(petra_head_erode, "out_file",
