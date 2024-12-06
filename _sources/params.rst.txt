@@ -29,4 +29,4 @@ Here is json file with all possible nodes to be tuned; Some node are optional, s
 .. include:: ../examples_doc/params_skull.json
    :literal:
 
-**Note**: The json file provided here only pass the node available in pipelines specific to skullTo3d processing. A functionnal pipeline will also require some pipeline sequence from macapype itself, *a minima* the definition of a short_preparation_pipe sequence of nodes. See `macapype params page <https://macatools.github.io/macapype/params.html>`_ for more details.
+**Note**: The json file provided here only pass the node available in pipelines specific to skullTo3d processing. A functional pipeline will also require some pipeline sequence from macapype itself, *a minima* the definition of a short_preparation_pipe sequence of nodes. See `macapype params page <https://macatools.github.io/macapype/params.html>`_ for more details.

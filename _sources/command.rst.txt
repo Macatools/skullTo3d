@@ -45,8 +45,15 @@ In particular:
 * _T2w (BIDS) extension is expected for T2 weighted images (BIDS)
 * _PDw (BIDS) or petra (non-BIDS) extensions are expected for petra images
 
+**Note** : All files with the same extension (T1w, T2w or PDw) will be aligned to the first one and averaged
+
 * _acq-CT_T2star (BIDS, but non canonical) extension is expected for CT images
 * _angio extension is expected for angiography images
+
+.. image:: ./img/images/BIDS_orga_skullTo3d.jpg
+    :width: 600
+    :align: center
+
 
 
 Command line parameters
