@@ -663,7 +663,7 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
     skull_petra_pipe.connect(inputnode, "stereo_T1",
                              align_petra_on_stereo_T1, "ref_file")
 
-    ### Adding early petra_debias
+    # Adding early petra_debias
     petra_itk_debias = NodeParams(
             interface=niu.Function(
                 input_names=["img_file"],
