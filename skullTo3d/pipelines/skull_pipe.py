@@ -667,7 +667,7 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
     petra_itk_debias = NodeParams(
             interface=niu.Function(
                 input_names=["img_file"],
-                output_names=["cor_img_file, bias_img_file"],
+                output_names=["cor_img_file", "bias_img_file"],
                 function=itk_debias),
             params=parse_key(params, "petra_itk_debias"),
             name="petra_itk_debias")
