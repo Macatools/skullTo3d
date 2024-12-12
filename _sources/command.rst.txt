@@ -9,17 +9,17 @@ Launching a processing
 Commands
 ********
 
-The main file is located in workflows and is called segment_petra.py and should be called like a python script:
+The main file is located in workflows and is called segment_skull.py and should be called like a python script:
 
 .. code:: bash
 
-    $ python workflows/segment_petra.py
+    $ python workflows/segment_skull.py
 
 **N.B. if you have installed the pypi version (e.g. using pip install macapype) or a docker/singularity version, you can replace the previous command by the following command:**
 
 .. code:: bash
 
-    $ segment_petra
+    $ segment_skull
 
 
 
@@ -27,11 +27,11 @@ For container (docker and singularity), here are some examples - add your proper
 
 .. code:: bash
 
-    $ docker run -B binding_to_host:binding_guest macatools/skullto3d:latest segment_petra
+    $ docker run -B binding_to_host:binding_guest macatools/skullto3d:latest segment_skull
 
 .. code:: bash
 
-    $ singularity run -v binding_to_host:binding_guest /path/to/containers/skullto3d_v0.0.4.1.sif segment_petra
+    $ singularity run -v binding_to_host:binding_guest /path/to/containers/skullto3d_v0.0.4.1.sif segment_skull
 
 Expected input data
 *******************
@@ -131,13 +131,13 @@ Command line examples
 
 .. code:: bash
 
-    $ python workflows/segment_petra.py -data ~/Data_maca -out ./local_test -soft ANTS_skull -params params.json
+    $ python workflows/segment_skull.py -data ~/Data_maca -out ./local_test -soft ANTS_skull -params params.json
 
 
 .. code:: bash
 
-    $ python workflows/segment_petra.py -data ~/Data_maca -out ./local_test -soft ANTS_skull_robustreg -species macaque
+    $ python workflows/segment_skull.py -data ~/Data_maca -out ./local_test -soft ANTS_skull_robustreg -species macaque
 
 .. code:: bash
 
-    $ python workflows/segment_petra.py -data ~/Data_maca -out ./local_test -soft ANTS_skull -params params.json -sub Apache Baron -ses 01 -rec mean -deriv -pad
+    $ python workflows/segment_skull.py -data ~/Data_maca -out ./local_test -soft ANTS_skull -params params.json -sub Apache Baron -ses 01 -rec mean -deriv -pad
