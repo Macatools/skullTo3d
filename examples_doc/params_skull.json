@@ -173,9 +173,7 @@
         "petra_head_mask_thr":
         {
             "params": "Threshold (FSL)",
-
             "thr": "300"
-
         },
         "comment": "OR",
         "petra_head_auto_mask":
