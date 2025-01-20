@@ -177,6 +177,7 @@ def create_angio_pipe(name="angio_pipe", params={}):
 
     return angio_pipe
 
+
 def create_autonomous_quick_angio_pipe(name="quick_angio_pipe", params={}):
 
     # Creating pipeline

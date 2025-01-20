@@ -13,7 +13,7 @@ from nipype.interfaces.fsl.maths import (
 import nipype.interfaces.fsl as fsl
 
 from nipype.interfaces.fsl.utils import RobustFOV
-from nipype.interfaces.fsl.preprocess import FAST, FLIRT
+from nipype.interfaces.fsl.preprocess import FAST
 
 
 from nipype.interfaces.niftyreg.regutils import RegResample
@@ -612,6 +612,7 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
 ###############################################################################
 # ####################  PETRA  #####################
 ###############################################################################
+
 
 def create_autonomous_skull_petra_pipe(name="skull_petra_pipe", params={}):
 
