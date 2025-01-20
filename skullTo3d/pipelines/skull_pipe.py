@@ -1093,37 +1093,51 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
         skull_petra_pipe.connect(inputnode, 'petra',
                                  av_PETRA, "list_img")
 
-    # align_petra_on_native
-    align_petra_on_native = pe.Node(interface=FLIRT(),
-                                    name="align_petra_on_native")
+    # align_petra_on_T1
+    align_petra_on_T1 = pe.Node(interface=RegAladin(),
+                                name="align_petra_on_T1")
 
-    align_petra_on_native.inputs.apply_xfm = True
-    align_petra_on_native.inputs.uses_qform = True
-    align_petra_on_native.inputs.interp = 'spline'
+    align_petra_on_T1.inputs.rig_only_flag = True
 
     if "avg_reorient_pipe" in params.keys():
         skull_petra_pipe.connect(av_PETRA, 'outputnode.std_img',
-                                 align_petra_on_native, "in_file")
+                                align_petra_on_T1, "flo_file")
     else:
         skull_petra_pipe.connect(av_PETRA, 'avg_img',
-                                 align_petra_on_native, "in_file")
+                                align_petra_on_T1, "flo_file")
 
-    skull_petra_pipe.connect(inputnode, "native_img",
-                             align_petra_on_native, "reference")
+    skull_petra_pipe.connepetra(inputnode, 'petra',
+                                align_petra_on_T1, "flo_file")
+
+    skull_petra_pipe.connepetra(inputnode, "native_T1",
+                                align_petra_on_T1, "ref_file")
+
+    if "align_petra_on_T1_2" in params:
+
+        # align_petra_on_T1
+        align_petra_on_T1_2 = pe.Node(interface=RegAladin(),
+                                      name="align_petra_on_T1_2")
+
+        align_petra_on_T1_2.inputs.rig_only_flag = True
+
+        skull_petra_pipe.connepetra(align_petra_on_T1, 'res_file',
+                                    align_petra_on_T1_2, "flo_file")
+
+        skull_petra_pipe.connepetra(inputnode, "native_T1",
+                                    align_petra_on_T1_2, "ref_file")
 
     # align_petra_on_stereo_T1
     align_petra_on_stereo_T1 = pe.Node(
         interface=RegResample(pad_val=0.0),
         name="align_petra_on_stereo_T1")
 
-    skull_petra_pipe.connect(align_petra_on_native, 'out_file',
-                             align_petra_on_stereo_T1, "flo_file")
+    if "align_petra_on_T1_2" in params:
+        skull_petra_pipe.connepetra(align_petra_on_T1_2, 'res_file',
+                                    align_petra_on_stereo_T1, "flo_file")
 
-    skull_petra_pipe.connect(inputnode, 'native_to_stereo_trans',
-                             align_petra_on_stereo_T1, "trans_file")
-
-    skull_petra_pipe.connect(inputnode, "stereo_T1",
-                             align_petra_on_stereo_T1, "ref_file")
+    else:
+        skull_petra_pipe.connepetra(align_petra_on_T1, 'res_file',
+                                    align_petra_on_stereo_T1, "flo_file")
 
     if "petra_itk_debias" in params.keys():
 
