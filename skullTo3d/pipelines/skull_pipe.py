@@ -1093,48 +1093,48 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
         skull_petra_pipe.connect(inputnode, 'petra',
                                  av_PETRA, "list_img")
 
-    # align_petra_on_T1
-    align_petra_on_T1 = pe.Node(interface=RegAladin(),
-                                name="align_petra_on_T1")
+    # align_petra_on_native
+    align_petra_on_native = pe.Node(interface=RegAladin(),
+                                    name="align_petra_on_native")
 
-    align_petra_on_T1.inputs.rig_only_flag = True
+    align_petra_on_native.inputs.rig_only_flag = True
 
     if "avg_reorient_pipe" in params.keys():
         skull_petra_pipe.connect(av_PETRA, 'outputnode.std_img',
-                                 align_petra_on_T1, "flo_file")
+                                 align_petra_on_native, "flo_file")
     else:
         skull_petra_pipe.connect(av_PETRA, 'avg_img',
-                                 align_petra_on_T1, "flo_file")
+                                 align_petra_on_native, "flo_file")
 
-    skull_petra_pipe.connect(inputnode, "native_T1",
-                             align_petra_on_T1, "ref_file")
+    skull_petra_pipe.connect(inputnode, "native_img",
+                             align_petra_on_native, "ref_file")
 
-    if "align_petra_on_T1_2" in params:
+    if "align_petra_on_native_2" in params:
 
-        # align_petra_on_T1
-        align_petra_on_T1_2 = pe.Node(interface=RegAladin(),
-                                      name="align_petra_on_T1_2")
+        # align_petra_on_native
+        align_petra_on_native_2 = pe.Node(interface=RegAladin(),
+                                          name="align_petra_on_native_2")
 
-        align_petra_on_T1_2.inputs.rig_only_flag = True
+        align_petra_on_native_2.inputs.rig_only_flag = True
 
-        skull_petra_pipe.connect(align_petra_on_T1, 'res_file',
-                                 align_petra_on_T1_2, "flo_file")
+        skull_petra_pipe.connect(align_petra_on_native, 'res_file',
+                                 align_petra_on_native_2, "flo_file")
 
-        skull_petra_pipe.connect(inputnode, "native_T1",
-                                 align_petra_on_T1_2, "ref_file")
+        skull_petra_pipe.connect(inputnode, "native_img",
+                                 align_petra_on_native_2, "ref_file")
 
-    # align_petra_on_stereo_T1
-    align_petra_on_stereo_T1 = pe.Node(
+    # align_petra_on_stereo
+    align_petra_on_stereo = pe.Node(
         interface=RegResample(pad_val=0.0),
-        name="align_petra_on_stereo_T1")
+        name="align_petra_on_stereo")
 
-    if "align_petra_on_T1_2" in params:
-        skull_petra_pipe.connect(align_petra_on_T1_2, 'res_file',
-                                    align_petra_on_stereo_T1, "flo_file")
+    if "align_petra_on_native_2" in params:
+        skull_petra_pipe.connect(align_petra_on_native_2, 'res_file',
+                                 align_petra_on_stereo, "flo_file")
 
     else:
-        skull_petra_pipe.connect(align_petra_on_T1, 'res_file',
-                                    align_petra_on_stereo_T1, "flo_file")
+        skull_petra_pipe.connect(align_petra_on_native, 'res_file',
+                                 align_petra_on_stereo, "flo_file")
 
     if "petra_itk_debias" in params.keys():
 
@@ -1146,7 +1146,7 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
                     function=itk_debias),
                 name="petra_itk_debias")
 
-        skull_petra_pipe.connect(align_petra_on_stereo_T1, "out_file",
+        skull_petra_pipe.connect(align_petra_on_stereo, "out_file",
                                  petra_itk_debias, "img_file")
 
     # ### head mask
@@ -1164,7 +1164,7 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
                                      petra_head_mask_thr, "in_file")
         else:
 
-            skull_petra_pipe.connect(align_petra_on_stereo_T1, "out_file",
+            skull_petra_pipe.connect(align_petra_on_stereo, "out_file",
                                      petra_head_mask_thr, "in_file")
 
         skull_petra_pipe.connect(
@@ -1187,7 +1187,7 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
                                      petra_head_auto_mask, "img_file")
         else:
 
-            skull_petra_pipe.connect(align_petra_on_stereo_T1, "out_file",
+            skull_petra_pipe.connect(align_petra_on_stereo, "out_file",
                                      petra_head_auto_mask, "img_file")
 
         skull_petra_pipe.connect(
