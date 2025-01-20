@@ -655,8 +655,8 @@ def create_autonomous_skull_petra_pipe(name="skull_petra_pipe", params={}):
         # cropping
         # Crop bounding box for petra
         crop_petra = NodeParams(fsl.ExtractROI(),
-                             params=parse_key(params, 'crop_petra'),
-                             name='crop_petra')
+                                params=parse_key(params, 'crop_petra'),
+                                name='crop_petra')
 
         skull_petra_pipe.connect(
             inputnode, ("indiv_params", parse_key, "crop_petra"),
@@ -664,10 +664,10 @@ def create_autonomous_skull_petra_pipe(name="skull_petra_pipe", params={}):
 
         if "avg_reorient_pipe" in params.keys():
             skull_petra_pipe.connect(av_PETRA, 'outputnode.std_img',
-                                          crop_petra, 'in_file')
+                                     crop_petra, 'in_file')
         else:
             skull_petra_pipe.connect(av_PETRA, 'avg_img',
-                                          crop_petra, 'in_file')
+                                     crop_petra, 'in_file')
 
     if "petra_itk_debias" in params.keys():
 
@@ -1101,16 +1101,13 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
 
     if "avg_reorient_pipe" in params.keys():
         skull_petra_pipe.connect(av_PETRA, 'outputnode.std_img',
-                                align_petra_on_T1, "flo_file")
+                                 align_petra_on_T1, "flo_file")
     else:
         skull_petra_pipe.connect(av_PETRA, 'avg_img',
-                                align_petra_on_T1, "flo_file")
-
-    skull_petra_pipe.connect(inputnode, 'petra',
-                                align_petra_on_T1, "flo_file")
+                                 align_petra_on_T1, "flo_file")
 
     skull_petra_pipe.connect(inputnode, "native_T1",
-                                align_petra_on_T1, "ref_file")
+                             align_petra_on_T1, "ref_file")
 
     if "align_petra_on_T1_2" in params:
 
@@ -1121,10 +1118,10 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
         align_petra_on_T1_2.inputs.rig_only_flag = True
 
         skull_petra_pipe.connect(align_petra_on_T1, 'res_file',
-                                    align_petra_on_T1_2, "flo_file")
+                                 align_petra_on_T1_2, "flo_file")
 
         skull_petra_pipe.connect(inputnode, "native_T1",
-                                    align_petra_on_T1_2, "ref_file")
+                                 align_petra_on_T1_2, "ref_file")
 
     # align_petra_on_stereo_T1
     align_petra_on_stereo_T1 = pe.Node(
