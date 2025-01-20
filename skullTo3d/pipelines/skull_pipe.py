@@ -1106,10 +1106,10 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
         skull_petra_pipe.connect(av_PETRA, 'avg_img',
                                 align_petra_on_T1, "flo_file")
 
-    skull_petra_pipe.connepetra(inputnode, 'petra',
+    skull_petra_pipe.connect(inputnode, 'petra',
                                 align_petra_on_T1, "flo_file")
 
-    skull_petra_pipe.connepetra(inputnode, "native_T1",
+    skull_petra_pipe.connect(inputnode, "native_T1",
                                 align_petra_on_T1, "ref_file")
 
     if "align_petra_on_T1_2" in params:
@@ -1120,10 +1120,10 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
 
         align_petra_on_T1_2.inputs.rig_only_flag = True
 
-        skull_petra_pipe.connepetra(align_petra_on_T1, 'res_file',
+        skull_petra_pipe.connect(align_petra_on_T1, 'res_file',
                                     align_petra_on_T1_2, "flo_file")
 
-        skull_petra_pipe.connepetra(inputnode, "native_T1",
+        skull_petra_pipe.connect(inputnode, "native_T1",
                                     align_petra_on_T1_2, "ref_file")
 
     # align_petra_on_stereo_T1
@@ -1132,11 +1132,11 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
         name="align_petra_on_stereo_T1")
 
     if "align_petra_on_T1_2" in params:
-        skull_petra_pipe.connepetra(align_petra_on_T1_2, 'res_file',
+        skull_petra_pipe.connect(align_petra_on_T1_2, 'res_file',
                                     align_petra_on_stereo_T1, "flo_file")
 
     else:
-        skull_petra_pipe.connepetra(align_petra_on_T1, 'res_file',
+        skull_petra_pipe.connect(align_petra_on_T1, 'res_file',
                                     align_petra_on_stereo_T1, "flo_file")
 
     if "petra_itk_debias" in params.keys():
