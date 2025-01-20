@@ -1264,7 +1264,7 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
                                  petra_hmasked, "in_file")
     else:
 
-        skull_petra_pipe.connect(align_petra_on_stereo_T1, "out_file",
+        skull_petra_pipe.connect(align_petra_on_stereo, "out_file",
                                  petra_hmasked, "in_file")
 
     skull_petra_pipe.connect(petra_head_erode, "out_file",
