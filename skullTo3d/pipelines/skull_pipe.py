@@ -1136,6 +1136,9 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
         skull_petra_pipe.connect(align_petra_on_native, 'res_file',
                                  align_petra_on_stereo, "flo_file")
 
+    skull_petra_pipe.connect(inputnode, 'native_to_stereo_trans',
+                             align_petra_on_stereo, "trans_file")
+
     skull_petra_pipe.connect(inputnode, 'stereo_T1',
                              align_petra_on_stereo, "ref_file")
 
