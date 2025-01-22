@@ -29,10 +29,6 @@
                 "ln_val": 17,
                 "lp_val": 15,
                 "smoo_r_val": 1.0
-            },
-            "crop_z_T1":
-            {
-                "brainsize": 30
             }
     	},
         "pad_template":
