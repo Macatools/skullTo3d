@@ -805,6 +805,14 @@ def create_autonomous_skull_petra_pipe(name="skull_petra_pipe", params={}):
         inputnode, ('indiv_params', parse_key, "petra_head_erode"),
         petra_head_erode, "indiv_params")
 
+    # mesh_petra_head #######
+    mesh_petra_head = pe.Node(
+        interface=IsoSurface(),
+        name="mesh_petra_head")
+
+    skull_petra_pipe.connect(petra_head_erode, "out_file",
+                             mesh_petra_head, "nii_file")
+
     # ### Masking with head mask
     # petra_hmasked ####### [okey]
     petra_hmasked = pe.Node(interface=ApplyMask(),
@@ -1033,7 +1041,7 @@ def create_autonomous_skull_petra_pipe(name="skull_petra_pipe", params={}):
         niu.IdentityInterface(
             fields=["petra_skull_mask", "petra_skull_stl",
                     "robustpetra_skull_mask", "robustpetra_skull_stl",
-                    "petra_head_mask"]),
+                    "petra_head_mask", "petra_head_stl"]),
         name='outputnode')
 
     skull_petra_pipe.connect(petra_head_erode, "out_file",
@@ -1041,6 +1049,9 @@ def create_autonomous_skull_petra_pipe(name="skull_petra_pipe", params={}):
 
     skull_petra_pipe.connect(mesh_petra_skull, "stl_file",
                              outputnode, "petra_skull_stl")
+
+    skull_petra_pipe.connect(mesh_petra_head, "stl_file",
+                             outputnode, "petra_head_stl")
 
     skull_petra_pipe.connect(petra_skull_erode, "out_file",
                              outputnode, "petra_skull_mask")
