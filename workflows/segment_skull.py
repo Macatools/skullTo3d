@@ -44,6 +44,8 @@
 #           Julien Sein (julien.sein@univ-amu.fr)
 #           Adam Sghari (adam.sghari@etu.univ-amu.fr)
 
+import sys
+
 import os
 import os.path as op
 
@@ -92,11 +94,12 @@ from skullTo3d.pipelines.rename import (
     rename_all_skull_t1_derivatives,
     rename_all_skull_ct_derivatives, rename_all_angio_derivatives)
 
+from skullTo3d._version import __version__
 
 fsl.FSLCommand.set_default_output_type('NIFTI_GZ')
 ##########################################################################
 
-def create_main_workflow(data_dir, process_dir, soft, species, subjects,
+def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
                          sessions, brain_dt, skull_dt, acquisitions,
                          reconstructions, params_file, indiv_params_file,
                          mask_file, template_path, template_files, nprocs,
@@ -881,6 +884,11 @@ def create_main_workflow(data_dir, process_dir, soft, species, subjects,
     main_workflow.config['execution'] = {'remove_unnecessary_outputs': 'false'}
 
     # saving real params.json
+    params["skullTo3d"] = __version__
+
+    params["full_command"] = cmd
+
+    # saving real params.json
     real_params_file = op.join(process_dir, wf_name, "real_params.json")
     with open(real_params_file, 'w+') as fp:
         json.dump(params, fp)
@@ -984,9 +992,12 @@ def main():
 
     args = parser.parse_args()
 
+    cmd = " ".join(sys.argv)
+
     # main_workflow
     print("Initialising the pipeline...")
     create_main_workflow(
+        cmd=cmd,
         data_dir=args.data,
         soft=args.soft,
         process_dir=args.out,
