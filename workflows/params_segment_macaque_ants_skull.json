@@ -15,7 +15,7 @@
     	},
         "pad_template":
         {
-            "copy_header" : true,
+            "copy_header" : false,
             "operation" : "PadImage",
             "op2" : "70"
         }

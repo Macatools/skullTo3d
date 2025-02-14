@@ -6,24 +6,18 @@
     },
     "short_preparation_pipe":
     {
-
         "aladin_T2_on_T1":{},
     	"crop_aladin_pipe":
     	{
-            "pre_crop_z_T1":
-            {
-                "brainsize": 70
-            },
             "reg_T1_on_template":
             {
-            },
-            "reg_T1_on_template2":
-            {
             }
-        },
-        "resample_T1_pad":
+    	},
+        "pad_template":
         {
-            "pad_val": 30
+            "copy_header" : false,
+            "operation" : "PadImage",
+            "op2" : "70"
         }
     },
     "debias":

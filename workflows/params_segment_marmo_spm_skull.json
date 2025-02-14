@@ -4,19 +4,25 @@
          "template_name": "MBM_v3.0.1",
          "template_stereo_name": "bma-1_0p2mm"
     },
-    "short_preparation_pipe":
+     "short_preparation_pipe":
     {
+        "use_T2":{},
+        "aladin_T2_on_T1": {},
+
         "crop_aladin_pipe":
         {
-            "use_T2": {},
+            "remove_capsule_pipe":{},
+
             "reg_T1_on_template":
             {
-            },
-            "reg_T1_on_template2":
-            {
             }
-        },
-        "resample_T1_pad": {}
+    	},
+        "pad_template":
+        {
+            "copy_header" : false,
+            "operation" : "PadImage",
+            "op2" : "90"
+        }
     },
     "debias":
     {
