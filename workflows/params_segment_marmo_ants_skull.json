@@ -15,6 +15,7 @@
 
             "reg_T1_on_template":
             {
+                "rig_only_flag": true
             }
     	},
         "pad_template":
