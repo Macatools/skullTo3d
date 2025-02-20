@@ -46,6 +46,22 @@ def rename_all_skull_petra_derivatives(params, main_workflow, segment_pnh_pipe,
             rename_stereo_petra_skull_mask, 'out_file',
             datasink, '@stereo_petra_skull_mask')
 
+        # rename petra_head_stl
+        rename_petra_head_stl = pe.Node(niu.Rename(),
+                                        name="rename_petra_head_stl")
+        rename_petra_head_stl.inputs.format_string = \
+            pref_deriv + "_desc-petra_headmask"
+        rename_petra_head_stl.inputs.parse_string = parse_str
+        rename_petra_head_stl.inputs.keep_ext = True
+
+        main_workflow.connect(
+            skull_petra_pipe, 'outputnode.petra_head_stl',
+            rename_petra_head_stl, 'in_file')
+
+        main_workflow.connect(
+            rename_petra_head_stl, 'out_file',
+            datasink, '@petra_head_stl')
+
         # rename stereo_petra_head_mask
         rename_stereo_petra_head_mask = pe.Node(
             niu.Rename(), name="rename_stereo_petra_head_mask")
