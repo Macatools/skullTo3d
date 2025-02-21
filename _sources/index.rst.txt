@@ -31,6 +31,8 @@ See :ref:`Quick Installation <quick_install>` for installation on your local sys
 
 See :ref:`Container installation <docker_install>` for fully compliant installation (no MRI softwares, or Windows / MacOS operating system)
 
+Once installed, see :ref:`Quick test <quick_test>` for testing if your installation is working properly
+
 
 Command line parameters
 ***********************
@@ -49,6 +51,7 @@ Table of contents
 
     quick_install
     docker_install
+    quick_test
     command
     params
     indiv_params

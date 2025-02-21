@@ -40,6 +40,8 @@ Starting from the release v0.2.1 on github, the docker images are tagged accordi
     $ docker pull macatools/skullto3d:version-0.2.1
 
 
+See :ref:`Quick test <quick_test>` for testing if your docker installation works properly on test datasets.
+
 Note on Singularity
 -------------------
 
@@ -53,3 +55,4 @@ Here is an example of a command line to install and convert the docker image to 
 
 It *seems* the sudo priviliges are required to install and build images, so in case you have trouble, ask the admin of your cluster to perform this operation
 
+See :ref:`Quick test <quick_test>` for testing if your singularity installation works properly on test datasets.

@@ -83,3 +83,5 @@ Testing the install
 .. code:: ipython
 
     In [1]: import skullTo3d; print (skullTo3d.__version__)
+
+See :ref:`Quick test <quick_test>` for testing if your installation works properly on test datasets.
