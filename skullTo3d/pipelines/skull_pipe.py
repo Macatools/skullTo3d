@@ -1066,7 +1066,8 @@ def create_autonomous_skull_petra_pipe(name="skull_petra_pipe", params={}):
     return skull_petra_pipe
 
 
-def create_skull_petra_pipe(name="skull_petra_pipe", params={}, manual_crop = False):
+def create_skull_petra_pipe(name="skull_petra_pipe", params={},
+                            manual_crop=False, pad=0):
 
     # creating pipeline
     skull_petra_pipe = pe.Workflow(name=name)
@@ -1153,8 +1154,8 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}, manual_crop = Fa
 
         skull_petra_pipe.connect(
             inputnode, ("indiv_params", parse_key, "crop_T1"),
-            crop_petra, 'indiv_params')
-
+            crop_petra, ('indiv_params', add_pad, pad)
+)
 
     # align_petra_on_stereo
     align_petra_on_stereo = pe.Node(
