@@ -1151,6 +1151,11 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}, manual_crop = Fa
             skull_petra_pipe.connect(align_petra_on_native, 'res_file',
                                      crop_petra, 'in_file')
 
+        skull_petra_pipe.connect(
+            inputnode, ("indiv_params", parse_key, "crop_T1"),
+            crop_petra, 'indiv_params')
+
+
     # align_petra_on_stereo
     align_petra_on_stereo = pe.Node(
         interface=RegResample(pad_val=0.0),
