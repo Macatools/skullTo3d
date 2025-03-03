@@ -16,11 +16,11 @@ def add_pad_str(roi_args, pad_value):
 
         if i % 2:
             # case odd:
-            padded_list.append(int_val - pad_value/2)
+            padded_list.append(int_val - int(pad_value/2))
         else:
             # case even
 
-            padded_list.append(int_val + pad_value/2)
+            padded_list.append(int_val + int(pad_value/2))
 
     str_padded = " ".join(padded_list)
     print(str_padded)
