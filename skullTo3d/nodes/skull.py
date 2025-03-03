@@ -28,7 +28,7 @@ def add_pad_str(roi_args, pad_value):
 
             padded_list.append(int_val + int(pad_value/2))
 
-    str_padded = " ".join(padded_list)
+    str_padded = " ".join(list(map(str, padded_list)))
     print(str_padded)
 
     padded_roi_args = {"args": str_padded}
