@@ -1159,16 +1159,16 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={},
                     function=add_pad_str),
                 name="add_pad")
 
-            add_pad_node.inputs.pad_value = pad
+            add_pad.inputs.pad_value = pad
 
             skull_petra_pipe.connect(
                 inputnode, ("indiv_params", parse_key, "crop_T1"),
                 add_pad, 'roi_args')
 
             skull_petra_pipe.connect(
-                add_pad_node, 'padded_roi_args',
-                add_pad, "indiv_params")
-)
+                add_pad, 'padded_roi_args',
+                crop_petra, "indiv_params")
+
 
     # align_petra_on_stereo
     align_petra_on_stereo = pe.Node(
