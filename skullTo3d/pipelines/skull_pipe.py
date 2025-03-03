@@ -32,7 +32,7 @@ from macapype.nodes.surface import (keep_gcc, IsoSurface)
 from macapype.nodes.correct_bias import itk_debias
 
 from skullTo3d.nodes.skull import (
-    mask_auto_img, add_pad)
+    mask_auto_img, add_pad_str)
 
 from macapype.utils.misc import parse_key, get_elem
 
@@ -1151,10 +1151,23 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={},
         else:
             skull_petra_pipe.connect(align_petra_on_native, 'res_file',
                                      crop_petra, 'in_file')
+        if pad:
+            add_pad = pe.Node(
+                niu.Function(
+                    input_names=["roi_args", "pad_value"],
+                    output_names=["padded_roi_args"],
+                    function=add_pad_str),
+                name="add_pad")
 
-        skull_petra_pipe.connect(
-            inputnode, ("indiv_params", parse_key, "crop_T1"),
-            crop_petra, ('indiv_params', add_pad, pad)
+            add_pad_node.inputs.pad_value = pad
+
+            skull_petra_pipe.connect(
+                inputnode, ("indiv_params", parse_key, "crop_T1"),
+                add_pad, 'roi_args')
+
+            skull_petra_pipe.connect(
+                add_pad_node, 'padded_roi_args',
+                add_pad, "indiv_params")
 )
 
     # align_petra_on_stereo

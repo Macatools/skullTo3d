@@ -1,9 +1,14 @@
 
-def add_pad(args_str, pad_value):
+def add_pad_str(roi_args, pad_value):
 
-    print(args_str)
+    print(roi_args)
     print(pad_value)
+
     0/0
+    padded_roi_args = roi_args
+    print(padded_roi_args)
+
+    return padded_roi_args
 
 def mask_auto_threshold(img_file, operation, index):
     import numpy as np
