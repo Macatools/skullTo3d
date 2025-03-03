@@ -2,6 +2,8 @@
 def add_pad_str(roi_args, pad_value):
 
     print(roi_args)
+    pad_value = int(pad_value)
+
     print(pad_value)
 
     print(roi_args["args"])
