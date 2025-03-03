@@ -4,9 +4,26 @@ def add_pad_str(roi_args, pad_value):
     print(roi_args)
     print(pad_value)
 
-    0/0
-    padded_roi_args = roi_args
-    print(padded_roi_args)
+    print(roi_args["args"])
+    print(list(map(int, roi_args["args"].split())))
+
+    padded_list = []
+    for i, int_val in enumerate(list(map(int, roi_args["args"].split()))):
+        print(i, int_val)
+        print(i % 2)
+
+        if i % 2:
+            # case odd:
+            padded_list.append(int_val - pad_value/2)
+        else:
+            # case even
+
+            padded_list.append(int_val + pad_value/2)
+
+    str_padded = " ".join(padded_list)
+    print(str_padded)
+
+    padded_roi_args = {"args": str_padded}
 
     return padded_roi_args
 
