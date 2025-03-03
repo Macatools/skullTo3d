@@ -504,13 +504,13 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
 
                 if "pad_template" in params["short_preparation_pipe"]:
                     pad_node = params["short_preparation_pipe"]["pad_template"]
-                    pad = pad_node["op2"]
+                    pad_value = pad_node["op2"]
                 else:
-                    pad = 0
+                    pad_value = 0
 
                 skull_petra_pipe = create_skull_petra_pipe(
                     params=parse_key(params, "skull_petra_pipe"),
-                    manual_crop=True, pad=pad)
+                    manual_crop=True, pad_value=pad_value)
 
             else:
                 skull_petra_pipe = create_skull_petra_pipe(

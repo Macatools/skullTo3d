@@ -1067,7 +1067,7 @@ def create_autonomous_skull_petra_pipe(name="skull_petra_pipe", params={}):
 
 
 def create_skull_petra_pipe(name="skull_petra_pipe", params={},
-                            manual_crop=False, pad=0):
+                            manual_crop=False, pad_value=0):
 
     # creating pipeline
     skull_petra_pipe = pe.Workflow(name=name)
@@ -1151,7 +1151,7 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={},
         else:
             skull_petra_pipe.connect(align_petra_on_native, 'res_file',
                                      crop_petra, 'in_file')
-        if pad:
+        if pad_value!=0:
             add_pad = pe.Node(
                 niu.Function(
                     input_names=["roi_args", "pad_value"],
@@ -1159,7 +1159,7 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={},
                     function=add_pad_str),
                 name="add_pad")
 
-            add_pad.inputs.pad_value = pad
+            add_pad.inputs.pad_value = pad_value
 
             skull_petra_pipe.connect(
                 inputnode, ("indiv_params", parse_key, "crop_T1"),
