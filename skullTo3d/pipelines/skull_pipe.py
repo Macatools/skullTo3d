@@ -1212,8 +1212,6 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={},
             #resample_T1_pad, "trans_file")
 
 
-    return skull_petra_pipe
-
     if "petra_itk_debias" in params.keys():
         # Adding early petra_debias
         petra_itk_debias = pe.Node(
