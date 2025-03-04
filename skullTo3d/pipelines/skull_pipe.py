@@ -22,6 +22,7 @@ from nipype.interfaces.niftyreg.reg import RegAladin
 from macapype.utils.utils_nodes import NodeParams
 
 from nipype.interfaces.ants import N4BiasFieldCorrection
+from nipype.interfaces.ants.utils import ImageMath
 
 from macapype.pipelines.prepare import _create_avg_reorient_pipeline
 
@@ -1111,6 +1112,7 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={},
                                     name="align_petra_on_native")
 
     align_petra_on_native.inputs.rig_only_flag = True
+    align_petra_on_native.inputs.rig_only_flag = True
 
     if "avg_reorient_pipe" in params.keys():
         skull_petra_pipe.connect(av_PETRA, 'outputnode.std_img',
@@ -1122,71 +1124,80 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={},
     skull_petra_pipe.connect(inputnode, "native_img",
                              align_petra_on_native, "ref_file")
 
-    if "align_petra_on_native_2" in params:
+    #if "align_petra_on_native_2" in params:
 
-        # align_petra_on_native
-        align_petra_on_native_2 = pe.Node(interface=RegAladin(),
-                                          name="align_petra_on_native_2")
+        ## align_petra_on_native
+        #align_petra_on_native_2 = pe.Node(interface=RegAladin(),
+                                          #name="align_petra_on_native_2")
 
-        align_petra_on_native_2.inputs.rig_only_flag = True
+        #align_petra_on_native_2.inputs.rig_only_flag = True
 
-        skull_petra_pipe.connect(align_petra_on_native, 'res_file',
-                                 align_petra_on_native_2, "flo_file")
+        #skull_petra_pipe.connect(align_petra_on_native, 'res_file',
+                                 #align_petra_on_native_2, "flo_file")
 
-        skull_petra_pipe.connect(inputnode, "native_img",
-                                 align_petra_on_native_2, "ref_file")
+        #skull_petra_pipe.connect(inputnode, "native_img",
+                                 #align_petra_on_native_2, "ref_file")
 
-    #if manual_crop:
 
-        ## cropping
-        ## Crop bounding box for T1
-        #crop_petra = NodeParams(fsl.ExtractROI(),
-                                ## params=parse_key(params, 'crop'),
-                                #name='crop_petra')
+    # pad image petra
+    pad_image_petra = pe.Node(
+        ImageMath(),
+        name="pad_image_petra")
 
-        #if "align_petra_on_native_2" in params:
-            #skull_petra_pipe.connect(align_petra_on_native_2, 'res_file',
-                                     #crop_petra, 'in_file')
+    pad_image_petra.inputs.copy_header = True
+    pad_image_petra.inputs.operation = "PadImage"
+    pad_image_petra.inputs.op2 = '200'
 
-        #else:
-            #skull_petra_pipe.connect(align_petra_on_native, 'res_file',
-                                     #crop_petra, 'in_file')
-        ##if pad_value!=0:
-            ##add_pad = pe.Node(
-                ##niu.Function(
-                    ##input_names=["roi_args", "pad_value"],
-                    ##output_names=["padded_roi_args"],
-                    ##function=add_pad_str),
-                ##name="add_pad")
+    if "avg_reorient_pipe" in params.keys():
+        skull_petra_pipe.connect(av_PETRA, 'outputnode.std_img',
+            pad_image_petra, "op1")
+    else:
+        skull_petra_pipe.connect(av_PETRA, 'avg_img',
+            pad_image_petra, "op1")
 
-            ##add_pad.inputs.pad_value = pad_value
 
-            ##skull_petra_pipe.connect(
-                ##inputnode, ("indiv_params", parse_key, "crop_T1"),
-                ##add_pad, 'roi_args')
 
-            ##skull_petra_pipe.connect(
-                ##add_pad, 'padded_roi_args',
-                ##crop_petra, "indiv_params")
+    # resampling using transfo on much bigger image
+    reg_resample_petra = pe.Node(
+        RegResample(pad_val=0.0),
+        name="reg_resample_petra")
 
+    skull_petra_pipe.connect(
+        align_petra_on_native, 'aff_file',
+        reg_resample_petra, 'trans_file')
+
+    skull_petra_pipe.connect(
+        pad_image_petra, 'output_image',
+        reg_resample_petra, "flo_file")
+
+    if "avg_reorient_pipe" in params.keys():
+        skull_petra_pipe.connect(
+            av_PETRA, 'outputnode.std_img',
+            reg_resample_petra, "ref_file")
+
+    else:
+        skull_petra_pipe.connect(
+            av_PETRA, 'avg_img',
+            reg_resample_petra, "ref_file")
 
     # align_petra_on_stereo
     align_petra_on_stereo = pe.Node(
         interface=RegResample(),
         name="align_petra_on_stereo")
 
-    if "align_petra_on_native_2" in params:
-            skull_petra_pipe.connect(align_petra_on_native_2, 'res_file',
-                                     align_petra_on_stereo, "flo_file")
-    else:
-        skull_petra_pipe.connect(align_petra_on_native, 'res_file',
-                                    align_petra_on_stereo, "flo_file")
+    #if "align_petra_on_native_2" in params:
+            #skull_petra_pipe.connect(align_petra_on_native_2, 'res_file',
+                                     #align_petra_on_stereo, "flo_file")
+    #else:
 
-    skull_petra_pipe.connect(inputnode, 'native_to_stereo_trans',
-                             align_petra_on_stereo, "trans_file")
+    skull_petra_pipe.connect(reg_resample_petra, 'out_file',
+                             align_petra_on_stereo, "flo_file")
 
     skull_petra_pipe.connect(inputnode, 'stereo_T1',
                              align_petra_on_stereo, "ref_file")
+
+    skull_petra_pipe.connect(inputnode, 'native_to_stereo_trans',
+                             align_petra_on_stereo, "trans_file")
 
     #if padded_value:
 
