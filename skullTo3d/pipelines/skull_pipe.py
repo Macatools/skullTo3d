@@ -22,7 +22,6 @@ from nipype.interfaces.niftyreg.reg import RegAladin
 from macapype.utils.utils_nodes import NodeParams
 
 from nipype.interfaces.ants import N4BiasFieldCorrection
-from nipype.interfaces.ants.utils import ImageMath
 
 from macapype.pipelines.prepare import _create_avg_reorient_pipeline
 
@@ -1112,7 +1111,6 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={},
                                     name="align_petra_on_native")
 
     align_petra_on_native.inputs.rig_only_flag = True
-    align_petra_on_native.inputs.rig_only_flag = True
 
     if "avg_reorient_pipe" in params.keys():
         skull_petra_pipe.connect(av_PETRA, 'outputnode.std_img',
@@ -1124,104 +1122,38 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={},
     skull_petra_pipe.connect(inputnode, "native_img",
                              align_petra_on_native, "ref_file")
 
-    #if "align_petra_on_native_2" in params:
+    if "align_petra_on_native_2" in params:
 
-        ## align_petra_on_native
-        #align_petra_on_native_2 = pe.Node(interface=RegAladin(),
-                                          #name="align_petra_on_native_2")
+        # align_petra_on_native
+        align_petra_on_native_2 = pe.Node(interface=RegAladin(),
+                                          name="align_petra_on_native_2")
 
-        #align_petra_on_native_2.inputs.rig_only_flag = True
+        align_petra_on_native_2.inputs.rig_only_flag = True
 
-        #skull_petra_pipe.connect(align_petra_on_native, 'res_file',
-                                 #align_petra_on_native_2, "flo_file")
+        skull_petra_pipe.connect(align_petra_on_native, 'res_file',
+                                 align_petra_on_native_2, "flo_file")
 
-        #skull_petra_pipe.connect(inputnode, "native_img",
-                                 #align_petra_on_native_2, "ref_file")
-
-
-    # pad image petra
-    pad_image_petra = pe.Node(
-        ImageMath(),
-        name="pad_image_petra")
-
-    pad_image_petra.inputs.copy_header = True
-    pad_image_petra.inputs.operation = "PadImage"
-    pad_image_petra.inputs.op2 = '200'
-
-    if "avg_reorient_pipe" in params.keys():
-        skull_petra_pipe.connect(av_PETRA, 'outputnode.std_img',
-            pad_image_petra, "op1")
-    else:
-        skull_petra_pipe.connect(av_PETRA, 'avg_img',
-            pad_image_petra, "op1")
-
-
-
-    # resampling using transfo on much bigger image
-    reg_resample_petra = pe.Node(
-        RegResample(pad_val=0.0, inter_val="NN"),
-        name="reg_resample_petra")
-
-    skull_petra_pipe.connect(
-        align_petra_on_native, 'aff_file',
-        reg_resample_petra, 'trans_file')
-
-    skull_petra_pipe.connect(
-        pad_image_petra, 'output_image',
-        reg_resample_petra, "flo_file")
-
-    if "avg_reorient_pipe" in params.keys():
-        skull_petra_pipe.connect(
-            av_PETRA, 'outputnode.std_img',
-            reg_resample_petra, "ref_file")
-
-    else:
-        skull_petra_pipe.connect(
-            av_PETRA, 'avg_img',
-            reg_resample_petra, "ref_file")
+        skull_petra_pipe.connect(inputnode, "native_img",
+                                 align_petra_on_native_2, "ref_file")
 
     # align_petra_on_stereo
     align_petra_on_stereo = pe.Node(
-        interface=RegResample(pad_val=0.0, inter_val="NN"),
+        interface=RegResample(pad_val=0.0),
         name="align_petra_on_stereo")
 
-    #if "align_petra_on_native_2" in params:
-            #skull_petra_pipe.connect(align_petra_on_native_2, 'res_file',
-                                     #align_petra_on_stereo, "flo_file")
-    #else:
+    if "align_petra_on_native_2" in params:
+        skull_petra_pipe.connect(align_petra_on_native_2, 'res_file',
+                                 align_petra_on_stereo, "flo_file")
 
-    skull_petra_pipe.connect(reg_resample_petra, 'out_file',
-                             align_petra_on_stereo, "flo_file")
-
-    skull_petra_pipe.connect(inputnode, 'stereo_T1',
-                             align_petra_on_stereo, "ref_file")
+    else:
+        skull_petra_pipe.connect(align_petra_on_native, 'res_file',
+                                 align_petra_on_stereo, "flo_file")
 
     skull_petra_pipe.connect(inputnode, 'native_to_stereo_trans',
                              align_petra_on_stereo, "trans_file")
 
-    #if padded_value:
-
-        #resample_T1_pad = pe.Node(
-            #regutils.RegResample(),
-            #name="resample_T1_pad")
-
-        #if "avg_reorient_pipe" in params.keys():
-            #data_preparation_pipe.connect(
-                #av_T1, 'outputnode.std_img',
-                #resample_T1_pad, "flo_file")
-        #else:
-            #data_preparation_pipe.connect(
-                #av_T1, 'avg_img',
-                #resample_T1_pad, "flo_file")
-
-        #skull_petra_pipe.connect(inputnode, 'padded_stereo_T1',
-                                 #resample_T1_pad, "ref_file")
-
-
-        #data_preparation_pipe.connect(
-            #crop_aladin_pipe, 'outputnode.native_to_stereo_trans',
-            #resample_T1_pad, "trans_file")
-
+    skull_petra_pipe.connect(inputnode, 'stereo_T1',
+                             align_petra_on_stereo, "ref_file")
 
     if "petra_itk_debias" in params.keys():
         # Adding early petra_debias
@@ -1295,6 +1227,17 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={},
 
         skull_petra_pipe.connect(petra_head_auto_mask, "mask_img_file",
                                  petra_head_mask_binary, "in_file")
+
+    # #### gcc erode gcc and dilate back
+    # petra_head_gcc_erode
+    petra_head_gcc_erode = NodeParams(interface=ErodeImage(),
+                                  params=parse_key(params, "petra_head_gcc_erode"),
+                                  name="petra_head_gcc_erode")
+
+    skull_petra_pipe.connect(petra_head_mask_binary, "out_file",
+                             petra_head_gcc_erode, "in_file")
+
+
     # petra_head_mask_binary_clean1
     petra_head_gcc = pe.Node(
         interface=niu.Function(input_names=["nii_file"],
@@ -1305,13 +1248,23 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={},
     skull_petra_pipe.connect(petra_head_mask_binary, "out_file",
                              petra_head_gcc, "nii_file")
 
+    # petra_head_gcc_dilate
+    petra_head_gcc_dilate = NodeParams(
+        interface=DilateImage(),
+        params=parse_key(params, "petra_head_gcc_dilate"),
+        name="petra_head_gcc_dilate")
+
+    skull_petra_pipe.connect(petra_head_gcc, "gcc_nii_file",
+                             petra_head_gcc_dilate, "in_file")
+
+    # ### fill dilate fill and erode back
     # petra_head_dilate
     petra_head_dilate = NodeParams(
         interface=DilateImage(),
         params=parse_key(params, "petra_head_dilate"),
         name="petra_head_dilate")
 
-    skull_petra_pipe.connect(petra_head_gcc, "gcc_nii_file",
+    skull_petra_pipe.connect(petra_head_gcc_dilate, "gcc_nii_file",
                              petra_head_dilate, "in_file")
 
     skull_petra_pipe.connect(
@@ -1339,6 +1292,7 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={},
         inputnode, ('indiv_params', parse_key, "petra_head_erode"),
         petra_head_erode, "indiv_params")
 
+    # mask_head
     # mesh_petra_head #######
     mesh_petra_head = pe.Node(
         interface=IsoSurface(),
