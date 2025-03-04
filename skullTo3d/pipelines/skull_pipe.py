@@ -1264,7 +1264,7 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={},
         params=parse_key(params, "petra_head_dilate"),
         name="petra_head_dilate")
 
-    skull_petra_pipe.connect(petra_head_gcc_dilate, "gcc_nii_file",
+    skull_petra_pipe.connect(petra_head_gcc_dilate, "out_file",
                              petra_head_dilate, "in_file")
 
     skull_petra_pipe.connect(
