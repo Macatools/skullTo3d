@@ -1448,9 +1448,6 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={},
         skull_petra_pipe.connect(petra_skull_mask_binary, "out_file",
                              petra_skull_gcc_erode, "in_file")
 
-    skull_petra_pipe.connect(petra_skull_fill, "out_file",
-                             petra_skull_gcc_erode, "in_file")
-
     skull_petra_pipe.connect(
         inputnode, ('indiv_params', parse_key, "petra_skull_gcc_erode"),
         petra_skull_gcc_erode, "indiv_params")
@@ -1467,7 +1464,7 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={},
     skull_petra_pipe.connect(petra_skull_gcc_erode, "out_file",
                              petra_skull_gcc, "nii_file")
 
-    # petra_skull_dilate ####### [okey][json]
+    # petra_skull_gcc_dilate ####### [okey][json]
     petra_skull_gcc_dilate = NodeParams(
         interface=DilateImage(),
         params=parse_key(params, "petra_skull_gcc_dilate"),
