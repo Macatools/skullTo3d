@@ -1136,38 +1136,38 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={},
         skull_petra_pipe.connect(inputnode, "native_img",
                                  align_petra_on_native_2, "ref_file")
 
-    if manual_crop:
+    #if manual_crop:
 
-        # cropping
-        # Crop bounding box for T1
-        crop_petra = NodeParams(fsl.ExtractROI(),
-                                # params=parse_key(params, 'crop'),
-                                name='crop_petra')
+        ## cropping
+        ## Crop bounding box for T1
+        #crop_petra = NodeParams(fsl.ExtractROI(),
+                                ## params=parse_key(params, 'crop'),
+                                #name='crop_petra')
 
-        if "align_petra_on_native_2" in params:
-            skull_petra_pipe.connect(align_petra_on_native_2, 'res_file',
-                                     crop_petra, 'in_file')
+        #if "align_petra_on_native_2" in params:
+            #skull_petra_pipe.connect(align_petra_on_native_2, 'res_file',
+                                     #crop_petra, 'in_file')
 
-        else:
-            skull_petra_pipe.connect(align_petra_on_native, 'res_file',
-                                     crop_petra, 'in_file')
-        if pad_value!=0:
-            add_pad = pe.Node(
-                niu.Function(
-                    input_names=["roi_args", "pad_value"],
-                    output_names=["padded_roi_args"],
-                    function=add_pad_str),
-                name="add_pad")
+        #else:
+            #skull_petra_pipe.connect(align_petra_on_native, 'res_file',
+                                     #crop_petra, 'in_file')
+        ##if pad_value!=0:
+            ##add_pad = pe.Node(
+                ##niu.Function(
+                    ##input_names=["roi_args", "pad_value"],
+                    ##output_names=["padded_roi_args"],
+                    ##function=add_pad_str),
+                ##name="add_pad")
 
-            add_pad.inputs.pad_value = pad_value
+            ##add_pad.inputs.pad_value = pad_value
 
-            skull_petra_pipe.connect(
-                inputnode, ("indiv_params", parse_key, "crop_T1"),
-                add_pad, 'roi_args')
+            ##skull_petra_pipe.connect(
+                ##inputnode, ("indiv_params", parse_key, "crop_T1"),
+                ##add_pad, 'roi_args')
 
-            skull_petra_pipe.connect(
-                add_pad, 'padded_roi_args',
-                crop_petra, "indiv_params")
+            ##skull_petra_pipe.connect(
+                ##add_pad, 'padded_roi_args',
+                ##crop_petra, "indiv_params")
 
 
     # align_petra_on_stereo
@@ -1175,24 +1175,44 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={},
         interface=RegResample(pad_val=0.0),
         name="align_petra_on_stereo")
 
-    if manual_crop:
-        skull_petra_pipe.connect(crop_petra, 'roi_file',
-                                 align_petra_on_stereo, "flo_file")
-    else:
-
-        if "align_petra_on_native_2" in params:
+    if "align_petra_on_native_2" in params:
             skull_petra_pipe.connect(align_petra_on_native_2, 'res_file',
                                      align_petra_on_stereo, "flo_file")
-
-        else:
-            skull_petra_pipe.connect(align_petra_on_native, 'res_file',
-                                     align_petra_on_stereo, "flo_file")
+    else:
+        skull_petra_pipe.connect(align_petra_on_native, 'res_file',
+                                    align_petra_on_stereo, "flo_file")
 
     skull_petra_pipe.connect(inputnode, 'native_to_stereo_trans',
                              align_petra_on_stereo, "trans_file")
 
     skull_petra_pipe.connect(inputnode, 'stereo_T1',
                              align_petra_on_stereo, "ref_file")
+
+    #if padded_value:
+
+        #resample_T1_pad = pe.Node(
+            #regutils.RegResample(),
+            #name="resample_T1_pad")
+
+        #if "avg_reorient_pipe" in params.keys():
+            #data_preparation_pipe.connect(
+                #av_T1, 'outputnode.std_img',
+                #resample_T1_pad, "flo_file")
+        #else:
+            #data_preparation_pipe.connect(
+                #av_T1, 'avg_img',
+                #resample_T1_pad, "flo_file")
+
+        #skull_petra_pipe.connect(inputnode, 'padded_stereo_T1',
+                                 #resample_T1_pad, "ref_file")
+
+
+        #data_preparation_pipe.connect(
+            #crop_aladin_pipe, 'outputnode.native_to_stereo_trans',
+            #resample_T1_pad, "trans_file")
+
+
+    return align_petra_on_stereo
 
     if "petra_itk_debias" in params.keys():
         # Adding early petra_debias
@@ -1203,7 +1223,7 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={},
                     function=itk_debias),
                 name="petra_itk_debias")
 
-        skull_petra_pipe.connect(align_petra_on_stereo, "out_file",
+        align_petra_on_stereo.connect(align_petra_on_stereo, "out_file",
                                  petra_itk_debias, "img_file")
 
     # ### head mask
