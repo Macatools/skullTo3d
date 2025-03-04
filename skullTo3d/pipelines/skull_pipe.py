@@ -1172,7 +1172,7 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={},
 
     # align_petra_on_stereo
     align_petra_on_stereo = pe.Node(
-        interface=RegResample(pad_val=0.0),
+        interface=RegResample(),
         name="align_petra_on_stereo")
 
     if "align_petra_on_native_2" in params:
