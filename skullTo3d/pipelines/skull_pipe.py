@@ -1159,7 +1159,7 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={},
 
     # resampling using transfo on much bigger image
     reg_resample_petra = pe.Node(
-        RegResample(pad_val=0.0, inter_val="LIN"),
+        RegResample(pad_val=0.0, inter_val="NN"),
         name="reg_resample_petra")
 
     skull_petra_pipe.connect(
@@ -1182,7 +1182,7 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={},
 
     # align_petra_on_stereo
     align_petra_on_stereo = pe.Node(
-        interface=RegResample(pad_val=0.0, inter_val="LIN"),
+        interface=RegResample(pad_val=0.0, inter_val="NN"),
         name="align_petra_on_stereo")
 
     #if "align_petra_on_native_2" in params:
