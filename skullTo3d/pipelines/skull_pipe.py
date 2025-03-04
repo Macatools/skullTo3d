@@ -1212,7 +1212,7 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={},
             #resample_T1_pad, "trans_file")
 
 
-    return align_petra_on_stereo
+    return skull_petra_pipe
 
     if "petra_itk_debias" in params.keys():
         # Adding early petra_debias
@@ -1223,7 +1223,7 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={},
                     function=itk_debias),
                 name="petra_itk_debias")
 
-        align_petra_on_stereo.connect(align_petra_on_stereo, "out_file",
+        skull_petra_pipe.connect(align_petra_on_stereo, "out_file",
                                  petra_itk_debias, "img_file")
 
     # ### head mask
