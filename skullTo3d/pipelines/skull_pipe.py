@@ -1159,7 +1159,7 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={},
 
     # resampling using transfo on much bigger image
     reg_resample_petra = pe.Node(
-        RegResample(pad_val=0.0),
+        RegResample(pad_val=0.0, inter_val="LIN"),
         name="reg_resample_petra")
 
     skull_petra_pipe.connect(
