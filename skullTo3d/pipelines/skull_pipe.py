@@ -1237,6 +1237,10 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={},
     skull_petra_pipe.connect(petra_head_mask_binary, "out_file",
                              petra_head_gcc_erode, "in_file")
 
+    skull_petra_pipe.connect(
+            inputnode, ('indiv_params', parse_key, "petra_head_gcc_erode"),
+            petra_head_gcc_erode, "indiv_params")
+
 
     # petra_head_mask_binary_clean1
     petra_head_gcc = pe.Node(
@@ -1256,6 +1260,10 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={},
 
     skull_petra_pipe.connect(petra_head_gcc, "gcc_nii_file",
                              petra_head_gcc_dilate, "in_file")
+
+    skull_petra_pipe.connect(
+            inputnode, ('indiv_params', parse_key, "petra_head_gcc_dilate"),
+            petra_head_gcc_dilate, "indiv_params")
 
     # ### fill dilate fill and erode back
     # petra_head_dilate
