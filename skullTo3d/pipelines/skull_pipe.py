@@ -32,7 +32,7 @@ from macapype.nodes.surface import (keep_gcc, IsoSurface)
 from macapype.nodes.correct_bias import itk_debias
 
 from skullTo3d.nodes.skull import (
-    mask_auto_img, add_pad_str)
+    mask_auto_img)
 
 from macapype.utils.misc import parse_key, get_elem
 
@@ -1230,9 +1230,10 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={},
 
     # #### gcc erode gcc and dilate back
     # petra_head_gcc_erode
-    petra_head_gcc_erode = NodeParams(interface=ErodeImage(),
-                                  params=parse_key(params, "petra_head_gcc_erode"),
-                                  name="petra_head_gcc_erode")
+    petra_head_gcc_erode = NodeParams(
+        interface=ErodeImage(),
+        params=parse_key(params, "petra_head_gcc_erode"),
+        name="petra_head_gcc_erode")
 
     skull_petra_pipe.connect(petra_head_mask_binary, "out_file",
                              petra_head_gcc_erode, "in_file")
@@ -1240,7 +1241,6 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={},
     skull_petra_pipe.connect(
             inputnode, ('indiv_params', parse_key, "petra_head_gcc_erode"),
             petra_head_gcc_erode, "indiv_params")
-
 
     # petra_head_mask_binary_clean1
     petra_head_gcc = pe.Node(
@@ -1443,15 +1443,14 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={},
 
     if "petra_head_erode_skin" in params.keys():
         skull_petra_pipe.connect(petra_skin_masked, "out_file",
-                             petra_skull_gcc_erode, "in_file")
+                                 petra_skull_gcc_erode, "in_file")
     else:
         skull_petra_pipe.connect(petra_skull_mask_binary, "out_file",
-                             petra_skull_gcc_erode, "in_file")
+                                 petra_skull_gcc_erode, "in_file")
 
     skull_petra_pipe.connect(
         inputnode, ('indiv_params', parse_key, "petra_skull_gcc_erode"),
         petra_skull_gcc_erode, "indiv_params")
-
 
     # petra_skull_gcc ####### [okey]
     petra_skull_gcc = pe.Node(
