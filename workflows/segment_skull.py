@@ -752,6 +752,23 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
                         "outputnode.stereo_to_native_trans",
                         pad_t1_skull_mask, "trans_file")
 
+                    print("Using reg_aladin transfo to pad head_mask back")
+
+                    pad_t1_head_mask = pe.Node(RegResample(inter_val="NN"),
+                                                  name="pad_t1_head_mask")
+
+                    main_workflow.connect(skull_t1_pipe,
+                                          "outputnode.t1_head_mask",
+                                          pad_t1_head_mask, "flo_file")
+
+                    main_workflow.connect(segment_brain_pipe,
+                                          "outputnode.native_T1",
+                                          pad_t1_head_mask, "ref_file")
+
+                    main_workflow.connect(segment_brain_pipe,
+                                          "outputnode.stereo_to_native_trans",
+                                          pad_t1_head_mask, "trans_file")
+
     if deriv:
 
         datasink_name = os.path.join("derivatives", wf_name)
@@ -790,7 +807,7 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
         if "petra" in skull_dt and "skull_petra_pipe" in params.keys():
             rename_all_skull_petra_derivatives(
                 params, main_workflow, segment_brain_pipe, skull_petra_pipe,
-                datasink, pref_deriv, parse_str, space, pad)
+                datasink, pref_deriv, parse_str, pad)
 
             if pad:
 
@@ -851,7 +868,7 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
         if "t1" in skull_dt and "skull_t1_pipe" in params.keys():
             rename_all_skull_t1_derivatives(
                 params, main_workflow, segment_brain_pipe, skull_t1_pipe,
-                datasink, pref_deriv, parse_str, space, pad)
+                datasink, pref_deriv, parse_str, pad)
 
             if pad:
 
@@ -872,12 +889,29 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
                     rename_native_t1_skull_mask, 'out_file',
                     datasink, '@t1_native_skull_mask')
 
+                # rename t1_head_mask
+                rename_native_t1_head_mask = pe.Node(
+                    niu.Rename(), name="rename_native_t1_head_mask")
+
+                rename_native_t1_head_mask.inputs.format_string = \
+                    pref_deriv + "_space-native_desc-t1_headmask"
+                rename_native_t1_head_mask.inputs.parse_string = parse_str
+                rename_native_t1_head_mask.inputs.keep_ext = True
+
+                main_workflow.connect(
+                    pad_t1_head_mask, "out_file",
+                    rename_native_t1_head_mask, 'in_file')
+
+                main_workflow.connect(
+                    rename_native_t1_head_mask, 'out_file',
+                    datasink, '@t1_native_head_mask')
+
         if "ct" in skull_dt and "skull_ct_pipe" in params.keys():
             print("rename ct skull pipe 1")
 
             rename_all_skull_ct_derivatives(
                 params, main_workflow, segment_brain_pipe, skull_ct_pipe,
-                datasink, pref_deriv, parse_str, space, pad)
+                datasink, pref_deriv, parse_str, pad)
 
         if "angio" in skull_dt and ("angio_pipe" in params.keys()
                                     or "angio_quick_pipe" in params.keys()):

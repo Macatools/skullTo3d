@@ -8,7 +8,7 @@ import nipype.pipeline.engine as pe
 
 def rename_all_skull_petra_derivatives(params, main_workflow, segment_pnh_pipe,
                                        skull_petra_pipe, datasink, pref_deriv,
-                                       parse_str, space, pad):
+                                       parse_str):
 
     # Rename in skull_petra_pipe
     if "skull_petra_pipe" in params.keys():
@@ -121,7 +121,7 @@ def rename_all_skull_petra_derivatives(params, main_workflow, segment_pnh_pipe,
 
 def rename_all_skull_ct_derivatives(params, main_workflow, segment_pnh_pipe,
                                     skull_ct_pipe, datasink, pref_deriv,
-                                    parse_str, space, pad):
+                                    parse_str):
 
     # Rename in skull_ct_pipe
     if "skull_ct_pipe" in params.keys():
@@ -200,7 +200,7 @@ def rename_all_skull_ct_derivatives(params, main_workflow, segment_pnh_pipe,
 
 def rename_all_skull_t1_derivatives(params, main_workflow, segment_pnh_pipe,
                                     skull_t1_pipe, datasink, pref_deriv,
-                                    parse_str, space, pad):
+                                    parse_str):
 
     # Rename in skull_t1_pipe
     if "skull_t1_pipe" in params.keys():
@@ -241,7 +241,7 @@ def rename_all_skull_t1_derivatives(params, main_workflow, segment_pnh_pipe,
         rename_t1_head_mask = pe.Node(niu.Rename(),
                                       name="rename_t1_head_mask")
         rename_t1_head_mask.inputs.format_string = \
-            pref_deriv + "_space-{}_desc-t1_headmask".format(space)
+            pref_deriv + "_space-stereo_desc-t1_headmask"
         rename_t1_head_mask.inputs.parse_string = parse_str
         rename_t1_head_mask.inputs.keep_ext = True
 
@@ -304,7 +304,7 @@ def rename_all_angio_derivatives(params, main_workflow, angio_pipe, datasink,
             niu.Rename(),
             name="rename_stereo_angio_mask")
         rename_stereo_angio_mask.inputs.format_string = \
-            pref_deriv + "_space-stereo_desc-pad_desc-angio_mask"
+            pref_deriv + "_space-stereo_desc-angio_mask"
         rename_stereo_angio_mask.inputs.parse_string = parse_str
         rename_stereo_angio_mask.inputs.keep_ext = True
 
@@ -321,7 +321,7 @@ def rename_all_angio_derivatives(params, main_workflow, angio_pipe, datasink,
             niu.Rename(),
             name="rename_stereo_angio")
         rename_stereo_angio.inputs.format_string = \
-            pref_deriv + "_space-stereo_desc-pad_angio"
+            pref_deriv + "_space-stereo_angio"
         rename_stereo_angio.inputs.parse_string = parse_str
         rename_stereo_angio.inputs.keep_ext = True
 
@@ -340,7 +340,7 @@ def rename_all_angio_derivatives(params, main_workflow, angio_pipe, datasink,
                 niu.Rename(),
                 name="rename_stereo_brain_angio")
             rename_stereo_brain_angio.inputs.format_string = \
-                pref_deriv + "_space-stereo_desc-pad_desc-brain_angio"
+                pref_deriv + "_space-stereo_desc-brain_angio"
             rename_stereo_brain_angio.inputs.parse_string = parse_str
             rename_stereo_brain_angio.inputs.keep_ext = True
 
