@@ -807,7 +807,7 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
         if "petra" in skull_dt and "skull_petra_pipe" in params.keys():
             rename_all_skull_petra_derivatives(
                 params, main_workflow, segment_brain_pipe, skull_petra_pipe,
-                datasink, pref_deriv, parse_str, pad)
+                datasink, pref_deriv, parse_str)
 
             if pad:
 
@@ -868,7 +868,7 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
         if "t1" in skull_dt and "skull_t1_pipe" in params.keys():
             rename_all_skull_t1_derivatives(
                 params, main_workflow, segment_brain_pipe, skull_t1_pipe,
-                datasink, pref_deriv, parse_str, pad)
+                datasink, pref_deriv, parse_str)
 
             if pad:
 
@@ -911,7 +911,7 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
 
             rename_all_skull_ct_derivatives(
                 params, main_workflow, segment_brain_pipe, skull_ct_pipe,
-                datasink, pref_deriv, parse_str, pad)
+                datasink, pref_deriv, parse_str)
 
         if "angio" in skull_dt and ("angio_pipe" in params.keys()
                                     or "angio_quick_pipe" in params.keys()):
