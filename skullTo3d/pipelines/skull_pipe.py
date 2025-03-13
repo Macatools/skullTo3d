@@ -421,7 +421,7 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
                               crop_CT, 'in_file')
 
     # align_ct_on_T1
-    align_ct_on_T1 = pe.Node(interface=RegAladin(pad_val=0.0),
+    align_ct_on_T1 = pe.Node(interface=RegAladin(),
                              name="align_ct_on_T1")
 
     align_ct_on_T1.inputs.rig_only_flag = True
