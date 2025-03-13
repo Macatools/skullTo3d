@@ -401,69 +401,69 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
         name='inputnode'
     )
 
+    if "crop_CT" in params:
+        print('crop_CT is in params')
+
+        assert "args" in params["crop_CT"].keys(), \
+            "Error, args is not specified for crop node, breaking"
+
+        # cropping
+        # Crop bounding box for T1
+        crop_CT = NodeParams(fsl.ExtractROI(),
+                             params=parse_key(params, 'crop_CT'),
+                             name='crop_CT')
+
+        skull_ct_pipe.connect(
+            inputnode, ("indiv_params", parse_key, "crop_CT"),
+            crop_CT, 'indiv_params')
+
+        skull_ct_pipe.connect(inputnode, 'ct',
+                              crop_CT, 'in_file')
+
     # align_ct_on_T1
     align_ct_on_T1 = pe.Node(interface=RegAladin(pad_val=0.0),
                              name="align_ct_on_T1")
 
     align_ct_on_T1.inputs.rig_only_flag = True
 
-    skull_ct_pipe.connect(inputnode, 'ct',
-                          align_ct_on_T1, "flo_file")
+    if "crop_CT" in params:
+        skull_ct_pipe.connect(
+            crop_CT, "roi_file",
+            align_ct_on_T1, "flo_file")
+    else:
+        skull_ct_pipe.connect(
+            inputnode, 'ct',
+            align_ct_on_T1, "flo_file")
 
     skull_ct_pipe.connect(inputnode, "native_T1",
                           align_ct_on_T1, "ref_file")
 
-    #if "align_ct_on_T1_2" in params:
+    if "align_ct_on_T1_2" in params:
 
-        ## align_ct_on_T1
-        #align_ct_on_T1_2 = pe.Node(interface=RegAladin(),
-                                   #name="align_ct_on_T1_2")
+        # align_ct_on_T1
+        align_ct_on_T1_2 = pe.Node(interface=RegAladin(),
+                                   name="align_ct_on_T1_2")
 
-        #align_ct_on_T1_2.inputs.rig_only_flag = True
+        align_ct_on_T1_2.inputs.rig_only_flag = True
 
-        #skull_ct_pipe.connect(align_ct_on_T1, 'res_file',
-                              #align_ct_on_T1_2, "flo_file")
+        skull_ct_pipe.connect(align_ct_on_T1, 'res_file',
+                              align_ct_on_T1_2, "flo_file")
 
-        #skull_ct_pipe.connect(inputnode, "native_T1",
-                              #align_ct_on_T1_2, "ref_file")
-
-    # pad image T2
-    pad_image_ct = pe.Node(
-        ImageMath(),
-        name="pad_image_ct")
-
-    pad_image_ct.inputs.copy_header = True
-    pad_image_ct.inputs.operation = "PadImage"
-    pad_image_ct.inputs.op2 = '200'
-
-    skull_ct_pipe.connect(inputnode, 'ct',
-            pad_image_ct, "op1")
-
-    # resampling using transfo on much bigger image
-    reg_resample_ct = pe.Node(
-        RegResample(pad_val=0.0),
-        name="reg_resample_ct")
-
-    skull_ct_pipe.connect(
-        align_ct_on_T1, 'aff_file',
-        reg_resample_ct, 'trans_file')
-
-    skull_ct_pipe.connect(
-        pad_image_ct, 'output_image',
-        reg_resample_ct, "flo_file")
+        skull_ct_pipe.connect(inputnode, "native_T1",
+                              align_ct_on_T1_2, "ref_file")
 
     # align_ct_on_stereo_T1
     align_ct_on_stereo_T1 = pe.Node(
         interface=RegResample(pad_val=0.0),
         name="align_ct_on_stereo_T1")
 
-    #if "align_ct_on_T1_2" in params:
-        #skull_ct_pipe.connect(align_ct_on_T1_2, 'res_file',
-                              #align_ct_on_stereo_T1, "flo_file")
+    if "align_ct_on_T1_2" in params:
+        skull_ct_pipe.connect(align_ct_on_T1_2, 'res_file',
+                              align_ct_on_stereo_T1, "flo_file")
 
-    #else:
-    skull_ct_pipe.connect(align_ct_on_T1, 'res_file',
-                          align_ct_on_stereo_T1, "flo_file")
+    else:
+        skull_ct_pipe.connect(align_ct_on_T1, 'res_file',
+                              align_ct_on_stereo_T1, "flo_file")
 
     skull_ct_pipe.connect(inputnode, 'native_to_stereo_trans',
                           align_ct_on_stereo_T1, "trans_file")
