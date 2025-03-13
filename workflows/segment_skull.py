@@ -637,6 +637,10 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
                               "outputnode.stereo_padded_T1",
                               skull_ct_pipe, 'inputnode.stereo_T1')
 
+        if indiv_params:
+            main_workflow.connect(datasource, "indiv_params",
+                                  skull_ct_pipe, 'inputnode.indiv_params')
+
         main_workflow.connect(
             segment_brain_pipe, "outputnode.native_to_stereo_trans",
             skull_ct_pipe, 'inputnode.native_to_stereo_trans')
