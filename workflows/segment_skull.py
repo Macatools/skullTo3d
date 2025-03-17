@@ -325,86 +325,107 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
             if "template" in ssoft:
                 wf_name += "_template"
 
-        # params_template
-        if template_path is not None:
-
-            # format for relative path
-            template_path = op.abspath(template_path)
-
-            assert os.path.exists(template_path), "Error, template_path {} do not exists".format(template_path)
-
-            print(template_files)
-
-            params_template = {}
-
-            assert len(template_files) > 1, "Error, template_files unspecified {}".format(template_files)
-
-            template_head = os.path.join(template_path,template_files[0])
-            assert os.path.exists(template_head), "Could not find template_head {}".format(template_head)
-            params_template["template_head"] = template_head
-
-            template_brain = os.path.join(template_path,template_files[1])
-            assert os.path.exists(template_brain), "Could not find template_brain {}".format(template_brain)
-            params_template["template_brain"] = template_brain
-
-            if len(template_files) == 3:
-
-                template_seg = os.path.join(template_path,template_files[2])
-                assert os.path.exists(template_seg), "Could not find template_seg {}".format(template_seg)
-                params_template["template_seg"] = template_seg
-
-            elif len(template_files) == 5:
-
-                template_gm = os.path.join(template_path,template_files[2])
-                assert os.path.exists(template_gm), "Could not find template_gm {}".format(template_gm)
-                params_template["template_gm"] = template_gm
-
-                template_wm = os.path.join(template_path,template_files[3])
-                assert os.path.exists(template_wm), "Could not find template_wm {}".format(template_wm)
-                params_template["template_wm"] = template_wm
-
-                template_csf = os.path.join(template_path,template_files[4])
-                assert os.path.exists(template_csf), "Could not find template_csf {}".format(template_csf)
-                params_template["template_csf"] = template_csf
-
-            else:
-                print("Unknown template_files format, should be 3 or 5 files")
-                exit(-1)
-
-            params_template_stereo = params_template
-
-        else:
-            ### use template from params
-            assert ("general" in params.keys() and \
-                "template_name" in params["general"].keys()), \
-                    "Error, the params.json should contains a general/template_name"
-
-            template_name = params["general"]["template_name"]
-
-            if "general" in params.keys() and "my_path" in params["general"].keys():
-                my_path = params["general"]["my_path"]
-            else:
-                my_path = ""
-
-            template_dir = load_test_data(template_name, path_to = my_path)
-            params_template = format_template(template_dir, template_name)
-
-            if "template_stereo_name" in params["general"].keys():
-
-                template_stereo_name = params["general"]["template_stereo_name"]
-                template_stereo_dir = load_test_data(template_stereo_name, path_to = my_path)
-                params_template_stereo = format_template(template_stereo_dir, template_stereo_name)
-
-            else:
-                params_template_stereo = params_template
-
-        print (params_template)
-
     else:
         print(f"error with {ssoft}, should be among [spm12, spm, ants])")
 
+    # params_template
+    if template_path is not None:
+
+        # format for relative path
+        template_path = op.abspath(template_path)
+
+        assert os.path.exists(template_path), \
+            "Error, template_path {} do not exists".format(template_path)
+
+        print(template_files)
+
+        params_template = {}
+
+        assert len(template_files) > 1, \
+            "Error, template_files unspecified {}".format(template_files)
+
+        template_head = os.path.join(template_path, template_files[0])
+        assert os.path.exists(template_head), \
+            "Could not find template_head {}".format(template_head)
+        params_template["template_head"] = template_head
+
+        template_brain = os.path.join(template_path, template_files[1])
+        assert os.path.exists(template_brain),\
+            "Could not find template_brain {}".format(template_brain)
+        params_template["template_brain"] = template_brain
+
+        if len(template_files) == 2:
+
+            print("Only two files (template_head and template_brain) \
+                have been specified, segmentation will be without priors")
+
+            if "brain_segment_pipe" in params.keys():
+                if "segment_atropos_pipe" in params["brain_segment_pipe"].keys():
+                    if "use_priors" in params["brain_segment_pipe"]["segment_atropos_pipe"].keys():
+                        del params["brain_segment_pipe"]["segment_atropos_pipe"]["use_priors"]
+
+        elif len(template_files) == 3:
+
+            template_seg = os.path.join(template_path,template_files[2])
+            assert os.path.exists(template_seg), "Could not find template_seg {}".format(template_seg)
+            params_template["template_seg"] = template_seg
+
+        elif len(template_files) == 5:
+
+            template_gm = os.path.join(template_path,template_files[2])
+            assert os.path.exists(template_gm), "Could not find template_gm {}".format(template_gm)
+            params_template["template_gm"] = template_gm
+
+            template_wm = os.path.join(template_path,template_files[3])
+            assert os.path.exists(template_wm), "Could not find template_wm {}".format(template_wm)
+            params_template["template_wm"] = template_wm
+
+            template_csf = os.path.join(template_path,template_files[4])
+            assert os.path.exists(template_csf), "Could not find template_csf {}".format(template_csf)
+            params_template["template_csf"] = template_csf
+
+        else:
+            print("Unknown template_files format, should be 3 or 5 files")
+            exit(-1)
+
+        params_template_stereo = params_template
+
+    else:
+        ### use template from params
+        assert ("general" in params.keys() and \
+            "template_name" in params["general"].keys()), \
+                "Error, the params.json should contains a general/template_name"
+
+        template_name = params["general"]["template_name"]
+
+        if "general" in params.keys() and "my_path" in params["general"].keys():
+            my_path = params["general"]["my_path"]
+        else:
+            my_path = ""
+
+        template_dir = load_test_data(template_name, path_to=my_path)
+        params_template = format_template(template_dir, template_name)
+
+        if "template_stereo_name" in params["general"].keys():
+
+            template_stereo_name = params["general"]["template_stereo_name"]
+            print("template_stereo_name = {}".format(template_stereo_name))
+            template_stereo_dir = load_test_data(template_stereo_name,
+                                                 path_to=my_path)
+            params_template_stereo = format_template(template_stereo_dir,
+                                                     template_stereo_name)
+
+        else:
+            params_template_stereo = params_template
+
+    print(params_template)
+
+
+
+
+
     # main_workflow
-    main_workflow = pe.Workflow(name= wf_name)
+    main_workflow = pe.Workflow(name=wf_name)
 
     main_workflow.base_dir = process_dir
 
