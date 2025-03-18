@@ -152,8 +152,9 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
                                    function=keep_gcc),
             name="t1_head_gcc")
 
-        skull_t1_pipe.connect(t1_head_mask_binary, "out_file",
-                                 t1_head_gcc, "nii_file")
+        skull_t1_pipe.connect(
+            t1_head_mask_binary, "out_file",
+            t1_head_gcc, "nii_file")
 
     # ### fill dilate fill and erode back
     # t1_head_dilate
