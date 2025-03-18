@@ -22,7 +22,6 @@ from nipype.interfaces.niftyreg.reg import RegAladin
 from macapype.utils.utils_nodes import NodeParams
 
 from nipype.interfaces.ants import N4BiasFieldCorrection
-from nipype.interfaces.ants.utils import ImageMath
 
 from macapype.pipelines.prepare import _create_avg_reorient_pipeline
 
