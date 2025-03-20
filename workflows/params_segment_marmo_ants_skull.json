@@ -128,7 +128,6 @@
     },
     "skull_t1_pipe":
     {
-        "use_debiased_t1":true,
         "t1_head_auto_mask":
         {
             "kmeans": true,
