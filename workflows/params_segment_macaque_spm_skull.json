@@ -11,11 +11,12 @@
     	{
             "reg_T1_on_template":
             {
+                "rig_only_flag" : true
             }
     	},
         "pad_template":
         {
-            "copy_header" : false,
+            "copy_header" : true,
             "operation" : "PadImage",
             "op2" : "70"
         }
