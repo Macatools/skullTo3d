@@ -22,6 +22,9 @@
             "copy_header" : true,
             "operation" : "PadImage",
             "op2" : "90"
+        },
+        "denoise":
+        {
         }
     },
     "fast":
