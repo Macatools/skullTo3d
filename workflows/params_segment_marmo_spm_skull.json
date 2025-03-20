@@ -21,6 +21,9 @@
         {
             "operation" : "PadImage",
             "op2" : "90"
+        },
+        "denoise":
+        {
         }
     },
     "debias":

@@ -504,14 +504,8 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
 
         if len(brain_dt):
 
-            if "crop_T1" in params["short_preparation_pipe"]:
-
-                skull_petra_pipe = create_skull_petra_pipe(
-                    params=parse_key(params, "skull_petra_pipe"))
-
-            else:
-                skull_petra_pipe = create_skull_petra_pipe(
-                    params=parse_key(params, "skull_petra_pipe"))
+            skull_petra_pipe = create_skull_petra_pipe(
+                params=parse_key(params, "skull_petra_pipe"))
 
             if "t1" in brain_dt and "t2" in brain_dt:
                 # optimal pipeline, use T2
