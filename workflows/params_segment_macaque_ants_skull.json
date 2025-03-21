@@ -75,6 +75,7 @@
             }
         }
     },
+
     "skull_t1_pipe":
     {
         "use_debiased_t1": {},
@@ -136,6 +137,7 @@
             "brainsize": 45
         }
     },
+
     "skull_petra_pipe":
     {
         "petra_head_auto_mask":
@@ -211,6 +213,7 @@
             "brainsize": 45
         }
     },
+
     "skull_ct_pipe":
     {
         "align_ct_on_T1_2":
@@ -240,6 +243,7 @@
             "brainsize" : 45
         }
     },
+
     "angio_pipe":
     {
         "angio_denoise":
