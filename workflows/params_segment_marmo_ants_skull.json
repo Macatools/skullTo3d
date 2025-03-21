@@ -81,7 +81,8 @@
             }
         }
     },
-            "skull_t1_pipe":
+
+    "skull_t1_pipe":
     {
         "t1_head_auto_mask":
         {
@@ -135,20 +136,8 @@
             "sample_bins": 3,
             "distance": 1,
             "operation": "lower",
-            "index": 2
+            "index": 1
         },
-        "petra_head_gcc_erode":
-        {
-            "kernel_shape": "boxv",
-            "kernel_size": 5.0
-        },
-        "petra_head_gcc_dilate":
-        {
-            "operation": "modal",
-            "kernel_shape": "boxv",
-            "kernel_size": 5.0
-        },
-
         "petra_head_dilate":
         {
             "operation": "modal",
