@@ -329,95 +329,107 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
             if "template" in ssoft:
                 wf_name += "_template"
 
-        # params_template
-        if template_path is not None:
-
-            # format for relative path
-            template_path = op.abspath(template_path)
-
-            assert os.path.exists(template_path), "Error, template_path {} do not exists".format(template_path)
-
-            print(template_files)
-
-            params_template = {}
-
-            assert len(template_files) > 1, "Error, template_files unspecified {}".format(template_files)
-
-            template_head = os.path.join(template_path,template_files[0])
-            assert os.path.exists(template_head), "Could not find template_head {}".format(template_head)
-            params_template["template_head"] = template_head
-
-            template_brain = os.path.join(template_path,template_files[1])
-            assert os.path.exists(template_brain), "Could not find template_brain {}".format(template_brain)
-            params_template["template_brain"] = template_brain
-
-            if len(template_files) == 2:
-
-                print("Only two files (template_head and template_brain) have been specified, segmentation will be without priors")
-
-                if "brain_segment_pipe" in params.keys():
-                    if "segment_atropos_pipe" in params["brain_segment_pipe"].keys():
-                        if "use_priors" in params["brain_segment_pipe"]["segment_atropos_pipe"].keys():
-                            del params["brain_segment_pipe"]["segment_atropos_pipe"]["use_priors"]
-
-            elif len(template_files) == 3:
-
-                template_seg = os.path.join(template_path,template_files[2])
-                assert os.path.exists(template_seg), "Could not find template_seg {}".format(template_seg)
-                params_template["template_seg"] = template_seg
-
-            elif len(template_files) == 5:
-
-                template_gm = os.path.join(template_path,template_files[2])
-                assert os.path.exists(template_gm), "Could not find template_gm {}".format(template_gm)
-                params_template["template_gm"] = template_gm
-
-                template_wm = os.path.join(template_path,template_files[3])
-                assert os.path.exists(template_wm), "Could not find template_wm {}".format(template_wm)
-                params_template["template_wm"] = template_wm
-
-                template_csf = os.path.join(template_path,template_files[4])
-                assert os.path.exists(template_csf), "Could not find template_csf {}".format(template_csf)
-                params_template["template_csf"] = template_csf
-
-            else:
-                print("Unknown template_files format, should be 3 or 5 files")
-                exit(-1)
-
-            params_template_stereo = params_template
-
-        else:
-            ### use template from params
-            assert ("general" in params.keys() and \
-                "template_name" in params["general"].keys()), \
-                    "Error, the params.json should contains a general/template_name"
-
-            template_name = params["general"]["template_name"]
-
-            if "general" in params.keys() and "my_path" in params["general"].keys():
-                my_path = params["general"]["my_path"]
-            else:
-                my_path = ""
-
-            template_dir = load_test_data(template_name, path_to = my_path)
-            params_template = format_template(template_dir, template_name)
-
-            if "template_stereo_name" in params["general"].keys():
-
-                template_stereo_name = params["general"]["template_stereo_name"]
-                template_stereo_dir = load_test_data(template_stereo_name, path_to = my_path)
-                params_template_stereo = format_template(template_stereo_dir, template_stereo_name)
-
-            else:
-                params_template_stereo = params_template
-
-        print (params_template)
-
     else:
         print(f"error with {ssoft}, should be among [spm12, spm, ants])")
 
+    # params_template
+    if template_path is not None:
+
+        # format for relative path
+        template_path = op.abspath(template_path)
+
+        assert os.path.exists(template_path), \
+            "Error, template_path {} do not exists".format(template_path)
+
+        print(template_files)
+
+        params_template = {}
+
+        assert len(template_files) > 1, \
+            "Error, template_files unspecified {}".format(template_files)
+
+        template_head = os.path.join(template_path, template_files[0])
+        assert os.path.exists(template_head), \
+            "Could not find template_head {}".format(template_head)
+        params_template["template_head"] = template_head
+
+        template_brain = os.path.join(template_path, template_files[1])
+        assert os.path.exists(template_brain),\
+            "Could not find template_brain {}".format(template_brain)
+        params_template["template_brain"] = template_brain
+
+        if len(template_files) == 2:
+
+            print("Only two files (template_head and template_brain) \
+                have been specified, segmentation will be without priors")
+
+            if "brain_segment_pipe" in params.keys():
+                if "segment_atropos_pipe" in params["brain_segment_pipe"].keys():
+                    if "use_priors" in params["brain_segment_pipe"]["segment_atropos_pipe"].keys():
+                        del params["brain_segment_pipe"]["segment_atropos_pipe"]["use_priors"]
+
+        elif len(template_files) == 3:
+
+            template_seg = os.path.join(template_path,template_files[2])
+            assert os.path.exists(template_seg), "Could not find template_seg {}".format(template_seg)
+            params_template["template_seg"] = template_seg
+
+        elif len(template_files) == 5:
+
+            template_gm = os.path.join(template_path,template_files[2])
+            assert os.path.exists(template_gm), "Could not find template_gm {}".format(template_gm)
+            params_template["template_gm"] = template_gm
+
+            template_wm = os.path.join(template_path,template_files[3])
+            assert os.path.exists(template_wm), "Could not find template_wm {}".format(template_wm)
+            params_template["template_wm"] = template_wm
+
+            template_csf = os.path.join(template_path,template_files[4])
+            assert os.path.exists(template_csf), "Could not find template_csf {}".format(template_csf)
+            params_template["template_csf"] = template_csf
+
+        else:
+            print("Unknown template_files format, should be 3 or 5 files")
+            exit(-1)
+
+        params_template_stereo = params_template
+
+    else:
+        ### use template from params
+        assert ("general" in params.keys() and \
+            "template_name" in params["general"].keys()), \
+                "Error, the params.json should contains a general/template_name"
+
+        template_name = params["general"]["template_name"]
+
+        if "general" in params.keys() and "my_path" in params["general"].keys():
+            my_path = params["general"]["my_path"]
+        else:
+            my_path = ""
+
+        template_dir = load_test_data(template_name, path_to=my_path)
+        params_template = format_template(template_dir, template_name)
+
+        if "template_stereo_name" in params["general"].keys():
+
+            template_stereo_name = params["general"]["template_stereo_name"]
+            print("template_stereo_name = {}".format(template_stereo_name))
+            template_stereo_dir = load_test_data(template_stereo_name,
+                                                 path_to=my_path)
+            params_template_stereo = format_template(template_stereo_dir,
+                                                     template_stereo_name)
+
+        else:
+            params_template_stereo = params_template
+
+    print(params_template)
+
+
+
+
+
     # main_workflow
-    main_workflow = pe.Workflow(name= wf_name)
+    main_workflow = pe.Workflow(name=wf_name)
 
     main_workflow.base_dir = process_dir
 
@@ -644,6 +656,10 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
                               "outputnode.stereo_padded_T1",
                               skull_ct_pipe, 'inputnode.stereo_T1')
 
+        if indiv_params:
+            main_workflow.connect(datasource, "indiv_params",
+                                  skull_ct_pipe, 'inputnode.indiv_params')
+
         main_workflow.connect(
             segment_brain_pipe, "outputnode.native_to_stereo_trans",
             skull_ct_pipe, 'inputnode.native_to_stereo_trans')
@@ -701,7 +717,7 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
                 params=parse_key(params, "angio_quick_pipe"))
 
             main_workflow.connect(datasource, ('ANGIO', get_first_elem),
-                                angio_pipe, 'inputnode.angio')
+                                  angio_pipe, 'inputnode.angio')
 
     if 't1' in skull_dt and "skull_t1_pipe" in params.keys():
         print("Found skull_t1_pipe")
@@ -709,10 +725,10 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
         skull_t1_pipe = create_skull_t1_pipe(
             params=parse_key(params, "skull_t1_pipe"))
 
-        print("Using stereo debias T1 for skull_t1_pipe ")
+        print("Using stereo T1 for skull_t1_pipe ")
         main_workflow.connect(
-            segment_brain_pipe, "outputnode.stereo_padded_T1",
-            skull_t1_pipe, 'inputnode.stereo_T1')
+                segment_brain_pipe, "outputnode.stereo_padded_T1",
+                skull_t1_pipe, 'inputnode.stereo_T1')
 
         if indiv_params:
             main_workflow.connect(datasource, "indiv_params",
@@ -749,6 +765,23 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
                         segment_brain_pipe,
                         "outputnode.stereo_to_native_trans",
                         pad_t1_skull_mask, "trans_file")
+
+                    print("Using reg_aladin transfo to pad head_mask back")
+
+                    pad_t1_head_mask = pe.Node(RegResample(inter_val="NN"),
+                                                  name="pad_t1_head_mask")
+
+                    main_workflow.connect(skull_t1_pipe,
+                                          "outputnode.t1_head_mask",
+                                          pad_t1_head_mask, "flo_file")
+
+                    main_workflow.connect(segment_brain_pipe,
+                                          "outputnode.native_T1",
+                                          pad_t1_head_mask, "ref_file")
+
+                    main_workflow.connect(segment_brain_pipe,
+                                          "outputnode.stereo_to_native_trans",
+                                          pad_t1_head_mask, "trans_file")
 
     if deriv:
 
@@ -788,7 +821,7 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
         if "petra" in skull_dt and "skull_petra_pipe" in params.keys():
             rename_all_skull_petra_derivatives(
                 params, main_workflow, segment_brain_pipe, skull_petra_pipe,
-                datasink, pref_deriv, parse_str, space, pad)
+                datasink, pref_deriv, parse_str)
 
             if pad:
 
@@ -849,7 +882,7 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
         if "t1" in skull_dt and "skull_t1_pipe" in params.keys():
             rename_all_skull_t1_derivatives(
                 params, main_workflow, segment_brain_pipe, skull_t1_pipe,
-                datasink, pref_deriv, parse_str, space, pad)
+                datasink, pref_deriv, parse_str)
 
             if pad:
 
@@ -870,12 +903,29 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
                     rename_native_t1_skull_mask, 'out_file',
                     datasink, '@t1_native_skull_mask')
 
+                # rename t1_head_mask
+                rename_native_t1_head_mask = pe.Node(
+                    niu.Rename(), name="rename_native_t1_head_mask")
+
+                rename_native_t1_head_mask.inputs.format_string = \
+                    pref_deriv + "_space-native_desc-t1_headmask"
+                rename_native_t1_head_mask.inputs.parse_string = parse_str
+                rename_native_t1_head_mask.inputs.keep_ext = True
+
+                main_workflow.connect(
+                    pad_t1_head_mask, "out_file",
+                    rename_native_t1_head_mask, 'in_file')
+
+                main_workflow.connect(
+                    rename_native_t1_head_mask, 'out_file',
+                    datasink, '@t1_native_head_mask')
+
         if "ct" in skull_dt and "skull_ct_pipe" in params.keys():
             print("rename ct skull pipe 1")
 
             rename_all_skull_ct_derivatives(
                 params, main_workflow, segment_brain_pipe, skull_ct_pipe,
-                datasink, pref_deriv, parse_str, space, pad)
+                datasink, pref_deriv, parse_str)
 
         if "angio" in skull_dt and ("angio_pipe" in params.keys()
                                     or "angio_quick_pipe" in params.keys()):

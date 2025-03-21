@@ -100,23 +100,77 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
         skull_t1_pipe.connect(t1_head_auto_mask, "mask_img_file",
                               t1_head_mask_binary, "in_file")
 
-    # keep_gcc_t1_head
-    keep_gcc_t1_head = pe.Node(
-        interface=niu.Function(input_names=["nii_file"],
-                               output_names=["gcc_nii_file"],
-                               function=keep_gcc),
-        name="keep_gcc_t1_head")
+    if "t1_head_gcc_erode" in params and "t1_head_gcc_dilate" in params:
 
-    skull_t1_pipe.connect(t1_head_mask_binary, "out_file",
-                          keep_gcc_t1_head, "nii_file")
+        # #### gcc erode gcc and dilate back
+        # t1_head_gcc_erode
+        t1_head_gcc_erode = NodeParams(
+            interface=ErodeImage(),
+            params=parse_key(params, "t1_head_gcc_erode"),
+            name="t1_head_gcc_erode")
 
+        skull_t1_pipe.connect(
+            t1_head_mask_binary, "out_file",
+            t1_head_gcc_erode, "in_file")
+
+        skull_t1_pipe.connect(
+                inputnode, ('indiv_params', parse_key, "t1_head_gcc_erode"),
+                t1_head_gcc_erode, "indiv_params")
+
+        # t1_head_mask_binary_clean1
+        t1_head_gcc = pe.Node(
+            interface=niu.Function(
+                input_names=["nii_file"],
+                output_names=["gcc_nii_file"],
+                function=keep_gcc),
+            name="t1_head_gcc")
+
+        skull_t1_pipe.connect(
+            t1_head_gcc_erode, "out_file",
+            t1_head_gcc, "nii_file")
+
+        # t1_head_gcc_dilate
+        t1_head_gcc_dilate = NodeParams(
+            interface=DilateImage(),
+            params=parse_key(params, "t1_head_gcc_dilate"),
+            name="t1_head_gcc_dilate")
+
+        skull_t1_pipe.connect(
+            t1_head_gcc, "gcc_nii_file",
+            t1_head_gcc_dilate, "in_file")
+
+        skull_t1_pipe.connect(
+                inputnode, ('indiv_params',
+                            parse_key, "t1_head_gcc_dilate"),
+                t1_head_gcc_dilate, "indiv_params")
+    else:
+
+        # t1_head_mask_binary_clean1
+        t1_head_gcc = pe.Node(
+            interface=niu.Function(input_names=["nii_file"],
+                                   output_names=["gcc_nii_file"],
+                                   function=keep_gcc),
+            name="t1_head_gcc")
+
+        skull_t1_pipe.connect(
+            t1_head_mask_binary, "out_file",
+            t1_head_gcc, "nii_file")
+
+    # ### fill dilate fill and erode back
     # t1_head_dilate
-    t1_head_dilate = NodeParams(interface=DilateImage(),
-                                params=parse_key(params, "t1_head_dilate"),
-                                name="t1_head_dilate")
+    t1_head_dilate = NodeParams(
+        interface=DilateImage(),
+        params=parse_key(params, "t1_head_dilate"),
+        name="t1_head_dilate")
 
-    skull_t1_pipe.connect(keep_gcc_t1_head, "gcc_nii_file",
-                          t1_head_dilate, "in_file")
+    if "t1_head_gcc_erode" in params and "t1_head_gcc_dilate" in params:
+        skull_t1_pipe.connect(
+            t1_head_gcc_dilate, "out_file",
+            t1_head_dilate, "in_file")
+    else:
+        skull_t1_pipe.connect(
+            t1_head_gcc, "gcc_nii_file",
+            t1_head_dilate, "in_file")
 
     skull_t1_pipe.connect(
         inputnode, ('indiv_params', parse_key, "t1_head_dilate"),
@@ -257,30 +311,89 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
         skull_t1_pipe.connect(t1_head_erode_skin, "out_file",
                               t1_head_skin_masked, "mask_file")
 
-    # t1_skull_gcc ####### [okey]
-    t1_skull_gcc = pe.Node(
-        interface=niu.Function(
-            input_names=["nii_file"],
-            output_names=["gcc_nii_file"],
-            function=keep_gcc),
-        name="t1_skull_gcc")
+    if "t1_skull_gcc_erode" in params and \
+            "t1_skull_gcc_dilate" in params:
 
-    if "t1_head_erode_skin" in params.keys():
+        # t1_skull_erode ####### [okey][json]
+        t1_skull_gcc_erode = NodeParams(
+            interface=ErodeImage(),
+            params=parse_key(params, "t1_skull_gcc_erode"),
+            name="t1_skull_gcc_erode")
 
-        skull_t1_pipe.connect(t1_head_skin_masked, "out_file",
-                              t1_skull_gcc, "nii_file")
+        if "t1_head_erode_skin" in params.keys():
+            skull_t1_pipe.connect(
+                t1_head_skin_masked, "out_file",
+                t1_skull_gcc_erode, "in_file")
+        else:
+            skull_t1_pipe.connect(
+                t1_skull_mask_binary, "out_file",
+                t1_skull_gcc_erode, "in_file")
+
+        skull_t1_pipe.connect(
+            inputnode, ('indiv_params', parse_key, "t1_skull_gcc_erode"),
+            t1_skull_gcc_erode, "indiv_params")
+
+        # t1_skull_gcc ####### [okey]
+        t1_skull_gcc = pe.Node(
+            interface=niu.Function(
+                input_names=["nii_file"],
+                output_names=["gcc_nii_file"],
+                function=keep_gcc),
+            name="t1_skull_gcc")
+
+        skull_t1_pipe.connect(
+            t1_skull_gcc_erode, "out_file",
+            t1_skull_gcc, "nii_file")
+
+        # t1_skull_gcc_dilate ####### [okey][json]
+        t1_skull_gcc_dilate = NodeParams(
+            interface=DilateImage(),
+            params=parse_key(params, "t1_skull_gcc_dilate"),
+            name="t1_skull_gcc_dilate")
+
+        skull_t1_pipe.connect(
+            t1_skull_gcc, "gcc_nii_file",
+            t1_skull_gcc_dilate, "in_file")
+
+        skull_t1_pipe.connect(
+            inputnode, ('indiv_params', parse_key, "t1_skull_gcc_dilate"),
+            t1_skull_gcc_dilate, "indiv_params")
+
     else:
-        skull_t1_pipe.connect(t1_skull_mask_binary, "out_file",
-                              t1_skull_gcc, "nii_file")
 
-    # t1_skull_dilate
+        # t1_skull_gcc ####### [okey]
+        t1_skull_gcc = pe.Node(
+            interface=niu.Function(
+                input_names=["nii_file"],
+                output_names=["gcc_nii_file"],
+                function=keep_gcc),
+            name="t1_skull_gcc")
+
+        if "t1_head_erode_skin" in params.keys():
+            skull_t1_pipe.connect(
+                t1_head_skin_masked, "out_file",
+                t1_skull_gcc, "nii_file")
+        else:
+            skull_t1_pipe.connect(
+                t1_skull_mask_binary, "out_file",
+                t1_skull_gcc, "nii_file")
+
+    # t1_skull_dilate ####### [okey][json]
     t1_skull_dilate = NodeParams(
         interface=DilateImage(),
         params=parse_key(params, "t1_skull_dilate"),
         name="t1_skull_dilate")
 
-    skull_t1_pipe.connect(t1_skull_gcc, "gcc_nii_file",
-                          t1_skull_dilate, "in_file")
+    if "t1_skull_gcc_erode" in params and \
+            "t1_skull_gcc_dilate" in params:
+
+        skull_t1_pipe.connect(
+            t1_skull_gcc_dilate, "out_file",
+            t1_skull_dilate, "in_file")
+    else:
+        skull_t1_pipe.connect(
+            t1_skull_gcc, "gcc_nii_file",
+            t1_skull_dilate, "in_file")
 
     skull_t1_pipe.connect(
         inputnode, ('indiv_params', parse_key, "t1_skull_dilate"),
@@ -400,14 +513,39 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
         name='inputnode'
     )
 
+    if "crop_CT" in params:
+        print('crop_CT is in params')
+
+        assert "args" in params["crop_CT"].keys(), \
+            "Error, args is not specified for crop node, breaking"
+
+        # cropping
+        # Crop bounding box for T1
+        crop_CT = NodeParams(fsl.ExtractROI(),
+                             params=parse_key(params, 'crop_CT'),
+                             name='crop_CT')
+
+        skull_ct_pipe.connect(
+            inputnode, ("indiv_params", parse_key, "crop_CT"),
+            crop_CT, 'indiv_params')
+
+        skull_ct_pipe.connect(inputnode, 'ct',
+                              crop_CT, 'in_file')
+
     # align_ct_on_T1
     align_ct_on_T1 = pe.Node(interface=RegAladin(),
                              name="align_ct_on_T1")
 
     align_ct_on_T1.inputs.rig_only_flag = True
 
-    skull_ct_pipe.connect(inputnode, 'ct',
-                          align_ct_on_T1, "flo_file")
+    if "crop_CT" in params:
+        skull_ct_pipe.connect(
+            crop_CT, "roi_file",
+            align_ct_on_T1, "flo_file")
+    else:
+        skull_ct_pipe.connect(
+            inputnode, 'ct',
+            align_ct_on_T1, "flo_file")
 
     skull_ct_pipe.connect(inputnode, "native_T1",
                           align_ct_on_T1, "ref_file")
