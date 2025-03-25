@@ -25,7 +25,7 @@ Testing from Singularity image
 
 .. code:: bash
 
-    $ singularity run -B /path/to/data:/data /path/to/containers/skullto3d_v0.0.5.sif segment_skull -data /data/skullTo3d_CI_v2/cerimed_marmo_petra -out /data/skullTo3d_CI_v2/cerimed_marmo_petra/results -soft ANTS_skull -species marmo -sub Paolina -ses 01 -brain_dt T1 T2 -skull_dt T1 petra -deriv -pad
+    $ singularity run -B /path/to/data:/data /path/to/containers/skullto3d_v0.0.5.sif segment_skull -data /data/skullTo3d_CI_v2/cerimed_marmo -out /data/skullTo3d_CI_v2/cerimed_marmo/results -soft ANTS_skull -species marmo -sub Tresor -ses 01 -brain_dt T1 T2 -skull_dt T1 petra CT -deriv -pad
 
 
 Testing from docker image
@@ -35,7 +35,7 @@ For testing the docker installation, the beginning of the commands should be rep
 
 .. code:: bash
 
-    $ docker run -v /path/to/data:/data macatools/skullto3d:v0.0.5 segment_skull -data /data/skullTo3d_CI_v2/cerimed_marmo_petra -out /data/skullTo3d_CI_v2/cerimed_marmo_petra/results -soft ANTS_skull -species marmo -sub Paolina -ses 01 -brain_dt T1 T2 -skull_dt T1 petra -deriv -pad
+    $ docker run -v /path/to/data:/data macatools/skullto3d:v0.0.5 segment_skull -data /data/skullTo3d_CI_v2/cerimed_marmo -out /data/skullTo3d_CI_v2/cerimed_marmo/results -soft ANTS_skull -species marmo -sub Tresor -ses 01 -brain_dt T1 T2 -skull_dt T1 petra CT -deriv -pad
 
 Testing from python package install
 -----------------------------------
@@ -44,13 +44,13 @@ From pip install
 ~~~~~~~~~~~~~~~~
 .. code:: bash
 
-    $ segment_skull -data /path/to/data/skullTo3d_CI_v2/cerimed_marmo_petra -out /path/to/data/skullTo3d_CI_v2/cerimed_marmo_petra/results -soft ANTS_skull -species marmo -sub Paolina -ses 01 -brain_dt T1 T2 -skull_dt T1 petra -deriv -pad
+    $ segment_skull -data /path/to/data/skullTo3d_CI_v2/cerimed_marmo -out /path/to/data/skullTo3d_CI_v2/cerimed_marmo/results -soft ANTS_skull -species marmo -sub Tresor -ses 01 -brain_dt T1 T2 -skull_dt T1 petra CT -deriv -pad
 
 From github install
 ~~~~~~~~~~~~~~~~
 .. code:: bash
 
-    $ python workflows/segment_skull.py -data /path/to/data/skullTo3d_CI_v2/cerimed_marmo_petra -out /path/to/data/skullTo3d_CI_v2/cerimed_marmo_petra/results -soft ANTS -species marmo -sub Paolina -ses 01  -brain_dt T1 T2 -skull_dt T1 petra -deriv -pad
+    $ python workflows/segment_skull.py -data /path/to/data/skullTo3d_CI_v2/cerimed_marmo -out /path/to/data/skullTo3d_CI_v2/cerimed_marmo/results -soft ANTS -species marmo -sub Tresor -ses 01  -brain_dt T1 T2 -skull_dt T1 petra CT -deriv -pad
 
 **Note the /path/to/data instead of /data (as in the container install) in the arguments**
 
@@ -63,22 +63,11 @@ Two other dataset, corresponding to one macaque and one baboon, are available in
 Testing from Singularity image
 ------------------------------
 
-Macaque CT
-~~~~~~~~~~
+Macaque CT petra
+~~~~~~~~~~~~~~~~
 
 .. code:: bash
 
-    $ singularity run -B /path/to/data/:/data /path/to/containers/skullto3d_v0.0.5.sif segment_skull  -data /data/skullTo3d_CI_v2/cerimed_macaque_ct -out /data/skullTo3d_CI_v2/cerimed_macaque_ct/results -soft ANTS_skull_robustreg -species macaque -sub Marvin -ses 01 -brain_dt T1 T2 -skull_dt CT -deriv -pad
+    $ singularity run -B /path/to/data/:/data /path/to/containers/skullto3d_v0.0.5.sif segment_skull  -data /data/skullTo3d_CI_v2/cerimed_macaque -out /data/skullTo3d_CI_v2/cerimed_macaque/results -soft ANTS_skull_robustreg -species macaque -sub Stevie -ses 01 -brain_dt T1 T2 -skull_dt CT petra t1 -deriv -pad
 
 See  :ref:`Commands <command>` for more info on robustreg in soft
-
-Macaque petra
-~~~~~~~~~~~~~
-
-.. code:: bash
-
-    $ singularity run -B /path/to/data/:/data /path/to/containers/skullto3d_v0.0.5.sif segment_skull -data /data/skullTo3d_CI_v2/cerimed_macaque_petra -out /data/skullTo3d_CI_v2/cerimed_macaque_petra/results -soft ANTS_skull -species macaque -sub Gus -ses 01 -brain_dt T1 T2 -skull_dt petra -deriv -pad
-
-
-
-
