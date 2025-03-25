@@ -75,7 +75,7 @@ jobs:
             python workflows/segment_skull.py -data /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_marmo -out /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_marmo/results -soft ANTS_test_skull -species marmo -sub Tresor -ses 01 -brain_dt T1 T2 -skull_dt T1 petra CT -deriv -pad
 
 
-            python workflows/segment_skull.py -data /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_macaque -out /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_macaque/results -soft SPM_native_test_skull -species macaque -sub Stevie -ses 01 -brain_dt T1 T2 -skull_dt T1 petra CT-deriv -pad
+            python workflows/segment_skull.py -data /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_macaque -out /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_macaque/results -soft SPM_native_test_skull -species macaque -sub Stevie -ses 01 -brain_dt T1 T2 -skull_dt T1 petra CT -deriv -pad
 
             python workflows/segment_skull.py -data /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_marmo -out /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_marmo/results -soft SPM_native_test_skull -species marmo -sub Tresor -ses 01 -brain_dt T1 T2 -skull_dt T1 petra CT -deriv -pad
 
