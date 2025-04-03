@@ -21,7 +21,9 @@ from nipype.interfaces.niftyreg.reg import RegAladin
 
 from macapype.utils.utils_nodes import NodeParams
 
-from nipype.interfaces.ants import N4BiasFieldCorrection
+from nipype.interfaces.ants import (N4BiasFieldCorrection)
+
+from skullTo3d.nodes.noise import DenoiseImage
 
 from macapype.pipelines.prepare import _create_avg_reorient_pipeline
 
@@ -221,26 +223,48 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
     skull_t1_pipe.connect(t1_head_erode, "out_file",
                           t1_hmasked, "mask_file")
 
-    if "t1_debias" in params.keys():
+    #if "t1_debias" in params.keys():
+
+        ## N4 intensity normalization over T1
+        #t1_debias = NodeParams(N4BiasFieldCorrection(),
+                               #params=parse_key(params, "t1_debias"),
+                               #name='t1_debias')
+
+        #skull_t1_pipe.connect(t1_hmasked, "out_file",
+                              #t1_debias, "input_image")
+
+        #skull_t1_pipe.connect(
+            #inputnode, ('indiv_params', parse_key, "t1_debias"),
+            #t1_debias, "indiv_params")
+
+
+    if "t1_denoise" in params.keys():
 
         # N4 intensity normalization over T1
-        t1_debias = NodeParams(N4BiasFieldCorrection(),
-                               params=parse_key(params, "t1_debias"),
-                               name='t1_debias')
+        t1_denoise = NodeParams(DenoiseImage(),
+                               params=parse_key(params, "t1_denoise"),
+                               name='t1_denoise')
 
         skull_t1_pipe.connect(t1_hmasked, "out_file",
-                              t1_debias, "input_image")
+                              t1_denoise, "input_image")
 
         skull_t1_pipe.connect(
-            inputnode, ('indiv_params', parse_key, "t1_debias"),
-            t1_debias, "indiv_params")
+            inputnode, ('indiv_params', parse_key, "t1_denoise"),
+            t1_denoise, "indiv_params")
 
     t1_fast = NodeParams(interface=FAST(),
                          params=parse_key(params, "t1_fast"),
                          name="t1_fast")
 
-    if "t1_debias" in params.keys():
-        skull_t1_pipe.connect(t1_debias, "output_image",
+    #if "t1_debias" in params.keys():
+        #skull_t1_pipe.connect(t1_debias, "output_image",
+                              #t1_fast, "in_files")
+    #else:
+        #skull_t1_pipe.connect(t1_hmasked, "out_file",
+                              #t1_fast, "in_files")
+
+    if "t1_denoise" in params.keys():
+        skull_t1_pipe.connect(t1_denoise, "output_image",
                               t1_fast, "in_files")
     else:
         skull_t1_pipe.connect(t1_hmasked, "out_file",
