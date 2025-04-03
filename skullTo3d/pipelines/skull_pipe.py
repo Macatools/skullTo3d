@@ -71,15 +71,26 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
 
         t1_head_auto_mask = NodeParams(
                 interface=niu.Function(
-                    input_names=["img_file", "operation",
-                                 "index", "sample_bins", "distance", "kmeans"],
-                    output_names=["mask_img_file"],
-                    function=mask_auto_img),
+                    input_names=["orig_img_file"],
+                    output_names=["lithr_img_file"],
+                    function=apply_li_thresh),
                 params=parse_key(params, "t1_head_auto_mask"),
                 name="t1_head_auto_mask")
 
         skull_t1_pipe.connect(inputnode, "stereo_T1",
-                              t1_head_auto_mask, "img_file")
+                              t1_head_auto_mask, "orig_img_file")
+
+        #t1_head_auto_mask = NodeParams(
+                #interface=niu.Function(
+                    #input_names=["img_file", "operation",
+                                 #"index", "sample_bins", "distance", "kmeans"],
+                    #output_names=["mask_img_file"],
+                    #function=mask_auto_img),
+                #params=parse_key(params, "t1_head_auto_mask"),
+                #name="t1_head_auto_mask")
+
+        #skull_t1_pipe.connect(inputnode, "stereo_T1",
+                              #t1_head_auto_mask, "img_file")
 
         skull_t1_pipe.connect(
             inputnode, ('indiv_params', parse_key, "t1_head_auto_mask"),
@@ -97,9 +108,11 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
         skull_t1_pipe.connect(t1_head_mask_thr, "out_file",
                               t1_head_mask_binary, "in_file")
     else:
-
-        skull_t1_pipe.connect(t1_head_auto_mask, "mask_img_file",
+        skull_t1_pipe.connect(t1_head_auto_mask, "lithr_img_file",
                               t1_head_mask_binary, "in_file")
+
+        #skull_t1_pipe.connect(t1_head_auto_mask, "mask_img_file",
+                              #t1_head_mask_binary, "in_file")
 
     if "t1_head_gcc_erode" in params and "t1_head_gcc_dilate" in params:
 
@@ -237,37 +250,6 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
         inputnode, ('indiv_params', parse_key, "t1_fast"),
         t1_fast, "indiv_params")
 
-    if "t1_skull_auto_mask" in params.keys():
-
-        print("*** t1_skull_auto_mask ***")
-
-        t1_skull_auto_mask = NodeParams(
-                interface=niu.Function(
-                    input_names=["img_file", "operation",
-                                 "index", "sample_bins", "distance", "kmeans"],
-                    output_names=["mask_img_file"],
-                    function=mask_auto_img),
-                params=parse_key(params, "t1_skull_auto_mask"),
-                name="t1_skull_auto_mask")
-
-        skull_t1_pipe.connect(t1_fast, "restored_image",
-                              t1_skull_auto_mask, "img_file")
-
-    elif "t1_skull_mask_thr" in params.keys():
-
-        # t1_skull_mask_thr
-        t1_skull_mask_thr = NodeParams(
-            interface=Threshold(),
-            params=parse_key(params, 't1_skull_mask_thr'),
-            name="t1_skull_mask_thr")
-
-        skull_t1_pipe.connect(t1_fast, "restored_image",
-                              t1_skull_mask_thr, "in_file")
-
-        skull_t1_pipe.connect(
-            inputnode, ('indiv_params', parse_key, "t1_skull_mask_thr"),
-            t1_skull_mask_thr, "indiv_params")
-
     # t1_skull_mask_binary
     t1_skull_mask_binary = pe.Node(interface=UnaryMaths(),
                                    name="t1_skull_mask_binary")
@@ -275,16 +257,9 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
     t1_skull_mask_binary.inputs.operation = 'bin'
     t1_skull_mask_binary.inputs.output_type = 'NIFTI_GZ'
 
-    if "t1_skull_auto_mask" in params.keys():
-        skull_t1_pipe.connect(t1_skull_auto_mask, "mask_img_file",
-                              t1_skull_mask_binary, "in_file")
-    elif "t1_skull_mask_thr" in params.keys():
-        skull_t1_pipe.connect(t1_skull_mask_thr, "out_file",
-                              t1_skull_mask_binary, "in_file")
-    else:
-        skull_t1_pipe.connect(t1_fast,
-                              ("partial_volume_files", get_elem, 0),
-                              t1_skull_mask_binary, "in_file")
+    skull_t1_pipe.connect(t1_fast,
+                          ("partial_volume_files", get_elem, 0),
+                          t1_skull_mask_binary, "in_file")
 
     # t1_head_erode_skin
     if "t1_head_erode_skin" in params.keys():
@@ -1540,41 +1515,6 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
         skull_petra_pipe.connect(petra_hmasked, "out_file",
                                  petra_fast, "in_files")
 
-    if "petra_skull_auto_mask" in params.keys():
-
-        print("*** petra_skull_auto_mask ***")
-
-        petra_skull_auto_mask = NodeParams(
-                interface=niu.Function(
-                    input_names=["img_file", "operation",
-                                 "index", "sample_bins", "distance", "kmeans"],
-                    output_names=["mask_img_file"],
-                    function=mask_auto_img),
-                params=parse_key(params, "petra_skull_auto_mask"),
-                name="petra_skull_auto_mask")
-
-        skull_petra_pipe.connect(petra_fast, "restored_image",
-                                 petra_skull_auto_mask, "img_file")
-
-        skull_petra_pipe.connect(
-            inputnode, ('indiv_params', parse_key, "petra_skull_auto_mask"),
-            petra_skull_auto_mask, "indiv_params")
-
-    elif "petra_skull_mask_thr" in params.keys():
-
-        # petra_skull_mask_thr
-        petra_skull_mask_thr = NodeParams(
-            interface=Threshold(),
-            params=parse_key(params, 'petra_skull_mask_thr'),
-            name="petra_skull_mask_thr")
-
-        skull_petra_pipe.connect(petra_fast, "restored_image",
-                                 petra_skull_mask_thr, "in_file")
-
-        skull_petra_pipe.connect(
-            inputnode, ('indiv_params', parse_key, "petra_skull_mask_thr"),
-            petra_skull_mask_thr, "indiv_params")
-
     # petra_skull_mask_binary
     petra_skull_mask_binary = pe.Node(interface=UnaryMaths(),
                                       name="petra_skull_mask_binary")
@@ -1582,16 +1522,9 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
     petra_skull_mask_binary.inputs.operation = 'bin'
     petra_skull_mask_binary.inputs.output_type = 'NIFTI_GZ'
 
-    if "petra_skull_auto_mask" in params.keys():
-        skull_petra_pipe.connect(petra_skull_auto_mask, "mask_img_file",
-                                 petra_skull_mask_binary, "in_file")
-    if "petra_skull_mask_thr" in params.keys():
-        skull_petra_pipe.connect(petra_skull_mask_thr, "out_file",
-                                 petra_skull_mask_binary, "in_file")
-    else:
-        skull_petra_pipe.connect(petra_fast,
-                                 ("partial_volume_files", get_elem, 0),
-                                 petra_skull_mask_binary, "in_file")
+    skull_petra_pipe.connect(petra_fast,
+                             ("partial_volume_files", get_elem, 0),
+                             petra_skull_mask_binary, "in_file")
 
     # petra_skull_auto_thresh
     if "petra_head_erode_skin" in params.keys():
