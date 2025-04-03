@@ -676,7 +676,7 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
                                                 name="pad_ct_skull_mask")
 
                     main_workflow.connect(
-                        skull_ct_pipe, "outputnode.ct_skull_mask",
+                        skull_ct_pipe, "outputnode.stereo_ct_skull_mask",
                         pad_ct_skull_mask, "flo_file")
 
                     main_workflow.connect(
@@ -722,11 +722,11 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
                 params=parse_key(params, "angio_quick_pipe"))
 
             main_workflow.connect(datasource, ('ANGIO', get_first_elem),
-                                angio_pipe, 'inputnode.angio')
+                                  angio_pipe, 'inputnode.angio')
 
             main_workflow.connect(segment_brain_pipe,
-                                "outputnode.native_T1",
-                                angio_pipe, 'inputnode.native_T1')
+                                  "outputnode.native_T1",
+                                  angio_pipe, 'inputnode.native_T1')
 
             main_workflow.connect(segment_brain_pipe,
                                 "outputnode.stereo_padded_T1",
