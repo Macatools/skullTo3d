@@ -4,9 +4,6 @@ from nipype.interfaces.base import (
     TraitedSpec,
     File,
     traits,
-    Tuple,
-    InputMultiPath,
-    OutputMultiPath,
     isdefined,
 )
 
