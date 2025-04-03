@@ -664,6 +664,30 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
             segment_brain_pipe, "outputnode.native_to_stereo_trans",
             skull_ct_pipe, 'inputnode.native_to_stereo_trans')
 
+        if pad and space == "native":
+
+            if "short_preparation_pipe" in params.keys():
+                if "crop_T1" in params["short_preparation_pipe"].keys():
+                    pass
+                else:
+                    print("Using reg_aladin transfo to pad skull_mask back")
+
+                    pad_ct_skull_mask = pe.Node(RegResample(inter_val="NN"),
+                                                name="pad_ct_skull_mask")
+
+                    main_workflow.connect(
+                        skull_ct_pipe, "outputnode.ct_skull_mask",
+                        pad_ct_skull_mask, "flo_file")
+
+                    main_workflow.connect(
+                        segment_brain_pipe, "outputnode.native_T1",
+                        pad_ct_skull_mask, "ref_file")
+
+                    main_workflow.connect(
+                        segment_brain_pipe,
+                        "outputnode.stereo_to_native_trans",
+                        pad_ct_skull_mask, "trans_file")
+
     if "angio" in skull_dt and "angio_pipe" in params.keys():
         print("Found angio_pipe")
 
@@ -736,14 +760,6 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
 
         if pad and space == "native":
 
-            # output node
-            outputnode = pe.Node(
-                niu.IdentityInterface(
-                    fields=["native_petra_skull_mask",
-                            "native_robustpetra_skull_mask",
-                            "native_petra_head_mask"]),
-                name='outputnode')
-
             if "short_preparation_pipe" in params.keys():
                 if "crop_T1" in params["short_preparation_pipe"].keys():
                     pass
@@ -768,8 +784,9 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
 
                     print("Using reg_aladin transfo to pad head_mask back")
 
-                    pad_t1_head_mask = pe.Node(RegResample(inter_val="NN"),
-                                                  name="pad_t1_head_mask")
+                    pad_t1_head_mask = pe.Node(
+                        RegResample(inter_val="NN"),
+                        name="pad_t1_head_mask")
 
                     main_workflow.connect(skull_t1_pipe,
                                           "outputnode.t1_head_mask",
@@ -926,6 +943,25 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
             rename_all_skull_ct_derivatives(
                 params, main_workflow, segment_brain_pipe, skull_ct_pipe,
                 datasink, pref_deriv, parse_str)
+
+            if pad:
+
+                # rename ct_skull_mask
+                rename_native_ct_skull_mask = pe.Node(
+                    niu.Rename(), name="rename_native_ct_skull_mask")
+
+                rename_native_ct_skull_mask.inputs.format_string = \
+                    pref_deriv + "_space-native_desc-ct_skullmask"
+                rename_native_ct_skull_mask.inputs.parse_string = parse_str
+                rename_native_ct_skull_mask.inputs.keep_ext = True
+
+                main_workflow.connect(
+                    pad_ct_skull_mask, "out_file",
+                    rename_native_ct_skull_mask, 'in_file')
+
+                main_workflow.connect(
+                    rename_native_ct_skull_mask, 'out_file',
+                    datasink, '@ct_native_skull_mask')
 
         if "angio" in skull_dt and ("angio_pipe" in params.keys()
                                     or "angio_quick_pipe" in params.keys()):
