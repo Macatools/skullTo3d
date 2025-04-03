@@ -31,8 +31,9 @@ from macapype.nodes.surface import (keep_gcc, IsoSurface)
 
 from macapype.nodes.correct_bias import itk_debias
 
-from skullTo3d.nodes.skull import (
-    mask_auto_img)
+from skullTo3d.nodes.skull import mask_auto_img
+
+from macapype.nodes.prepare import apply_li_thresh
 
 from macapype.utils.misc import parse_key, get_elem
 
@@ -1331,12 +1332,20 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
 
         petra_head_auto_mask = NodeParams(
                 interface=niu.Function(
-                    input_names=["img_file", "operation",
-                                 "index", "sample_bins", "distance", "kmeans"],
-                    output_names=["mask_img_file"],
-                    function=mask_auto_img),
+                    input_names=["orig_img_file"],
+                    output_names=["lithr_img_file"],
+                    function=apply_li_thresh),
                 params=parse_key(params, "petra_head_auto_mask"),
                 name="petra_head_auto_mask")
+
+        #petra_head_auto_mask = NodeParams(
+                #interface=niu.Function(
+                    #input_names=["img_file", "operation",
+                                 #"index", "sample_bins", "distance", "kmeans"],
+                    #output_names=["mask_img_file"],
+                    #function=mask_auto_img),
+                #params=parse_key(params, "petra_head_auto_mask"),
+                #name="petra_head_auto_mask")
 
         if "petra_itk_debias" in params.keys():
 
