@@ -248,6 +248,9 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
         skull_t1_pipe.connect(t1_hmasked, "out_file",
                               t1_denoise, "input_image")
 
+        skull_t1_pipe.connect(t1_head_erode, "out_file",
+                              t1_denoise, "mask_image")
+
         skull_t1_pipe.connect(
             inputnode, ('indiv_params', parse_key, "t1_denoise"),
             t1_denoise, "indiv_params")
