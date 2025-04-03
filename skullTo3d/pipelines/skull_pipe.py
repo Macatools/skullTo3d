@@ -1338,6 +1338,15 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
                 params=parse_key(params, "petra_head_auto_mask"),
                 name="petra_head_auto_mask")
 
+        if "petra_itk_debias" in params.keys():
+
+            skull_petra_pipe.connect(petra_itk_debias, "cor_img_file",
+                                     petra_head_auto_mask, "orig_img_file")
+        else:
+
+            skull_petra_pipe.connect(align_petra_on_stereo, "out_file",
+                                     petra_head_auto_mask, "orig_img_file")
+
         #petra_head_auto_mask = NodeParams(
                 #interface=niu.Function(
                     #input_names=["img_file", "operation",
@@ -1347,14 +1356,14 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
                 #params=parse_key(params, "petra_head_auto_mask"),
                 #name="petra_head_auto_mask")
 
-        if "petra_itk_debias" in params.keys():
+        #if "petra_itk_debias" in params.keys():
 
-            skull_petra_pipe.connect(petra_itk_debias, "cor_img_file",
-                                     petra_head_auto_mask, "img_file")
-        else:
+            #skull_petra_pipe.connect(petra_itk_debias, "cor_img_file",
+                                     #petra_head_auto_mask, "img_file")
+        #else:
 
-            skull_petra_pipe.connect(align_petra_on_stereo, "out_file",
-                                     petra_head_auto_mask, "img_file")
+            #skull_petra_pipe.connect(align_petra_on_stereo, "out_file",
+                                     #petra_head_auto_mask, "img_file")
 
         skull_petra_pipe.connect(
             inputnode, ('indiv_params', parse_key, "petra_head_auto_mask"),
@@ -1373,7 +1382,10 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
                                  petra_head_mask_binary, "in_file")
     else:
 
-        skull_petra_pipe.connect(petra_head_auto_mask, "mask_img_file",
+        #skull_petra_pipe.connect(petra_head_auto_mask, "mask_img_file",
+                                 #petra_head_mask_binary, "in_file")
+
+        skull_petra_pipe.connect(petra_head_auto_mask, "lithr_img_file",
                                  petra_head_mask_binary, "in_file")
 
     if "petra_head_gcc_erode" in params and "petra_head_gcc_dilate" in params:
