@@ -17,6 +17,10 @@
         {
             "operation" : "PadImage",
             "op2" : "70"
+        },
+        "denoise":
+        {
+            "shrink_factor": 2
         }
     },
     "N4debias":
