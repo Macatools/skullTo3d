@@ -74,6 +74,8 @@ from macapype.utils.utils_tests import load_test_data, format_template
 
 from macapype.utils.utils_params import update_params
 
+from skullTo3d.utils.utils_params import update_indiv_params
+
 from macapype.utils.misc import show_files, get_first_elem, parse_key
 
 from macapype.pipelines.rename import rename_all_brain_derivatives
@@ -242,6 +244,12 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
         params, indiv_params, extra_wf_name = update_params(
             ssoft=ssoft, subjects=subjects, sessions=sessions,
             params_file=params_file, indiv_params_file=indiv_params_file)
+
+        params, indiv_params, extra_wf_name = update_indiv_params(
+            params, indiv_params,
+            subjects=subjects,
+            sessions=sessions,
+            extra_wf_name=extra_wf_name)
 
     else:
 
