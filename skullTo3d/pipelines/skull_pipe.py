@@ -110,7 +110,7 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
         skull_t1_pipe.connect(t1_head_mask_thr, "out_file",
                               t1_head_mask_binary, "in_file")
 
-    elif "t1_head_auto_mask":
+    elif "t1_head_auto_mask" in params.keys():
         skull_t1_pipe.connect(t1_head_auto_mask, "mask_img_file",
                               t1_head_mask_binary, "in_file")
 
@@ -620,7 +620,7 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
         skull_ct_pipe.connect(ct_skull_mask_thr, "out_file",
                               ct_skull_mask_binary, "in_file")
 
-    elif "ct_skull_auto_mask":
+    elif "ct_skull_auto_mask" in params.keys():
         skull_ct_pipe.connect(ct_skull_auto_mask, "mask_img_file",
                               ct_skull_mask_binary, "in_file")
 
@@ -1368,12 +1368,10 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
     petra_head_mask_binary.inputs.output_type = 'NIFTI_GZ'
 
     if "petra_head_mask_thr" in params.keys():
-
         skull_petra_pipe.connect(petra_head_mask_thr, "out_file",
                                  petra_head_mask_binary, "in_file")
 
     elif "petra_head_auto_mask" in params.keys():
-
         skull_petra_pipe.connect(petra_head_auto_mask, "mask_img_file",
                                  petra_head_mask_binary, "in_file")
 
