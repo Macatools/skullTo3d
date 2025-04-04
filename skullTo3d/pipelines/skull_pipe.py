@@ -573,7 +573,7 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
             params=parse_key(params, 'ct_skull_mask_thr'),
             name="ct_skull_mask_thr")
 
-        skull_ct_pipe.connect(align_ct_on_stereo_T1, "res_file",
+        skull_ct_pipe.connect(align_ct_on_stereo_T1, "out_file",
                               ct_skull_mask_thr, "in_file")
 
         skull_ct_pipe.connect(
@@ -591,7 +591,7 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
                 params=parse_key(params, "ct_skull_auto_mask"),
                 name="ct_skull_auto_mask")
 
-        skull_ct_pipe.connect(align_ct_on_stereo_T1, "res_file",
+        skull_ct_pipe.connect(align_ct_on_stereo_T1, "out_file",
                               ct_skull_auto_mask, "img_file")
 
         skull_ct_pipe.connect(
@@ -606,7 +606,7 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
                     function=apply_li_thresh),
                 name="ct_skull_li_mask")
 
-        skull_ct_pipe.connect(align_ct_on_stereo_T1, "res_file",
+        skull_ct_pipe.connect(align_ct_on_stereo_T1, "out_file",
                               ct_skull_li_mask, "orig_img_file")
 
     # ct_skull_mask_binary
