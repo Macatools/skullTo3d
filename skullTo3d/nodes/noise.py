@@ -98,13 +98,15 @@ class DenoiseImage(ANTSCommand):
     >>> denoise_2.inputs.noise_model = 'Rician'
     >>> denoise_2.inputs.shrink_factor = 2
     >>> denoise_2.cmdline
-    'DenoiseImage -d 3 -i im1.nii -n Rician -o output_corrected_image.nii.gz -s 2'
+    'DenoiseImage -d 3 -i im1.nii -n Rician -o
+    output_corrected_image.nii.gz -s 2'
 
     >>> denoise_3 = DenoiseImage()
     >>> denoise_3.inputs.input_image = 'im1.nii'
     >>> denoise_3.inputs.save_noise = True
     >>> denoise_3.cmdline
-    'DenoiseImage -i im1.nii -n Gaussian -o [ im1_noise_corrected.nii, im1_noise.nii ] -s 1'
+    'DenoiseImage -i im1.nii -n Gaussian -o [ im1_
+    noise_corrected.nii, im1_noise.nii ] -s 1'
 
     """
 
