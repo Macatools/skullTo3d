@@ -565,61 +565,68 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
 
     skull_ct_pipe.connect(inputnode, "stereo_T1",
                           align_ct_on_stereo_T1, "ref_file")
-
-    # ct_skull_auto_thresh
-    if "ct_skull_mask_thr" in params.keys():
-
-        print("*** ct_skull_mask_thr ***")
-
-        # ct_skull_mask_thr ####### [okey][json]
-        ct_skull_mask_thr = NodeParams(
+    # headmask_threshold
+    if "ct_head_mask_thr" in params.keys():
+        # ct_head_mask_thr
+        ct_head_mask_thr = NodeParams(
             interface=Threshold(),
-            params=parse_key(params, "ct_skull_mask_thr"),
-            name="ct_skull_mask_thr")
+            params=parse_key(params, 'ct_head_mask_thr'),
+            name="ct_head_mask_thr")
 
-        ct_skull_mask_thr.inputs.direction = 'above'
+        skull_ct_pipe.connect(inputnode, "stereo_T1",
+                              ct_head_mask_thr, "in_file")
 
         skull_ct_pipe.connect(
-            inputnode, ("indiv_params", parse_key, "ct_skull_mask_thr"),
-            ct_skull_mask_thr, "indiv_params")
+            inputnode, ('indiv_params', parse_key, "ct_head_mask_thr"),
+            ct_head_mask_thr, "indiv_params")
 
-        skull_ct_pipe.connect(align_ct_on_stereo_T1, 'out_file',
-                              ct_skull_mask_thr, "in_file")
-    else:
+    elif "ct_head_auto_mask" in params:
 
-        print("*** ct_skull_auto_mask ***")
-
-        ct_skull_auto_mask = NodeParams(
+        ct_head_auto_mask = NodeParams(
                 interface=niu.Function(
                     input_names=["img_file", "operation",
                                  "index", "sample_bins", "distance", "kmeans"],
                     output_names=["mask_img_file"],
                     function=mask_auto_img),
-                params=parse_key(params, "ct_skull_auto_mask"),
-                name="ct_skull_auto_mask")
+                params=parse_key(params, "ct_head_auto_mask"),
+                name="ct_head_auto_mask")
 
-        skull_ct_pipe.connect(align_ct_on_stereo_T1, 'out_file',
-                              ct_skull_auto_mask, "img_file")
+        skull_ct_pipe.connect(inputnode, "stereo_T1",
+                              ct_head_auto_mask, "img_file")
 
         skull_ct_pipe.connect(
-            inputnode, ("indiv_params", parse_key, "ct_skull_auto_mask"),
-            ct_skull_auto_mask, "indiv_params")
-
-    # ct_skull_mask_binary
-    ct_skull_mask_binary = pe.Node(interface=UnaryMaths(),
-                                   name="ct_skull_mask_binary")
-
-    ct_skull_mask_binary.inputs.operation = 'bin'
-    ct_skull_mask_binary.inputs.output_type = 'NIFTI_GZ'
-
-    if "ct_skull_mask_thr" in params.keys():
-
-        skull_ct_pipe.connect(ct_skull_mask_thr, "out_file",
-                              ct_skull_mask_binary, "in_file")
+            inputnode, ('indiv_params', parse_key, "ct_head_auto_mask"),
+            ct_head_auto_mask, "indiv_params")
     else:
 
-        skull_ct_pipe.connect(ct_skull_auto_mask, "mask_img_file",
-                              ct_skull_mask_binary, "in_file")
+        ct_head_li_mask = pe.Node(
+                interface=niu.Function(
+                    input_names=["orig_img_file"],
+                    output_names=["lithr_img_file"],
+                    function=apply_li_thresh),
+                name="ct_head_li_mask")
+
+        skull_ct_pipe.connect(inputnode, "stereo_T1",
+                              ct_head_li_mask, "orig_img_file")
+
+    # ct_head_mask_binary
+    ct_head_mask_binary = pe.Node(interface=UnaryMaths(),
+                                  name="ct_head_mask_binary")
+
+    ct_head_mask_binary.inputs.operation = 'bin'
+    ct_head_mask_binary.inputs.output_type = 'NIFTI_GZ'
+
+    if "ct_head_mask_thr" in params.keys():
+        skull_ct_pipe.connect(ct_head_mask_thr, "out_file",
+                              ct_head_mask_binary, "in_file")
+
+    elif "ct_head_auto_mask":
+        skull_ct_pipe.connect(ct_head_auto_mask, "mask_img_file",
+                              ct_head_mask_binary, "in_file")
+
+    else:
+        skull_ct_pipe.connect(ct_head_li_mask, "lithr_img_file",
+                              ct_head_mask_binary, "in_file")
 
     # ct_skull_gcc ####### [okey]
     ct_skull_gcc = pe.Node(
