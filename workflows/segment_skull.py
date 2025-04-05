@@ -301,30 +301,6 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
     # soft
     wf_name += "_{}".format(soft)
 
-    if 't1' in skull_dt:
-        wf_name += "_t1"
-
-    if 'petra' in skull_dt:
-        wf_name += "_petra"
-
-    if 'angio' in skull_dt:
-        wf_name += "_angio"
-
-    if 'ct' in skull_dt:
-        wf_name += "_CT"
-
-    if len(brain_dt) != 0:
-        wf_name += "_segbrain"
-
-    if 't1' in brain_dt:
-        wf_name += "_t1"
-
-    if 't2' in brain_dt:
-        wf_name += "_t2"
-
-    if mask_file is not None:
-        wf_name += "_mask"
-
     if "spm" in ssoft or "spm12" in ssoft or "ants" in ssoft:
         print("Segmenting brain, default is t1 based")
 
