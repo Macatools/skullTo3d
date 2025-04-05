@@ -65,6 +65,7 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
+
   run-pretest-ants-macaque:
     name: Running all existing pipelines in skullTo3d_CI_v2.zip (ANTS macaque)
     needs:  docker-build
@@ -100,7 +101,7 @@ jobs:
 
             ls /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_macaque/results/derivatives
 
-            ls /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_macaque/results/derivatives/macapype_crop_aladin_ants_skull_t1_petra_CT_segbrain_t1_t2/sub-Stevie/ses-01/anat
+            ls /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_macaque/results/derivatives/macapype_ants_skull/sub-Stevie/ses-01/anat
 
       - name: Cleaning dataset
         run: |
@@ -144,7 +145,7 @@ jobs:
 
             ls /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_marmo/results/derivatives
 
-            ls /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_marmo/results/derivatives/macapype_crop_aladin_ants_skull_t1_petra_CT_segbrain_t1_t2/sub-Tresor/ses-01/anat
+            ls /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_marmo/results/derivatives/macapype_ants_skull/sub-Tresor/ses-01/anat
 
       - name: Cleaning dataset
         run: |
