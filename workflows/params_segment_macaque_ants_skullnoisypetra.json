@@ -87,6 +87,18 @@
 
     "skull_t1_pipe":
     {
+        "t1_head_gcc_erode":
+        {
+            "kernel_shape": "boxv",
+            "kernel_size": 5.0
+        },
+        "t1_head_gcc_dilate":
+        {
+            "operation": "modal",
+            "kernel_shape": "boxv",
+            "kernel_size": 5.0
+        },
+
         "t1_head_dilate":
         {
             "operation": "modal",
