@@ -5,6 +5,7 @@ def update_indiv_params(params=None, indiv_params=None,
 
     if not indiv_params:
         # empty indiv
+        print("indiv_params is empty, no update params")
         return params, indiv_params, extra_wf_name
 
     if "skull_ct_pipe" not in params.keys():
