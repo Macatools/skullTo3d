@@ -79,6 +79,8 @@ can be one of these : SPM or ANTS
     * with _seq (at the end) to run in sequential mode (all iterables will be processed one after the other; equivalent to -nprocs 1) *like in macapype*
 
 
+**Note** : _skullnoisypetra instead of _skull available for macaque with issues on petra
+
 --------------------------------------
 The following parameters are exclusive
 --------------------------------------
@@ -90,6 +92,7 @@ a json file specifiying the global parameters of the analysis. See :ref:`Paramet
 * -species  *(mandatory if -params is omitted)*
 followed the NHP species corresponding to the image, e.g. {macaque | marmo | baboon | chimp}
 
+In extra, marmoT2 can be used for segmenting from the T2w image (by default, T1w is used)
 --------------------------------------
 The following parameters are optional
 --------------------------------------

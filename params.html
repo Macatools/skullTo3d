@@ -112,12 +112,12 @@
 <li class="toctree-l2"><a class="reference internal" href="command.html#expected-input-data">Expected input data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="command.html#command-line-parameters">Command line parameters</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="command.html#the-following-parameters-are-mandatory">The following parameters are mandatory</a></li>
-<li class="toctree-l3"><a class="reference internal" href="command.html#the-following-parameters-are-exclusive">The following parameters are exclusive</a></li>
-<li class="toctree-l3"><a class="reference internal" href="command.html#the-following-parameters-are-optional">The following parameters are optional</a></li>
-<li class="toctree-l3"><a class="reference internal" href="command.html#id1">The following parameters are optional</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="command.html#command-line-examples">Command line examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="command.html#the-following-parameters-are-exclusive">The following parameters are exclusive</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="command.html#in-extra-marmot2-can-be-used-for-segmenting-from-the-t2w-image-by-default-t1w-is-used">In extra, marmoT2 can be used for segmenting from the T2w image (by default, T1w is used)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="command.html#the-following-parameters-are-optional">The following parameters are optional</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="command.html#id1">The following parameters are optional</a></li>
 </ul>
 </li>
 </ul>
@@ -226,12 +226,20 @@
             &quot;reg_T1_on_template&quot;:
             {
                 &quot;rig_only_flag&quot; : true
+            },
+            &quot;reg_T1_on_template2&quot;:
+            {
+                &quot;rig_only_flag&quot;:true
             }
         },
         &quot;pad_template&quot;:
         {
             &quot;operation&quot; : &quot;PadImage&quot;,
             &quot;op2&quot; : &quot;70&quot;
+        },
+        &quot;denoise&quot;:
+        {
+            &quot;shrink_factor&quot;: 2
         }
     },
     &quot;N4debias&quot;:
@@ -293,14 +301,6 @@
 
     &quot;skull_t1_pipe&quot;:
     {
-        &quot;t1_head_auto_mask&quot;:
-        {
-            &quot;kmeans&quot;: true,
-            &quot;sample_bins&quot;: 30,
-            &quot;distance&quot;: 1,
-            &quot;operation&quot;: &quot;lower&quot;,
-            &quot;index&quot;:1
-        },
         &quot;t1_head_dilate&quot;:
         {
             &quot;operation&quot;: &quot;modal&quot;,
@@ -351,18 +351,8 @@
             &quot;brainsize&quot;: 45
         }
     },
-
     &quot;skull_petra_pipe&quot;:
     {
-        &quot;petra_head_auto_mask&quot;:
-        {
-            &quot;kmeans&quot;: true,
-            &quot;sample_bins&quot;: 3,
-            &quot;distance&quot;: 1,
-            &quot;operation&quot;: &quot;lower&quot;,
-            &quot;index&quot;: 1
-        },
-
         &quot;petra_head_dilate&quot;:
         {
             &quot;operation&quot;: &quot;modal&quot;,
@@ -780,7 +770,7 @@
       
     </p>
     <p>
-        &copy; Copyright 2025, SkullTo3d Developers (macatools). Last updated on 2025-04-04.<br/>
+        &copy; Copyright 2025, SkullTo3d Developers (macatools). Last updated on 2025-04-06.<br/>
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 8.1.3.<br/>
     </p>
   </div>
