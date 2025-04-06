@@ -1,22 +1,26 @@
 {
-   "general":
+    "general":
     {
-        "template_name": "MBM_v3.0.1_6seg"
+         "template_name": "MBM_v3.0.1",
+         "template_stereo_name": "bma-1_0p2mm"
     },
-    "short_preparation_pipe":
+     "short_preparation_pipe":
     {
+        "use_T2":{},
         "aladin_T2_on_T1": {},
+
         "crop_aladin_pipe":
         {
+            "remove_capsule_pipe":{},
             "reg_T1_on_template":
             {
-                "rig_only_flag":true
+                "rig_only_flag": true
             },
             "reg_T1_on_template2":
             {
                 "rig_only_flag":true
             }
-        },
+    	},
         "pad_template":
         {
             "operation" : "PadImage",
