@@ -1724,10 +1724,13 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
     # creating outputnode #######
     outputnode = pe.Node(
         niu.IdentityInterface(
-            fields=["petra_skull_mask", "petra_skull_stl",
+            fields=["petra_skull_mask", "petra_skull_stl", "stereo_petra",
                     "robustpetra_skull_mask", "robustpetra_skull_stl",
                     "petra_head_mask", "petra_head_stl"]),
         name='outputnode')
+
+    skull_petra_pipe.connect(align_petra_on_stereo, "out_file",
+                             outputnode, "stereo_petra")
 
     skull_petra_pipe.connect(petra_head_erode, "out_file",
                              outputnode, "petra_head_mask")
