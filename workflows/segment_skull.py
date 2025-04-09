@@ -485,6 +485,7 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
             output_query, data_dir, subjects,  sessions, acquisitions,
             reconstructions)
 
+    # brain
     if "spm" in ssoft or "spm12" in ssoft or "ants" in ssoft:
         if "t1" in brain_dt:
             main_workflow.connect(datasource, 'T1',
@@ -497,8 +498,9 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
         elif "t1" in brain_dt and "spm" in ssoft:
             # cheating using T2 as T1
             main_workflow.connect(datasource, 'T1',
-                                segment_brain_pipe, 'inputnode.list_T2')
+                                  segment_brain_pipe, 'inputnode.list_T2')
 
+    # petra_skull
     if "petra" in skull_dt and "skull_petra_pipe" in params.keys():
         print("Found skull_petra_pipe")
 
@@ -520,9 +522,14 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
                     "outputnode.native_T1",
                     skull_petra_pipe, 'inputnode.native_img')
 
-            main_workflow.connect(segment_brain_pipe,
-                                  "outputnode.stereo_padded_T1",
-                                  skull_petra_pipe, 'inputnode.stereo_T1')
+            if "pad_template" in params["short_preparation_pipe"].keys():
+                main_workflow.connect(
+                    segment_brain_pipe, "outputnode.stereo_T1",
+                    skull_petra_pipe, 'inputnode.stereo_T1')
+            else:
+                main_workflow.connect(
+                    segment_brain_pipe, "outputnode.stereo_padded_T1",
+                    skull_petra_pipe, 'inputnode.stereo_T1')
 
             main_workflow.connect(segment_brain_pipe,
                                   "outputnode.native_to_stereo_trans",
@@ -606,6 +613,7 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
                         "outputnode.stereo_to_native_trans",
                         pad_robustpetra_skull_mask, "trans_file")
 
+    # ct_skull
     if "ct" in skull_dt and "skull_ct_pipe" in params.keys():
         print("Found skull_ct_pipe")
 
@@ -623,9 +631,14 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
                               "outputnode.native_T2",
                               skull_ct_pipe, 'inputnode.native_T2')
 
-        main_workflow.connect(segment_brain_pipe,
-                              "outputnode.stereo_padded_T1",
-                              skull_ct_pipe, 'inputnode.stereo_T1')
+        if "pad_template" in params["short_preparation_pipe"].keys():
+            main_workflow.connect(
+                segment_brain_pipe, "outputnode.stereo_T1",
+                skull_ct_pipe, 'inputnode.stereo_T1')
+        else:
+            main_workflow.connect(
+                segment_brain_pipe, "outputnode.stereo_padded_T1",
+                skull_ct_pipe, 'inputnode.stereo_T1')
 
         if indiv_params:
             main_workflow.connect(datasource, "indiv_params",
@@ -661,6 +674,7 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
                     "outputnode.stereo_to_native_trans",
                     pad_ct_skull_mask, "trans_file")
 
+    # angio
     if "angio" in skull_dt and "angio_pipe" in params.keys():
         print("Found angio_pipe")
 
@@ -674,9 +688,14 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
                               "outputnode.native_T1",
                               angio_pipe, 'inputnode.native_T1')
 
-        main_workflow.connect(segment_brain_pipe,
-                              "outputnode.stereo_padded_T1",
-                              angio_pipe, 'inputnode.stereo_T1')
+        if "pad_template" in params["short_preparation_pipe"].keys():
+            main_workflow.connect(
+                segment_brain_pipe, "outputnode.stereo_T1",
+                angio_pipe, 'inputnode.stereo_T1')
+        else:
+            main_workflow.connect(
+                segment_brain_pipe, "outputnode.stereo_padded_T1",
+                angio_pipe, 'inputnode.stereo_T1')
 
         main_workflow.connect(segment_brain_pipe,
                               "outputnode.stereo_padded_brain_mask",
@@ -686,6 +705,7 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
             segment_brain_pipe, "outputnode.native_to_stereo_trans",
             angio_pipe, 'inputnode.native_to_stereo_trans')
 
+    # angio_quick
     if "angio" in skull_dt and "angio_quick_pipe" in params.keys():
         print("Found angio_pipe")
 
@@ -701,9 +721,14 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
                                   "outputnode.native_T1",
                                   angio_pipe, 'inputnode.native_T1')
 
-            main_workflow.connect(segment_brain_pipe,
-                                  "outputnode.stereo_padded_T1",
-                                  angio_pipe, 'inputnode.stereo_T1')
+            if "pad_template" in params["short_preparation_pipe"].keys():
+                main_workflow.connect(
+                    segment_brain_pipe, "outputnode.stereo_T1",
+                    angio_pipe, 'inputnode.stereo_T1')
+            else:
+                main_workflow.connect(
+                    segment_brain_pipe, "outputnode.stereo_padded_T1",
+                    angio_pipe, 'inputnode.stereo_T1')
 
             main_workflow.connect(
                 segment_brain_pipe, "outputnode.native_to_stereo_trans",
@@ -716,6 +741,7 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
             main_workflow.connect(datasource, ('ANGIO', get_first_elem),
                                   angio_pipe, 'inputnode.angio')
 
+    # t1_skull
     if 't1' in skull_dt and "skull_t1_pipe" in params.keys():
         print("Found skull_t1_pipe")
 
@@ -723,7 +749,13 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
             params=parse_key(params, "skull_t1_pipe"))
 
         print("Using stereo T1 for skull_t1_pipe ")
-        main_workflow.connect(
+
+        if "pad_template" in params["short_preparation_pipe"].keys():
+            main_workflow.connect(
+                segment_brain_pipe, "outputnode.stereo_T1",
+                skull_t1_pipe, 'inputnode.stereo_T1')
+        else:
+            main_workflow.connect(
                 segment_brain_pipe, "outputnode.stereo_padded_T1",
                 skull_t1_pipe, 'inputnode.stereo_T1')
 
@@ -759,17 +791,17 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
                     RegResample(inter_val="NN"),
                     name="pad_t1_head_mask")
 
-                main_workflow.connect(skull_t1_pipe,
-                                        "outputnode.t1_head_mask",
-                                        pad_t1_head_mask, "flo_file")
+                main_workflow.connect(
+                    skull_t1_pipe, "outputnode.t1_head_mask",
+                    pad_t1_head_mask, "flo_file")
 
-                main_workflow.connect(segment_brain_pipe,
-                                        "outputnode.native_T1",
-                                        pad_t1_head_mask, "ref_file")
+                main_workflow.connect(
+                    segment_brain_pipe, "outputnode.native_T1",
+                    pad_t1_head_mask, "ref_file")
 
-                main_workflow.connect(segment_brain_pipe,
-                                        "outputnode.stereo_to_native_trans",
-                                        pad_t1_head_mask, "trans_file")
+                main_workflow.connect(
+                    segment_brain_pipe, "outputnode.stereo_to_native_trans",
+                    pad_t1_head_mask, "trans_file")
 
     if deriv:
 
