@@ -144,19 +144,19 @@ def rename_all_skull_ct_derivatives(params, main_workflow, segment_pnh_pipe,
     if "skull_ct_pipe" in params.keys():
 
         # rename ct_skull_mask
-        rename_ct_skull_mask = pe.Node(niu.Rename(),
-                                       name="rename_ct_skull_mask")
-        rename_ct_skull_mask.inputs.format_string = \
+        rename_ct = pe.Node(niu.Rename(),
+                            name="rename_ct")
+        rename_ct.inputs.format_string = \
             pref_deriv + "_space-stereo_desc-ct_T2star"
-        rename_ct_skull_mask.inputs.parse_string = parse_str
-        rename_ct_skull_mask.inputs.keep_ext = True
+        rename_ct.inputs.parse_string = parse_str
+        rename_ct.inputs.keep_ext = True
 
         main_workflow.connect(
                 skull_ct_pipe, "outputnode.stereo_ct",
-                rename_ct_skull_mask, 'in_file')
+                rename_ct, 'in_file')
 
         main_workflow.connect(
-            rename_ct_skull_mask, 'out_file',
+            rename_ct, 'out_file',
             datasink, '@stereo_ct')
 
         # rename ct_skull_mask
