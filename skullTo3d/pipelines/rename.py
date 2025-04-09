@@ -126,7 +126,7 @@ def rename_all_skull_ct_derivatives(params, main_workflow, segment_pnh_pipe,
     # Rename in skull_ct_pipe
     if "skull_ct_pipe" in params.keys():
 
-        # rename ct_skull_mask
+        # rename ct_stereo
         rename_ct_stereo = pe.Node(niu.Rename(),
                                        name="rename_ct_stereo")
         rename_ct_stereo.inputs.format_string = \
