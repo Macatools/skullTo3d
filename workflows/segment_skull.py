@@ -524,17 +524,18 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
 
             if "pad_template" in params["short_preparation_pipe"].keys():
                 main_workflow.connect(
-                    segment_brain_pipe, "outputnode.stereo_T1",
+                    segment_brain_pipe, "outputnode.stereo_padded_T1",
                     skull_petra_pipe, 'inputnode.stereo_T1')
             else:
                 main_workflow.connect(
-                    segment_brain_pipe, "outputnode.stereo_padded_T1",
+                    segment_brain_pipe, "outputnode.stereo_T1",
                     skull_petra_pipe, 'inputnode.stereo_T1')
 
             main_workflow.connect(segment_brain_pipe,
                                   "outputnode.native_to_stereo_trans",
                                   skull_petra_pipe,
                                   'inputnode.native_to_stereo_trans')
+
         else:
             print("No brain segmentation")
             skull_petra_pipe = create_autonomous_skull_petra_pipe(
@@ -633,11 +634,11 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
 
         if "pad_template" in params["short_preparation_pipe"].keys():
             main_workflow.connect(
-                segment_brain_pipe, "outputnode.stereo_T1",
+                segment_brain_pipe, "outputnode.stereo_padded_T1",
                 skull_ct_pipe, 'inputnode.stereo_T1')
         else:
             main_workflow.connect(
-                segment_brain_pipe, "outputnode.stereo_padded_T1",
+                segment_brain_pipe, "outputnode.stereo_T1",
                 skull_ct_pipe, 'inputnode.stereo_T1')
 
         if indiv_params:
@@ -690,11 +691,11 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
 
         if "pad_template" in params["short_preparation_pipe"].keys():
             main_workflow.connect(
-                segment_brain_pipe, "outputnode.stereo_T1",
+                segment_brain_pipe, "outputnode.stereo_padded_T1",
                 angio_pipe, 'inputnode.stereo_T1')
         else:
             main_workflow.connect(
-                segment_brain_pipe, "outputnode.stereo_padded_T1",
+                segment_brain_pipe, "outputnode.stereo_T1",
                 angio_pipe, 'inputnode.stereo_T1')
 
         main_workflow.connect(segment_brain_pipe,
@@ -723,11 +724,11 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
 
             if "pad_template" in params["short_preparation_pipe"].keys():
                 main_workflow.connect(
-                    segment_brain_pipe, "outputnode.stereo_T1",
+                    segment_brain_pipe, "outputnode.stereo_padded_T1",
                     angio_pipe, 'inputnode.stereo_T1')
             else:
                 main_workflow.connect(
-                    segment_brain_pipe, "outputnode.stereo_padded_T1",
+                    segment_brain_pipe, "outputnode.stereo_T1",
                     angio_pipe, 'inputnode.stereo_T1')
 
             main_workflow.connect(
@@ -752,11 +753,11 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
 
         if "pad_template" in params["short_preparation_pipe"].keys():
             main_workflow.connect(
-                segment_brain_pipe, "outputnode.stereo_T1",
+                segment_brain_pipe, "outputnode.stereo_padded_T1",
                 skull_t1_pipe, 'inputnode.stereo_T1')
         else:
             main_workflow.connect(
-                segment_brain_pipe, "outputnode.stereo_padded_T1",
+                segment_brain_pipe, "outputnode.stereo_T1",
                 skull_t1_pipe, 'inputnode.stereo_T1')
 
         if indiv_params:
