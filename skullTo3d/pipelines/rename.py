@@ -130,7 +130,7 @@ def rename_all_skull_ct_derivatives(params, main_workflow, segment_pnh_pipe,
         rename_ct_stereo = pe.Node(niu.Rename(),
                                        name="rename_ct_stereo")
         rename_ct_stereo.inputs.format_string = \
-            pref_deriv + "_space-stereo_acq-CT_T2star"
+            pref_deriv + "_space-stereo_T2star"
         rename_ct_stereo.inputs.parse_string = parse_str
         rename_ct_stereo.inputs.keep_ext = True
 
