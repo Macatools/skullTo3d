@@ -993,7 +993,7 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
             counter += 1
 
     with open(real_params_file, 'w+') as fp:
-        json.dumps(params, fp, sort_keys=True, indent=4)
+        json.dump(params, fp, sort_keys=True, indent=4)
 
     if deriv:
         try:
