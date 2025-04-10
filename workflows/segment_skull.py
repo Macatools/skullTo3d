@@ -1003,6 +1003,13 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
 
         real_params_file = op.join(process_dir,
                                    datasink_name, "real_params.json")
+        if os.path.exists(real_params_file):
+            counter = 0
+            while os.path.exists(real_params_file):
+                real_params_file = op.join(
+                    process_dir, wf_name, f"real_params{counter}.json")
+                counter += 1
+
         with open(real_params_file, 'w+') as fp:
             json.dump(params, fp, sort_keys=True, indent=4)
 
