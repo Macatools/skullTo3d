@@ -1004,7 +1004,7 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
         real_params_file = op.join(process_dir,
                                    datasink_name, "real_params.json")
         with open(real_params_file, 'w+') as fp:
-            json.dump(params, fp)
+            json.dump(params, fp, sort_keys=True, indent=4)
 
     if nprocs is None:
         nprocs = 4
