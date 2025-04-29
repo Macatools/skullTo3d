@@ -338,38 +338,43 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
         params_template["template_head"] = template_head
 
         template_brain = os.path.join(template_path, template_files[1])
-        assert os.path.exists(template_brain),\
+        assert os.path.exists(template_brain), \
             "Could not find template_brain {}".format(template_brain)
         params_template["template_brain"] = template_brain
 
         if len(template_files) == 2:
 
-            print("Only two files (template_head and template_brain) \
-                have been specified, segmentation will be without priors")
+            print("Only two files (template_head and template_brain) have \
+                been specified, segmentation will be without priors")
 
             if "brain_segment_pipe" in params.keys():
-                if "segment_atropos_pipe" in params["brain_segment_pipe"].keys():
-                    if "use_priors" in params["brain_segment_pipe"]["segment_atropos_pipe"].keys():
-                        del params["brain_segment_pipe"]["segment_atropos_pipe"]["use_priors"]
+                pbs = params["brain_segment_pipe"]
+                if "segment_atropos_pipe" in pbs.keys():
+                    if "use_priors" in pbs["segment_atropos_pipe"].keys():
+                        del pbs["segment_atropos_pipe"]["use_priors"]
 
         elif len(template_files) == 3:
 
-            template_seg = os.path.join(template_path,template_files[2])
-            assert os.path.exists(template_seg), "Could not find template_seg {}".format(template_seg)
+            template_seg = os.path.join(template_path, template_files[2])
+            assert os.path.exists(template_seg), \
+                "Could not find template_seg {}".format(template_seg)
             params_template["template_seg"] = template_seg
 
         elif len(template_files) == 5:
 
-            template_gm = os.path.join(template_path,template_files[2])
-            assert os.path.exists(template_gm), "Could not find template_gm {}".format(template_gm)
+            template_gm = os.path.join(template_path, template_files[2])
+            assert os.path.exists(template_gm), \
+                "Could not find template_gm {}".format(template_gm)
             params_template["template_gm"] = template_gm
 
-            template_wm = os.path.join(template_path,template_files[3])
-            assert os.path.exists(template_wm), "Could not find template_wm {}".format(template_wm)
+            template_wm = os.path.join(template_path, template_files[3])
+            assert os.path.exists(template_wm), \
+                "Could not find template_wm {}".format(template_wm)
             params_template["template_wm"] = template_wm
 
-            template_csf = os.path.join(template_path,template_files[4])
-            assert os.path.exists(template_csf), "Could not find template_csf {}".format(template_csf)
+            template_csf = os.path.join(template_path, template_files[4])
+            assert os.path.exists(template_csf), \
+                "Could not find template_csf {}".format(template_csf)
             params_template["template_csf"] = template_csf
 
         else:
@@ -377,26 +382,35 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
             exit(-1)
 
         params_template_stereo = params_template
+        params_template_brainmask = params_template
+        params_template_seg = params_template
 
     else:
-        ### use template from params
-        assert ("general" in params.keys() and \
-            "template_name" in params["general"].keys()), \
-                "Error, the params.json should contains a general/template_name"
+        # use template from params
+        assert "general" in params.keys(), \
+            "Error, the params.json should contains a general section"
 
-        template_name = params["general"]["template_name"]
+        pg = params["general"]
 
-        if "general" in params.keys() and "my_path" in params["general"].keys():
-            my_path = params["general"]["my_path"]
+        if "my_path" in pg.keys():
+            my_path = pg["my_path"]
         else:
             my_path = ""
 
-        template_dir = load_test_data(template_name, path_to=my_path)
-        params_template = format_template(template_dir, template_name)
+        # template_name
+        if "template_name" in pg.keys():
 
-        if "template_stereo_name" in params["general"].keys():
+            template_name = pg["template_name"]
 
-            template_stereo_name = params["general"]["template_stereo_name"]
+            template_dir = load_test_data(template_name, path_to=my_path)
+            params_template = format_template(template_dir, template_name)
+        else:
+            params_template = {}
+
+        # template_stereo_name
+        if "template_stereo_name" in pg.keys():
+
+            template_stereo_name = pg["template_stereo_name"]
             print("template_stereo_name = {}".format(template_stereo_name))
             template_stereo_dir = load_test_data(template_stereo_name,
                                                  path_to=my_path)
@@ -404,9 +418,45 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
                                                      template_stereo_name)
 
         else:
+            if not params_template:
+                print("Error, either template_name or \
+                    template_stereo_name should be defined")
+
             params_template_stereo = params_template
 
-    print(params_template)
+        # template_brainmask_name
+        if "template_brainmask_name" in pg.keys():
+            template_brainmask_name = pg["template_brainmask_name"]
+            print("template_brainmask_name = {}".format(
+                template_brainmask_name))
+            template_brainmask_dir = load_test_data(
+                template_brainmask_name,  path_to=my_path)
+            params_template_brainmask = format_template(
+                template_brainmask_dir, template_brainmask_name)
+
+        else:
+            if not params_template:
+                print("Error, either template_name or \
+                    template_brainmask_name should be defined")
+
+            params_template_brainmask = params_template
+
+        # template_seg_name
+        if "template_seg_name" in pg.keys():
+
+            template_seg_name = pg["template_seg_name"]
+            print("template_seg_name = {}".format(template_seg_name))
+            template_seg_dir = load_test_data(
+                template_seg_name, path_to=my_path)
+            params_template_seg = format_template(
+                template_seg_dir, template_seg_name)
+
+        else:
+            if not params_template:
+                print("Error, either template_name or \
+                    template_seg_name should be defined")
+
+            params_template_seg = params_template
 
     # main_workflow
     main_workflow = pe.Workflow(name=wf_name)
@@ -422,21 +472,24 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
     # which soft is used
     if "spm" in ssoft or "spm12" in ssoft:
         segment_brain_pipe = create_full_spm_subpipes(
-            params_template=params_template,
             params_template_stereo=params_template_stereo,
+            params_template_brainmask=params_template_brainmask,
+            params_template_seg=params_template_seg,
             params=params, pad=pad, space=space)
 
     elif "ants" in ssoft:
         if "t1" in brain_dt and 't2' in brain_dt:
             segment_brain_pipe = create_full_ants_subpipes(
-                params_template=params_template,
                 params_template_stereo=params_template_stereo,
+                params_template_brainmask=params_template_brainmask,
+                params_template_seg=params_template_seg,
                 params=params, mask_file=mask_file, space=space, pad=pad)
 
         elif "t1" in brain_dt:
             segment_brain_pipe = create_full_T1_ants_subpipes(
-                params_template=params_template,
                 params_template_stereo=params_template_stereo,
+                params_template_brainmask=params_template_brainmask,
+                params_template_seg=params_template_seg,
                 params=params, space=space, pad=pad)
 
     # list of all required outputs
