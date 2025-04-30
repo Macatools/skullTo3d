@@ -9,7 +9,7 @@
 #
 # Timestamp: 2020/12/02 18:33:44 UTC
 
-FROM macatools/macapype:v0.3.5.2-spm
+FROM macatools/macapype:latest
 
 USER root
 

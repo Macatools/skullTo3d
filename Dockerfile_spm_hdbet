@@ -9,7 +9,7 @@
 #
 # Timestamp: 2020/12/02 18:33:44 UTC
 
-FROM macatools/macapype:latest
+FROM macatools/macapype:v0.3.5.2-spm
 
 USER root
 
@@ -19,6 +19,6 @@ MAINTAINER David Meunier "david.meunier@univ-amu.fr"
 
 ############################################# install skullTo3d
 
-RUN python -m pip install --no-deps --index-url https://test.pypi.org/simple/ --pre skullTo3d
+RUN python -m pip install --no-deps --pre skullTo3d
 
 RUN python -c "import skullTo3d; print(skullTo3d.__version__)"
