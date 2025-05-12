@@ -26,7 +26,6 @@
         {
             "shrink_factor": 2
         },
-
         "N4debias":
         {
             "dimension": 3,
