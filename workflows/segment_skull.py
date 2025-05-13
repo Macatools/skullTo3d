@@ -180,7 +180,7 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
     if 'noskull' in ssoft:
         new_ssoft.remove('noskull')
 
-    if 'nohead' in ssoft:
+    if 'noh' in ssoft:
         new_ssoft.remove('nohead')
 
     if 'noseg' in ssoft:
@@ -253,8 +253,7 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
             params_file=params_file, indiv_params_file=indiv_params_file)
 
         params, indiv_params, extra_wf_name = update_skull_params(
-            ssoft=ssoft, params=params, indiv_params=indiv_params,
-            extra_wf_name=extra_wf_name)
+            ssoft=ssoft, params=params)
 
         params, indiv_params, extra_wf_name = update_indiv_skull_params(
             params, indiv_params,
