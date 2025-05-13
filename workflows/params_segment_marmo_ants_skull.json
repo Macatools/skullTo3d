@@ -84,46 +84,52 @@
 
     "skull_t1_pipe":
     {
-        "t1_head_auto_mask":
+        "headmask_t1_pipe":
         {
-            "kmeans": true,
-            "sample_bins": 30,
-            "distance": 1,
-            "operation": "lower",
-            "index": 1
+            "t1_head_auto_mask":
+            {
+                "kmeans": true,
+                "sample_bins": 30,
+                "distance": 1,
+                "operation": "lower",
+                "index": 1
+            },
+            "t1_head_dilate":
+            {
+                "operation": "modal",
+                "kernel_shape": "boxv",
+                "kernel_size": 9.0
+            },
+            "t1_head_erode":
+            {
+                "kernel_shape": "boxv",
+                "kernel_size": 9.0
+            }
         },
-        "t1_head_dilate":
+        "skullmask_t1_pipe":
         {
-            "operation": "modal",
-            "kernel_shape": "boxv",
-            "kernel_size": 9.0
-        },
-        "t1_head_erode":
-        {
-            "kernel_shape": "boxv",
-            "kernel_size": 9.0
-        },
-        "t1_fast":
-        {
-            "args": "-l 4 -O 4 -t 1",
-            "output_biascorrected": true,
-            "output_biasfield": true
-        },
-        "t1_head_erode_skin":
-        {
-            "kernel_shape": "boxv",
-            "kernel_size": 6.0
-        },
-        "t1_skull_dilate":
-        {
-            "operation": "modal",
-            "kernel_shape": "boxv",
-            "kernel_size": 4.0
-        },
-        "t1_skull_erode":
-        {
-            "kernel_shape": "boxv",
-            "kernel_size": 4.0
+            "t1_fast":
+            {
+                "args": "-l 4 -O 4 -t 1",
+                "output_biascorrected": true,
+                "output_biasfield": true
+            },
+            "t1_head_erode_skin":
+            {
+                "kernel_shape": "boxv",
+                "kernel_size": 6.0
+            },
+            "t1_skull_dilate":
+            {
+                "operation": "modal",
+                "kernel_shape": "boxv",
+                "kernel_size": 4.0
+            },
+            "t1_skull_erode":
+            {
+                "kernel_shape": "boxv",
+                "kernel_size": 4.0
+            }
         }
     },
 

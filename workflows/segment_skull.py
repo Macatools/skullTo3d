@@ -842,39 +842,46 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
                 if "crop_T1" in params["short_preparation_pipe"].keys():
                     pass
 
-                pad_t1_skull_mask = pe.Node(RegResample(inter_val="NN"),
-                                            name="pad_t1_skull_mask")
 
-                main_workflow.connect(
-                    skull_t1_pipe, "outputnode.t1_skull_mask",
-                    pad_t1_skull_mask, "flo_file")
+                if "skullmask_t1_pipe" in params["skull_t1_pipe"]:
 
-                main_workflow.connect(
-                    segment_brain_pipe, "outputnode.native_T1",
-                    pad_t1_skull_mask, "ref_file")
+                    print("Using reg_aladin transfo to pad skull_mask back")
 
-                main_workflow.connect(
-                    segment_brain_pipe,
-                    "outputnode.stereo_to_native_trans",
-                    pad_t1_skull_mask, "trans_file")
+                    pad_t1_skull_mask = pe.Node(RegResample(inter_val="NN"),
+                                                name="pad_t1_skull_mask")
 
-                print("Using reg_aladin transfo to pad head_mask back")
+                    main_workflow.connect(
+                        skull_t1_pipe, "outputnode.t1_skull_mask",
+                        pad_t1_skull_mask, "flo_file")
 
-                pad_t1_head_mask = pe.Node(
-                    RegResample(inter_val="NN"),
-                    name="pad_t1_head_mask")
+                    main_workflow.connect(
+                        segment_brain_pipe, "outputnode.native_T1",
+                        pad_t1_skull_mask, "ref_file")
 
-                main_workflow.connect(
-                    skull_t1_pipe, "outputnode.t1_head_mask",
-                    pad_t1_head_mask, "flo_file")
+                    main_workflow.connect(
+                        segment_brain_pipe,
+                        "outputnode.stereo_to_native_trans",
+                        pad_t1_skull_mask, "trans_file")
 
-                main_workflow.connect(
-                    segment_brain_pipe, "outputnode.native_T1",
-                    pad_t1_head_mask, "ref_file")
+                if "headmask_t1_pipe" in params["skull_t1_pipe"]:
 
-                main_workflow.connect(
-                    segment_brain_pipe, "outputnode.stereo_to_native_trans",
-                    pad_t1_head_mask, "trans_file")
+                    print("Using reg_aladin transfo to pad head_mask back")
+
+                    pad_t1_head_mask = pe.Node(
+                        RegResample(inter_val="NN"),
+                        name="pad_t1_head_mask")
+
+                    main_workflow.connect(
+                        skull_t1_pipe, "outputnode.t1_head_mask",
+                        pad_t1_head_mask, "flo_file")
+
+                    main_workflow.connect(
+                        segment_brain_pipe, "outputnode.native_T1",
+                        pad_t1_head_mask, "ref_file")
+
+                    main_workflow.connect(
+                        segment_brain_pipe, "outputnode.stereo_to_native_trans",
+                        pad_t1_head_mask, "trans_file")
 
     if deriv:
 
@@ -983,39 +990,43 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
 
             if pad:
 
-                # rename t1_skull_mask
-                rename_native_t1_skull_mask = pe.Node(
-                    niu.Rename(), name="rename_native_t1_skull_mask")
+                if "skullmask_t1_pipe" in params["skull_t1_pipe"]:
 
-                rename_native_t1_skull_mask.inputs.format_string = \
-                    pref_deriv + "_space-native_desc-t1_skullmask"
-                rename_native_t1_skull_mask.inputs.parse_string = parse_str
-                rename_native_t1_skull_mask.inputs.keep_ext = True
+                    # rename t1_skull_mask
+                    rename_native_t1_skull_mask = pe.Node(
+                        niu.Rename(), name="rename_native_t1_skull_mask")
 
-                main_workflow.connect(
-                    pad_t1_skull_mask, "out_file",
-                    rename_native_t1_skull_mask, 'in_file')
+                    rename_native_t1_skull_mask.inputs.format_string = \
+                        pref_deriv + "_space-native_desc-t1_skullmask"
+                    rename_native_t1_skull_mask.inputs.parse_string = parse_str
+                    rename_native_t1_skull_mask.inputs.keep_ext = True
 
-                main_workflow.connect(
-                    rename_native_t1_skull_mask, 'out_file',
-                    datasink, '@t1_native_skull_mask')
+                    main_workflow.connect(
+                        pad_t1_skull_mask, "out_file",
+                        rename_native_t1_skull_mask, 'in_file')
 
-                # rename t1_head_mask
-                rename_native_t1_head_mask = pe.Node(
-                    niu.Rename(), name="rename_native_t1_head_mask")
+                    main_workflow.connect(
+                        rename_native_t1_skull_mask, 'out_file',
+                        datasink, '@t1_native_skull_mask')
 
-                rename_native_t1_head_mask.inputs.format_string = \
-                    pref_deriv + "_space-native_desc-t1_headmask"
-                rename_native_t1_head_mask.inputs.parse_string = parse_str
-                rename_native_t1_head_mask.inputs.keep_ext = True
+                if "headmask_t1_pipe" in params["skull_t1_pipe"]:
 
-                main_workflow.connect(
-                    pad_t1_head_mask, "out_file",
-                    rename_native_t1_head_mask, 'in_file')
+                    # rename t1_head_mask
+                    rename_native_t1_head_mask = pe.Node(
+                        niu.Rename(), name="rename_native_t1_head_mask")
 
-                main_workflow.connect(
-                    rename_native_t1_head_mask, 'out_file',
-                    datasink, '@t1_native_head_mask')
+                    rename_native_t1_head_mask.inputs.format_string = \
+                        pref_deriv + "_space-native_desc-t1_headmask"
+                    rename_native_t1_head_mask.inputs.parse_string = parse_str
+                    rename_native_t1_head_mask.inputs.keep_ext = True
+
+                    main_workflow.connect(
+                        pad_t1_head_mask, "out_file",
+                        rename_native_t1_head_mask, 'in_file')
+
+                    main_workflow.connect(
+                        rename_native_t1_head_mask, 'out_file',
+                        datasink, '@t1_native_head_mask')
 
         if "ct" in skull_dt and "skull_ct_pipe" in params.keys():
             print("rename ct skull pipe 1")
