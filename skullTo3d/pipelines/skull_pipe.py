@@ -1260,7 +1260,6 @@ def create_autonomous_skull_petra_pipe(name="skull_petra_pipe", params={}):
                     "petra_head_mask", "petra_head_stl"]),
         name='outputnode')
 
-
     # average if multiple PETRA
     if "avg_reorient_pipe" in params.keys():
         print("Found avg_reorient_pipe for av_PETRA")
@@ -1308,7 +1307,9 @@ def create_autonomous_skull_petra_pipe(name="skull_petra_pipe", params={}):
     # ## headmask
     if "headmask_petra_pipe" in params:
 
-        headmask_pipe = _create_petra_head_mask(params=params)
+        headmask_pipe = _create_petra_head_mask(
+            name="headmask_petra_pipe",
+            params=params["headmask_petra_pipe"])
         # TODO
 
         if "crop_petra" in params:
@@ -1479,9 +1480,10 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
                              outputnode, "stereo_petra")
 
     # ## headmask
-    if "headmask_petra_pipe":
+    if "headmask_petra_pipe" in params:
 
         headmask_pipe = _create_petra_head_mask(
+            name="headmask_petra_pipe",
             params=params["headmask_petra_pipe"])
         # TODO
         skull_petra_pipe.connect(
