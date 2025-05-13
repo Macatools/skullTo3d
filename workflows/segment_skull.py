@@ -620,13 +620,13 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
                     print("Warning, crop_t1 is defined")
                     pass
 
-                if "headmask_petra_pipe" in params["skull_petra_pipe"]:
-
+                if "skullmask_petra_pipe" in params["skull_petra_pipe"]:
 
                     print("Using reg_aladin transfo to pad skull_mask back")
 
-                    pad_petra_skull_mask = pe.Node(RegResample(inter_val="NN"),
-                                                name="pad_petra_skull_mask")
+                    pad_petra_skull_mask = pe.Node(
+                        RegResample(inter_val="NN"),
+                        name="pad_petra_skull_mask")
 
                     main_workflow.connect(
                         skull_petra_pipe, "outputnode.petra_skull_mask",
@@ -641,25 +641,28 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
                         "outputnode.stereo_to_native_trans",
                         pad_petra_skull_mask, "trans_file")
 
-
-                if "skullmask_petra_pipe" in params["skull_petra_pipe"]:
+                if "headmask_petra_pipe" in params["skull_petra_pipe"]:
 
                     print("Using reg_aladin transfo to pad head_mask back")
 
-                    pad_petra_head_mask = pe.Node(RegResample(inter_val="NN"),
-                                                name="pad_petra_head_mask")
+                    pad_petra_head_mask = pe.Node(
+                        RegResample(inter_val="NN"),
+                        name="pad_petra_head_mask")
 
-                    main_workflow.connect(skull_petra_pipe,
-                                        "outputnode.petra_head_mask",
-                                        pad_petra_head_mask, "flo_file")
+                    main_workflow.connect(
+                        skull_petra_pipe,
+                        "outputnode.petra_head_mask",
+                        pad_petra_head_mask, "flo_file")
 
-                    main_workflow.connect(segment_brain_pipe,
-                                        "outputnode.native_T1",
-                                        pad_petra_head_mask, "ref_file")
+                    main_workflow.connect(
+                        segment_brain_pipe,
+                        "outputnode.native_T1",
+                        pad_petra_head_mask, "ref_file")
 
-                    main_workflow.connect(segment_brain_pipe,
-                                        "outputnode.stereo_to_native_trans",
-                                        pad_petra_head_mask, "trans_file")
+                    main_workflow.connect(
+                        segment_brain_pipe,
+                        "outputnode.stereo_to_native_trans",
+                        pad_petra_head_mask, "trans_file")
 
                     print("Using reg_aladin transfo \
                         to pad robustpetra_skull_mask back")
