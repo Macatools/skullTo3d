@@ -74,7 +74,8 @@ from macapype.utils.utils_tests import load_test_data, format_template
 
 from macapype.utils.utils_params import update_params
 
-from skullTo3d.utils.utils_params import update_indiv_params
+from skullTo3d.utils.utils_params import (update_indiv_skull_params,
+                                          update_skull_params)
 
 from macapype.utils.misc import show_files, get_first_elem, parse_key
 
@@ -176,6 +177,12 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
     if 'prep' in ssoft:
         new_ssoft.remove('prep')
 
+    if 'noskull' in ssoft:
+        new_ssoft.remove('noskull')
+
+    if 'nohead' in ssoft:
+        new_ssoft.remove('nohead')
+
     if 'noseg' in ssoft:
         new_ssoft.remove('noseg')
 
@@ -245,7 +252,11 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
             ssoft=ssoft, subjects=subjects, sessions=sessions,
             params_file=params_file, indiv_params_file=indiv_params_file)
 
-        params, indiv_params, extra_wf_name = update_indiv_params(
+        params, indiv_params, extra_wf_name = update_skull_params(
+            ssoft=ssoft, params=params, indiv_params=indiv_params,
+            extra_wf_name=extra_wf_name)
+
+        params, indiv_params, extra_wf_name = update_indiv_skull_params(
             params, indiv_params,
             subjects=subjects,
             sessions=sessions,

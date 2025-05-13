@@ -1376,6 +1376,14 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
         name='inputnode'
     )
 
+    # creating outputnode #######
+    outputnode = pe.Node(
+        niu.IdentityInterface(
+            fields=["petra_skull_mask", "petra_skull_stl", "stereo_petra",
+                    "robustpetra_skull_mask", "robustpetra_skull_stl",
+                    "petra_head_mask", "petra_head_stl"]),
+        name='outputnode')
+
     # average if multiple PETRA
     if "avg_reorient_pipe" in params.keys():
         print("Found avg_reorient_pipe for av_PETRA")
@@ -1451,44 +1459,54 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
 
     skull_petra_pipe.connect(inputnode, 'stereo_T1',
                              align_petra_on_stereo, "ref_file")
-    # ## headmask
-    headmask_pipe = _create_petra_head_mask(params=params)
-    # TODO
-    skull_petra_pipe.connect(align_petra_on_stereo, "out_file",
-                             headmask_pipe, "inputnode.reoriented_petra")
-
-    skull_petra_pipe.connect(inputnode, "indiv_params",
-                             headmask_pipe, "inputnode.indiv_params")
-
-    # ## skull mask
-    skullmask_pipe = _create_petra_skull_mask(params=params)
-    # TODO
-
-    skull_petra_pipe.connect(headmask_pipe, "petra_hmasked.out_file",
-                             skullmask_pipe, "inputnode.headmasked_petra")
-
-    skull_petra_pipe.connect(headmask_pipe, "petra_head_erode.out_file",
-                             skullmask_pipe, "inputnode.headmask")
-
-    skull_petra_pipe.connect(inputnode, "indiv_params",
-                             skullmask_pipe, "inputnode.indiv_params")
-
-    # creating outputnode #######
-    outputnode = pe.Node(
-        niu.IdentityInterface(
-            fields=["petra_skull_mask", "petra_skull_stl", "stereo_petra",
-                    "robustpetra_skull_mask", "robustpetra_skull_stl",
-                    "petra_head_mask", "petra_head_stl"]),
-        name='outputnode')
-
+    # outputnode
     skull_petra_pipe.connect(align_petra_on_stereo, "out_file",
                              outputnode, "stereo_petra")
+
+    # ## headmask
+    if "headmask_petra_pipe":
+
+        headmask_pipe = _create_petra_head_mask(
+            params=params["headmask_petra_pipe"])
+        # TODO
+        skull_petra_pipe.connect(
+            align_petra_on_stereo, "out_file",
+            headmask_pipe, "inputnode.reoriented_petra")
+
+        skull_petra_pipe.connect(
+            inputnode, "indiv_params",
+            headmask_pipe, "inputnode.indiv_params")
+
+    else:
+        return skull_petra_pipe
 
     skull_petra_pipe.connect(headmask_pipe, "petra_head_erode.out_file",
                              outputnode, "petra_head_mask")
 
     skull_petra_pipe.connect(headmask_pipe, "mesh_petra_head.stl_file",
                              outputnode, "petra_head_stl")
+
+    # ## skull mask
+    if "skullmask_petra_pipe" in params:
+
+        skullmask_pipe = _create_petra_skull_mask(
+            name="skullmask_petra_pipe",
+            params=params["skullmask_petra_pipe"])
+
+        skull_petra_pipe.connect(
+            headmask_pipe, "petra_hmasked.out_file",
+            skullmask_pipe, "inputnode.headmasked_petra")
+
+        skull_petra_pipe.connect(
+            headmask_pipe, "petra_head_erode.out_file",
+            skullmask_pipe, "inputnode.headmask")
+
+        skull_petra_pipe.connect(
+            inputnode, "indiv_params",
+            skullmask_pipe, "inputnode.indiv_params")
+
+    else:
+        return skull_petra_pipe
 
     skull_petra_pipe.connect(skullmask_pipe, "mesh_petra_skull.stl_file",
                              outputnode, "petra_skull_stl")
