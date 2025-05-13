@@ -180,7 +180,7 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
     if 'noskull' in ssoft:
         new_ssoft.remove('noskull')
 
-    if 'noh' in ssoft:
+    if 'nohead' in ssoft:
         new_ssoft.remove('nohead')
 
     if 'noseg' in ssoft:
