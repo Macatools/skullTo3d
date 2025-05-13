@@ -243,7 +243,9 @@ def _create_skullmask_t1_pipe(name="skullmask_t1_pipe", params={}):
 
     # Creating input node
     inputnode = pe.Node(
-        niu.IdentityInterface(fields=['indiv_params', 'headmasked_T1', "headmask"]),
+        niu.IdentityInterface(fields=['indiv_params',
+                                      'headmasked_T1',
+                                      "headmask"]),
         name='inputnode')
 
     if "t1_denoise" in params.keys():
@@ -511,7 +513,7 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
             name="skullmask_t1_pipe", params=params["skullmask_t1_pipe"])
 
         skull_t1_pipe.connect(inputnode, "stereo_T1",
-                              skullmask_t1_pipe, "inputnode.stereo_T1")
+                              skullmask_t1_pipe, "inputnode.headmasked_T1")
 
         skull_t1_pipe.connect(inputnode, "indiv_params",
                               skullmask_t1_pipe, "inputnode.indiv_params")
