@@ -252,7 +252,7 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
             ssoft=ssoft, subjects=subjects, sessions=sessions,
             params_file=params_file, indiv_params_file=indiv_params_file)
 
-        params, indiv_params, extra_wf_name = update_skull_params(
+        params = update_skull_params(
             ssoft=ssoft, params=params)
 
         params, indiv_params, extra_wf_name = update_indiv_skull_params(
