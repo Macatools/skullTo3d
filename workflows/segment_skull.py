@@ -697,7 +697,7 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
                 params=parse_key(params, "skull_ct_pipe"))
 
             main_workflow.connect(datasource, ('CT', get_first_elem),
-                                skull_ct_pipe, 'inputnode.ct')
+                                  skull_ct_pipe, 'inputnode.ct')
 
             main_workflow.connect(
                 segment_brain_pipe,
@@ -849,7 +849,7 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
         else:
             print("without brain segmenation, running on first T1 only")
             main_workflow.connect(
-                datasource, ('T1', get_first_elem),
+                datasource, 'T1',
                 skull_t1_pipe, 'inputnode.stereo_T1')
 
         if indiv_params:
