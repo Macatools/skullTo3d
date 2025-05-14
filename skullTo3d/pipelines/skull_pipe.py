@@ -21,8 +21,6 @@ from nipype.interfaces.niftyreg.reg import RegAladin
 
 from macapype.utils.utils_nodes import NodeParams
 
-from nipype.interfaces.ants import (N4BiasFieldCorrection)
-
 from skullTo3d.nodes.noise import DenoiseImage
 
 from macapype.pipelines.prepare import _create_avg_reorient_pipeline
@@ -255,11 +253,13 @@ def _create_skullmask_t1_pipe(name="skullmask_t1_pipe", params={}):
                                 params=parse_key(params, "t1_denoise"),
                                 name='t1_denoise')
 
-        skullmask_t1_pipe.connect(inputnode, "headmasked_T1",
-                              t1_denoise, "input_image")
+        skullmask_t1_pipe.connect(
+            inputnode, "headmasked_T1",
+            t1_denoise, "input_image")
 
-        skullmask_t1_pipe.connect(inputnode, "headmask",
-                              t1_denoise, "mask_image")
+        skullmask_t1_pipe.connect(
+            inputnode, "headmask",
+            t1_denoise, "mask_image")
 
         skullmask_t1_pipe.connect(
             inputnode, ('indiv_params', parse_key, "t1_denoise"),
@@ -270,11 +270,13 @@ def _create_skullmask_t1_pipe(name="skullmask_t1_pipe", params={}):
                          name="t1_fast")
 
     if "t1_denoise" in params.keys():
-        skullmask_t1_pipe.connect(t1_denoise, "output_image",
-                              t1_fast, "in_files")
+        skullmask_t1_pipe.connect(
+            t1_denoise, "output_image",
+            t1_fast, "in_files")
     else:
-        skullmask_t1_pipe.connect(inputnode, "headmasked_T1",
-                              t1_fast, "in_files")
+        skullmask_t1_pipe.connect(
+            inputnode, "headmasked_T1",
+            t1_fast, "in_files")
 
     skullmask_t1_pipe.connect(
         inputnode, ('indiv_params', parse_key, "t1_fast"),
