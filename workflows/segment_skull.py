@@ -754,7 +754,7 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
                 params=parse_key(params, "skull_ct_pipe"))
 
             main_workflow.connect(datasource, ('CT', get_first_elem),
-                                skull_ct_pipe, 'inputnode.ct')
+                                  skull_ct_pipe, 'inputnode.ct')
 
         if indiv_params:
             main_workflow.connect(datasource, "indiv_params",
@@ -847,10 +847,9 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
                     segment_brain_pipe, "outputnode.stereo_T1",
                     skull_t1_pipe, 'inputnode.stereo_T1')
         else:
-            print("run brain_dt T1 and skull_dt T1 for skull processing")
-            main_workflow.connect(
-                datasource, 'T1',
-                skull_t1_pipe, 'inputnode.stereo_T1')
+            print("Error, run -soft ants_prep_skull -brain_dt T1 -skull_dt T1 \
+                for skull processing of T1")
+            exit(-1)
 
         if indiv_params:
             main_workflow.connect(datasource, "indiv_params",
