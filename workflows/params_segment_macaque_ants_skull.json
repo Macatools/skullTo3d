@@ -210,28 +210,32 @@
         "align_ct_on_T1_2":
         {
         },
-        "ct_skull_auto_mask":
+
+        "skullmask_ct_pipe":
         {
-            "kmeans": true,
-            "sample_bins": 30,
-            "distance": 10,
-            "operation": "lower",
-            "index": 2
-        },
-        "ct_skull_dilate":
-        {
-            "operation" : "modal",
-            "kernel_shape" : "boxv",
-            "kernel_size" : 3.0
-        },
-        "ct_skull_erode":
-        {
-            "kernel_shape" : "boxv",
-            "kernel_size" : 3.0
-        },
-        "ct_skull_fov":
-        {
-            "brainsize" : 45
+            "ct_skull_auto_mask":
+            {
+                "kmeans": true,
+                "sample_bins": 30,
+                "distance": 10,
+                "operation": "lower",
+                "index": 2
+            },
+            "ct_skull_dilate":
+            {
+                "operation" : "modal",
+                "kernel_shape" : "boxv",
+                "kernel_size" : 3.0
+            },
+            "ct_skull_erode":
+            {
+                "kernel_shape" : "boxv",
+                "kernel_size" : 3.0
+            },
+            "ct_skull_fov":
+            {
+                "brainsize" : 45
+            }
         }
     },
 
