@@ -847,7 +847,7 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
                     segment_brain_pipe, "outputnode.stereo_T1",
                     skull_t1_pipe, 'inputnode.stereo_T1')
         else:
-            print("without brain segmenation, running on first T1 only")
+            print("run brain_dt T1 and skull_dt T1 for skull processing")
             main_workflow.connect(
                 datasource, 'T1',
                 skull_t1_pipe, 'inputnode.stereo_T1')
