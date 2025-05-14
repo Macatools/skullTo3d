@@ -608,8 +608,9 @@ def _create_skullmask_ct_pipe(name="skullmask_ct_pipe", params={}):
                     function=apply_li_thresh),
                 name="ct_skull_li_mask")
 
-        skullmask_ct_pipe.connect(inputnode, "realigned_ct",
-                              ct_skull_li_mask, "orig_img_file")
+        skullmask_ct_pipe.connect(
+            inputnode, "realigned_ct",
+            ct_skull_li_mask, "orig_img_file")
 
     # ct_skull_mask_binary
     ct_skull_mask_binary = pe.Node(interface=UnaryMaths(),
@@ -907,13 +908,9 @@ def create_autonomous_skull_ct_pipe(name="skull_ct_pipe", params={}):
     return skull_ct_pipe
 
 
-
-
-
 ###############################################################################
 # ####################  PETRA  #####################
 ###############################################################################
-
 
 def _create_petra_head_mask(name="headmask_petra_pipe", params={}):
 

@@ -56,7 +56,7 @@ jobs:
             curl https://amubox.univ-amu.fr/public.php/dav/files/7tf4ooJsyjHfSbG --output skullTo3d_CI_v2.zip
             unzip -o skullTo3d_CI_v2.zip -d skullTo3d_CI_v2
 
-      - name: Running all test pipelines (macaque (no brain, skull only with petra))
+      - name: Running all test pipelines (macaque (no brain, skull only with petra and CT))
         run: |
 
             python workflows/segment_skull.py -data /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_macaque -out /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_macaque/results -soft test_skull -species macaque -sub Stevie -ses 01 -skull_dt petra CT
