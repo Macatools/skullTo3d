@@ -241,7 +241,6 @@
         {
             &quot;shrink_factor&quot;: 2
         },
-
         &quot;N4debias&quot;:
         {
             &quot;dimension&quot;: 3,
@@ -302,108 +301,122 @@
 
     &quot;skull_t1_pipe&quot;:
     {
-        &quot;t1_head_dilate&quot;:
+        &quot;headmask_t1_pipe&quot;:
         {
-            &quot;operation&quot;: &quot;modal&quot;,
-            &quot;kernel_shape&quot;: &quot;boxv&quot;,
-            &quot;kernel_size&quot;: 9.0
+            &quot;t1_head_dilate&quot;:
+            {
+                &quot;operation&quot;: &quot;modal&quot;,
+                &quot;kernel_shape&quot;: &quot;boxv&quot;,
+                &quot;kernel_size&quot;: 9.0
+            },
+            &quot;t1_head_erode&quot;:
+            {
+                &quot;kernel_shape&quot;: &quot;boxv&quot;,
+                &quot;kernel_size&quot;: 9.0
+            }
         },
-        &quot;t1_head_erode&quot;:
+        &quot;skullmask_t1_pipe&quot;:
         {
-            &quot;kernel_shape&quot;: &quot;boxv&quot;,
-            &quot;kernel_size&quot;: 9.0
-        },
-        &quot;t1_fast&quot;:
-        {
-            &quot;args&quot;: &quot;-l 10&quot;,
-            &quot;img_type&quot;: 1,
-            &quot;output_biascorrected&quot;: true,
-            &quot;output_biasfield&quot;: true
-        },
-        &quot;t1_head_erode_skin&quot;:
-        {
-            &quot;kernel_shape&quot;: &quot;boxv&quot;,
-            &quot;kernel_size&quot;: 9.0
-        },
-        &quot;t1_skull_gcc_erode&quot;:
-        {
-            &quot;kernel_shape&quot;: &quot;boxv&quot;,
-            &quot;kernel_size&quot;: 5.0
-        },
-        &quot;t1_skull_gcc_dilate&quot;:
-        {
-            &quot;operation&quot;: &quot;modal&quot;,
-            &quot;kernel_shape&quot;: &quot;boxv&quot;,
-            &quot;kernel_size&quot;: 5.0
-        },
-        &quot;t1_skull_dilate&quot;:
-        {
-            &quot;operation&quot;: &quot;modal&quot;,
-            &quot;kernel_shape&quot;: &quot;boxv&quot;,
-            &quot;kernel_size&quot;: 4.0
-        },
-        &quot;t1_skull_erode&quot;:
-        {
-            &quot;kernel_shape&quot;: &quot;boxv&quot;,
-            &quot;kernel_size&quot;: 4.0
-        },
-        &quot;t1_skull_fov&quot;:
-        {
-            &quot;brainsize&quot;: 45
+            &quot;t1_fast&quot;:
+            {
+                &quot;args&quot;: &quot;-l 10&quot;,
+                &quot;img_type&quot;: 1,
+                &quot;output_biascorrected&quot;: true,
+                &quot;output_biasfield&quot;: true
+            },
+            &quot;t1_head_erode_skin&quot;:
+            {
+                &quot;kernel_shape&quot;: &quot;boxv&quot;,
+                &quot;kernel_size&quot;: 9.0
+            },
+            &quot;t1_skull_gcc_erode&quot;:
+            {
+                &quot;kernel_shape&quot;: &quot;boxv&quot;,
+                &quot;kernel_size&quot;: 3.0
+            },
+            &quot;t1_skull_gcc_dilate&quot;:
+            {
+                &quot;operation&quot;: &quot;modal&quot;,
+                &quot;kernel_shape&quot;: &quot;boxv&quot;,
+                &quot;kernel_size&quot;: 3.0
+            },
+            &quot;t1_skull_dilate&quot;:
+            {
+                &quot;operation&quot;: &quot;modal&quot;,
+                &quot;kernel_shape&quot;: &quot;boxv&quot;,
+                &quot;kernel_size&quot;: 4.0
+            },
+            &quot;t1_skull_erode&quot;:
+            {
+                &quot;kernel_shape&quot;: &quot;boxv&quot;,
+                &quot;kernel_size&quot;: 4.0
+            },
+            &quot;t1_skull_fov&quot;:
+            {
+                &quot;brainsize&quot;: 45
+            }
         }
     },
+
     &quot;skull_petra_pipe&quot;:
     {
-        &quot;petra_head_dilate&quot;:
-        {
-            &quot;operation&quot;: &quot;modal&quot;,
-            &quot;kernel_shape&quot;: &quot;boxv&quot;,
-            &quot;kernel_size&quot;: 7.0
-        },
-        &quot;petra_head_erode&quot;:
-        {
-            &quot;kernel_shape&quot;: &quot;boxv&quot;,
-            &quot;kernel_size&quot;: 7.0
-        },
-        &quot;petra_fast&quot;:
-        {
-            &quot;args&quot;: &quot; -l 10&quot;,
-            &quot;img_type&quot;: 3,
-            &quot;output_biascorrected&quot;: true,
-            &quot;output_biasfield&quot;: true
-        },
-        &quot;petra_head_erode_skin&quot;:
-        {
-            &quot;kernel_shape&quot;: &quot;boxv&quot;,
-            &quot;kernel_size&quot;: 9.0
-        },
 
-        &quot;petra_skull_gcc_erode&quot;:
+        &quot;headmask_petra_pipe&quot;:
         {
-            &quot;kernel_shape&quot;: &quot;boxv&quot;,
-            &quot;kernel_size&quot;: 3.0
+            &quot;petra_head_dilate&quot;:
+            {
+                &quot;operation&quot;: &quot;modal&quot;,
+                &quot;kernel_shape&quot;: &quot;boxv&quot;,
+                &quot;kernel_size&quot;: 7.0
+            },
+            &quot;petra_head_erode&quot;:
+            {
+                &quot;kernel_shape&quot;: &quot;boxv&quot;,
+                &quot;kernel_size&quot;: 7.0
+            }
         },
-        &quot;petra_skull_gcc_dilate&quot;:
+        &quot;skullmask_petra_pipe&quot;:
         {
-            &quot;operation&quot;: &quot;modal&quot;,
-            &quot;kernel_shape&quot;: &quot;boxv&quot;,
-            &quot;kernel_size&quot;: 3.0
-        },
+            &quot;petra_fast&quot;:
+            {
+                &quot;args&quot;: &quot; -l 10&quot;,
+                &quot;img_type&quot;: 3,
+                &quot;output_biascorrected&quot;: true,
+                &quot;output_biasfield&quot;: true
+            },
+            &quot;petra_head_erode_skin&quot;:
+            {
+                &quot;kernel_shape&quot;: &quot;boxv&quot;,
+                &quot;kernel_size&quot;: 9.0
+            },
 
-        &quot;petra_skull_dilate&quot;:
-        {
-            &quot;operation&quot;: &quot;modal&quot;,
-            &quot;kernel_shape&quot;: &quot;boxv&quot;,
-            &quot;kernel_size&quot;: 7.0
-        },
-        &quot;petra_skull_erode&quot;:
-        {
-            &quot;kernel_shape&quot;: &quot;boxv&quot;,
-            &quot;kernel_size&quot;: 7.0
-        },
-        &quot;petra_skull_fov&quot;:
-        {
-            &quot;brainsize&quot;: 45
+            &quot;petra_skull_gcc_erode&quot;:
+            {
+                &quot;kernel_shape&quot;: &quot;boxv&quot;,
+                &quot;kernel_size&quot;: 3.0
+            },
+            &quot;petra_skull_gcc_dilate&quot;:
+            {
+                &quot;operation&quot;: &quot;modal&quot;,
+                &quot;kernel_shape&quot;: &quot;boxv&quot;,
+                &quot;kernel_size&quot;: 3.0
+            },
+
+            &quot;petra_skull_dilate&quot;:
+            {
+                &quot;operation&quot;: &quot;modal&quot;,
+                &quot;kernel_shape&quot;: &quot;boxv&quot;,
+                &quot;kernel_size&quot;: 7.0
+            },
+            &quot;petra_skull_erode&quot;:
+            {
+                &quot;kernel_shape&quot;: &quot;boxv&quot;,
+                &quot;kernel_size&quot;: 7.0
+            },
+            &quot;petra_skull_fov&quot;:
+            {
+                &quot;brainsize&quot;: 45
+            }
         }
     },
 
@@ -412,28 +425,32 @@
         &quot;align_ct_on_T1_2&quot;:
         {
         },
-        &quot;ct_skull_auto_mask&quot;:
+
+        &quot;skullmask_ct_pipe&quot;:
         {
-            &quot;kmeans&quot;: true,
-            &quot;sample_bins&quot;: 30,
-            &quot;distance&quot;: 10,
-            &quot;operation&quot;: &quot;lower&quot;,
-            &quot;index&quot;: 2
-        },
-        &quot;ct_skull_dilate&quot;:
-        {
-            &quot;operation&quot; : &quot;modal&quot;,
-            &quot;kernel_shape&quot; : &quot;boxv&quot;,
-            &quot;kernel_size&quot; : 3.0
-        },
-        &quot;ct_skull_erode&quot;:
-        {
-            &quot;kernel_shape&quot; : &quot;boxv&quot;,
-            &quot;kernel_size&quot; : 3.0
-        },
-        &quot;ct_skull_fov&quot;:
-        {
-            &quot;brainsize&quot; : 45
+            &quot;ct_skull_auto_mask&quot;:
+            {
+                &quot;kmeans&quot;: true,
+                &quot;sample_bins&quot;: 30,
+                &quot;distance&quot;: 10,
+                &quot;operation&quot;: &quot;lower&quot;,
+                &quot;index&quot;: 2
+            },
+            &quot;ct_skull_dilate&quot;:
+            {
+                &quot;operation&quot; : &quot;modal&quot;,
+                &quot;kernel_shape&quot; : &quot;boxv&quot;,
+                &quot;kernel_size&quot; : 3.0
+            },
+            &quot;ct_skull_erode&quot;:
+            {
+                &quot;kernel_shape&quot; : &quot;boxv&quot;,
+                &quot;kernel_size&quot; : 3.0
+            },
+            &quot;ct_skull_fov&quot;:
+            {
+                &quot;brainsize&quot; : 45
+            }
         }
     },
 
@@ -771,7 +788,7 @@
       
     </p>
     <p>
-        &copy; Copyright 2025, SkullTo3d Developers (macatools). Last updated on 2025-04-30.<br/>
+        &copy; Copyright 2025, SkullTo3d Developers (macatools). Last updated on 2025-05-14.<br/>
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 8.1.3.<br/>
     </p>
   </div>
