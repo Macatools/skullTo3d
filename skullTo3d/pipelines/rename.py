@@ -6,7 +6,7 @@ import nipype.interfaces.utility as niu
 import nipype.pipeline.engine as pe
 
 
-def rename_all_skull_petra_derivatives(params, main_workflow, segment_pnh_pipe,
+def rename_all_skull_petra_derivatives(params, main_workflow,
                                        skull_petra_pipe, datasink, pref_deriv,
                                        parse_str):
 
@@ -142,7 +142,7 @@ def rename_all_skull_petra_derivatives(params, main_workflow, segment_pnh_pipe,
                     datasink, '@stereo_robustpetra_skullmask')
 
 
-def rename_all_skull_ct_derivatives(params, main_workflow, segment_pnh_pipe,
+def rename_all_skull_ct_derivatives(params, main_workflow,
                                     skull_ct_pipe, datasink, pref_deriv,
                                     parse_str):
 
@@ -237,7 +237,7 @@ def rename_all_skull_ct_derivatives(params, main_workflow, segment_pnh_pipe,
                 datasink, '@stereo_robustct_skullmask')
 
 
-def rename_all_skull_t1_derivatives(params, main_workflow, segment_pnh_pipe,
+def rename_all_skull_t1_derivatives(params, main_workflow,
                                     skull_t1_pipe, datasink, pref_deriv,
                                     parse_str):
 

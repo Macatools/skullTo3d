@@ -898,7 +898,8 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
                         pad_t1_head_mask, "ref_file")
 
                     main_workflow.connect(
-                        segment_brain_pipe, "outputnode.stereo_to_native_trans",
+                        segment_brain_pipe,
+                        "outputnode.stereo_to_native_trans",
                         pad_t1_head_mask, "trans_file")
 
     if deriv:
@@ -938,7 +939,7 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
 
         if "petra" in skull_dt and "skull_petra_pipe" in params.keys():
             rename_all_skull_petra_derivatives(
-                params, main_workflow, segment_brain_pipe, skull_petra_pipe,
+                params, main_workflow, skull_petra_pipe,
                 datasink, pref_deriv, parse_str)
 
             if pad:
@@ -1003,7 +1004,7 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
 
         if "t1" in skull_dt and "skull_t1_pipe" in params.keys():
             rename_all_skull_t1_derivatives(
-                params, main_workflow, segment_brain_pipe, skull_t1_pipe,
+                params, main_workflow, skull_t1_pipe,
                 datasink, pref_deriv, parse_str)
 
             if pad:
@@ -1050,7 +1051,7 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
             print("rename ct skull pipe 1")
 
             rename_all_skull_ct_derivatives(
-                params, main_workflow, segment_brain_pipe, skull_ct_pipe,
+                params, main_workflow, skull_ct_pipe,
                 datasink, pref_deriv, parse_str)
 
             if pad:
