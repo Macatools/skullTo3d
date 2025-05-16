@@ -56,21 +56,39 @@ jobs:
             curl https://amubox.univ-amu.fr/public.php/dav/files/7tf4ooJsyjHfSbG --output skullTo3d_CI_v2.zip
             unzip -o skullTo3d_CI_v2.zip -d skullTo3d_CI_v2
 
+      - name: Running all test pipelines (macaque_0p5 ANTS)
+        run: |
+
+            python workflows/segment_skull.py -data /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_macaque -out /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_macaque/results -soft ANTS_4animal_test_skull -species macaque_0p5 -sub Stevie -ses 01 -brain_dt T1 T2 -skull_dt T1 petra CT -deriv -pad
+
+            python workflows/segment_skull.py -data /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_macaque -out /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_macaque/results -soft ANTS_4animal_test_skullnoisypetra -species macaque_0p5 -sub Stevie -ses 01 -brain_dt T1 T2 -skull_dt T1 petra CT -deriv -pad
+
+            python workflows/segment_skull.py -data /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_macaque -out /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_macaque/results -soft ANTS_quick_test_skull -species macaque_0p5 -sub Stevie -ses 01 -brain_dt T1 T2 -skull_dt T1 petra CT -deriv -pad
+
+            python workflows/segment_skull.py -data /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_macaque -out /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_macaque/results -soft ANTS_quick_test_skullnoisypetra -species macaque_0p5 -sub Stevie -ses 01 -brain_dt T1 T2 -skull_dt T1 petra CT -deriv -pad
+
+            python workflows/segment_skull.py -data /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_macaque -out /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_macaque/results -soft ANTS_test_skull -species macaque_0p5 -sub Stevie -ses 01 -brain_dt T1 T2 -skull_dt T1 petra CT -deriv -pad
+
+            python workflows/segment_skull.py -data /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_macaque -out /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_macaque/results -soft ANTS_test_skullnoisypetra -species macaque_0p5 -sub Stevie -ses 01 -brain_dt T1 T2 -skull_dt T1 petra CT -deriv -pad
+
+      - name: Running all test pipelines (macaque ANTS)
+        run: |
+            python workflows/segment_skull.py -data /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_macaque -out /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_macaque/results -soft ANTS_4animal_test_skull -species macaque -sub Stevie -ses 01 -brain_dt T1 T2 -skull_dt T1 petra CT -deriv -pad
+
+            python workflows/segment_skull.py -data /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_macaque -out /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_macaque/results -soft ANTS_4animal_test_skullnoisypetra -species macaque -sub Stevie -ses 01 -brain_dt T1 T2 -skull_dt T1 petra CT -deriv -pad
+
+            python workflows/segment_skull.py -data /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_macaque -out /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_macaque/results -soft ANTS_quick_test_skull -species macaque -sub Stevie -ses 01 -brain_dt T1 T2 -skull_dt T1 petra CT -deriv -pad
+
+            python workflows/segment_skull.py -data /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_macaque -out /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_macaque/results -soft ANTS_quick_test_skullnoisypetra -species macaque -sub Stevie -ses 01 -brain_dt T1 T2 -skull_dt T1 petra CT -deriv -pad
+
+            python workflows/segment_skull.py -data /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_macaque -out /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_macaque/results -soft ANTS_test_skull -species macaque -sub Stevie -ses 01 -brain_dt T1 T2 -skull_dt T1 petra CT -deriv -pad
+
+            python workflows/segment_skull.py -data /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_macaque -out /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_macaque/results -soft ANTS_test_skullnoisypetra -species macaque -sub Stevie -ses 01 -brain_dt T1 T2 -skull_dt T1 petra CT -deriv -pad
+
       - name: Running all test pipelines (macaque (no brain, skull only with petra and CT))
         run: |
 
             python workflows/segment_skull.py -data /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_macaque -out /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_macaque/results -soft test_skull -species macaque -sub Stevie -ses 01 -skull_dt petra CT
-
-      - name: Running all test pipelines (macaque ANTS)
-        run: |
-
-            python workflows/segment_skull.py -data /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_macaque -out /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_macaque/results -soft ANTS_test_skull -species macaque_0p5 -sub Stevie -ses 01 -brain_dt T1 T2 -skull_dt T1 petra CT -deriv -pad
-
-            python workflows/segment_skull.py -data /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_macaque -out /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_macaque/results -soft ANTS_quick_test_skull -species macaque -sub Stevie -ses 01 -brain_dt T1 T2 -skull_dt T1 petra CT -deriv -pad
-
-            python workflows/segment_skull.py -data /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_macaque -out /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_macaque/results -soft ANTS_test_skull -species macaque -sub Stevie -ses 01 -brain_dt T1 T2 -skull_dt T1 petra CT -deriv -pad
-
-            python workflows/segment_skull.py -data /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_macaque -out /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_macaque/results -soft ANTS_test_skullnoisypetra -species macaque -sub Stevie -ses 01 -brain_dt T1 T2 -skull_dt T1 petra CT
 
       - name: Running all test pipelines (macaque SPM)
         run: |
@@ -79,16 +97,20 @@ jobs:
 
             python workflows/segment_skull.py -data /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_macaque -out /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_macaque/results -soft SPM_native_test_skullnoisypetra -species macaque -sub Stevie -ses 01 -brain_dt T1 T2 -skull_dt T1 petra CT -deriv -pad
 
-      - name: Running all test pipelines (marmo ANTS)
+      - name: Running all test pipelines (marmo )
         run: |
+            python workflows/segment_skull.py -data /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_marmo -out /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_marmo/results -soft ANTS_4animal_test_skull -species marmo -sub Tresor -ses 01 -brain_dt T1 T2 -skull_dt T1 petra CT -deriv -pad
+
+            python workflows/segment_skull.py -data /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_marmo -out /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_marmo/results -soft ANTS_quick_test_skull -species marmo -sub Tresor -ses 01 -brain_dt T1 T2 -skull_dt T1 petra CT -deriv -pad
+
             python workflows/segment_skull.py -data /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_marmo -out /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_marmo/results -soft ANTS_test_skull -species marmo -sub Tresor -ses 01 -brain_dt T1 T2 -skull_dt T1 petra CT -deriv -pad
 
-            python workflows/segment_skull.py -data /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_marmo -out /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_marmo/results -soft ANTS_test_skull -species marmoT2 -sub Tresor -ses 01 -brain_dt T1 T2 -skull_dt T1 petra CT -deriv -pad
+            python workflows/segment_skull.py -data /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_marmo -out /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_marmo/results -soft SPM_native_test_skull -species marmo -sub Tresor -ses 01 -brain_dt T1 T2 -skull_dt T1 petra CT -deriv -pad
 
       - name: Running all test pipelines (marmo SPM)
         run: |
 
-            python workflows/segment_skull.py -data /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_marmo -out /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_marmo/results -soft SPM_native_test_skull -species marmo -sub Tresor -ses 01 -brain_dt T1 T2 -skull_dt T1 petra CT -deriv -pad
+            python workflows/segment_skull.py -data /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_marmo -out /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_marmo/results -soft ANTS_test_skull -species marmoT2 -sub Tresor -ses 01 -brain_dt T1 T2 -skull_dt T1 petra CT -deriv -pad
 
             python workflows/segment_skull.py -data /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_marmo -out /home/runner/work/skullTo3d/skullTo3d/skullTo3d_CI_v2/cerimed_marmo/results -soft SPM_native_test_skull -species marmoT2 -sub Tresor -ses 01 -brain_dt T1 T2 -skull_dt T1 petra CT -deriv -pad
 
