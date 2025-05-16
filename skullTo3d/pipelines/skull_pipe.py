@@ -838,7 +838,7 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
                               skullmask_ct_pipe, "inputnode.indiv_params")
 
     else:
-        return skullmask_ct_pipe
+        return skull_ct_pipe
 
     skull_ct_pipe.connect(skullmask_ct_pipe, "mesh_ct_skull.stl_file",
                           outputnode, "ct_skull_stl")
@@ -909,7 +909,7 @@ def create_autonomous_skull_ct_pipe(name="skull_ct_pipe", params={}):
 
 
 ###############################################################################
-# ####################  PETRA  #####################
+# #################################  PETRA  ###################################
 ###############################################################################
 
 def _create_petra_head_mask(name="headmask_petra_pipe", params={}):
