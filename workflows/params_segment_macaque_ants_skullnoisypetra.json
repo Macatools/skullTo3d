@@ -189,15 +189,14 @@
             "petra_skull_gcc_erode":
             {
                 "kernel_shape": "boxv",
-                "kernel_size": 5.0
+                "kernel_size": 1.0
             },
             "petra_skull_gcc_dilate":
             {
                 "operation": "modal",
                 "kernel_shape": "boxv",
-                "kernel_size": 5.0
+                "kernel_size": 1.0
             },
-
             "petra_skull_dilate":
             {
                 "operation": "modal",
