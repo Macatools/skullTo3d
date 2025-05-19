@@ -9,16 +9,62 @@
 #
 # Timestamp: 2020/12/02 18:33:44 UTC
 
-FROM macatools/macapype:latest
+FROM macatools/macapype_env:v0.3.2
 
 USER root
 
 ARG DEBIAN_FRONTEND="noninteractive"
 
 MAINTAINER David Meunier "david.meunier@univ-amu.fr"
+######################## Python packages
+
+RUN apt-get update && apt-get install -y git libpng-dev libfreetype6-dev libxft-dev libblas-dev liblapack-dev libatlas-base-dev gfortran libxml2-dev libxslt1-dev wget graphviz
+
+RUN python -m pip install xvfbwrapper \
+    psutil \
+    numpy \
+    scipy \
+    matplotlib \
+    statsmodels \
+    pandas \
+    networkx\
+    mock \
+    prov \
+    click \
+    funcsigs \
+    pydotplus \
+    pydot \
+    rdflib \
+    pbr \
+    nibabel \
+    packaging \
+    pytest
+
+RUN python -m pip install graphviz \
+    pybids \
+    nipype \
+    nilearn \
+    scikit-image \
+    brain-slam
+
+RUN python -m pip install SimpleITK
+
+############################################# install macapype
+
+RUN python -m pip install --pre macapype
+RUN python -c "import macapype; print(macapype.__version__)"
 
 ############################################# install skullTo3d
 
 RUN python -m pip install --no-deps --pre skullTo3d
 
 RUN python -c "import skullTo3d; print(skullTo3d.__version__)"
+
+################################################## Finishing
+RUN apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN rm -rf \
+     /tmp/hsperfdata* \
+     /var/*/apt/*/partial \
+     /var/log/apt/term*
