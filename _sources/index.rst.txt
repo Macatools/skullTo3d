@@ -41,6 +41,7 @@ SkullTo3D is fairly flexible, but requires to specify multiples parameters in co
 
 See :ref:`Commands <command>` for a description on the avalaible command parameters
 
+If ``-deriv``` is provided, see :ref:`Derivatives <derivatives>` for a descrition of the outputs
 
 
 Table of contents
@@ -53,6 +54,7 @@ Table of contents
     docker_install
     quick_test
     command
+    derivatives
     params
     indiv_params
 
