@@ -120,7 +120,7 @@ specifies the datatype available for skull segmentation (can be, "T1", "petra", 
 
 * ``-deriv`` : creates a derivatives directory, with all important files, properly named following BIDS derivatives convertion. See :ref:`Derivatives <derivatives>` for a descrition of the outputs
 
-* ``-pad`` : exports most important files in native (original) space
+* ``-padback`` : exports most important files in native (original) space
 
 ------------------------
 more optional parameters
@@ -178,4 +178,4 @@ Command line examples
 
 .. code:: bash
 
-    $ python workflows/segment_skull.py -data ~/Data_maca -out ./local_test -soft ANTS_skull -params params.json -sub Apache Baron -ses 01 -rec mean -deriv -pad
+    $ python workflows/segment_skull.py -data ~/Data_maca -out ./local_test -soft ANTS_skull -params params.json -sub Apache Baron -ses 01 -rec mean -deriv -padback
