@@ -21,8 +21,6 @@ For all files provided by macapype, see `Derivatives <https://macatools.github.i
 Data Preparation (Padded files)
 *******************************
 
-|
-
 **If pad_template is defined in params (normalily used to coregister stereo to petra, T1w and CT):**
 
 *sub-Stevie_ses-01_space-stereo_desc-pad_T1w.nii.gz*
@@ -57,7 +55,6 @@ Petra Skull extraction
 *sub-Stevie_ses-01_space-stereo_desc-petra_PDw.nii.gz*
 
 |
-
 **Headmask in stereo and native (normally corresponding to native T1w) spaces:**
 
 *sub-Stevie_ses-01_space-stereo_desc-petra_headmask.nii.gz*
@@ -83,7 +80,6 @@ Petra Skull extraction
 T1w Skull extraction
 ********************
 
-|
 
 **Headmask in stereo and native spaces:**
 
