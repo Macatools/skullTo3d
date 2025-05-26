@@ -98,7 +98,7 @@ exclusive parameters
 *(but one is mandatory)*
 
 * ``-params`` : *(mandatory if -species is omitted)* a json file specifiying the global parameters of the analysis. See :ref:`Parameters <params>` for more details
-* ``-species`` : *(mandatory if -params is omitted)* followed the NHP species corresponding to the image, e.g. {macaque | marmo | baboon | chimp}
+* ``-species`` : *(mandatory if -params is omitted)* followed the NHP species corresponding to the image, e.g. {macaque | marmo }
 
 **NB** marmoT2 can be used for segmenting from the T2w image (by default, T1w is used for marmo)
 **NB** macaque_0p5 is available to use downsampled template (faster results)

@@ -33,14 +33,19 @@ A docker image can also be downloaded directly from `DockerHub repo <https://hub
 
     $ docker pull macatools/skullto3d:latest
 
-Starting from the release v0.2.1 on github, the docker images are tagged accordingly on Dockerhub:
+Docker images are tagged accordingly on Dockerhub:
 
 .. code:: bash
 
-    $ docker pull macatools/skullto3d:version-0.2.1
-
+    $ docker pull macatools/skullto3d:v0.1
 
 See :ref:`Quick test <quick_test>` for testing if your docker installation works properly on test datasets.
+
+**NB** for running ``-soft SPM`` and/or hdbet (corresponding ``-soft ANTS_quick``), a bigger version of the docker is available:
+
+.. code:: bash
+
+    $ docker pull macatools/skullto3d:v0.1
 
 Note on Singularity
 -------------------
@@ -51,7 +56,7 @@ Here is an example of a command line to install and convert the docker image to 
 
 .. code:: bash
 
-    $ export SINGULARITY_TMPDIR=/tmp/; export SINGULARITY_CACHEDIR=/tmp/; sudo -E /path/to/bin/singularity build /path/to/containers/skullto3d_v0.0.4.1.sif docker://macatools/skullto3d:v0.0.4.1
+    $ export SINGULARITY_TMPDIR=/tmp/; export SINGULARITY_CACHEDIR=/tmp/; sudo -E /path/to/bin/singularity build /path/to/containers/skullto3d_v0.1.sif docker://macatools/skullto3d:v0.1
 
 It *seems* the sudo priviliges are required to install and build images, so in case you have trouble, ask the admin of your cluster to perform this operation
 
