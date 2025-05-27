@@ -89,14 +89,6 @@
     {
         "headmask_t1_pipe":
         {
-            "t1_head_auto_mask":
-            {
-                "kmeans": true,
-                "sample_bins": 30,
-                "distance": 1,
-                "operation": "lower",
-                "index": 1
-            },
             "t1_head_dilate":
             {
                 "operation": "modal",
