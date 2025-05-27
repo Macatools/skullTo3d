@@ -6,7 +6,7 @@
 Container install
 *****************
 
-Docker allows to provide all necessary softwares in extra to macapype packages. The Docker image we provide include ANTS 2.3.1, FSL 5.0.10 and AFNI (latest version). See at the bottom of this page for docker with SPM Stand-alone.
+Docker allows to provide all necessary softwares in extra to macapype packages. The Docker image we provide include ANTS 2.4.3, FSL 6.0.7.17 and AFNI (latest version). See at the bottom of this page for docker with SPM Stand-alone.
 
 **Note 1** :the image is quite big (~5GB) so requires some space on your "/" partition.
 **Note 2** : due to standard naming format, the repository on DockerHub is called "skullto3d", not "skullTo3d" - please note the difference in uppercase lowercase "T"...
