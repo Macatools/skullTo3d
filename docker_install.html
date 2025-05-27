@@ -221,7 +221,7 @@
       
   <section id="container-install">
 <span id="docker-install"></span><h1>Container install<a class="headerlink" href="#container-install" title="Link to this heading">¶</a></h1>
-<p>Docker allows to provide all necessary softwares in extra to macapype packages. The Docker image we provide include ANTS 2.3.1, FSL 5.0.10 and AFNI (latest version). See at the bottom of this page for docker with SPM Stand-alone.</p>
+<p>Docker allows to provide all necessary softwares in extra to macapype packages. The Docker image we provide include ANTS 2.4.3, FSL 6.0.7.17 and AFNI (latest version). See at the bottom of this page for docker with SPM Stand-alone.</p>
 <p><strong>Note 1</strong> :the image is quite big (~5GB) so requires some space on your “/” partition.
 <strong>Note 2</strong> : due to standard naming format, the repository on DockerHub is called “skullto3d”, not “skullTo3d” - please note the difference in uppercase lowercase “T”…</p>
 <section id="dockerfile">
@@ -241,17 +241,21 @@ $<span class="w"> </span>docker<span class="w"> </span>build<span class="w"> </s
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>docker<span class="w"> </span>pull<span class="w"> </span>macatools/skullto3d:latest
 </pre></div>
 </div>
-<p>Starting from the release v0.2.1 on github, the docker images are tagged accordingly on Dockerhub:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>docker<span class="w"> </span>pull<span class="w"> </span>macatools/skullto3d:version-0.2.1
+<p>Docker images are tagged accordingly on Dockerhub:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>docker<span class="w"> </span>pull<span class="w"> </span>macatools/skullto3d:v0.1
 </pre></div>
 </div>
 <p>See <a class="reference internal" href="quick_test.html#quick-test"><span class="std std-ref">Quick test</span></a> for testing if your docker installation works properly on test datasets.</p>
+<p><strong>NB</strong> for running <code class="docutils literal notranslate"><span class="pre">-soft</span> <span class="pre">SPM</span></code> and/or hdbet (corresponding <code class="docutils literal notranslate"><span class="pre">-soft</span> <span class="pre">ANTS_quick</span></code>), a bigger version of the docker is available:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>docker<span class="w"> </span>pull<span class="w"> </span>macatools/skullto3d:v0.1
+</pre></div>
+</div>
 </section>
 <section id="note-on-singularity">
 <h2>Note on Singularity<a class="headerlink" href="#note-on-singularity" title="Link to this heading">¶</a></h2>
 <p>It is possible (and recommanded) to use singularity version of container on shared computers/clusters. skullto3d docker version has been tested and is compatible with versions of singularity higher than 0.3 (“sif” version)</p>
 <p>Here is an example of a command line to install and convert the docker image to singularity image :</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">SINGULARITY_TMPDIR</span><span class="o">=</span>/tmp/<span class="p">;</span><span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">SINGULARITY_CACHEDIR</span><span class="o">=</span>/tmp/<span class="p">;</span><span class="w"> </span>sudo<span class="w"> </span>-E<span class="w"> </span>/path/to/bin/singularity<span class="w"> </span>build<span class="w"> </span>/path/to/containers/skullto3d_v0.0.4.1.sif<span class="w"> </span>docker://macatools/skullto3d:v0.0.4.1
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">SINGULARITY_TMPDIR</span><span class="o">=</span>/tmp/<span class="p">;</span><span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">SINGULARITY_CACHEDIR</span><span class="o">=</span>/tmp/<span class="p">;</span><span class="w"> </span>sudo<span class="w"> </span>-E<span class="w"> </span>/path/to/bin/singularity<span class="w"> </span>build<span class="w"> </span>/path/to/containers/skullto3d_v0.1.sif<span class="w"> </span>docker://macatools/skullto3d:v0.1
 </pre></div>
 </div>
 <p>It <em>seems</em> the sudo priviliges are required to install and build images, so in case you have trouble, ask the admin of your cluster to perform this operation</p>
@@ -271,7 +275,7 @@ $<span class="w"> </span>docker<span class="w"> </span>build<span class="w"> </s
       
     </p>
     <p>
-        &copy; Copyright 2025, SkullTo3d Developers (macatools). Last updated on 2025-05-22.<br/>
+        &copy; Copyright 2025, SkullTo3d Developers (macatools). Last updated on 2025-05-27.<br/>
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 8.1.3.<br/>
     </p>
   </div>

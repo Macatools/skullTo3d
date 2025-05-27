@@ -25,7 +25,7 @@ Testing from Singularity image
 
 .. code:: bash
 
-    $ singularity run -B /path/to/data:/data /path/to/containers/skullto3d_v0.0.5.sif segment_skull -data /data/skullTo3d_CI_v2/cerimed_marmo -out /data/skullTo3d_CI_v2/cerimed_marmo/results -soft ANTS_skull_robustreg -species marmo -sub Tresor -ses 01 -brain_dt T1 T2 -skull_dt T1 petra CT -deriv -padback
+    $ singularity run -B /path/to/data:/data /path/to/containers/skullto3d_v0.1.sif segment_skull -data /data/skullTo3d_CI_v2/cerimed_marmo -out /data/skullTo3d_CI_v2/cerimed_marmo/results -soft ANTS_skull_robustreg -species marmo -sub Tresor -ses 01 -brain_dt T1 T2 -skull_dt T1 petra CT -deriv -padback
 
 
 Testing from docker image
@@ -35,7 +35,7 @@ For testing the docker installation, the beginning of the commands should be rep
 
 .. code:: bash
 
-    $ docker run -v /path/to/data:/data macatools/skullto3d:v0.0.5 segment_skull -data /data/skullTo3d_CI_v2/cerimed_marmo -out /data/skullTo3d_CI_v2/cerimed_marmo/results -soft ANTS_skull_robustreg -species marmo -sub Tresor -ses 01 -brain_dt T1 T2 -skull_dt T1 petra CT -deriv -padback
+    $ docker run -v /path/to/data:/data macatools/skullto3d:v0.1 segment_skull -data /data/skullTo3d_CI_v2/cerimed_marmo -out /data/skullTo3d_CI_v2/cerimed_marmo/results -soft ANTS_skull_robustreg -species marmo -sub Tresor -ses 01 -brain_dt T1 T2 -skull_dt T1 petra CT -deriv -padback
 
 Testing from python package install
 -----------------------------------
@@ -68,6 +68,6 @@ Macaque CT petra
 
 .. code:: bash
 
-    $ singularity run -B /path/to/data/:/data /path/to/containers/skullto3d_v0.0.5.sif segment_skull  -data /data/skullTo3d_CI_v2/cerimed_macaque -out /data/skullTo3d_CI_v2/cerimed_macaque/results -soft ANTS_skull_robustreg -species macaque -sub Stevie -ses 01 -brain_dt T1 T2 -skull_dt CT petra t1 -deriv -padback
+    $ singularity run -B /path/to/data/:/data /path/to/containers/skullto3d_v0.1.sif segment_skull  -data /data/skullTo3d_CI_v2/cerimed_macaque -out /data/skullTo3d_CI_v2/cerimed_macaque/results -soft ANTS_skull_robustreg -species macaque -sub Stevie -ses 01 -brain_dt T1 T2 -skull_dt CT petra t1 -deriv -padback
 
 See  :ref:`Commands <command>` for more info on robustreg in soft
