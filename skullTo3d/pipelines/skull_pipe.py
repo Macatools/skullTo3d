@@ -31,6 +31,8 @@ from macapype.nodes.surface import (keep_gcc, IsoSurface)
 
 from macapype.nodes.correct_bias import itk_debias
 
+from skullTo3d.nodes.utils import empty_node
+
 from skullTo3d.nodes.skull import mask_auto_img
 
 from macapype.nodes.prepare import apply_li_thresh
@@ -510,6 +512,16 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
         skull_t1_pipe.connect(inputnode, "indiv_params",
                               headmask_t1_pipe, "inputnode.indiv_params")
     else:
+        empty = pe.Node(
+                interface=niu.Function(
+                    input_names=["in_file"],
+                    output_names=["out_file"],
+                    function=empty_node),
+                name="empty")
+
+        skull_t1_pipe.connect(inputnode, "stereo_T1",
+                              empty, "in_file")
+
         return skull_t1_pipe
 
     skull_t1_pipe.connect(

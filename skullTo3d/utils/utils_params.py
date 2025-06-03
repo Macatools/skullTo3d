@@ -1,5 +1,4 @@
 
-
 def update_skull_params(ssoft, params):
 
     if "noheadmask" in ssoft:
