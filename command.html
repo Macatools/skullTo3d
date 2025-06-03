@@ -290,23 +290,44 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">_4animal</span></code> :  will use bet4animal (FSL) for brain extraction, for faster computation (by default atlas_brex is used)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">_quick</span></code> : will use hd-bet (Deep Learning) for brain extraction, for faster computation (by default atlas_brex is used)</p></li>
 </ul>
-<p><a href="#id1"><span class="problematic" id="id2">**</span></a>NB: ** hd-bet requires a specific version of macapype/skullTo3d, not available by default</p>
-<p>This option should be used if the coregistration to template in preparation is not performed correctly:</p>
+<p><strong>NB:</strong> hd-bet requires a specific version of macapype/skullTo3d, not available by default</p>
+</li>
+</ul>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<blockquote>
+<div><p>This option should be used if the coregistration to template in preparation is not performed correctly:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">_robustreg</span></code> (at the end) to have a more robust registration (in two steps)</p></li>
 </ul>
-<p>Finally, these option are available (to place after SPM or ANTS) and will modify the parameters but can be launched in sequence:</p>
+</div></blockquote>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<blockquote>
+<div><p>Finally, these option are available (to place after SPM or ANTS) and will modify the parameters but can be launched in sequence:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">_test</span></code> : (at the end) to check if the full pipeline is coherent (will only generate the graph.dot and graph.png)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">_prep</span></code> (at the end) will perform data preparation (no brain extraction and segmentation)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">_noseg</span></code> (at the end) will perform data preparation and brain extraction (no segmentation)</p></li>
 </ul>
-<p><strong>Some options are specific to skullTo3d:</strong>
-*  <code class="docutils literal notranslate"><span class="pre">_skull</span></code> after SPM or ANTS if you want to process skull or angio <em>specific to skullTo3d</em>; otherwise the main pipelines of macapype will be launched (only brain segmentation will be performed) <a href="#id3"><span class="problematic" id="id4">**</span></a>NB : ** <code class="docutils literal notranslate"><span class="pre">_skullnoisypetra</span></code> instead of <code class="docutils literal notranslate"><span class="pre">_skull</span></code> available for macaque with issues on petra
-* <code class="docutils literal notranslate"><span class="pre">_noskullmask</span></code> (at the end) will perform realignement to stereo and headmask (only realignement for CT)
-* <code class="docutils literal notranslate"><span class="pre">_noheadmask</span></code> (at the end) will perform only realignement to stereo</p>
-</li>
+</div></blockquote>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<blockquote>
+<div><p><strong>Some options are specific to skullTo3d:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">_skull</span></code> after SPM or ANTS if you want to process skull or angio <em>specific to skullTo3d</em>; otherwise the main pipelines of macapype will be launched (only brain segmentation will be performed)</p></li>
 </ul>
+<p><strong>NB :</strong> <code class="docutils literal notranslate"><span class="pre">_skullnoisypetra</span></code> instead of <code class="docutils literal notranslate"><span class="pre">_skull</span></code> available for macaque with issues on petra</p>
+<p><strong>NB :</strong> <code class="docutils literal notranslate"><span class="pre">-soft</span> <span class="pre">skull</span></code> without processing brain is possible, but is still experimental. It only works if <code class="docutils literal notranslate"><span class="pre">-skull_dt</span> <span class="pre">CT</span> <span class="pre">petra</span></code> and <code class="docutils literal notranslate"><span class="pre">-deriv</span></code> and <code class="docutils literal notranslate"><span class="pre">-padback</span></code> are NOT defined</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">_noskullmask</span></code> (at the end) will perform realignement to stereo and headmask (only realignement for CT)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">_noheadmask</span></code> (at the end) will perform only realignement to stereo</p></li>
+</ul>
+</div></blockquote>
 </section>
 <section id="exclusive-parameters">
 <h3>exclusive parameters<a class="headerlink" href="#exclusive-parameters" title="Link to this heading">¶</a></h3>
@@ -399,7 +420,7 @@
       
     </p>
     <p>
-        &copy; Copyright 2025, SkullTo3d Developers (macatools). Last updated on 2025-05-27.<br/>
+        &copy; Copyright 2025, SkullTo3d Developers (macatools). Last updated on 2025-06-03.<br/>
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 8.1.3.<br/>
     </p>
   </div>

@@ -74,11 +74,16 @@ mandatory parameters
 
   * ``_4animal`` :  will use bet4animal (FSL) for brain extraction, for faster computation (by default atlas_brex is used)
   * ``_quick`` : will use hd-bet (Deep Learning) for brain extraction, for faster computation (by default atlas_brex is used)
-  **NB: ** hd-bet requires a specific version of macapype/skullTo3d, not available by default
+
+  **NB:** hd-bet requires a specific version of macapype/skullTo3d, not available by default
+
+|
 
   This option should be used if the coregistration to template in preparation is not performed correctly:
 
   * ``_robustreg`` (at the end) to have a more robust registration (in two steps)
+
+|
 
   Finally, these option are available (to place after SPM or ANTS) and will modify the parameters but can be launched in sequence:
 
@@ -86,8 +91,16 @@ mandatory parameters
   * ``_prep`` (at the end) will perform data preparation (no brain extraction and segmentation)
   * ``_noseg`` (at the end) will perform data preparation and brain extraction (no segmentation)
 
+|
+
   **Some options are specific to skullTo3d:**
-  *  ``_skull`` after SPM or ANTS if you want to process skull or angio *specific to skullTo3d*; otherwise the main pipelines of macapype will be launched (only brain segmentation will be performed) **NB : ** ``_skullnoisypetra`` instead of ``_skull`` available for macaque with issues on petra
+
+  *  ``_skull`` after SPM or ANTS if you want to process skull or angio *specific to skullTo3d*; otherwise the main pipelines of macapype will be launched (only brain segmentation will be performed)
+
+  **NB :** ``_skullnoisypetra`` instead of ``_skull`` available for macaque with issues on petra
+
+  **NB :** ``-soft skull`` without processing brain is possible, but is still experimental. It only works if ``-skull_dt CT petra`` and ``-deriv`` and ``-padback`` are NOT defined
+
   * ``_noskullmask`` (at the end) will perform realignement to stereo and headmask (only realignement for CT)
   * ``_noheadmask`` (at the end) will perform only realignement to stereo
 
