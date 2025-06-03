@@ -581,7 +581,7 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
         outputnode, "t1_rawskull_stl")
 
     skull_t1_pipe.connect(
-        skullmask_t1_pipe, "t1_rawskull_erode.out_file",
+        skullmask_t1_pipe, "t1_skull_erode.out_file",
         outputnode, "t1_rawskull_mask")
 
     if "t1_skull_fov" in params.keys():
