@@ -875,6 +875,25 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
                         "outputnode.stereo_to_native_trans",
                         pad_t1_skull_mask, "trans_file")
 
+                    print("Using reg_aladin transfo to pad rawskull_mask back")
+
+                    pad_t1_rawskull_mask = pe.Node(
+                        RegResample(inter_val="NN"),
+                        name="pad_t1_rawskull_mask")
+
+                    main_workflow.connect(
+                        skull_t1_pipe, "outputnode.t1_rawskull_mask",
+                        pad_t1_rawskull_mask, "flo_file")
+
+                    main_workflow.connect(
+                        segment_brain_pipe, "outputnode.native_T1",
+                        pad_t1_rawskull_mask, "ref_file")
+
+                    main_workflow.connect(
+                        segment_brain_pipe,
+                        "outputnode.stereo_to_native_trans",
+                        pad_t1_rawskull_mask, "trans_file")
+
                 if "headmask_t1_pipe" in params["skull_t1_pipe"]:
 
                     print("Using reg_aladin transfo to pad head_mask back")
@@ -1004,6 +1023,23 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
             if pad:
 
                 if "skullmask_t1_pipe" in params["skull_t1_pipe"]:
+
+                    # rename t1_rawskull_mask
+                    rename_native_t1_rawskull_mask = pe.Node(
+                        niu.Rename(), name="rename_native_t1_rawskull_mask")
+
+                    rename_native_t1_rawskull_mask.inputs.format_string = \
+                        pref_deriv + "_space-native_desc-t1_rawskullmask"
+                    rename_native_t1_rawskull_mask.inputs.parse_string = parse_str
+                    rename_native_t1_rawskull_mask.inputs.keep_ext = True
+
+                    main_workflow.connect(
+                        pad_t1_rawskull_mask, "out_file",
+                        rename_native_t1_rawskull_mask, 'in_file')
+
+                    main_workflow.connect(
+                        rename_native_t1_rawskull_mask, 'out_file',
+                        datasink, '@t1_native_rawskull_mask')
 
                     # rename t1_skull_mask
                     rename_native_t1_skull_mask = pe.Node(

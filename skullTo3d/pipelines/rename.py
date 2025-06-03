@@ -281,6 +281,41 @@ def rename_all_skull_t1_derivatives(params, main_workflow,
                 rename_t1_skull_stl, 'out_file',
                 datasink, '@t1_skull_stl')
 
+            # rename t1_rawskull_mask
+            rename_t1_rawskull_mask = pe.Node(
+                niu.Rename(), name="rename_t1_rawskull_mask")
+
+            rename_t1_rawskull_mask.inputs.format_string = \
+                pref_deriv + "_space-stereo_desc-t1_rawskullmask"
+            rename_t1_rawskull_mask.inputs.parse_string = parse_str
+            rename_t1_rawskull_mask.inputs.keep_ext = True
+
+            main_workflow.connect(
+                    skull_t1_pipe, "outputnode.t1_rawskull_mask",
+                    rename_t1_rawskull_mask, 'in_file')
+
+            main_workflow.connect(
+                rename_t1_rawskull_mask, 'out_file',
+                datasink, '@t1_rawskull_mask')
+
+            # rename t1_rawskull_stl
+            rename_t1_rawskull_stl = pe.Node(
+                niu.Rename(),
+                name="rename_t1_rawskull_stl")
+
+            rename_t1_rawskull_stl.inputs.format_string = \
+                pref_deriv + "_desc-t1_rawskullmask"
+            rename_t1_rawskull_stl.inputs.parse_string = parse_str
+            rename_t1_rawskull_stl.inputs.keep_ext = True
+
+            main_workflow.connect(
+                skull_t1_pipe, 'outputnode.t1_rawskull_stl',
+                rename_t1_rawskull_stl, 'in_file')
+
+            main_workflow.connect(
+                rename_t1_rawskull_stl, 'out_file',
+                datasink, '@t1_rawskull_stl')
+
             if "t1_skull_fov" in params["skull_t1_pipe"]:
 
                 # rename robustt1_skull_stl
@@ -338,6 +373,24 @@ def rename_all_skull_t1_derivatives(params, main_workflow,
             main_workflow.connect(
                 rename_t1_head_mask, 'out_file',
                 datasink, '@t1_head_mask')
+
+            # rename t1_head_stl
+            rename_t1_head_stl = pe.Node(
+                niu.Rename(),
+                name="rename_t1_head_stl")
+
+            rename_t1_head_stl.inputs.format_string = \
+                pref_deriv + "_desc-t1_headmask"
+            rename_t1_head_stl.inputs.parse_string = parse_str
+            rename_t1_head_stl.inputs.keep_ext = True
+
+            main_workflow.connect(
+                skull_t1_pipe, 'outputnode.t1_head_stl',
+                rename_t1_head_stl, 'in_file')
+
+            main_workflow.connect(
+                rename_t1_head_stl, 'out_file',
+                datasink, '@t1_head_stl')
 
 
 # ############################# ANGIO
