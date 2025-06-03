@@ -178,11 +178,11 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
     if 'prep' in ssoft:
         new_ssoft.remove('prep')
 
-    if 'noskull' in ssoft:
-        new_ssoft.remove('noskull')
+    if 'noskullmask' in ssoft:
+        new_ssoft.remove('noskullmask')
 
-    if 'nohead' in ssoft:
-        new_ssoft.remove('nohead')
+    if 'noheadmask' in ssoft:
+        new_ssoft.remove('noheadmask')
 
     if 'noseg' in ssoft:
         new_ssoft.remove('noseg')
