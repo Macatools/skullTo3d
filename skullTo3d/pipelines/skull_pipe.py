@@ -519,6 +519,9 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
                     function=empty_node),
                 name="empty")
 
+        skull_t1_pipe.connect(inputnode, "stereo_T1",
+                              empty, "in_file")
+
         return skull_t1_pipe
 
     skull_t1_pipe.connect(
