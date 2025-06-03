@@ -31,7 +31,7 @@ from macapype.nodes.surface import (keep_gcc, IsoSurface)
 
 from macapype.nodes.correct_bias import itk_debias
 
-from skullTo3d.nodes.util import empty_node
+from skullTo3d.nodes.utils import empty_node
 
 from skullTo3d.nodes.skull import mask_auto_img
 
