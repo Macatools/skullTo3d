@@ -1030,7 +1030,8 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
 
                     rename_native_t1_rawskull_mask.inputs.format_string = \
                         pref_deriv + "_space-native_desc-t1_rawskullmask"
-                    rename_native_t1_rawskull_mask.inputs.parse_string = parse_str
+                    rename_native_t1_rawskull_mask.inputs.parse_string = \
+                        parse_str
                     rename_native_t1_rawskull_mask.inputs.keep_ext = True
 
                     main_workflow.connect(
