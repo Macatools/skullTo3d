@@ -442,7 +442,7 @@ def _create_skullmask_t1_pipe(name="skullmask_t1_pipe", params={}):
         inputnode, ('indiv_params', parse_key, "t1_skull_dilate"),
         t1_skull_dilate, "indiv_params")
 
-    # t1_skull_t1_fill
+    # t1_skull_fill
     t1_skull_fill = pe.Node(interface=UnaryMaths(),
                             name="t1_skull_fill")
 
@@ -452,7 +452,7 @@ def _create_skullmask_t1_pipe(name="skullmask_t1_pipe", params={}):
         t1_skull_dilate, "out_file",
         t1_skull_fill, "in_file")
 
-    # t1_skull_t1_erode
+    # t1_skull_erode
     t1_skull_erode = NodeParams(interface=ErodeImage(),
                                 params=parse_key(params, "t1_skull_erode"),
                                 name="t1_skull_erode")
@@ -584,7 +584,7 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
         outputnode, "t1_skull_stl")
 
     skull_t1_pipe.connect(
-        skullmask_t1_pipe, "t1_skull_mask_binary.out_file",
+        skullmask_t1_pipe, "t1_skull_erode.out_file",
         outputnode, "t1_skull_mask")
 
     # rawskull t1
@@ -602,7 +602,7 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
             skullmask_t1_pipe, "t1_skull_mask_binary.out_file",
             outputnode, "t1_rawskull_mask")
 
-    if "t1_skull_fov" in params.keys():
+    if "t1_skull_fov" in params["skullmask_t1_pipe"].keys():
         skull_t1_pipe.connect(
             skullmask_t1_pipe, "t1_skull_fov.out_roi",
             outputnode, "robustt1_skull_mask")
