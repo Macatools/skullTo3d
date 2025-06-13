@@ -316,7 +316,7 @@ def rename_all_skull_t1_derivatives(params, main_workflow,
                 rename_t1_rawskull_stl, 'out_file',
                 datasink, '@t1_rawskull_stl')
 
-            if "t1_skull_fov" in params["skull_t1_pipe"]:
+            if "t1_skull_fov" in params["skull_t1_pipe"]["skullmask_t1_pipe"]:
 
                 # rename robustt1_skull_stl
                 rename_robustt1_skull_stl = pe.Node(
