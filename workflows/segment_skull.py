@@ -305,10 +305,10 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
     # soft
     wf_name += "_{}".format(soft)
 
-    if 't1' in datatypes:
+    if 't1' in brain_dt:
         wf_name += '_t1'
 
-        if 't2' in datatypes:
+        if 't2' in brain_dt:
             wf_name += 't2'
 
     if "spm" in ssoft or "spm12" in ssoft or "ants" in ssoft:
