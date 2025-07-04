@@ -69,21 +69,20 @@
                 "wm": 4,
                 "csf": [1, 5]
             }
-        },
-        "export_5tt_pipe": {},
-
-        "IsoSurface_brain_pipe":
-        {
-            "merge_brain_tissues":
-            {
-                "keep_indexes": [2, 3, 4]
-            }
-        },
-
-        "IsoSurface_tissues_pipe":
-        {
         }
     },
+    "export_5tt_pipe": {},
+    "IsoSurface_brain_pipe":
+    {
+        "merge_brain_tissues":
+        {
+            "keep_indexes": [2, 3, 4]
+        }
+    },
+    "IsoSurface_tissues_pipe":
+    {
+    },
+
     "skull_t1_pipe":
     {
         "headmask_t1_pipe":
