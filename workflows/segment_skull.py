@@ -61,9 +61,8 @@ import nipype.interfaces.fsl as fsl
 from nipype.interfaces.niftyreg.regutils import RegResample
 
 from macapype.pipelines.full_pipelines import (
-    create_full_spm_subpipes,
-    create_full_ants_subpipes,
-    create_full_T1_ants_subpipes,)
+    create_full_T1T2_subpipes,
+    create_full_T1_subpipes)
 
 from macapype.utils.utils_bids import (
     create_datasource,
@@ -260,7 +259,7 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
 
         print("Using orig params file:", params_file)
 
-        extra_wf_name = "_orig"
+        wf_name += "_orig"
 
         # indiv_params
         if indiv_params_file is not None:
@@ -305,6 +304,12 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
 
     # soft
     wf_name += "_{}".format(soft)
+
+    if 't1' in brain_dt:
+        wf_name += '_t1'
+
+        if 't2' in brain_dt:
+            wf_name += 't2'
 
     if "spm" in ssoft or "spm12" in ssoft or "ants" in ssoft:
         print("Segmenting brain, default is t1 based")
@@ -475,27 +480,19 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
         space = "native"
 
     # which soft is used
-    if "spm" in ssoft or "spm12" in ssoft:
-        segment_brain_pipe = create_full_spm_subpipes(
+    if "t1" in brain_dt and 't2' in brain_dt:
+        segment_brain_pipe = create_full_T1T2_subpipes(
             params_template_stereo=params_template_stereo,
             params_template_brainmask=params_template_brainmask,
             params_template_seg=params_template_seg,
-            params=params, pad=pad, space=space)
+            params=params, mask_file=mask_file, space=space, pad=pad)
 
-    elif "ants" in ssoft:
-        if "t1" in brain_dt and 't2' in brain_dt:
-            segment_brain_pipe = create_full_ants_subpipes(
-                params_template_stereo=params_template_stereo,
-                params_template_brainmask=params_template_brainmask,
-                params_template_seg=params_template_seg,
-                params=params, mask_file=mask_file, space=space, pad=pad)
-
-        elif "t1" in brain_dt:
-            segment_brain_pipe = create_full_T1_ants_subpipes(
-                params_template_stereo=params_template_stereo,
-                params_template_brainmask=params_template_brainmask,
-                params_template_seg=params_template_seg,
-                params=params, space=space, pad=pad)
+    elif "t1" in brain_dt:
+        segment_brain_pipe = create_full_T1_subpipes(
+            params_template_stereo=params_template_stereo,
+            params_template_brainmask=params_template_brainmask,
+            params_template_seg=params_template_seg,
+            params=params, space=space, pad=pad)
 
     # list of all required outputs
     output_query = {}
