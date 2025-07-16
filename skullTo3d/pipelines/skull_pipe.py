@@ -1290,9 +1290,14 @@ def _create_petra_skull_mask(name="skullmask_petra_pipe", params={}):
                     function=apply_li_thresh),
                 name="petra_skull_li_mask")
 
-        skullmask_petra_pipe.connect(
-            inputnode, "stereo_T1",
-            petra_skull_li_mask, "orig_img_file")
+        if "petra_denoise" in params.keys():
+            skullmask_petra_pipe.connect(
+                petra_denoise, "output_image",
+                petra_skull_li_mask, "orig_img_file")
+        else:
+            skullmask_petra_pipe.connect(
+                inputnode, "headmasked_petra",
+                petra_skull_li_mask, "orig_img_file")
 
         # fslmaths mask -mul -1 -add 1 invmask
         petra_skull_inv = pe.Node(
