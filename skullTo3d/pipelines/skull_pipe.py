@@ -7,7 +7,7 @@ import nipype.pipeline.engine as pe
 
 from nipype.interfaces.fsl.maths import (
     DilateImage, ErodeImage,
-    ApplyMask, UnaryMaths, Threshold)
+    ApplyMask, UnaryMaths, Threshold, MathsCommand)
 
 
 import nipype.interfaces.fsl as fsl
@@ -1301,7 +1301,7 @@ def _create_petra_skull_mask(name="skullmask_petra_pipe", params={}):
 
         # fslmaths mask -mul -1 -add 1 invmask
         petra_skull_inv = pe.Node(
-                interface=fsl.UnaryMaths(),
+                interface=MathsCommand(),
                 name="petra_skull_inv")
 
         petra_skull_inv.inputs.args = " -mul -1 -add 1"
