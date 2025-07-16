@@ -1266,7 +1266,7 @@ def _create_petra_skull_mask(name="skullmask_petra_pipe", params={}):
                 petra_fast, "in_files")
         else:
             skullmask_petra_pipe.connect(
-                inputnode, "headmasked_petra",
+                inputnode, "petra",
                 petra_fast, "in_files")
 
         # petra_skull_mask_binary
@@ -1296,7 +1296,7 @@ def _create_petra_skull_mask(name="skullmask_petra_pipe", params={}):
                 petra_skull_li_mask, "orig_img_file")
         else:
             skullmask_petra_pipe.connect(
-                inputnode, "headmasked_petra",
+                inputnode, "petra",
                 petra_skull_li_mask, "orig_img_file")
 
         # fslmaths mask -mul -1 -add 1 invmask
