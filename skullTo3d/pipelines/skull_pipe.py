@@ -1840,10 +1840,12 @@ def create_skull_megre_pipe(name="skull_ct_pipe", params={}):
     print(params)
 
     av_MEGRE = pe.Node(
-        niu.Function(input_names=['list_img', "reorient"],
+        niu.Function(input_names=['list_img', "reorient", "max_index"],
                      output_names=['avg_img'],
                      function=average_align),
         name="av_MEGRE")
+
+    av_MEGRE.inputs.max_index = 3
 
     skull_megre_pipe.connect(
         inputnode, 'list_megre',
