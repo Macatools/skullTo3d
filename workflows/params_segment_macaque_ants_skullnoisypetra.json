@@ -180,7 +180,6 @@
 
             "petra_fast":
             {
-
                 "bias_lowpass": 10,
                 "img_type": 3,
                 "output_biascorrected": true,

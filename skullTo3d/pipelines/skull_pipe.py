@@ -43,6 +43,7 @@ from macapype.utils.misc import parse_key, get_elem
 # ####################################  T1  ##################################
 ##############################################################################
 
+
 def _create_headmask_t1_pipe(name="headmask_t1_pipe", params={}):
 
     headmask_t1_pipe = pe.Workflow(name=name)
@@ -1309,7 +1310,6 @@ def _create_petra_skull_mask(name="skullmask_petra_pipe", params={}):
         skullmask_petra_pipe.connect(
             petra_skull_li_mask, "lithr_img_file",
             petra_skull_inv, "in_file")
-
 
     # petra_skull_auto_thresh
     if "petra_head_erode_skin" in params.keys():
