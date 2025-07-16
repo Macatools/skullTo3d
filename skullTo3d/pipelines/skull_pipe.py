@@ -39,10 +39,9 @@ from macapype.nodes.prepare import apply_li_thresh
 
 from macapype.utils.misc import parse_key, get_elem
 
-#################################################
-# ####################  T1  #####################
-#################################################
-
+##############################################################################
+# ####################################  T1  ##################################
+##############################################################################
 
 def _create_headmask_t1_pipe(name="headmask_t1_pipe", params={}):
 
@@ -613,9 +612,9 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
 
     return skull_t1_pipe
 
-###############################################################################
-# #################### CT  ######################
-###############################################################################
+##############################################################################
+# ####################################  CT  ##################################
+##############################################################################
 
 
 def _create_skullmask_ct_pipe(name="skullmask_ct_pipe", params={}):
@@ -1255,29 +1254,57 @@ def _create_petra_skull_mask(name="skullmask_petra_pipe", params={}):
             inputnode, ('indiv_params', parse_key, "petra_denoise"),
             petra_denoise, "indiv_params")
 
-    petra_fast = NodeParams(interface=FAST(),
-                            params=parse_key(params, "petra_fast"),
-                            name="petra_fast")
+    if "petra_fast" in params.keys():
 
-    if "petra_denoise" in params.keys():
+        petra_fast = NodeParams(interface=FAST(),
+                                params=parse_key(params, "petra_fast"),
+                                name="petra_fast")
+
+        if "petra_denoise" in params.keys():
+            skullmask_petra_pipe.connect(
+                petra_denoise, "output_image",
+                petra_fast, "in_files")
+        else:
+            skullmask_petra_pipe.connect(
+                inputnode, "headmasked_petra",
+                petra_fast, "in_files")
+
+        # petra_skull_mask_binary
+        petra_skull_mask_binary = pe.Node(
+            interface=UnaryMaths(),
+            name="petra_skull_mask_binary")
+
+        petra_skull_mask_binary.inputs.operation = 'bin'
+        petra_skull_mask_binary.inputs.output_type = 'NIFTI_GZ'
+
         skullmask_petra_pipe.connect(
-            petra_denoise, "output_image",
-            petra_fast, "in_files")
+            petra_fast, ("partial_volume_files", get_elem, 0),
+            petra_skull_mask_binary, "in_file")
+
     else:
-        skullmask_petra_pipe.connect(
-            inputnode, "headmasked_petra",
-            petra_fast, "in_files")
+        # petra_skull_li_mask
+        petra_skull_li_mask = pe.Node(
+                interface=niu.Function(
+                    input_names=["orig_img_file"],
+                    output_names=["lithr_img_file"],
+                    function=apply_li_thresh),
+                name="petra_skull_li_mask")
 
-    # petra_skull_mask_binary
-    petra_skull_mask_binary = pe.Node(interface=UnaryMaths(),
-                                      name="petra_skull_mask_binary")
+        headmask_t1_pipe.connect(
+            inputnode, "stereo_T1",
+            petra_skull_li_mask, "orig_img_file")
 
-    petra_skull_mask_binary.inputs.operation = 'bin'
-    petra_skull_mask_binary.inputs.output_type = 'NIFTI_GZ'
+        # fslmaths mask -mul -1 -add 1 invmask
+        petra_skull_inv = pe.Node(
+                interface=fsl.UnaryMaths(),
+                name="petra_skull_inv")
 
-    skullmask_petra_pipe.connect(
-        petra_fast, ("partial_volume_files", get_elem, 0),
-        petra_skull_mask_binary, "in_file")
+        petra_skull_inv.inputs.args = " -mul -1 -add 1"
+
+        headmask_t1_pipe.connect(
+            petra_skull_li_mask, "orig_img_file",
+            petra_skull_inv, "in_file")
+
 
     # petra_skull_auto_thresh
     if "petra_head_erode_skin" in params.keys():
@@ -1296,17 +1323,23 @@ def _create_petra_skull_mask(name="skullmask_petra_pipe", params={}):
             petra_head_erode_skin, "indiv_params")
 
         # ### Masking with petra_head mask
-        # petra_hmasked ####### [okey]
+        # petra_skin_masked ####### [okey]
         petra_skin_masked = pe.Node(interface=ApplyMask(),
                                     name="petra_skin_masked")
 
         skullmask_petra_pipe.connect(
-            petra_skull_mask_binary, "out_file",
-            petra_skin_masked, "in_file")
-
-        skullmask_petra_pipe.connect(
             petra_head_erode_skin, "out_file",
             petra_skin_masked, "mask_file")
+
+        if "petra_fast" in params.keys():
+            skullmask_petra_pipe.connect(
+                petra_skull_mask_binary, "out_file",
+                petra_skin_masked, "in_file")
+
+        else:
+            skullmask_petra_pipe.connect(
+                petra_skull_inv, "out_file",
+                petra_skin_masked, "in_file")
 
     if "petra_skull_gcc_erode" in params and \
             "petra_skull_gcc_dilate" in params:
