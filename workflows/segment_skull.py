@@ -90,7 +90,8 @@ from skullTo3d.pipelines.skull_pipe import (
     create_autonomous_skull_petra_pipe,
     create_skull_ct_pipe,
     create_autonomous_skull_ct_pipe,
-    create_skull_t1_pipe)
+    create_skull_t1_pipe,
+    create_skull_megre_pipe)
 
 from skullTo3d.pipelines.rename import (
     rename_all_skull_petra_derivatives,
@@ -514,6 +515,11 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
             "datatype": "anat", "suffix": ["PDw", "petra"],
             "extension": ["nii", ".nii.gz"]}
 
+    if 'megre' in skull_dt:
+        output_query['PETRA'] = {
+            "datatype": "anat", "acq": "MEGRE", "suffix": "PDw",
+            "extension": ["nii", ".nii.gz"]}
+
     if 'ct' in skull_dt:
         output_query['CT'] = {
             "datatype": "anat", "suffix": "T2star",
@@ -781,6 +787,39 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
         main_workflow.connect(
             segment_brain_pipe, "outputnode.native_to_stereo_trans",
             angio_pipe, 'inputnode.native_to_stereo_trans')
+
+    # angio
+    if "megre" in skull_dt and "skull_megre_pipe" in params.keys():
+        print("Found skull_megre_pipe")
+
+        skull_megre_pipe = create_skull_megre_pipe(
+            params=parse_key(params, "angio_pipe"))
+
+        main_workflow.connect(datasource, 'megre',
+                              skull_megre_pipe, 'inputnode.list_megre')
+
+        main_workflow.connect(segment_brain_pipe,
+                              "outputnode.native_T1",
+                              angio_pipe, 'inputnode.native_T1')
+        #
+        # if "pad_template" in params["short_preparation_pipe"].keys():
+        #     main_workflow.connect(
+        #         segment_brain_pipe, "outputnode.stereo_padded_T1",
+        #         angio_pipe, 'inputnode.stereo_T1')
+        # else:
+        #     main_workflow.connect(
+        #         segment_brain_pipe, "outputnode.stereo_T1",
+        #         angio_pipe, 'inputnode.stereo_T1')
+        #
+        # main_workflow.connect(segment_brain_pipe,
+        #                       "outputnode.stereo_padded_brain_mask",
+        #                       angio_pipe, 'inputnode.stereo_brain_mask')
+        #
+        # main_workflow.connect(
+        #     segment_brain_pipe, "outputnode.native_to_stereo_trans",
+        #     angio_pipe, 'inputnode.native_to_stereo_trans')
+
+
 
     # angio_quick
     if "angio" in skull_dt and "angio_quick_pipe" in params.keys():
