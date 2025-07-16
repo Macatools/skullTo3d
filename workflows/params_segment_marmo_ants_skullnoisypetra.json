@@ -174,6 +174,21 @@
                 "kernel_shape": "boxv",
                 "kernel_size": 8.0
             },
+
+
+            "petra_skull_gcc_erode":
+            {
+                "kernel_shape": "boxv",
+                "kernel_size": 3.0
+            },
+            "petra_skull_gcc_dilate":
+            {
+                "operation": "modal",
+                "kernel_shape": "boxv",
+                "kernel_size": 3.0
+            },
+
+
             "petra_skull_dilate":
             {
                 "operation": "modal",
