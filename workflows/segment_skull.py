@@ -800,7 +800,7 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
 
         main_workflow.connect(segment_brain_pipe,
                               "outputnode.native_T1",
-                              angio_pipe, 'inputnode.native_T1')
+                              skull_megre_pipe, 'inputnode.native_T1')
         #
         # if "pad_template" in params["short_preparation_pipe"].keys():
         #     main_workflow.connect(
