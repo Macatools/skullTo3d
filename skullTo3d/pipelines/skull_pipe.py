@@ -1786,19 +1786,9 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
             name="skullmask_petra_pipe",
             params=params["skullmask_petra_pipe"])
 
-        if "crop_petra" in params:
-            skull_petra_pipe.connect(
-                crop_petra, "out_file",
-                skullmask_pipe, "inputnode.petra")
-
-        elif "avg_reorient_pipe" in params.keys():
-            skull_petra_pipe.connect(
-                av_PETRA, 'outputnode.std_img',
-                skullmask_pipe, "inputnode.petra")
-        else:
-            skull_petra_pipe.connect(
-                av_PETRA, 'avg_img',
-                skullmask_pipe, "inputnode.petra")
+        skull_petra_pipe.connect(
+            align_petra_on_stereo, "out_file",
+            skullmask_pipe, "inputnode.petra")
 
         skull_petra_pipe.connect(
             headmask_pipe, "petra_head_erode.out_file",
