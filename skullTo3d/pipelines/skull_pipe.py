@@ -1952,7 +1952,7 @@ def create_skull_megre_pipe(name="skull_ct_pipe", params={}):
     #                           "mesh_robustct_skull.stl_file",
     #                           outputnode, "robustct_skull_stl")
 
-    return skull_ct_pipe
+    return skull_megre_pipe
 
 
 
