@@ -516,7 +516,7 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
             "extension": ["nii", ".nii.gz"]}
 
     if 'megre' in skull_dt:
-        output_query['PETRA'] = {
+        output_query['MEGRE'] = {
             "datatype": "anat", "acquisition": "MEGRE", "suffix": "PDw",
             "extension": ["nii", ".nii.gz"]}
 
@@ -795,7 +795,7 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
         skull_megre_pipe = create_skull_megre_pipe(
             params=parse_key(params, "angio_pipe"))
 
-        main_workflow.connect(datasource, 'megre',
+        main_workflow.connect(datasource, 'MEGRE',
                               skull_megre_pipe, 'inputnode.list_megre')
 
         main_workflow.connect(segment_brain_pipe,
