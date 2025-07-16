@@ -1836,18 +1836,18 @@ def create_skull_megre_pipe(name="skull_ct_pipe", params={}):
                     "ct_skull_stl"]),
         name='outputnode')
 
-    print("Using average_align for av_PETRA")
+    print("Using average_align for av_MEGRE")
     print(params)
 
     av_MEGRE = pe.Node(
         niu.Function(input_names=['list_img', "reorient"],
                      output_names=['avg_img'],
                      function=average_align),
-        name="av_PETRA")
+        name="av_MEGRE")
 
     skull_megre_pipe.connect(
         inputnode, 'list_megre',
-        av_PETRA, "list_img")
+        av_MEGRE, "list_img")
 
     #
     # if "crop_CT" in params:
