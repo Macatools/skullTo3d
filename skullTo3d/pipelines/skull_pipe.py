@@ -1307,7 +1307,7 @@ def _create_petra_skull_mask(name="skullmask_petra_pipe", params={}):
         petra_skull_inv.inputs.args = " -mul -1 -add 1"
 
         skullmask_petra_pipe.connect(
-            petra_skull_li_mask, "orig_img_file",
+            petra_skull_li_mask, "lithr_img_file",
             petra_skull_inv, "in_file")
 
 
