@@ -512,7 +512,7 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
 
     if 'petra' in skull_dt:
         output_query['PETRA'] = {
-            "datatype": "anat", "suffix": ["PDw", "petra"],
+            "datatype": "anat",  "acquisition": "PETRA", "suffix": ["PDw", "petra"],
             "extension": ["nii", ".nii.gz"]}
 
     if 'megre' in skull_dt:
