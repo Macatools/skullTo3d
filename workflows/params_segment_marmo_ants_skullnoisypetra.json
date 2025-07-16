@@ -162,10 +162,12 @@
         },
         "skullmask_petra_pipe":
         {
-
             "petra_fast":
             {
-                "args": "-l 4 -O 4 -t 3",
+                "bias_lowpass": 4,
+                "iters_afterbias": 4,
+                "img_type": 3,
+
                 "output_biascorrected": true,
                 "output_biasfield": true
             },
