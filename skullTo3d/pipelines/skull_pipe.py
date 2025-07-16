@@ -1818,7 +1818,7 @@ def create_autonomous_skull_ct_pipe(name="skull_ct_pipe", params={}):
 def create_skull_megre_pipe(name="skull_ct_pipe", params={}):
 
     # Creating pipeline
-    skull_ct_pipe = pe.Workflow(name=name)
+    skull_megre_pipe = pe.Workflow(name=name)
 
     # Creating input node
     inputnode = pe.Node(
@@ -1845,7 +1845,7 @@ def create_skull_megre_pipe(name="skull_ct_pipe", params={}):
                      function=average_align),
         name="av_PETRA")
 
-    skull_petra_pipe.connect(
+    skull_megre_pipe.connect(
         inputnode, 'list_megre',
         av_PETRA, "list_img")
 
