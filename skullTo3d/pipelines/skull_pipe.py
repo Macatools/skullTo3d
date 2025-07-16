@@ -1290,7 +1290,7 @@ def _create_petra_skull_mask(name="skullmask_petra_pipe", params={}):
                     function=apply_li_thresh),
                 name="petra_skull_li_mask")
 
-        headmask_t1_pipe.connect(
+        skullmask_petra_pipe.connect(
             inputnode, "stereo_T1",
             petra_skull_li_mask, "orig_img_file")
 
@@ -1301,7 +1301,7 @@ def _create_petra_skull_mask(name="skullmask_petra_pipe", params={}):
 
         petra_skull_inv.inputs.args = " -mul -1 -add 1"
 
-        headmask_t1_pipe.connect(
+        skullmask_petra_pipe.connect(
             petra_skull_li_mask, "orig_img_file",
             petra_skull_inv, "in_file")
 
