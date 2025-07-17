@@ -1815,7 +1815,7 @@ def create_autonomous_skull_ct_pipe(name="skull_ct_pipe", params={}):
 # #################################  MEGRE  ##################################
 ##############################################################################
 
-def create_skull_megre_pipe(name="skull_ct_pipe", params={}):
+def create_skull_megre_pipe(name="skull_megre_pipe", params={}):
 
     # Creating pipeline
     skull_megre_pipe = pe.Workflow(name=name)
@@ -1870,25 +1870,26 @@ def create_skull_megre_pipe(name="skull_ct_pipe", params={}):
     #
     #     skull_ct_pipe.connect(inputnode, 'ct',
     #                           crop_CT, 'in_file')
-    #
-    # # align_ct_on_T1
-    # align_ct_on_T1 = pe.Node(interface=RegAladin(),
-    #                          name="align_ct_on_T1")
-    #
-    # align_ct_on_T1.inputs.rig_only_flag = True
-    #
-    # if "crop_CT" in params:
-    #     skull_ct_pipe.connect(
-    #         crop_CT, "roi_file",
-    #         align_ct_on_T1, "flo_file")
-    # else:
-    #     skull_ct_pipe.connect(
-    #         inputnode, 'ct',
-    #         align_ct_on_T1, "flo_file")
-    #
-    # skull_ct_pipe.connect(inputnode, "native_T1",
-    #                       align_ct_on_T1, "ref_file")
-    #
+
+    # align_megre_on_T1
+    align_megre_on_T1 = pe.Node(interface=RegAladin(),
+                             name="align_megre_on_T1")
+
+    align_megre_on_T1.inputs.rig_only_flag = True
+#
+#     if "crop_CT" in params:
+#         skull_megre_pipe.connemegre(
+#             crop_CT, "roi_file",
+#             align_megre_on_T1, "flo_file")
+#     else:
+#
+    skull_megre_pipe.connemegre(
+        inputnode, 'megre',
+        align_megre_on_T1, "flo_file")
+
+    skull_megre_pipe.connemegre(inputnode, "native_T1",
+                          align_megre_on_T1, "ref_file")
+
     # if "align_ct_on_T1_2" in params:
     #
     #     # align_ct_on_T1

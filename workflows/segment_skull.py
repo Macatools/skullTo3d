@@ -793,7 +793,7 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
         print("Found skull_megre_pipe")
 
         skull_megre_pipe = create_skull_megre_pipe(
-            params=parse_key(params, "angio_pipe"))
+            params=parse_key(params, "skull_megre_pipe"))
 
         main_workflow.connect(datasource, 'MEGRE',
                               skull_megre_pipe, 'inputnode.list_megre')
