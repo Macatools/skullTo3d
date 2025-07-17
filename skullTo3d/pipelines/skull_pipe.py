@@ -2098,7 +2098,7 @@ def create_skull_megre_pipe(name="skull_megre_pipe", params={}):
                           align_megre_on_stereo_T1, "ref_file")
     # output node
     skull_megre_pipe.connect(align_megre_on_stereo_T1, "out_file",
-                          outputnode, "stereo_ct")
+                          outputnode, "stereo_megre")
 
     # ## headmask
     if "headmask_megre_pipe" in params:
@@ -2106,20 +2106,10 @@ def create_skull_megre_pipe(name="skull_megre_pipe", params={}):
         headmask_pipe = _create_petra_head_mask(
             name="headmask_megre_pipe",
             params=params["headmask_megre_pipe"])
-        # TODO
 
-        if "crop_megre" in params:
-            skull_megre_pipe.connect(
-                crop_megre, "out_file",
-                headmask_pipe, "inputnode.reoriented_petra")
-        elif "avg_reorient_pipe" in params.keys():
-            skull_megre_pipe.connect(
-                av_PETRA, 'outputnode.std_img',
-                headmask_pipe, "inputnode.reoriented_petra")
-        else:
-            skull_megre_pipe.connect(
-                av_MEGRE, 'avg_img',
-                headmask_pipe, "inputnode.reoriented_petra")
+        skull_megre_pipe.connect(
+            align_megre_on_stereo_T1,  "out_file",
+            headmask_pipe, "inputnode.reoriented_petra")
 
         skull_megre_pipe.connect(inputnode, "indiv_params",
                                  headmask_pipe, "inputnode.indiv_params")
