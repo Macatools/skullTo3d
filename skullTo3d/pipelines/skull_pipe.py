@@ -2119,7 +2119,7 @@ def create_skull_megre_pipe(name="skull_megre_pipe", params={}):
                 headmask_pipe, "inputnode.reoriented_megre")
         else:
             skull_megre_pipe.connect(
-                av_PETRA, 'avg_img',
+                av_MEGRE, 'avg_img',
                 headmask_pipe, "inputnode.reoriented_megre")
 
         skull_megre_pipe.connect(inputnode, "indiv_params",
