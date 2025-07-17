@@ -1641,8 +1641,8 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
     # Creating input node
     inputnode = pe.Node(
         niu.IdentityInterface(fields=['ct', 'stereo_T1', 'native_T1',
-                                      'native_T2', 'native_to_stereo_trans',
-                                      'stereo_T1', 'indiv_params']),
+                                      'native_to_stereo_trans',
+                                      'indiv_params']),
         name='inputnode'
     )
 
@@ -1998,17 +1998,16 @@ def create_skull_megre_pipe(name="skull_megre_pipe", params={}):
     # Creating input node
     inputnode = pe.Node(
         niu.IdentityInterface(fields=['list_megre', 'stereo_T1', 'native_T1',
-                                      'native_T2', 'native_to_stereo_trans',
-                                      'stereo_T1', 'indiv_params']),
+                                     'native_to_stereo_trans','indiv_params']),
         name='inputnode'
     )
 
     # creating outputnode #######
     outputnode = pe.Node(
         niu.IdentityInterface(
-            fields=["stereo_ct_skull_mask", "stereo_ct",
-                    "robustct_skull_mask", "robustct_skull_stl",
-                    "ct_skull_stl"]),
+            fields=["stereo_megre_skull_mask", "stereo_megre",
+                    "robustmegre_skull_mask", "robustmegre_skull_stl",
+                    "megre_skull_stl"]),
         name='outputnode')
 
     print("Using average_align for av_MEGRE")
@@ -2141,12 +2140,12 @@ def create_skull_megre_pipe(name="skull_megre_pipe", params={}):
             name="skullmask_megre_pipe",
             params=params["skullmask_megre_pipe"])
 
-        skull_megre_pipe.connect(
-            headmask_pipe, "megre_hmasked.out_file",
-            skullmask_pipe, "inputnode.headmasked_megre")
+        skull_petra_pipe.connect(
+            headmask_pipe, "petra_hmasked.out_file",
+            skullmask_pipe, "inputnode.headmasked_petra")
 
         skull_megre_pipe.connect(
-            headmask_pipe, "megre_head_erode.out_file",
+            headmask_pipe, "petra_head_erode.out_file",
             skullmask_pipe, "inputnode.headmask")
 
         skull_megre_pipe.connect(
@@ -2156,10 +2155,10 @@ def create_skull_megre_pipe(name="skull_megre_pipe", params={}):
     else:
         return skull_megre_pipe
 
-    skull_megre_pipe.connect(skullmask_pipe, "mesh_megre_skull.stl_file",
+    skull_megre_pipe.connect(skullmask_pipe, "mesh_petra_skull.stl_file",
                              outputnode, "megre_skull_stl")
 
-    skull_megre_pipe.connect(skullmask_pipe, "megre_skull_erode.out_file",
+    skull_megre_pipe.connect(skullmask_pipe, "megre_petra_erode.out_file",
                              outputnode, "megre_skull_mask")
 
     return skull_megre_pipe
