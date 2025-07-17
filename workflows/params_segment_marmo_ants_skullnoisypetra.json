@@ -230,7 +230,8 @@
             {
             },
 
-            "comment":{"0p36mm"},
+            "comment": "0p36mm",
+
             "petra_head_gcc_erode":
             {
                 "kernel_shape": "boxv",
@@ -244,6 +245,7 @@
             },
 
             "comment":{},
+
             "0p40mm":
             {
             "petra_head_gcc_erode":
