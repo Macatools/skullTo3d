@@ -1884,7 +1884,7 @@ def create_skull_megre_pipe(name="skull_megre_pipe", params={}):
 #     else:
 #
     skull_megre_pipe.connect(
-        inputnode, 'megre',
+        av_MEGRE, 'avg_img',
         align_megre_on_T1, "flo_file")
 
     skull_megre_pipe.connect(inputnode, "native_T1",
