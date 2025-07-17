@@ -267,7 +267,7 @@
             "petra_head_erode_skin":
             {
                 "kernel_shape": "boxv",
-                "kernel_size": 8.0
+                "kernel_size": 5.0
             },
 
             "petra_skull_dilate":
