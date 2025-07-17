@@ -2140,7 +2140,7 @@ def create_skull_megre_pipe(name="skull_megre_pipe", params={}):
             name="skullmask_megre_pipe",
             params=params["skullmask_megre_pipe"])
 
-        skull_petra_pipe.connect(
+        skull_megre_pipe.connect(
             headmask_pipe, "petra_hmasked.out_file",
             skullmask_pipe, "inputnode.headmasked_petra")
 
