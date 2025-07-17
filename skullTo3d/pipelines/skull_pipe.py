@@ -2005,9 +2005,9 @@ def create_skull_megre_pipe(name="skull_megre_pipe", params={}):
     # creating outputnode #######
     outputnode = pe.Node(
         niu.IdentityInterface(
-            fields=["stereo_megre_skull_mask", "stereo_megre",
-                    "robustmegre_skull_mask", "robustmegre_skull_stl",
-                    "megre_skull_stl"]),
+            fields=["stereo_megre",
+                    "megre_head_mask", "megre_head_stl"
+                    "megre_skull_stl", "megre_skull_mask"]),
         name='outputnode')
 
     print("Using average_align for av_MEGRE")
