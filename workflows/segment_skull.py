@@ -801,23 +801,19 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
         main_workflow.connect(segment_brain_pipe,
                               "outputnode.native_T1",
                               skull_megre_pipe, 'inputnode.native_T1')
-        #
-        # if "pad_template" in params["short_preparation_pipe"].keys():
-        #     main_workflow.connect(
-        #         segment_brain_pipe, "outputnode.stereo_padded_T1",
-        #         angio_pipe, 'inputnode.stereo_T1')
-        # else:
-        #     main_workflow.connect(
-        #         segment_brain_pipe, "outputnode.stereo_T1",
-        #         angio_pipe, 'inputnode.stereo_T1')
-        #
-        # main_workflow.connect(segment_brain_pipe,
-        #                       "outputnode.stereo_padded_brain_mask",
-        #                       angio_pipe, 'inputnode.stereo_brain_mask')
-        #
-        # main_workflow.connect(
-        #     segment_brain_pipe, "outputnode.native_to_stereo_trans",
-        #     angio_pipe, 'inputnode.native_to_stereo_trans')
+
+        if "pad_template" in params["short_preparation_pipe"].keys():
+            main_workflow.connect(
+                segment_brain_pipe, "outputnode.stereo_padded_T1",
+                skull_megre_pipe, 'inputnode.stereo_T1')
+        else:
+            main_workflow.connect(
+                segment_brain_pipe, "outputnode.stereo_T1",
+                skull_megre_pipe, 'inputnode.stereo_T1')
+
+        main_workflow.connect(
+            segment_brain_pipe, "outputnode.native_to_stereo_trans",
+            skull_megre_pipe, 'inputnode.native_to_stereo_trans')
 
 
 
