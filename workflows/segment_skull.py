@@ -832,7 +832,7 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
 
         # all remaining connection
         main_workflow.connect(datasource, ('MEGRE', show_files),
-                              skull_megre_pipe, 'inputnode.megre')
+                              skull_megre_pipe, 'inputnode.list_megre')
 
         if indiv_params:
             main_workflow.connect(datasource, "indiv_params",
