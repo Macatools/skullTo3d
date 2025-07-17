@@ -229,6 +229,23 @@
             "petra_itk_debias":
             {
             },
+
+            "comment":{"0p36mm"},
+            "petra_head_gcc_erode":
+            {
+                "kernel_shape": "boxv",
+                "kernel_size": 1.0
+            },
+            "petra_head_gcc_dilate":
+            {
+                "operation": "modal",
+                "kernel_shape": "boxv",
+                "kernel_size": 1.0
+            },
+
+            "comment":{},
+            "0p40mm":
+            {
             "petra_head_gcc_erode":
             {
                 "kernel_shape": "boxv",
@@ -239,6 +256,7 @@
                 "operation": "modal",
                 "kernel_shape": "boxv",
                 "kernel_size": 3.0
+            }
             },
 
             "petra_head_dilate":
