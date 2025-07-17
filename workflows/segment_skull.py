@@ -794,31 +794,149 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
     if "megre" in skull_dt and "skull_megre_pipe" in params.keys():
         print("Found skull_megre_pipe")
 
-        skull_megre_pipe = create_skull_megre_pipe(
-            params=parse_key(params, "skull_megre_pipe"))
 
-        main_workflow.connect(datasource, 'MEGRE',
-                              skull_megre_pipe, 'inputnode.list_megre')
 
-        main_workflow.connect(segment_brain_pipe,
-                              "outputnode.native_T1",
-                              skull_megre_pipe, 'inputnode.native_T1')
 
-        if "pad_template" in params["short_preparation_pipe"].keys():
-            main_workflow.connect(
-                segment_brain_pipe, "outputnode.stereo_padded_T1",
-                skull_megre_pipe, 'inputnode.stereo_T1')
+
+
+
+
+
+        if len(brain_dt):
+
+            skull_megre_pipe = create_skull_megre_pipe(
+                params=parse_key(params, "skull_megre_pipe"))
+
+            main_workflow.connect(segment_brain_pipe,
+                                "outputnode.native_T1",
+                                skull_megre_pipe, 'inputnode.native_T1')
+
+            if "pad_template" in params["short_preparation_pipe"].keys():
+                main_workflow.connect(
+                    segment_brain_pipe, "outputnode.stereo_padded_T1",
+                    skull_megre_pipe, 'inputnode.stereo_T1')
+            else:
+                main_workflow.connect(
+                    segment_brain_pipe, "outputnode.stereo_T1",
+                    skull_megre_pipe, 'inputnode.stereo_T1')
+
+            main_workflow.connect(segment_brain_pipe,
+                                  "outputnode.native_to_stereo_trans",
+                                  skull_megre_pipe,
+                                  'inputnode.native_to_stereo_trans')
+
         else:
-            main_workflow.connect(
-                segment_brain_pipe, "outputnode.stereo_T1",
-                skull_megre_pipe, 'inputnode.stereo_T1')
+            print("No brain segmentation")
+            skull_megre_pipe = create_autonomous_skull_megre_pipe(
+                params=parse_key(params, "skull_megre_pipe"))
 
-        main_workflow.connect(
-            segment_brain_pipe, "outputnode.native_to_stereo_trans",
-            skull_megre_pipe, 'inputnode.native_to_stereo_trans')
+        # all remaining connection
+        main_workflow.connect(datasource, ('MEGRE', show_files),
+                              skull_megre_pipe, 'inputnode.megre')
 
+        if indiv_params:
+            main_workflow.connect(datasource, "indiv_params",
+                                  skull_megre_pipe, 'inputnode.indiv_params')
 
+        if pad and space == "native":
 
+            if "short_preparation_pipe" in params.keys():
+                if "crop_T1" in params["short_preparation_pipe"].keys():
+
+                    print("Warning, crop_t1 is defined")
+                    pass
+
+                if "skullmask_megre_pipe" in params["skull_megre_pipe"]:
+
+                    print("Using reg_aladin transfo to pad skull_mask back")
+
+                    pad_megre_skull_mask = pe.Node(
+                        RegResample(inter_val="NN"),
+                        name="pad_megre_skull_mask")
+
+                    main_workflow.connect(
+                        skull_megre_pipe, "outputnode.megre_skull_mask",
+                        pad_megre_skull_mask, "flo_file")
+
+                    main_workflow.connect(
+                        segment_brain_pipe, "outputnode.native_T1",
+                        pad_megre_skull_mask, "ref_file")
+
+                    main_workflow.connect(
+                        segment_brain_pipe,
+                        "outputnode.stereo_to_native_trans",
+                        pad_megre_skull_mask, "trans_file")
+
+                if "headmask_megre_pipe" in params["skull_megre_pipe"]:
+
+                    print("Using reg_aladin transfo to pad head_mask back")
+
+                    pad_megre_head_mask = pe.Node(
+                        RegResample(inter_val="NN"),
+                        name="pad_megre_head_mask")
+
+                    main_workflow.connect(
+                        skull_megre_pipe,
+                        "outputnode.megre_head_mask",
+                        pad_megre_head_mask, "flo_file")
+
+                    main_workflow.connect(
+                        segment_brain_pipe,
+                        "outputnode.native_T1",
+                        pad_megre_head_mask, "ref_file")
+
+                    main_workflow.connect(
+                        segment_brain_pipe,
+                        "outputnode.stereo_to_native_trans",
+                        pad_megre_head_mask, "trans_file")
+
+                    print("Using reg_aladin transfo \
+                        to pad robustmegre_skull_mask back")
+
+                    if "megre_skull_fov" in params["skull_megre_pipe"]:
+                        pad_robustmegre_skull_mask = pe.Node(
+                            RegResample(inter_val="NN"),
+                            name="pad_robustmegre_skull_mask")
+
+                        main_workflow.connect(
+                            skull_megre_pipe,
+                            "outputnode.robustmegre_skull_mask",
+                            pad_robustmegre_skull_mask, "flo_file")
+
+                        main_workflow.connect(
+                            segment_brain_pipe, "outputnode.native_T1",
+                            pad_robustmegre_skull_mask, "ref_file")
+
+                        main_workflow.connect(
+                            segment_brain_pipe,
+                            "outputnode.stereo_to_native_trans",
+                            pad_robustmegre_skull_mask, "trans_file")
+
+        #
+        #
+        # skull_megre_pipe = create_skull_megre_pipe(
+        #     params=parse_key(params, "skull_megre_pipe"))
+        #
+        # main_workflow.connect(datasource, 'MEGRE',
+        #                       skull_megre_pipe, 'inputnode.list_megre')
+        #
+        # main_workflow.connect(segment_brain_pipe,
+        #                       "outputnode.native_T1",
+        #                       skull_megre_pipe, 'inputnode.native_T1')
+        #
+        # if "pad_template" in params["short_preparation_pipe"].keys():
+        #     main_workflow.connect(
+        #         segment_brain_pipe, "outputnode.stereo_padded_T1",
+        #         skull_megre_pipe, 'inputnode.stereo_T1')
+        # else:
+        #     main_workflow.connect(
+        #         segment_brain_pipe, "outputnode.stereo_T1",
+        #         skull_megre_pipe, 'inputnode.stereo_T1')
+        #
+        # main_workflow.connect(
+        #     segment_brain_pipe, "outputnode.native_to_stereo_trans",
+        #     skull_megre_pipe, 'inputnode.native_to_stereo_trans')
+        #
     # angio_quick
     if "angio" in skull_dt and "angio_quick_pipe" in params.keys():
         print("Found angio_pipe")
