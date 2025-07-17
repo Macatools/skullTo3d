@@ -2127,10 +2127,10 @@ def create_skull_megre_pipe(name="skull_megre_pipe", params={}):
     else:
         return skull_megre_pipe
 
-    skull_megre_pipe.connect(headmask_pipe, "megre_head_erode.out_file",
+    skull_megre_pipe.connect(headmask_pipe, "petra_head_erode.out_file",
                              outputnode, "megre_head_mask")
 
-    skull_megre_pipe.connect(headmask_pipe, "mesh_megre_head.stl_file",
+    skull_megre_pipe.connect(headmask_pipe, "mesh_petra_head.stl_file",
                              outputnode, "megre_head_stl")
 
     # ## skull mask
