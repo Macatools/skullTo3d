@@ -1883,11 +1883,11 @@ def create_skull_megre_pipe(name="skull_megre_pipe", params={}):
 #             align_megre_on_T1, "flo_file")
 #     else:
 #
-    skull_megre_pipe.connemegre(
+    skull_megre_pipe.connect(
         inputnode, 'megre',
         align_megre_on_T1, "flo_file")
 
-    skull_megre_pipe.connemegre(inputnode, "native_T1",
+    skull_megre_pipe.connect(inputnode, "native_T1",
                           align_megre_on_T1, "ref_file")
 
     # if "align_ct_on_T1_2" in params:
