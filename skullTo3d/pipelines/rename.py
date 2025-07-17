@@ -5,6 +5,145 @@
 import nipype.interfaces.utility as niu
 import nipype.pipeline.engine as pe
 
+def rename_all_skull_megre_derivatives(params, main_workflow,
+                                       skull_megre_pipe, datasink, pref_deriv,
+                                       parse_str):
+
+    # Rename in skull_megre_pipe
+    if "skull_megre_pipe" in params.keys():
+
+        # rename stereo_megre_skull_mask
+        rename_stereo_megre = pe.Node(
+            niu.Rename(), name="rename_stereo_megre")
+
+        rename_stereo_megre.inputs.format_string =\
+            pref_deriv + "_space-stereo_desc-megre_PDw"
+        rename_stereo_megre.inputs.parse_string = parse_str
+        rename_stereo_megre.inputs.keep_ext = True
+
+        main_workflow.connect(
+            skull_megre_pipe, 'outputnode.stereo_megre',
+            rename_stereo_megre, 'in_file')
+
+        main_workflow.connect(
+            rename_stereo_megre, 'out_file',
+            datasink, '@stereo_megre')
+
+        if "headmask_megre_pipe" in params["skull_megre_pipe"]:
+
+            # rename megre_head_stl
+            rename_megre_head_stl = pe.Node(niu.Rename(),
+                                            name="rename_megre_head_stl")
+            rename_megre_head_stl.inputs.format_string = \
+                pref_deriv + "_desc-megre_headmask"
+            rename_megre_head_stl.inputs.parse_string = parse_str
+            rename_megre_head_stl.inputs.keep_ext = True
+
+            main_workflow.connect(
+                skull_megre_pipe, 'outputnode.megre_head_stl',
+                rename_megre_head_stl, 'in_file')
+
+            main_workflow.connect(
+                rename_megre_head_stl, 'out_file',
+                datasink, '@megre_head_stl')
+
+            # rename stereo_megre_head_mask
+            rename_stereo_megre_head_mask = pe.Node(
+                niu.Rename(), name="rename_stereo_megre_head_mask")
+
+            rename_stereo_megre_head_mask.inputs.format_string =\
+                pref_deriv + "_space-stereo_desc-megre_headmask"
+            rename_stereo_megre_head_mask.inputs.parse_string = parse_str
+            rename_stereo_megre_head_mask.inputs.keep_ext = True
+
+            main_workflow.connect(
+                skull_megre_pipe, 'outputnode.megre_head_mask',
+                rename_stereo_megre_head_mask, 'in_file')
+
+            main_workflow.connect(
+                rename_stereo_megre_head_mask, 'out_file',
+                datasink, '@stereo_megre_head_mask')
+
+        if "skullmask_megre_pipe" in params["skull_megre_pipe"]:
+
+            # rename megre_skull_stl
+            rename_megre_skull_stl = pe.Node(
+                niu.Rename(),
+                name="rename_megre_skull_stl")
+
+            rename_megre_skull_stl.inputs.format_string = \
+                pref_deriv + "_desc-megre_skullmask"
+            rename_megre_skull_stl.inputs.parse_string = parse_str
+            rename_megre_skull_stl.inputs.keep_ext = True
+
+            main_workflow.connect(
+                skull_megre_pipe, 'outputnode.megre_skull_stl',
+                rename_megre_skull_stl, 'in_file')
+
+            main_workflow.connect(
+                rename_megre_skull_stl, 'out_file',
+                datasink, '@megre_skull_stl')
+
+            # rename stereo_megre_skull_mask
+            rename_stereo_megre_skull_mask = pe.Node(
+                niu.Rename(), name="rename_stereo_megre_skull_mask")
+
+            rename_stereo_megre_skull_mask.inputs.format_string =\
+                pref_deriv + "_space-stereo_desc-megre_skullmask"
+            rename_stereo_megre_skull_mask.inputs.parse_string = parse_str
+            rename_stereo_megre_skull_mask.inputs.keep_ext = True
+
+            main_workflow.connect(
+                skull_megre_pipe, 'outputnode.megre_skull_mask',
+                rename_stereo_megre_skull_mask, 'in_file')
+
+            main_workflow.connect(
+                rename_stereo_megre_skull_mask, 'out_file',
+                datasink, '@stereo_megre_skull_mask')
+            #
+            # if "megre_skull_fov" in params["skull_megre_pipe"]:
+            #
+            #     # rename robustmegre_skull_stl
+            #     rename_robustmegre_skull_stl = pe.Node(
+            #         niu.Rename(), name="rename_robustmegre_skull_stl")
+            #
+            #     rename_robustmegre_skull_stl.inputs.format_string = \
+            #         pref_deriv + "_desc-robustmegre_skullmask"
+            #     rename_robustmegre_skull_stl.inputs.parse_string = parse_str
+            #     rename_robustmegre_skull_stl.inputs.keep_ext = True
+            #
+            #     main_workflow.connect(
+            #         skull_megre_pipe, 'outputnode.robustmegre_skull_stl',
+            #         rename_robustmegre_skull_stl, 'in_file')
+            #
+            #     main_workflow.connect(
+            #         rename_robustmegre_skull_stl, 'out_file',
+            #         datasink, '@robustmegre_skull_stl')
+            #
+            #     # rename stereo_robustmegre_skull_mask
+            #     rename_stereo_robustmegre_skull_mask = pe.Node(
+            #         niu.Rename(), name="rename_stereo_robustmegre_skullmask")
+            #
+            #     rename_stereo_robustmegre_skull_mask.inputs.format_string = \
+            #         pref_deriv + "_space-stereo_desc-robustmegre_skullmask"
+            #
+            #     rename_stereo_robustmegre_skull_mask.inputs.parse_string = \
+            #         parse_str
+            #
+            #     rename_stereo_robustmegre_skull_mask.inputs.keep_ext = True
+            #
+            #     main_workflow.connect(
+            #         skull_megre_pipe, 'outputnode.robustmegre_skull_mask',
+            #         rename_stereo_robustmegre_skull_mask, 'in_file')
+            #
+            #     main_workflow.connect(
+            #         rename_stereo_robustmegre_skull_mask, 'out_file',
+            #         datasink, '@stereo_robustmegre_skullmask')
+            #
+            #
+            #
+
+
 
 def rename_all_skull_petra_derivatives(params, main_workflow,
                                        skull_petra_pipe, datasink, pref_deriv,

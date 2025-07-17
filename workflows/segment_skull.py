@@ -95,8 +95,10 @@ from skullTo3d.pipelines.skull_pipe import (
 
 from skullTo3d.pipelines.rename import (
     rename_all_skull_petra_derivatives,
+    rename_all_skull_megre_derivatives,
     rename_all_skull_t1_derivatives,
-    rename_all_skull_ct_derivatives, rename_all_angio_derivatives)
+    rename_all_skull_ct_derivatives,
+    rename_all_angio_derivatives)
 
 from skullTo3d._version import __version__
 
@@ -1046,6 +1048,71 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
                         main_workflow.connect(
                             rename_robustpetra_skull_mask, 'out_file',
                             datasink, '@robustpetra_skull_mask')
+
+        if "megre" in skull_dt and "skull_megre_pipe" in params.keys():
+            rename_all_skull_megre_derivatives(
+                params, main_workflow, skull_megre_pipe,
+                datasink, pref_deriv, parse_str)
+
+            if pad:
+
+                if "headmask_megre_pipe" in params["skull_megre_pipe"]:
+
+                    # rename megre_head_mask
+                    rename_megre_head_mask = pe.Node(
+                        niu.Rename(), name="rename_megre_head_mask")
+                    rename_megre_head_mask.inputs.format_string = \
+                        pref_deriv + "_space-native_desc-megre_headmask"
+                    rename_megre_head_mask.inputs.parse_string = parse_str
+                    rename_megre_head_mask.inputs.keep_ext = True
+
+                    main_workflow.connect(
+                        pad_megre_head_mask, "out_file",
+                        rename_megre_head_mask, 'in_file')
+
+                    main_workflow.connect(
+                        rename_megre_head_mask, 'out_file',
+                        datasink, '@megre_head_mask')
+
+                if "skullmask_megre_pipe" in params["skull_megre_pipe"]:
+
+                    # rename megre_skull_mask
+                    rename_megre_skull_mask = pe.Node(
+                        niu.Rename(), name="rename_megre_skull_mask")
+
+                    rename_megre_skull_mask.inputs.format_string = \
+                        pref_deriv + "_space-native_desc-megre_skullmask"
+                    rename_megre_skull_mask.inputs.parse_string = parse_str
+                    rename_megre_skull_mask.inputs.keep_ext = True
+
+                    main_workflow.connect(
+                        pad_megre_skull_mask, "out_file",
+                        rename_megre_skull_mask, 'in_file')
+
+                    main_workflow.connect(
+                        rename_megre_skull_mask, 'out_file',
+                        datasink, '@megre_skull_mask')
+
+                    if "megre_skull_fov" in params["skull_megre_pipe"]:
+                        # rename robustmegre_skull_mask
+                        rename_robustmegre_skull_mask = pe.Node(
+                            niu.Rename(), name="rename_robustmegre_skull_mask")
+                        rename_robustmegre_skull_mask.inputs.format_string = \
+                            pref_deriv + \
+                            "_space-native_desc-robustmegre_skullmask"
+
+                        rename_robustmegre_skull_mask.inputs.parse_string = \
+                            parse_str
+
+                        rename_robustmegre_skull_mask.inputs.keep_ext = True
+
+                        main_workflow.connect(
+                            pad_robustmegre_skull_mask, "out_file",
+                            rename_robustmegre_skull_mask, 'in_file')
+
+                        main_workflow.connect(
+                            rename_robustmegre_skull_mask, 'out_file',
+                            datasink, '@robustmegre_skull_mask')
 
         if "t1" in skull_dt and "skull_t1_pipe" in params.keys():
             rename_all_skull_t1_derivatives(
