@@ -970,24 +970,29 @@ def _create_petra_skull_mask(name="skullmask_petra_pipe", params={}):
             inputnode, ("indiv_params", parse_key, "petra_head_erode_skin"),
             petra_head_erode_skin, "indiv_params")
 
-        # ### Masking with petra_head mask
-        # petra_skin_masked ####### [okey]
-        petra_skin_masked = pe.Node(interface=ApplyMask(),
-                                    name="petra_skin_masked")
+    # ### Masking with head mask or skin_erode_head_mask
+    # petra_skin_masked ####### [okey]
+    petra_skin_masked = pe.Node(interface=ApplyMask(),
+                                name="petra_skin_masked")
 
+    if "petra_head_erode_skin" in params.keys():
         skullmask_petra_pipe.connect(
             petra_head_erode_skin, "out_file",
             petra_skin_masked, "mask_file")
+    else:
+        skullmask_petra_pipe.connect(
+            inputnode, "headmask",
+            petra_skin_masked, "mask_file")
 
-        if "petra_fast" in params.keys():
-            skullmask_petra_pipe.connect(
-                petra_skull_mask_binary, "out_file",
-                petra_skin_masked, "in_file")
+    if "petra_fast" in params.keys():
+        skullmask_petra_pipe.connect(
+            petra_skull_mask_binary, "out_file",
+            petra_skin_masked, "in_file")
 
-        else:
-            skullmask_petra_pipe.connect(
-                petra_skull_inv, "out_file",
-                petra_skin_masked, "in_file")
+    else:
+        skullmask_petra_pipe.connect(
+            petra_skull_inv, "out_file",
+            petra_skin_masked, "in_file")
 
     if "petra_skull_gcc_erode" in params and \
             "petra_skull_gcc_dilate" in params:
