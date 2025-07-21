@@ -101,7 +101,7 @@ def rename_all_skull_megre_derivatives(params, main_workflow,
                 rename_stereo_megre_skull_mask, 'out_file',
                 datasink, '@stereo_megre_skull_mask')
 
-        if "fullskullmask_megre_pipe" in params['skull_megre_pipe']
+        if "fullskullmask_megre_pipe" in params['skull_megre_pipe']:
 
             # rename megre_fullskull_stl
             rename_megre_fullskull_stl = pe.Node(
