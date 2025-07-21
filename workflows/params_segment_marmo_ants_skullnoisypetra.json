@@ -360,6 +360,18 @@
         },
         "fullskullmask_megre_pipe":
         {
+
+            "fullskull_dilate":
+            {
+                "operation": "modal",
+                "kernel_shape": "boxv",
+                "kernel_size": 7.0
+            },
+            "fullskull_erode":
+            {
+                "kernel_shape": "boxv",
+                "kernel_size": 7.0
+            }
         }
     }
 

@@ -1467,6 +1467,7 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
 
 def _create_fullskull_mask(name="fullskull_pipe", params={}):
 
+    print("Running fullskull_pipe with:", params)
     # Creating pipeline
     fullskull_pipe = pe.Workflow(name=name)
 
@@ -1509,10 +1510,10 @@ def _create_fullskull_mask(name="fullskull_pipe", params={}):
     fullskull_pipe.connect(
         fullskull_mask_add, "out_file",
         fullskull_dilate, "in_file")
-
-    fullskull_pipe.connect(
-        inputnode, ('indiv_params', parse_key, "fullskull_dilate"),
-        fullskull_dilate, "indiv_params")
+    #
+    # fullskull_pipe.connect(
+    #     inputnode, ('indiv_params', parse_key, "fullskull_dilate"),
+    #     fullskull_dilate, "indiv_params")
 
     # fullskull_fill #######  [okey]
     fullskull_fill = pe.Node(interface=UnaryMaths(),
@@ -1533,10 +1534,10 @@ def _create_fullskull_mask(name="fullskull_pipe", params={}):
     fullskull_pipe.connect(
         fullskull_fill, "out_file",
         fullskull_erode, "in_file")
-
-    fullskull_pipe.connect(
-        inputnode, ('indiv_params', parse_key, "fullskull_erode"),
-        fullskull_erode, "indiv_params")
+    #
+    # fullskull_pipe.connect(
+    #     inputnode, ('indiv_params', parse_key, "fullskull_erode"),
+    #     fullskull_erode, "indiv_params")
 
     # mesh_fullskull #######
     mesh_fullskull = pe.Node(
