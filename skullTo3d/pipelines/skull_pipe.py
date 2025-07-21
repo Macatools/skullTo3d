@@ -1496,7 +1496,7 @@ def _create_fullskull_mask(name="fullskull_pipe", params={}):
         name="brainmask_expand")
 
     fullskull_pipe.connect(
-        fullskull_mask_binary, "out_file",
+        brainmask_binary, "out_file",
         brainmask_expand, "in_file")
 
     # add masks
@@ -1510,7 +1510,7 @@ def _create_fullskull_mask(name="fullskull_pipe", params={}):
             fullskull_mask_add, "in_file")
 
     fullskull_pipe.connect(
-            fullskull_mask_binary, "out_file",
+            brainmask_binary, "out_file",
             fullskull_mask_add, "operand_file")
 
     # fullskull_dilate ####### [okey][json]
