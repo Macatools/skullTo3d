@@ -1700,7 +1700,7 @@ def create_skull_megre_pipe(name="skull_megre_pipe", params={}):
             fullskullmask_pipe, "inputnode.skullmask")
 
         skull_megre_pipe.connect(
-            headmask_pipe, "inputnode.segmented_brain_mask",
+            inputnode, "segmented_brain_mask",
             fullskullmask_pipe, "inputnode.segmented_brain_mask")
 
         skull_megre_pipe.connect(
