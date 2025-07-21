@@ -697,111 +697,7 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
                             "outputnode.stereo_to_native_trans",
                             pad_robustpetra_skull_mask, "trans_file")
 
-    # ct_skull
-    if "ct" in skull_dt and "skull_ct_pipe" in params.keys():
-        print("Found skull_ct_pipe")
-
-        if len(brain_dt):
-
-            skull_ct_pipe = create_skull_ct_pipe(
-                params=parse_key(params, "skull_ct_pipe"))
-
-            main_workflow.connect(datasource, ('CT', get_first_elem),
-                                  skull_ct_pipe, 'inputnode.ct')
-
-            main_workflow.connect(
-                segment_brain_pipe,
-                "outputnode.native_T1",
-                skull_ct_pipe, 'inputnode.native_T1')
-
-            main_workflow.connect(
-                segment_brain_pipe,
-                "outputnode.native_T2",
-                skull_ct_pipe, 'inputnode.native_T2')
-
-            if "pad_template" in params["short_preparation_pipe"].keys():
-                main_workflow.connect(
-                    segment_brain_pipe, "outputnode.stereo_padded_T1",
-                    skull_ct_pipe, 'inputnode.stereo_T1')
-            else:
-                main_workflow.connect(
-                    segment_brain_pipe, "outputnode.stereo_T1",
-                    skull_ct_pipe, 'inputnode.stereo_T1')
-
-            main_workflow.connect(
-                segment_brain_pipe, "outputnode.native_to_stereo_trans",
-                skull_ct_pipe, 'inputnode.native_to_stereo_trans')
-
-            if pad and space == "native":
-
-                if "short_preparation_pipe" in params.keys():
-                    if "crop_T1" in params["short_preparation_pipe"].keys():
-
-                        print("Warning, crop_t1 is defined")
-                        pass
-
-                    print("Using reg_aladin transfo to pad skull_mask back")
-
-                    pad_ct_skull_mask = pe.Node(RegResample(inter_val="NN"),
-                                                name="pad_ct_skull_mask")
-
-                    main_workflow.connect(
-                        skull_ct_pipe, "outputnode.stereo_ct_skull_mask",
-                        pad_ct_skull_mask, "flo_file")
-
-                    main_workflow.connect(
-                        segment_brain_pipe, "outputnode.native_T1",
-                        pad_ct_skull_mask, "ref_file")
-
-                    main_workflow.connect(
-                        segment_brain_pipe,
-                        "outputnode.stereo_to_native_trans",
-                        pad_ct_skull_mask, "trans_file")
-
-        else:
-
-            skull_ct_pipe = create_autonomous_skull_ct_pipe(
-                params=parse_key(params, "skull_ct_pipe"))
-
-            main_workflow.connect(datasource, ('CT', get_first_elem),
-                                  skull_ct_pipe, 'inputnode.ct')
-
-        if indiv_params:
-            main_workflow.connect(datasource, "indiv_params",
-                                  skull_ct_pipe, 'inputnode.indiv_params')
-
-    # angio
-    if "angio" in skull_dt and "angio_pipe" in params.keys():
-        print("Found angio_pipe")
-
-        angio_pipe = create_angio_pipe(
-            params=parse_key(params, "angio_pipe"))
-
-        main_workflow.connect(datasource, ('ANGIO', get_first_elem),
-                              angio_pipe, 'inputnode.angio')
-
-        main_workflow.connect(segment_brain_pipe,
-                              "outputnode.native_T1",
-                              angio_pipe, 'inputnode.native_T1')
-
-        if "pad_template" in params["short_preparation_pipe"].keys():
-            main_workflow.connect(
-                segment_brain_pipe, "outputnode.stereo_padded_T1",
-                angio_pipe, 'inputnode.stereo_T1')
-        else:
-            main_workflow.connect(
-                segment_brain_pipe, "outputnode.stereo_T1",
-                angio_pipe, 'inputnode.stereo_T1')
-
-        main_workflow.connect(segment_brain_pipe,
-                              "outputnode.stereo_padded_brain_mask",
-                              angio_pipe, 'inputnode.stereo_brain_mask')
-
-        main_workflow.connect(
-            segment_brain_pipe, "outputnode.native_to_stereo_trans",
-            angio_pipe, 'inputnode.native_to_stereo_trans')
-
-    # angio
+    # megre
     if "megre" in skull_dt and "skull_megre_pipe" in params.keys():
         print("Found skull_megre_pipe")
 
@@ -832,7 +728,7 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
                 if "pad_template" in params["short_preparation_pipe"].keys():
                     main_workflow.connect(
                         segment_brain_pipe, "outputnode.stereo_padded_segmented_brain_mask",
-                        skull_megre_pipe, 'inputnode.stereo_segmented_brain_mask')
+                        skull_megre_pipe, 'inputnode.segmented_brain_mask')
 
                 else:
                     main_workflow.connect(
@@ -951,6 +847,110 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
         #     segment_brain_pipe, "outputnode.native_to_stereo_trans",
         #     skull_megre_pipe, 'inputnode.native_to_stereo_trans')
         #
+    # ct_skull
+    if "ct" in skull_dt and "skull_ct_pipe" in params.keys():
+        print("Found skull_ct_pipe")
+
+        if len(brain_dt):
+
+            skull_ct_pipe = create_skull_ct_pipe(
+                params=parse_key(params, "skull_ct_pipe"))
+
+            main_workflow.connect(datasource, ('CT', get_first_elem),
+                                  skull_ct_pipe, 'inputnode.ct')
+
+            main_workflow.connect(
+                segment_brain_pipe,
+                "outputnode.native_T1",
+                skull_ct_pipe, 'inputnode.native_T1')
+
+            main_workflow.connect(
+                segment_brain_pipe,
+                "outputnode.native_T2",
+                skull_ct_pipe, 'inputnode.native_T2')
+
+            if "pad_template" in params["short_preparation_pipe"].keys():
+                main_workflow.connect(
+                    segment_brain_pipe, "outputnode.stereo_padded_T1",
+                    skull_ct_pipe, 'inputnode.stereo_T1')
+            else:
+                main_workflow.connect(
+                    segment_brain_pipe, "outputnode.stereo_T1",
+                    skull_ct_pipe, 'inputnode.stereo_T1')
+
+            main_workflow.connect(
+                segment_brain_pipe, "outputnode.native_to_stereo_trans",
+                skull_ct_pipe, 'inputnode.native_to_stereo_trans')
+
+            if pad and space == "native":
+
+                if "short_preparation_pipe" in params.keys():
+                    if "crop_T1" in params["short_preparation_pipe"].keys():
+
+                        print("Warning, crop_t1 is defined")
+                        pass
+
+                    print("Using reg_aladin transfo to pad skull_mask back")
+
+                    pad_ct_skull_mask = pe.Node(RegResample(inter_val="NN"),
+                                                name="pad_ct_skull_mask")
+
+                    main_workflow.connect(
+                        skull_ct_pipe, "outputnode.stereo_ct_skull_mask",
+                        pad_ct_skull_mask, "flo_file")
+
+                    main_workflow.connect(
+                        segment_brain_pipe, "outputnode.native_T1",
+                        pad_ct_skull_mask, "ref_file")
+
+                    main_workflow.connect(
+                        segment_brain_pipe,
+                        "outputnode.stereo_to_native_trans",
+                        pad_ct_skull_mask, "trans_file")
+
+        else:
+
+            skull_ct_pipe = create_autonomous_skull_ct_pipe(
+                params=parse_key(params, "skull_ct_pipe"))
+
+            main_workflow.connect(datasource, ('CT', get_first_elem),
+                                  skull_ct_pipe, 'inputnode.ct')
+
+        if indiv_params:
+            main_workflow.connect(datasource, "indiv_params",
+                                  skull_ct_pipe, 'inputnode.indiv_params')
+
+    # angio
+    if "angio" in skull_dt and "angio_pipe" in params.keys():
+        print("Found angio_pipe")
+
+        angio_pipe = create_angio_pipe(
+            params=parse_key(params, "angio_pipe"))
+
+        main_workflow.connect(datasource, ('ANGIO', get_first_elem),
+                              angio_pipe, 'inputnode.angio')
+
+        main_workflow.connect(segment_brain_pipe,
+                              "outputnode.native_T1",
+                              angio_pipe, 'inputnode.native_T1')
+
+        if "pad_template" in params["short_preparation_pipe"].keys():
+            main_workflow.connect(
+                segment_brain_pipe, "outputnode.stereo_padded_T1",
+                angio_pipe, 'inputnode.stereo_T1')
+        else:
+            main_workflow.connect(
+                segment_brain_pipe, "outputnode.stereo_T1",
+                angio_pipe, 'inputnode.stereo_T1')
+
+        main_workflow.connect(segment_brain_pipe,
+                              "outputnode.stereo_padded_brain_mask",
+                              angio_pipe, 'inputnode.stereo_brain_mask')
+
+        main_workflow.connect(
+            segment_brain_pipe, "outputnode.native_to_stereo_trans",
+            angio_pipe, 'inputnode.native_to_stereo_trans')
+
     # angio_quick
     if "angio" in skull_dt and "angio_quick_pipe" in params.keys():
         print("Found angio_pipe")
