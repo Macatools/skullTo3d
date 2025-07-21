@@ -1544,7 +1544,7 @@ def create_skull_megre_pipe(name="skull_megre_pipe", params={}):
         niu.IdentityInterface(
             fields=["stereo_megre",
                     "megre_head_mask", "megre_head_stl",
-                    "megre_skull_stl", "megre_skull_mask"
+                    "megre_skull_stl", "megre_skull_mask",
                     "megre_fullskull_stl", "megre_fullskull_mask"]),
         name='outputnode')
 
