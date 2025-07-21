@@ -725,22 +725,15 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
                                   'inputnode.native_to_stereo_trans')
 
             if "fullskullmask_megre_pipe" in params["skull_megre_pipe"]:
-                print("found fullskullmask_megre_pipe")
-
                 if "pad_template" in params["short_preparation_pipe"].keys():
                     main_workflow.connect(
                         segment_brain_pipe, "outputnode.stereo_padded_segmented_brain_mask",
                         skull_megre_pipe, 'inputnode.segmented_brain_mask')
 
-                    print("stereo_padded_segmented_brain_mask ")
-
                 else:
                     main_workflow.connect(
                         segment_brain_pipe, "outputnode.stereo_segmented_brain_mask",
                         skull_megre_pipe, 'inputnode.segmented_brain_mask')
-
-
-                    print("stereo_segmented_brain_mask ")
 
         else:
             print("No brain segmentation")

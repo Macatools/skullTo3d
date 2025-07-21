@@ -361,6 +361,13 @@
         "fullskullmask_megre_pipe":
         {
 
+            "brainmask_expand":
+            {
+                "operation": "modal",
+                "kernel_shape": "boxv",
+                "kernel_size": 11
+            },
+
             "fullskull_dilate":
             {
                 "operation": "modal",

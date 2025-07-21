@@ -1477,15 +1477,27 @@ def _create_fullskull_mask(name="fullskull_pipe", params={}):
         name='inputnode')
 
     # ct_skull_mask_binary
-    fullskull_mask_binary = pe.Node(interface=UnaryMaths(),
-                                   name="fullskull_mask_binary")
+    brainmask_binary = pe.Node(interface=UnaryMaths(),
+                                   name="brainmask_binary")
 
-    fullskull_mask_binary.inputs.operation = 'bin'
-    fullskull_mask_binary.inputs.output_type = 'NIFTI_GZ'
+    brainmask_binary.inputs.operation = 'bin'
+    brainmask_binary.inputs.output_type = 'NIFTI_GZ'
 
     fullskull_pipe.connect(
             inputnode, "segmented_brain_mask",
-            fullskull_mask_binary, "in_file")
+            brainmask_binary, "in_file")
+
+    # brainmask_expand
+
+    # fullskull_dilate ####### [okey][json]
+    brainmask_expand = NodeParams(
+        interface=DilateImage(),
+        params=parse_key(params, "brainmask_expand"),
+        name="brainmask_expand")
+
+    fullskull_pipe.connect(
+        fullskull_mask_binary, "out_file",
+        brainmask_expand, "in_file")
 
     # add masks
     fullskull_mask_add= pe.Node(interface=BinaryMaths(),
@@ -1539,6 +1551,7 @@ def _create_fullskull_mask(name="fullskull_pipe", params={}):
     #     inputnode, ('indiv_params', parse_key, "fullskull_erode"),
     #     fullskull_erode, "indiv_params")
 
+
     # mesh_fullskull #######
     mesh_fullskull = pe.Node(
         interface=IsoSurface(),
@@ -1547,6 +1560,29 @@ def _create_fullskull_mask(name="fullskull_pipe", params={}):
     fullskull_pipe.connect(
         fullskull_erode, "out_file",
         mesh_fullskull, "nii_file")
+
+    # fullskull_restrain
+    fullskull_restrain = NodeParams(
+            interface=ApplyMask(),
+            params=parse_key(params, "fullskull_restrain"),
+            name="fullskull_restrain")
+
+    fullskull_pipe.connect(
+        fullskull_erode, "out_file",
+        fullskull_restrain, "in_file")
+
+    fullskull_pipe.connect(
+        brainmask_expand, "out_file",
+        fullskull_restrain, "mask_file")
+
+    # mesh_fullskull_restrain #######
+    mesh_fullskull_restrain = pe.Node(
+        interface=IsoSurface(),
+        name="mesh_fullskull_restrain")
+
+    fullskull_pipe.connect(
+        fullskull_restrain, "out_file",
+        mesh_fullskull_restrain, "nii_file")
 
 
     return fullskull_pipe
@@ -1570,7 +1606,9 @@ def create_skull_megre_pipe(name="skull_megre_pipe", params={}):
             fields=["stereo_megre",
                     "megre_head_mask", "megre_head_stl",
                     "megre_skull_stl", "megre_skull_mask",
-                    "megre_fullskull_stl", "megre_fullskull_mask"]),
+                    "megre_fullskull_stl", "megre_fullskull_mask,
+                    "megre_fullskull_restrain_stl",
+                    "megre_fullskull_restrain_mask"]),
         name='outputnode')
 
     print("Using average_align for av_MEGRE")
@@ -1708,11 +1746,11 @@ def create_skull_megre_pipe(name="skull_megre_pipe", params={}):
     else:
         return skull_megre_pipe
 
-    skull_megre_pipe.connect(skullmask_pipe, "mesh_petra_skull.stl_file",
-                             outputnode, "megre_skull_stl")
-
     skull_megre_pipe.connect(skullmask_pipe, "petra_skull_erode.out_file",
                              outputnode, "megre_skull_mask")
+
+    skull_megre_pipe.connect(skullmask_pipe, "mesh_petra_skull.stl_file",
+                             outputnode, "megre_skull_stl")
 
 
     # ## skull mask
@@ -1738,11 +1776,17 @@ def create_skull_megre_pipe(name="skull_megre_pipe", params={}):
         return skull_megre_pipe
 
     # outputnode
+    skull_megre_pipe.connect(fullskullmask_pipe, "fullskull_erode.out_file",
+                             outputnode, "megre_fullskull_mask")
+
     skull_megre_pipe.connect(fullskullmask_pipe, "mesh_fullskull.stl_file",
                              outputnode, "megre_fullskull_stl")
 
-    skull_megre_pipe.connect(fullskullmask_pipe, "fullskull_fill.out_file",
-                             outputnode, "megre_fullskull_mask")
+    skull_megre_pipe.connect(fullskullmask_pipe, "fullskull_restrain.out_file",
+                             outputnode, "megre_fullskull_restrain_mask")
+
+    skull_megre_pipe.connect(fullskullmask_pipe, "mesh_fullskull_restrain.stl_file",
+                             outputnode, "megre_fullskull_restrain_stl")
 
     return skull_megre_pipe
 
