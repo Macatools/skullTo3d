@@ -1702,10 +1702,10 @@ def create_skull_megre_pipe(name="skull_megre_pipe", params={}):
         skull_megre_pipe.connect(
             inputnode, "segmented_brain_mask",
             fullskullmask_pipe, "inputnode.segmented_brain_mask")
-
-        skull_megre_pipe.connect(
-            inputnode, "indiv_params",
-            fullskullmask_pipe, "inputnode.indiv_params")
+        #
+        # skull_megre_pipe.connect(
+        #     inputnode, "indiv_params",
+        #     fullskullmask_pipe, "inputnode.indiv_params")
 
     else:
         return skull_megre_pipe
