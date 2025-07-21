@@ -603,7 +603,7 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
                 if "pad_template" in params["short_preparation_pipe"].keys():
                     main_workflow.connect(
                         segment_brain_pipe, "outputnode.stereo_padded_segmented_brain_mask",
-                        skull_petra_pipe, 'inputnode.stereo_segmented_brain_mask')
+                        skull_petra_pipe, 'inputnode.segmented_brain_mask')
 
                 else:
                     main_workflow.connect(
