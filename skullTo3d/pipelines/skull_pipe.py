@@ -7,7 +7,8 @@ import nipype.pipeline.engine as pe
 
 from nipype.interfaces.fsl.maths import (
     DilateImage, ErodeImage,
-    ApplyMask, UnaryMaths, Threshold, MathsCommand)
+    ApplyMask, Threshold,
+    UnaryMaths, BinaryMaths, MathsCommand)
 
 
 import nipype.interfaces.fsl as fsl
