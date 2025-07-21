@@ -240,11 +240,9 @@
                 "kernel_size": 7.0
             }
         },
-
-    },
-
-    "fullskullmask_petra_pipe":
-    {
+        "fullskullmask_petra_pipe":
+        {
+        }
     },
 
     "skull_ct_pipe":
@@ -359,11 +357,9 @@
                 "kernel_shape": "boxv",
                 "kernel_size": 7.0
             }
+        },
+        "fullskullmask_megre_pipe":
+        {
         }
-    },
-
-    "fullskullmask_megre_pipe":
-    {
-    }
 
 }
