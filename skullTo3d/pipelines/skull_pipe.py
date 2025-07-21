@@ -1301,6 +1301,7 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
     inputnode = pe.Node(
         niu.IdentityInterface(fields=['petra', 'stereo_T1',
                                       'native_img',
+                                      "segmented_brain_mask",
                                       'native_to_stereo_trans',
                                       'indiv_params']),
         name='inputnode'
@@ -2003,6 +2004,7 @@ def create_skull_megre_pipe(name="skull_megre_pipe", params={}):
     # Creating input node
     inputnode = pe.Node(
         niu.IdentityInterface(fields=['list_megre', 'stereo_T1', 'native_T1',
+                                      "segmented_brain_mask",
                                      'native_to_stereo_trans','indiv_params']),
         name='inputnode'
     )
@@ -2155,6 +2157,29 @@ def create_skull_megre_pipe(name="skull_megre_pipe", params={}):
 
     skull_megre_pipe.connect(skullmask_pipe, "petra_skull_erode.out_file",
                              outputnode, "megre_skull_mask")
+
+
+    # ## skull mask
+    if "fullskullmask_megre_pipe" in params:
+
+        fullskullmask_pipe = _create_fullskull_mask(
+            name="fullskullmask_megre_pipe",
+            params=params["fullskullmask_megre_pipe"])
+
+        fullskullmask_megre_pipe.connect(
+            skullmask_pipe, "petra_skull_erode.out_file",
+            fullskullmask_megre_pipe, "inputnode.headmasked_petra")
+
+        skull_megre_pipe.connect(
+            headmask_pipe, "inputnode.segmented_brain_mask",
+            fullskullmask_megre_pipe, "inputnode.segmented_brain_mask")
+
+        skull_megre_pipe.connect(
+            inputnode, "indiv_params",
+            skullmask_pipe, "inputnode.indiv_params")
+
+    else:
+        return skull_megre_pipe
 
     return skull_megre_pipe
 

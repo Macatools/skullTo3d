@@ -210,6 +210,7 @@
                 "kernel_size": 7.0
             }
         },
+
         "skullmask_petra_pipe":
         {
             "petra_fast":
@@ -238,7 +239,12 @@
                 "kernel_shape": "boxv",
                 "kernel_size": 7.0
             }
-        }
+        },
+
+    },
+
+    "fullskullmask_petra_pipe":
+    {
     },
 
     "skull_ct_pipe":
@@ -354,5 +360,10 @@
                 "kernel_size": 7.0
             }
         }
+    },
+
+    "fullskullmask_megre_pipe":
+    {
     }
+
 }
