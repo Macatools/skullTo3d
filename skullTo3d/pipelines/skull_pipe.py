@@ -1472,7 +1472,7 @@ def _create_fullskull_mask(name="fullskull_pipe", params={}):
 
     # Creating input node
     inputnode = pe.Node(
-        niu.IdentityInterface(fields=['segmented_brain_mask', "skullmask"]),
+        niu.IdentityInterface(fields=['segmented_brain_mask', "skullmask", "indiv_params"]),
         name='inputnode')
 
     # ct_skull_mask_binary
@@ -1500,19 +1500,43 @@ def _create_fullskull_mask(name="fullskull_pipe", params={}):
             fullskull_mask_binary, "out_file",
             fullskull_mask_add, "operand_file")
 
+    # fullskull_dilate ####### [okey][json]
+    fullskull_dilate = NodeParams(
+        interface=DilateImage(),
+        params=parse_key(params, "fullskull_dilate"),
+        name="fullskull_dilate")
+
+    fullskull_pipe.connect(
+        fullskull_mask_add, "out_file",
+        fullskull_dilate, "in_file")
+
+    fullskull_pipe.connect(
+        inputnode, ('indiv_params', parse_key, "fullskull_dilate"),
+        fullskull_dilate, "indiv_params")
 
     # fullskull_fill #######  [okey]
-    fullskull_fill = pe.Node(
-        interface=UnaryMaths(),
-        name="fullskull_fill")
+    fullskull_fill = pe.Node(interface=UnaryMaths(),
+                               name="fullskull_fill")
 
     fullskull_fill.inputs.operation = 'fillh'
 
     fullskull_pipe.connect(
-        fullskull_mask_add, "out_file",
+        fullskull_dilate, "out_file",
         fullskull_fill, "in_file")
 
+    # fullskull_erode ####### [okey][json]
+    fullskull_erode = NodeParams(
+        interface=ErodeImage(),
+        params=parse_key(params, "fullskull_erode"),
+        name="fullskull_erode")
 
+    fullskull_pipe.connect(
+        fullskull_fill, "out_file",
+        fullskull_erode, "in_file")
+
+    fullskull_pipe.connect(
+        inputnode, ('indiv_params', parse_key, "fullskull_erode"),
+        fullskull_erode, "indiv_params")
 
     # mesh_fullskull #######
     mesh_fullskull = pe.Node(
@@ -1520,7 +1544,7 @@ def _create_fullskull_mask(name="fullskull_pipe", params={}):
         name="mesh_fullskull")
 
     fullskull_pipe.connect(
-        fullskull_fill, "out_file",
+        fullskull_erode, "out_file",
         mesh_fullskull, "nii_file")
 
 
@@ -1704,10 +1728,10 @@ def create_skull_megre_pipe(name="skull_megre_pipe", params={}):
         skull_megre_pipe.connect(
             inputnode, "segmented_brain_mask",
             fullskullmask_pipe, "inputnode.segmented_brain_mask")
-        #
-        # skull_megre_pipe.connect(
-        #     inputnode, "indiv_params",
-        #     fullskullmask_pipe, "inputnode.indiv_params")
+
+        skull_megre_pipe.connect(
+            inputnode, "indiv_params",
+            fullskullmask_pipe, "inputnode.indiv_params")
 
     else:
         return skull_megre_pipe
