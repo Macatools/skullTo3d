@@ -1695,17 +1695,17 @@ def create_skull_megre_pipe(name="skull_megre_pipe", params={}):
             name="fullskullmask_megre_pipe",
             params=params["fullskullmask_megre_pipe"])
 
-        fullskullmask_pipe.connect(
+        skull_megre_pipe.connect(
             skullmask_pipe, "petra_skull_erode.out_file",
-            fullskullmask_megre_pipe, "inputnode.headmasked_petra")
+            fullskullmask_pipe, "inputnode.headmasked_petra")
 
-        fullskullmask_pipe.connect(
+        skull_megre_pipe.connect(
             headmask_pipe, "inputnode.segmented_brain_mask",
-            fullskullmask_megre_pipe, "inputnode.segmented_brain_mask")
+            fullskullmask_pipe, "inputnode.segmented_brain_mask")
 
-        fullskullmask_pipe.connect(
+        skull_megre_pipe.connect(
             inputnode, "indiv_params",
-            skullmask_pipe, "inputnode.indiv_params")
+            fullskullmask_pipe, "inputnode.indiv_params")
 
     else:
         return skull_megre_pipe
