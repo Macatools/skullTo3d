@@ -1472,7 +1472,7 @@ def _create_fullskull_mask(name="fullskull_pipe", params={}):
     # Creating input node
     inputnode = pe.Node(
         niu.IdentityInterface(fields=['segmented_brain_mask', "skullmask"]),
-        name='inputnode'
+        name='inputnode')
 
     # ct_skull_mask_binary
     fullskull_mask_binary = pe.Node(interface=UnaryMaths(),
