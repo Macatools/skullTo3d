@@ -1502,8 +1502,9 @@ def _create_fullskull_mask(name="fullskull_pipe", params={}):
 
 
     # fullskull_fill #######  [okey]
-    fullskull_fill = pe.Node(interface=UnaryMaths(),
-                            name="ct_skull_fill")
+    fullskull_fill = pe.Node(
+        interface=UnaryMaths(),
+        name="fullskull_fill")
 
     fullskull_fill.inputs.operation = 'fillh'
 
