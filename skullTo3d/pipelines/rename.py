@@ -145,7 +145,7 @@ def rename_all_skull_megre_derivatives(params, main_workflow,
                 name="rename_megre_fullskull_restrain_stl")
 
             rename_megre_fullskull_restrain_stl.inputs.format_string = \
-                pref_deriv + "_desc-megre_fullskull_restrainmask"
+                pref_deriv + "_desc-megre_desc-braincrop_fullskullmask"
             rename_megre_fullskull_restrain_stl.inputs.parse_string = parse_str
             rename_megre_fullskull_restrain_stl.inputs.keep_ext = True
 
@@ -162,7 +162,7 @@ def rename_all_skull_megre_derivatives(params, main_workflow,
                 niu.Rename(), name="rename_stereo_megre_fullskull_restrain_mask")
 
             rename_stereo_megre_fullskull_restrain_mask.inputs.format_string =\
-                pref_deriv + "_space-stereo_desc-megre_fullskull_restrainmask"
+                pref_deriv + "_space-stereo_desc-megre_desc-braincrop_fullskullnmask"
             rename_stereo_megre_fullskull_restrain_mask.inputs.parse_string = parse_str
             rename_stereo_megre_fullskull_restrain_mask.inputs.keep_ext = True
 
