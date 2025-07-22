@@ -1447,6 +1447,41 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
     skull_petra_pipe.connect(skullmask_pipe, "petra_skull_erode.out_file",
                              outputnode, "petra_skull_mask")
 
+    # ## skull mask
+    if "fullskullmask_petra_pipe" in params:
+
+        fullskullmask_pipe = _create_fullskull_mask(
+            name="fullskullmask_petra_pipe",
+            params=params["fullskullmask_petra_pipe"])
+
+        skull_petra_pipe.connect(
+            skullmask_pipe, "petra_skull_erode.out_file",
+            fullskullmask_pipe, "inputnode.skullmask")
+
+        skull_petra_pipe.connect(
+            inputnode, "segmented_brain_mask",
+            fullskullmask_pipe, "inputnode.segmented_brain_mask")
+
+        skull_petra_pipe.connect(
+            inputnode, "indiv_params",
+            fullskullmask_pipe, "inputnode.indiv_params")
+
+    else:
+        return skull_petra_pipe
+
+    # outputnode
+    skull_petra_pipe.connect(fullskullmask_pipe, "fullskull_erode.out_file",
+                             outputnode, "petra_fullskull_mask")
+
+    skull_petra_pipe.connect(fullskullmask_pipe, "mesh_fullskull.stl_file",
+                             outputnode, "petra_fullskull_stl")
+
+    skull_petra_pipe.connect(fullskullmask_pipe, "fullskull_restrain.out_file",
+                             outputnode, "petra_fullskull_restrain_mask")
+
+    skull_petra_pipe.connect(fullskullmask_pipe, "mesh_fullskull_restrain.stl_file",
+                             outputnode, "petra_fullskull_restrain_stl")
+
     if "petra_skull_fov" in params.keys():
 
         skull_petra_pipe.connect(
