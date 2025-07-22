@@ -1927,6 +1927,9 @@ def _create_skullmask_ct_pipe(name="skullmask_ct_pipe", params={}):
         interface=IsoSurface(),
         name="mesh_ct_skull")
 
+    mesh_ct_skull.inputs.KPB = 0.0001
+    mesh_ct_skull.inputs.NITER = 1000
+
     skullmask_ct_pipe.connect(
         ct_skull_erode, "out_file",
         mesh_ct_skull, "nii_file")
