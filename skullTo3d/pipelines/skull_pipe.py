@@ -2170,7 +2170,8 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
     skull_ct_pipe.connect(skullmask_ct_pipe, "ct_skull_erode.out_file",
                           outputnode, "stereo_ct_skull_mask")
 
-    if "ct_skull_fov" in params.keys():
+    if "ct_skull_fov" in params["skullmask_ct_pipe"].keys():
+
         skull_ct_pipe.connect(skullmask_ct_pipe, "ct_skull_fov.out_roi",
                               outputnode, "robustct_skull_mask")
 
