@@ -40,6 +40,129 @@ from macapype.nodes.prepare import apply_li_thresh
 
 from macapype.utils.misc import parse_key, get_elem
 
+
+def _create_fullskull_mask(name="fullskull_pipe", params={}):
+
+    print("Running fullskull_pipe with:", params)
+    # Creating pipeline
+    fullskull_pipe = pe.Workflow(name=name)
+
+    # Creating input node
+    inputnode = pe.Node(
+        niu.IdentityInterface(fields=['segmented_brain_mask', "skullmask", "indiv_params"]),
+        name='inputnode')
+
+    # ct_skull_mask_binary
+    brainmask_binary = pe.Node(interface=UnaryMaths(),
+                                   name="brainmask_binary")
+
+    brainmask_binary.inputs.operation = 'bin'
+    brainmask_binary.inputs.output_type = 'NIFTI_GZ'
+
+    fullskull_pipe.connect(
+            inputnode, "segmented_brain_mask",
+            brainmask_binary, "in_file")
+
+    # brainmask_expand
+
+    # fullskull_dilate ####### [okey][json]
+    brainmask_expand = NodeParams(
+        interface=DilateImage(),
+        params=parse_key(params, "brainmask_expand"),
+        name="brainmask_expand")
+
+    fullskull_pipe.connect(
+        brainmask_binary, "out_file",
+        brainmask_expand, "in_file")
+
+    # add masks
+    fullskull_mask_add= pe.Node(interface=BinaryMaths(),
+                                   name="fullskull_mask_add")
+
+    fullskull_mask_add.inputs.operation = 'add'
+
+    fullskull_pipe.connect(
+            inputnode, "skullmask",
+            fullskull_mask_add, "in_file")
+
+    fullskull_pipe.connect(
+            brainmask_binary, "out_file",
+            fullskull_mask_add, "operand_file")
+
+    # fullskull_dilate ####### [okey][json]
+    fullskull_dilate = NodeParams(
+        interface=DilateImage(),
+        params=parse_key(params, "fullskull_dilate"),
+        name="fullskull_dilate")
+
+    fullskull_pipe.connect(
+        fullskull_mask_add, "out_file",
+        fullskull_dilate, "in_file")
+    #
+    # fullskull_pipe.connect(
+    #     inputnode, ('indiv_params', parse_key, "fullskull_dilate"),
+    #     fullskull_dilate, "indiv_params")
+
+    # fullskull_fill #######  [okey]
+    fullskull_fill = pe.Node(interface=UnaryMaths(),
+                               name="fullskull_fill")
+
+    fullskull_fill.inputs.operation = 'fillh'
+
+    fullskull_pipe.connect(
+        fullskull_dilate, "out_file",
+        fullskull_fill, "in_file")
+
+    # fullskull_erode ####### [okey][json]
+    fullskull_erode = NodeParams(
+        interface=ErodeImage(),
+        params=parse_key(params, "fullskull_erode"),
+        name="fullskull_erode")
+
+    fullskull_pipe.connect(
+        fullskull_fill, "out_file",
+        fullskull_erode, "in_file")
+    #
+    # fullskull_pipe.connect(
+    #     inputnode, ('indiv_params', parse_key, "fullskull_erode"),
+    #     fullskull_erode, "indiv_params")
+
+
+    # mesh_fullskull #######
+    mesh_fullskull = pe.Node(
+        interface=IsoSurface(),
+        name="mesh_fullskull")
+
+    fullskull_pipe.connect(
+        fullskull_erode, "out_file",
+        mesh_fullskull, "nii_file")
+
+    # fullskull_restrain
+    fullskull_restrain = NodeParams(
+            interface=ApplyMask(),
+            params=parse_key(params, "fullskull_restrain"),
+            name="fullskull_restrain")
+
+    fullskull_pipe.connect(
+        fullskull_erode, "out_file",
+        fullskull_restrain, "in_file")
+
+    fullskull_pipe.connect(
+        brainmask_expand, "out_file",
+        fullskull_restrain, "mask_file")
+
+    # mesh_fullskull_restrain #######
+    mesh_fullskull_restrain = pe.Node(
+        interface=IsoSurface(),
+        name="mesh_fullskull_restrain")
+
+    fullskull_pipe.connect(
+        fullskull_restrain, "out_file",
+        mesh_fullskull_restrain, "nii_file")
+
+
+    return fullskull_pipe
+
 ##############################################################################
 # ####################################  T1  ##################################
 ##############################################################################
@@ -1313,7 +1436,11 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
         niu.IdentityInterface(
             fields=["petra_skull_mask", "petra_skull_stl", "stereo_petra",
                     "robustpetra_skull_mask", "robustpetra_skull_stl",
-                    "petra_head_mask", "petra_head_stl"]),
+                    "petra_head_mask", "petra_head_stl"
+                    "petra_fullskull_stl",
+                    "petra_fullskull_mask",
+                    "petra_fullskull_restrain_stl",
+                    "petra_fullskull_restrain_mask"]),
         name='outputnode')
 
     # average if multiple PETRA
@@ -1499,128 +1626,6 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
 ##############################################################################
 # #################################  MEGRE  ##################################
 ##############################################################################
-
-def _create_fullskull_mask(name="fullskull_pipe", params={}):
-
-    print("Running fullskull_pipe with:", params)
-    # Creating pipeline
-    fullskull_pipe = pe.Workflow(name=name)
-
-    # Creating input node
-    inputnode = pe.Node(
-        niu.IdentityInterface(fields=['segmented_brain_mask', "skullmask", "indiv_params"]),
-        name='inputnode')
-
-    # ct_skull_mask_binary
-    brainmask_binary = pe.Node(interface=UnaryMaths(),
-                                   name="brainmask_binary")
-
-    brainmask_binary.inputs.operation = 'bin'
-    brainmask_binary.inputs.output_type = 'NIFTI_GZ'
-
-    fullskull_pipe.connect(
-            inputnode, "segmented_brain_mask",
-            brainmask_binary, "in_file")
-
-    # brainmask_expand
-
-    # fullskull_dilate ####### [okey][json]
-    brainmask_expand = NodeParams(
-        interface=DilateImage(),
-        params=parse_key(params, "brainmask_expand"),
-        name="brainmask_expand")
-
-    fullskull_pipe.connect(
-        brainmask_binary, "out_file",
-        brainmask_expand, "in_file")
-
-    # add masks
-    fullskull_mask_add= pe.Node(interface=BinaryMaths(),
-                                   name="fullskull_mask_add")
-
-    fullskull_mask_add.inputs.operation = 'add'
-
-    fullskull_pipe.connect(
-            inputnode, "skullmask",
-            fullskull_mask_add, "in_file")
-
-    fullskull_pipe.connect(
-            brainmask_binary, "out_file",
-            fullskull_mask_add, "operand_file")
-
-    # fullskull_dilate ####### [okey][json]
-    fullskull_dilate = NodeParams(
-        interface=DilateImage(),
-        params=parse_key(params, "fullskull_dilate"),
-        name="fullskull_dilate")
-
-    fullskull_pipe.connect(
-        fullskull_mask_add, "out_file",
-        fullskull_dilate, "in_file")
-    #
-    # fullskull_pipe.connect(
-    #     inputnode, ('indiv_params', parse_key, "fullskull_dilate"),
-    #     fullskull_dilate, "indiv_params")
-
-    # fullskull_fill #######  [okey]
-    fullskull_fill = pe.Node(interface=UnaryMaths(),
-                               name="fullskull_fill")
-
-    fullskull_fill.inputs.operation = 'fillh'
-
-    fullskull_pipe.connect(
-        fullskull_dilate, "out_file",
-        fullskull_fill, "in_file")
-
-    # fullskull_erode ####### [okey][json]
-    fullskull_erode = NodeParams(
-        interface=ErodeImage(),
-        params=parse_key(params, "fullskull_erode"),
-        name="fullskull_erode")
-
-    fullskull_pipe.connect(
-        fullskull_fill, "out_file",
-        fullskull_erode, "in_file")
-    #
-    # fullskull_pipe.connect(
-    #     inputnode, ('indiv_params', parse_key, "fullskull_erode"),
-    #     fullskull_erode, "indiv_params")
-
-
-    # mesh_fullskull #######
-    mesh_fullskull = pe.Node(
-        interface=IsoSurface(),
-        name="mesh_fullskull")
-
-    fullskull_pipe.connect(
-        fullskull_erode, "out_file",
-        mesh_fullskull, "nii_file")
-
-    # fullskull_restrain
-    fullskull_restrain = NodeParams(
-            interface=ApplyMask(),
-            params=parse_key(params, "fullskull_restrain"),
-            name="fullskull_restrain")
-
-    fullskull_pipe.connect(
-        fullskull_erode, "out_file",
-        fullskull_restrain, "in_file")
-
-    fullskull_pipe.connect(
-        brainmask_expand, "out_file",
-        fullskull_restrain, "mask_file")
-
-    # mesh_fullskull_restrain #######
-    mesh_fullskull_restrain = pe.Node(
-        interface=IsoSurface(),
-        name="mesh_fullskull_restrain")
-
-    fullskull_pipe.connect(
-        fullskull_restrain, "out_file",
-        mesh_fullskull_restrain, "nii_file")
-
-
-    return fullskull_pipe
 
 def create_skull_megre_pipe(name="skull_megre_pipe", params={}):
 
