@@ -742,7 +742,6 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
             skullmask_t1_pipe, "mesh_robustt1_skull.stl_file",
             outputnode, "robustt1_skull_stl")
 
-
     # ## skull mask
     if "fullskullmask_t1_pipe" in params:
 
@@ -751,7 +750,7 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
             params=params["fullskullmask_t1_pipe"])
 
         skull_t1_pipe.connect(
-            skullmask_pipe, "petra_skull_erode.out_file",
+            skullmask_t1_pipe, "petra_skull_erode.out_file",
             fullskullmask_pipe, "inputnode.skullmask")
 
         skull_t1_pipe.connect(
