@@ -750,7 +750,7 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
             params=params["fullskullmask_t1_pipe"])
 
         skull_t1_pipe.connect(
-            skullmask_t1_pipe, "petra_skull_erode.out_file",
+            skullmask_t1_pipe, "t1_skull_erode.out_file",
             fullskullmask_pipe, "inputnode.skullmask")
 
         skull_t1_pipe.connect(
