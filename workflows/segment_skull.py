@@ -527,6 +527,12 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
             "datatype": "anat", "suffix": "T2star",
             "acquisition": "CT",
             "extension": ["nii", ".nii.gz"]}
+    #
+    # if 'ct' in skull_dt:
+    #     output_query['CT'] = {
+    #         "datatype": "anat", "suffix": "T2star",
+    #         "acquisition": "CT",
+    #         "extension": ["nii", ".nii.gz"]}
 
     if 'angio' in skull_dt:
         output_query['ANGIO'] = {
@@ -863,11 +869,6 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
                 segment_brain_pipe,
                 "outputnode.native_T1",
                 skull_ct_pipe, 'inputnode.native_T1')
-
-            main_workflow.connect(
-                segment_brain_pipe,
-                "outputnode.native_T2",
-                skull_ct_pipe, 'inputnode.native_T2')
 
             if "pad_template" in params["short_preparation_pipe"].keys():
                 main_workflow.connect(
