@@ -162,7 +162,7 @@ def rename_all_skull_megre_derivatives(params, main_workflow,
                 niu.Rename(), name="rename_stereo_megre_fullskull_restrain_mask")
 
             rename_stereo_megre_fullskull_restrain_mask.inputs.format_string =\
-                pref_deriv + "_space-stereo_desc-megre_desc-braincrop_fullskullnmask"
+                pref_deriv + "_space-stereo_desc-megre_desc-braincrop_fullskullmask"
             rename_stereo_megre_fullskull_restrain_mask.inputs.parse_string = parse_str
             rename_stereo_megre_fullskull_restrain_mask.inputs.keep_ext = True
 
@@ -375,7 +375,7 @@ def rename_all_skull_petra_derivatives(params, main_workflow,
                 niu.Rename(), name="rename_stereo_petra_fullskull_restrain_mask")
 
             rename_stereo_petra_fullskull_restrain_mask.inputs.format_string =\
-                pref_deriv + "_space-stereo_desc-petra_desc-braincrop_fullskullnmask"
+                pref_deriv + "_space-stereo_desc-petra_desc-braincrop_fullskullmask"
             rename_stereo_petra_fullskull_restrain_mask.inputs.parse_string = parse_str
             rename_stereo_petra_fullskull_restrain_mask.inputs.keep_ext = True
 
@@ -386,45 +386,45 @@ def rename_all_skull_petra_derivatives(params, main_workflow,
             main_workflow.connect(
                 rename_stereo_petra_fullskull_restrain_mask, 'out_file',
                 datasink, '@stereo_petra_fullskull_restrain_mask')
-
-            if "petra_skull_fov" in params["skull_petra_pipe"]:
-
-                # rename robustpetra_skull_stl
-                rename_robustpetra_skull_stl = pe.Node(
-                    niu.Rename(), name="rename_robustpetra_skull_stl")
-
-                rename_robustpetra_skull_stl.inputs.format_string = \
-                    pref_deriv + "_desc-robustpetra_skullmask"
-                rename_robustpetra_skull_stl.inputs.parse_string = parse_str
-                rename_robustpetra_skull_stl.inputs.keep_ext = True
-
-                main_workflow.connect(
-                    skull_petra_pipe, 'outputnode.robustpetra_skull_stl',
-                    rename_robustpetra_skull_stl, 'in_file')
-
-                main_workflow.connect(
-                    rename_robustpetra_skull_stl, 'out_file',
-                    datasink, '@robustpetra_skull_stl')
-
-                # rename stereo_robustpetra_skull_mask
-                rename_stereo_robustpetra_skull_mask = pe.Node(
-                    niu.Rename(), name="rename_stereo_robustpetra_skullmask")
-
-                rename_stereo_robustpetra_skull_mask.inputs.format_string = \
-                    pref_deriv + "_space-stereo_desc-robustpetra_skullmask"
-
-                rename_stereo_robustpetra_skull_mask.inputs.parse_string = \
-                    parse_str
-
-                rename_stereo_robustpetra_skull_mask.inputs.keep_ext = True
-
-                main_workflow.connect(
-                    skull_petra_pipe, 'outputnode.robustpetra_skull_mask',
-                    rename_stereo_robustpetra_skull_mask, 'in_file')
-
-                main_workflow.connect(
-                    rename_stereo_robustpetra_skull_mask, 'out_file',
-                    datasink, '@stereo_robustpetra_skullmask')
+            #
+            # if "petra_skull_fov" in params["skull_petra_pipe"]:
+            #
+            #     # rename robustpetra_skull_stl
+            #     rename_robustpetra_skull_stl = pe.Node(
+            #         niu.Rename(), name="rename_robustpetra_skull_stl")
+            #
+            #     rename_robustpetra_skull_stl.inputs.format_string = \
+            #         pref_deriv + "_desc-robustpetra_skullmask"
+            #     rename_robustpetra_skull_stl.inputs.parse_string = parse_str
+            #     rename_robustpetra_skull_stl.inputs.keep_ext = True
+            #
+            #     main_workflow.connect(
+            #         skull_petra_pipe, 'outputnode.robustpetra_skull_stl',
+            #         rename_robustpetra_skull_stl, 'in_file')
+            #
+            #     main_workflow.connect(
+            #         rename_robustpetra_skull_stl, 'out_file',
+            #         datasink, '@robustpetra_skull_stl')
+            #
+            #     # rename stereo_robustpetra_skull_mask
+            #     rename_stereo_robustpetra_skull_mask = pe.Node(
+            #         niu.Rename(), name="rename_stereo_robustpetra_skullmask")
+            #
+            #     rename_stereo_robustpetra_skull_mask.inputs.format_string = \
+            #         pref_deriv + "_space-stereo_desc-robustpetra_skullmask"
+            #
+            #     rename_stereo_robustpetra_skull_mask.inputs.parse_string = \
+            #         parse_str
+            #
+            #     rename_stereo_robustpetra_skull_mask.inputs.keep_ext = True
+            #
+            #     main_workflow.connect(
+            #         skull_petra_pipe, 'outputnode.robustpetra_skull_mask',
+            #         rename_stereo_robustpetra_skull_mask, 'in_file')
+            #
+            #     main_workflow.connect(
+            #         rename_stereo_robustpetra_skull_mask, 'out_file',
+            #         datasink, '@stereo_robustpetra_skullmask')
 
 
 def rename_all_skull_ct_derivatives(params, main_workflow,
@@ -481,45 +481,45 @@ def rename_all_skull_ct_derivatives(params, main_workflow,
         main_workflow.connect(
             rename_ct_skull_stl, 'out_file',
             datasink, '@ct_skull_stl')
-
-        if "ct_skull_fov" in params["skull_ct_pipe"]:
-
-            # rename robustct_skull_stl
-            rename_robustct_skull_stl = pe.Node(
-                niu.Rename(), name="rename_robustct_skull_stl")
-
-            rename_robustct_skull_stl.inputs.format_string = \
-                pref_deriv + "_desc-robustct_skullmask"
-            rename_robustct_skull_stl.inputs.parse_string = parse_str
-            rename_robustct_skull_stl.inputs.keep_ext = True
-
-            main_workflow.connect(
-                skull_ct_pipe, 'outputnode.robustct_skull_stl',
-                rename_robustct_skull_stl, 'in_file')
-
-            main_workflow.connect(
-                rename_robustct_skull_stl, 'out_file',
-                datasink, '@robustct_skull_stl')
-
-            # rename stereo_robustct_skull_mask
-            rename_stereo_robustct_skull_mask = pe.Node(
-                niu.Rename(), name="rename_stereo_robustct_skullmask")
-
-            rename_stereo_robustct_skull_mask.inputs.format_string = \
-                pref_deriv + "_space-stereo_desc-robustct_skullmask"
-
-            rename_stereo_robustct_skull_mask.inputs.parse_string = \
-                parse_str
-
-            rename_stereo_robustct_skull_mask.inputs.keep_ext = True
-
-            main_workflow.connect(
-                skull_ct_pipe, 'outputnode.robustct_skull_mask',
-                rename_stereo_robustct_skull_mask, 'in_file')
-
-            main_workflow.connect(
-                rename_stereo_robustct_skull_mask, 'out_file',
-                datasink, '@stereo_robustct_skullmask')
+        #
+        # if "ct_skull_fov" in params["skull_ct_pipe"]:
+        #
+        #     # rename robustct_skull_stl
+        #     rename_robustct_skull_stl = pe.Node(
+        #         niu.Rename(), name="rename_robustct_skull_stl")
+        #
+        #     rename_robustct_skull_stl.inputs.format_string = \
+        #         pref_deriv + "_desc-robustct_skullmask"
+        #     rename_robustct_skull_stl.inputs.parse_string = parse_str
+        #     rename_robustct_skull_stl.inputs.keep_ext = True
+        #
+        #     main_workflow.connect(
+        #         skull_ct_pipe, 'outputnode.robustct_skull_stl',
+        #         rename_robustct_skull_stl, 'in_file')
+        #
+        #     main_workflow.connect(
+        #         rename_robustct_skull_stl, 'out_file',
+        #         datasink, '@robustct_skull_stl')
+        #
+        #     # rename stereo_robustct_skull_mask
+        #     rename_stereo_robustct_skull_mask = pe.Node(
+        #         niu.Rename(), name="rename_stereo_robustct_skullmask")
+        #
+        #     rename_stereo_robustct_skull_mask.inputs.format_string = \
+        #         pref_deriv + "_space-stereo_desc-robustct_skullmask"
+        #
+        #     rename_stereo_robustct_skull_mask.inputs.parse_string = \
+        #         parse_str
+        #
+        #     rename_stereo_robustct_skull_mask.inputs.keep_ext = True
+        #
+        #     main_workflow.connect(
+        #         skull_ct_pipe, 'outputnode.robustct_skull_mask',
+        #         rename_stereo_robustct_skull_mask, 'in_file')
+        #
+        #     main_workflow.connect(
+        #         rename_stereo_robustct_skull_mask, 'out_file',
+        #         datasink, '@stereo_robustct_skullmask')
 
 
 def rename_all_skull_t1_derivatives(params, main_workflow,
@@ -677,6 +677,77 @@ def rename_all_skull_t1_derivatives(params, main_workflow,
                 rename_t1_head_stl, 'out_file',
                 datasink, '@t1_head_stl')
 
+        if "fullskullmask_t1_pipe" in params['skull_t1_pipe']:
+
+            # rename t1_fullskull_stl
+            rename_t1_fullskull_stl = pe.Node(
+                niu.Rename(),
+                name="rename_t1_fullskull_stl")
+
+            rename_t1_fullskull_stl.inputs.format_string = \
+                pref_deriv + "_desc-t1_fullskullmask"
+            rename_t1_fullskull_stl.inputs.parse_string = parse_str
+            rename_t1_fullskull_stl.inputs.keep_ext = True
+
+            main_workflow.connect(
+                skull_t1_pipe, 'outputnode.t1_fullskull_stl',
+                rename_t1_fullskull_stl, 'in_file')
+
+            main_workflow.connect(
+                rename_t1_fullskull_stl, 'out_file',
+                datasink, '@t1_fullskull_stl')
+
+            # rename stereo_t1_fullskull_mask
+            rename_stereo_t1_fullskull_mask = pe.Node(
+                niu.Rename(), name="rename_stereo_t1_fullskull_mask")
+
+            rename_stereo_t1_fullskull_mask.inputs.format_string =\
+                pref_deriv + "_space-stereo_desc-t1_fullskullmask"
+            rename_stereo_t1_fullskull_mask.inputs.parse_string = parse_str
+            rename_stereo_t1_fullskull_mask.inputs.keep_ext = True
+
+            main_workflow.connect(
+                skull_t1_pipe, 'outputnode.t1_fullskull_mask',
+                rename_stereo_t1_fullskull_mask, 'in_file')
+
+            main_workflow.connect(
+                rename_stereo_t1_fullskull_mask, 'out_file',
+                datasink, '@stereo_t1_fullskull_mask')
+
+            # rename t1_fullskull_restrain_stl
+            rename_t1_fullskull_restrain_stl = pe.Node(
+                niu.Rename(),
+                name="rename_t1_fullskull_restrain_stl")
+
+            rename_t1_fullskull_restrain_stl.inputs.format_string = \
+                pref_deriv + "_desc-t1_desc-braincrop_fullskullmask"
+            rename_t1_fullskull_restrain_stl.inputs.parse_string = parse_str
+            rename_t1_fullskull_restrain_stl.inputs.keep_ext = True
+
+            main_workflow.connect(
+                skull_t1_pipe, 'outputnode.t1_fullskull_restrain_stl',
+                rename_t1_fullskull_restrain_stl, 'in_file')
+
+            main_workflow.connect(
+                rename_t1_fullskull_restrain_stl, 'out_file',
+                datasink, '@t1_fullskull_restrain_stl')
+
+            # rename stereo_t1_fullskull_restrain_mask
+            rename_stereo_t1_fullskull_restrain_mask = pe.Node(
+                niu.Rename(), name="rename_stereo_t1_fullskull_restrain_mask")
+
+            rename_stereo_t1_fullskull_restrain_mask.inputs.format_string =\
+                pref_deriv + "_space-stereo_desc-t1_desc-braincrop_fullskullmask"
+            rename_stereo_t1_fullskull_restrain_mask.inputs.parse_string = parse_str
+            rename_stereo_t1_fullskull_restrain_mask.inputs.keep_ext = True
+
+            main_workflow.connect(
+                skull_t1_pipe, 'outputnode.t1_fullskull_restrain_mask',
+                rename_stereo_t1_fullskull_restrain_mask, 'in_file')
+
+            main_workflow.connect(
+                rename_stereo_t1_fullskull_restrain_mask, 'out_file',
+                datasink, '@stereo_t1_fullskull_restrain_mask')
 
 # ############################# ANGIO
 def rename_all_angio_derivatives(params, main_workflow, angio_pipe, datasink,

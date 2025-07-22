@@ -828,31 +828,6 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
                             "outputnode.stereo_to_native_trans",
                             pad_robustmegre_skull_mask, "trans_file")
 
-        #
-        #
-        # skull_megre_pipe = create_skull_megre_pipe(
-        #     params=parse_key(params, "skull_megre_pipe"))
-        #
-        # main_workflow.connect(datasource, 'MEGRE',
-        #                       skull_megre_pipe, 'inputnode.list_megre')
-        #
-        # main_workflow.connect(segment_brain_pipe,
-        #                       "outputnode.native_T1",
-        #                       skull_megre_pipe, 'inputnode.native_T1')
-        #
-        # if "pad_template" in params["short_preparation_pipe"].keys():
-        #     main_workflow.connect(
-        #         segment_brain_pipe, "outputnode.stereo_padded_T1",
-        #         skull_megre_pipe, 'inputnode.stereo_T1')
-        # else:
-        #     main_workflow.connect(
-        #         segment_brain_pipe, "outputnode.stereo_T1",
-        #         skull_megre_pipe, 'inputnode.stereo_T1')
-        #
-        # main_workflow.connect(
-        #     segment_brain_pipe, "outputnode.native_to_stereo_trans",
-        #     skull_megre_pipe, 'inputnode.native_to_stereo_trans')
-        #
     # ct_skull
     if "ct" in skull_dt and "skull_ct_pipe" in params.keys():
         print("Found skull_ct_pipe")
@@ -1007,6 +982,19 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
                 main_workflow.connect(
                     segment_brain_pipe, "outputnode.stereo_T1",
                     skull_t1_pipe, 'inputnode.stereo_T1')
+
+
+            if "fullskullmask_t1_pipe" in params["skull_t1_pipe"]:
+                if "pad_template" in params["short_preparation_pipe"].keys():
+                    main_workflow.connect(
+                        segment_brain_pipe, "outputnode.stereo_padded_segmented_brain_mask",
+                        skull_t1_pipe, 'inputnode.segmented_brain_mask')
+
+                else:
+                    main_workflow.connect(
+                        segment_brain_pipe, "outputnode.stereo_segmented_brain_mask",
+                        skull_t1_pipe, 'inputnode.segmented_brain_mask')
+
         else:
             print("Error, run -soft ants_prep_skull -brain_dt T1 -skull_dt T1 \
                 for skull processing of T1")

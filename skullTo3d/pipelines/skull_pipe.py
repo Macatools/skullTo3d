@@ -643,7 +643,8 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
 
     # Creating input node
     inputnode = pe.Node(
-        niu.IdentityInterface(fields=['indiv_params', 'stereo_T1']),
+        niu.IdentityInterface(fields=['indiv_params', 'stereo_T1',
+                                      "segmented_brain_mask"]),
         name='inputnode')
 
     # creating outputnode #######
@@ -652,7 +653,13 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
             fields=["t1_skull_mask", "t1_skull_stl",
                     "t1_rawskull_mask", "t1_rawskull_stl",
                     "robustt1_skull_mask", "robustt1_skull_stl",
-                    "t1_head_mask", "t1_head_stl",]),
+                    "t1_head_mask", "t1_head_stl",
+
+                    "t1_fullskull_stl",
+                    "t1_fullskull_mask",
+                    "t1_fullskull_restrain_stl",
+                    "t1_fullskull_restrain_mask"]),
+
         name='outputnode')
 
     # Creating headmask_t1_pipe
@@ -734,6 +741,42 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
         skull_t1_pipe.connect(
             skullmask_t1_pipe, "mesh_robustt1_skull.stl_file",
             outputnode, "robustt1_skull_stl")
+
+
+    # ## skull mask
+    if "fullskullmask_t1_pipe" in params:
+
+        fullskullmask_pipe = _create_fullskull_mask(
+            name="fullskullmask_t1_pipe",
+            params=params["fullskullmask_t1_pipe"])
+
+        skull_t1_pipe.connect(
+            skullmask_pipe, "petra_skull_erode.out_file",
+            fullskullmask_pipe, "inputnode.skullmask")
+
+        skull_t1_pipe.connect(
+            inputnode, "segmented_brain_mask",
+            fullskullmask_pipe, "inputnode.segmented_brain_mask")
+
+        skull_t1_pipe.connect(
+            inputnode, "indiv_params",
+            fullskullmask_pipe, "inputnode.indiv_params")
+
+    else:
+        return skull_t1_pipe
+
+    # outputnode
+    skull_t1_pipe.connect(fullskullmask_pipe, "fullskull_erode.out_file",
+                             outputnode, "t1_fullskull_mask")
+
+    skull_t1_pipe.connect(fullskullmask_pipe, "mesh_fullskull.stl_file",
+                             outputnode, "t1_fullskull_stl")
+
+    skull_t1_pipe.connect(fullskullmask_pipe, "fullskull_restrain.out_file",
+                             outputnode, "t1_fullskull_restrain_mask")
+
+    skull_t1_pipe.connect(fullskullmask_pipe, "mesh_fullskull_restrain.stl_file",
+                             outputnode, "t1_fullskull_restrain_stl")
 
     return skull_t1_pipe
 
