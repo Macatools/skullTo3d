@@ -486,16 +486,12 @@ def _create_skullmask_t1_pipe(name="skullmask_t1_pipe", params={}):
         if "t1_fast" in params.keys():
             skullmask_t1_pipe.connect(
                 t1_skull_mask_binary, "out_file",
-                t1_skin_masked, "in_file")
+                t1_head_skin_masked, "in_file")
 
         else:
             skullmask_t1_pipe.connect(
                 t1_skull_inv, "out_file",
-                t1_skin_masked, "in_file")
-
-        skullmask_t1_pipe.connect(
-            t1_skull_mask_binary, "out_file",
-            t1_head_skin_masked, "in_file")
+                t1_head_skin_masked, "in_file")
 
         skullmask_t1_pipe.connect(
             t1_head_erode_skin, "out_file",
