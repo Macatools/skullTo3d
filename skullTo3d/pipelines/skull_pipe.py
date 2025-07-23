@@ -518,6 +518,7 @@ def _create_skullmask_t1_pipe(name="skullmask_t1_pipe", params={}):
 
         skullmask_t1_pipe.connect(
                 t1_head_skin_masked, "out_file",
+                t1_skull_gcc_erode, "in_file")
 
         skullmask_t1_pipe.connect(
             inputnode, ('indiv_params', parse_key, "t1_skull_gcc_erode"),
