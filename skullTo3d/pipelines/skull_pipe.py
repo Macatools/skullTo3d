@@ -400,34 +400,67 @@ def _create_skullmask_t1_pipe(name="skullmask_t1_pipe", params={}):
             inputnode, ('indiv_params', parse_key, "t1_denoise"),
             t1_denoise, "indiv_params")
 
-    t1_fast = NodeParams(interface=FAST(),
-                         params=parse_key(params, "t1_fast"),
-                         name="t1_fast")
 
-    if "t1_denoise" in params.keys():
+
+
+
+
+    if "t1_fast" in params.keys():
+
+        t1_fast = NodeParams(interface=FAST(),
+                                params=parse_key(params, "t1_fast"),
+                                name="t1_fast")
+
+        if "t1_denoise" in params.keys():
+            skullmask_t1_pipe.connect(
+                t1_denoise, "output_image",
+                t1_fast, "in_files")
+        else:
+            skullmask_t1_pipe.connect(
+                inputnode, "headmasked_t1",
+                t1_fast, "in_files")
+
+        # t1_skull_mask_binary
+        t1_skull_mask_binary = pe.Node(
+            interface=UnaryMaths(),
+            name="t1_skull_mask_binary")
+
+        t1_skull_mask_binary.inputs.operation = 'bin'
+        t1_skull_mask_binary.inputs.output_type = 'NIFTI_GZ'
+
         skullmask_t1_pipe.connect(
-            t1_denoise, "output_image",
-            t1_fast, "in_files")
+            t1_fast, ("partial_volume_files", get_elem, 0),
+            t1_skull_mask_binary, "in_file")
+
     else:
+        # t1_skull_li_mask
+        t1_skull_li_mask = pe.Node(
+                interface=niu.Function(
+                    input_names=["orig_img_file"],
+                    output_names=["lithr_img_file"],
+                    function=apply_li_thresh),
+                name="t1_skull_li_mask")
+
+        if "t1_denoise" in params.keys():
+            skullmask_t1_pipe.connect(
+                t1_denoise, "output_image",
+                t1_skull_li_mask, "orig_img_file")
+        else:
+            skullmask_t1_pipe.connect(
+                inputnode, "headmasked_t1",
+                t1_skull_li_mask, "orig_img_file")
+
+        # fslmaths mask -mul -1 -add 1 invmask
+        t1_skull_inv = pe.Node(
+                interface=MathsCommand(),
+                name="t1_skull_inv")
+
+        t1_skull_inv.inputs.args = " -mul -1 -add 1"
+
         skullmask_t1_pipe.connect(
-            inputnode, "headmasked_T1",
-            t1_fast, "in_files")
+            t1_skull_li_mask, "lithr_img_file",
+            t1_skull_inv, "in_file")
 
-    skullmask_t1_pipe.connect(
-        inputnode, ('indiv_params', parse_key, "t1_fast"),
-        t1_fast, "indiv_params")
-
-    # t1_skull_mask_binary
-    t1_skull_mask_binary = pe.Node(interface=UnaryMaths(),
-                                   name="t1_skull_mask_binary")
-
-    t1_skull_mask_binary.inputs.operation = 'bin'
-    t1_skull_mask_binary.inputs.output_type = 'NIFTI_GZ'
-
-    skullmask_t1_pipe.connect(
-        t1_fast,
-        ("partial_volume_files", get_elem, 0),
-        t1_skull_mask_binary, "in_file")
 
     # t1_head_erode_skin
     if "t1_head_erode_skin" in params.keys():
@@ -449,6 +482,16 @@ def _create_skullmask_t1_pipe(name="skullmask_t1_pipe", params={}):
         # t1_head_hmasked ####### [okey]
         t1_head_skin_masked = pe.Node(interface=ApplyMask(),
                                       name="t1_head_skin_masked")
+
+        if "t1_fast" in params.keys():
+            skullmask_t1_pipe.connect(
+                t1_skull_mask_binary, "out_file",
+                t1_skin_masked, "in_file")
+
+        else:
+            skullmask_t1_pipe.connect(
+                t1_skull_inv, "out_file",
+                t1_skin_masked, "in_file")
 
         skullmask_t1_pipe.connect(
             t1_skull_mask_binary, "out_file",
@@ -474,9 +517,15 @@ def _create_skullmask_t1_pipe(name="skullmask_t1_pipe", params={}):
             IsoSurface(),
             name="mesh_t1_rawskull")
 
-        skullmask_t1_pipe.connect(
-            t1_skull_mask_binary, "out_file",
-            mesh_t1_rawskull, "nii_file")
+        if "t1_fast" in params.keys():
+            skullmask_t1_pipe.connect(
+                t1_skull_mask_binary, "out_file",
+                mesh_t1_rawskull, "nii_file")
+
+        else:
+            skullmask_t1_pipe.connect(
+                t1_skull_inv, "out_file",
+                mesh_t1_rawskull, "nii_file")
 
     if "t1_skull_gcc_erode" in params and \
             "t1_skull_gcc_dilate" in params:
