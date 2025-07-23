@@ -473,50 +473,39 @@ def _create_skullmask_t1_pipe(name="skullmask_t1_pipe", params={}):
             inputnode, ('indiv_params', parse_key, "t1_head_erode_skin"),
             t1_head_erode_skin, "indiv_params")
 
-        # ### Masking with t1_head mask
-        # t1_head_hmasked ####### [okey]
-        t1_head_skin_masked = pe.Node(interface=ApplyMask(),
-                                      name="t1_head_skin_masked")
+    # ### Masking with t1_head mask
+    # t1_head_hmasked ####### [okey]
+    t1_head_skin_masked = pe.Node(interface=ApplyMask(),
+                                    name="t1_head_skin_masked")
 
-        if "t1_fast" in params.keys():
-            skullmask_t1_pipe.connect(
-                t1_skull_mask_binary, "out_file",
-                t1_head_skin_masked, "in_file")
-
-        else:
-            skullmask_t1_pipe.connect(
-                t1_skull_inv, "out_file",
-                t1_head_skin_masked, "in_file")
-
+    if "t1_head_erode_skin" in params.keys():
         skullmask_t1_pipe.connect(
             t1_head_erode_skin, "out_file",
-            t1_head_skin_masked, "mask_file")
-
-        # mesh_t1_rawskull #######
-        mesh_t1_rawskull = pe.Node(
-            IsoSurface(),
-            name="mesh_t1_rawskull")
-
-        skullmask_t1_pipe.connect(
-            t1_head_skin_masked, "out_file",
-            mesh_t1_rawskull, "nii_file")
+            t1_head_skin_masked, "in_file")
 
     else:
+        skullmask_t1_pipe.connect(
+            inputnode, "headmask",
+            t1_head_skin_masked, "mask_file")
 
-        # mesh_t1_rawskull #######
-        mesh_t1_rawskull = pe.Node(
-            IsoSurface(),
-            name="mesh_t1_rawskull")
+    if "t1_fast" in params.keys():
+        skullmask_t1_pipe.connect(
+            t1_skull_mask_binary, "out_file",
+            t1_head_skin_masked, "in_file")
 
-        if "t1_fast" in params.keys():
-            skullmask_t1_pipe.connect(
-                t1_skull_mask_binary, "out_file",
-                mesh_t1_rawskull, "nii_file")
+    else:
+        skullmask_t1_pipe.connect(
+            t1_skull_inv, "out_file",
+            t1_head_skin_masked, "in_file")
 
-        else:
-            skullmask_t1_pipe.connect(
-                t1_skull_inv, "out_file",
-                mesh_t1_rawskull, "nii_file")
+    # mesh_t1_rawskull #######
+    mesh_t1_rawskull = pe.Node(
+        IsoSurface(),
+        name="mesh_t1_rawskull")
+
+    skullmask_t1_pipe.connect(
+        t1_head_skin_masked, "out_file",
+        mesh_t1_rawskull, "nii_file")
 
     if "t1_skull_gcc_erode" in params and \
             "t1_skull_gcc_dilate" in params:
@@ -527,14 +516,8 @@ def _create_skullmask_t1_pipe(name="skullmask_t1_pipe", params={}):
             params=parse_key(params, "t1_skull_gcc_erode"),
             name="t1_skull_gcc_erode")
 
-        if "t1_head_erode_skin" in params.keys():
-            skullmask_t1_pipe.connect(
+        skullmask_t1_pipe.connect(
                 t1_head_skin_masked, "out_file",
-                t1_skull_gcc_erode, "in_file")
-        else:
-            skullmask_t1_pipe.connect(
-                t1_skull_mask_binary, "out_file",
-                t1_skull_gcc_erode, "in_file")
 
         skullmask_t1_pipe.connect(
             inputnode, ('indiv_params', parse_key, "t1_skull_gcc_erode"),
@@ -576,13 +559,8 @@ def _create_skullmask_t1_pipe(name="skullmask_t1_pipe", params={}):
                 function=keep_gcc),
             name="t1_skull_gcc")
 
-        if "t1_head_erode_skin" in params.keys():
-            skullmask_t1_pipe.connect(
+        skullmask_t1_pipe.connect(
                 t1_head_skin_masked, "out_file",
-                t1_skull_gcc, "nii_file")
-        else:
-            skullmask_t1_pipe.connect(
-                t1_skull_mask_binary, "out_file",
                 t1_skull_gcc, "nii_file")
 
     # t1_skull_dilate ####### [okey][json]
@@ -763,15 +741,23 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
         skullmask_t1_pipe, "mesh_t1_rawskull.stl_file",
         outputnode, "t1_rawskull_stl")
 
-    if "t1_head_erode_skin" in params.keys():
+    if "t1_head_erode_skin" in params["skullmask_t1_pipe"].keys():
         skull_t1_pipe.connect(
             skullmask_t1_pipe, "t1_head_skin_masked.out_file",
             outputnode, "t1_rawskull_mask")
 
     else:
-        skull_t1_pipe.connect(
-            skullmask_t1_pipe, "t1_skull_mask_binary.out_file",
-            outputnode, "t1_rawskull_mask")
+        if "t1_fast" in params["skullmask_t1_pipe"].keys():
+
+            skull_t1_pipe.connect(
+                skullmask_t1_pipe, "t1_skull_mask_binary.out_file",
+                outputnode, "t1_rawskull_mask")
+        else:
+
+            skull_t1_pipe.connect(
+                skullmask_t1_pipe, "t1_skull_inv.out_file",
+                outputnode, "t1_rawskull_mask")
+
 
     if "t1_skull_fov" in params["skullmask_t1_pipe"].keys():
         skull_t1_pipe.connect(
