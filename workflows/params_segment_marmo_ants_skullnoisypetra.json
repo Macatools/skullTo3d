@@ -287,6 +287,10 @@
 
     "skull_ct_pipe":
     {
+        "align_ct_on_T1_2":
+        {
+            "rig_only_flag":true
+        },
         "skullmask_ct_pipe":
         {
             "ct_skull_auto_mask":
