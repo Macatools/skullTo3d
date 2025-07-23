@@ -481,8 +481,7 @@ def _create_skullmask_t1_pipe(name="skullmask_t1_pipe", params={}):
     if "t1_head_erode_skin" in params.keys():
         skullmask_t1_pipe.connect(
             t1_head_erode_skin, "out_file",
-            t1_head_skin_masked, "in_file")
-
+            t1_head_skin_masked, "mask_file")
     else:
         skullmask_t1_pipe.connect(
             inputnode, "headmask",
@@ -492,7 +491,6 @@ def _create_skullmask_t1_pipe(name="skullmask_t1_pipe", params={}):
         skullmask_t1_pipe.connect(
             t1_skull_mask_binary, "out_file",
             t1_head_skin_masked, "in_file")
-
     else:
         skullmask_t1_pipe.connect(
             t1_skull_inv, "out_file",
