@@ -400,11 +400,6 @@ def _create_skullmask_t1_pipe(name="skullmask_t1_pipe", params={}):
             inputnode, ('indiv_params', parse_key, "t1_denoise"),
             t1_denoise, "indiv_params")
 
-
-
-
-
-
     if "t1_fast" in params.keys():
 
         t1_fast = NodeParams(interface=FAST(),
@@ -417,7 +412,7 @@ def _create_skullmask_t1_pipe(name="skullmask_t1_pipe", params={}):
                 t1_fast, "in_files")
         else:
             skullmask_t1_pipe.connect(
-                inputnode, "headmasked_t1",
+                inputnode, "headmasked_T1",
                 t1_fast, "in_files")
 
         # t1_skull_mask_binary
