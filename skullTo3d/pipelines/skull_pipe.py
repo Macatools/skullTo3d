@@ -442,7 +442,7 @@ def _create_skullmask_t1_pipe(name="skullmask_t1_pipe", params={}):
                 t1_skull_li_mask, "orig_img_file")
         else:
             skullmask_t1_pipe.connect(
-                inputnode, "headmasked_t1",
+                inputnode, "headmasked_T1",
                 t1_skull_li_mask, "orig_img_file")
 
         # fslmaths mask -mul -1 -add 1 invmask
