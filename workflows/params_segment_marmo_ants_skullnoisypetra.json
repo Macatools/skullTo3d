@@ -314,7 +314,7 @@
             },
             "ct_skull_fov":
             {
-                "brainsize" : 45
+                "brainsize" : 40
             }
         }
     },
