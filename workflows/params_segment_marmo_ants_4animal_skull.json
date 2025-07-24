@@ -106,6 +106,7 @@
             "t1_denoise":
             {
             },
+
             "t1_fast":
             {
                 "args": "-l 4 -O 4 -t 1",
