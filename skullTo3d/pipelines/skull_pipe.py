@@ -177,6 +177,19 @@ def _create_headmask_t1_pipe(name="headmask_t1_pipe", params={}):
         niu.IdentityInterface(fields=['indiv_params', 'stereo_T1']),
         name='inputnode')
 
+    if "t1_itk_debias" in params.keys():
+        # Adding early t1_debias
+        t1_itk_debias = pe.Node(
+                interface=niu.Function(
+                    input_names=["img_file"],
+                    output_names=["cor_img_file", "bias_img_file"],
+                    function=itk_debias),
+                name="t1_itk_debias")
+
+        headmask_t1_pipe.connect(
+            inputnode, "stereo_T1",
+            t1_itk_debias, "img_file")
+
     # ### head mask
     # headmask_threshold
     if "t1_head_mask_thr" in params.keys():
@@ -186,9 +199,15 @@ def _create_headmask_t1_pipe(name="headmask_t1_pipe", params={}):
             params=parse_key(params, 't1_head_mask_thr'),
             name="t1_head_mask_thr")
 
-        headmask_t1_pipe.connect(
-            inputnode, "stereo_T1",
-            t1_head_mask_thr, "in_file")
+
+        if "t1_itk_debias" in params.keys():
+            headmask_t1_pipe.connect(
+                t1_itk_debias, "cor_img_file",
+                t1_head_mask_thr, "in_file")
+        else:
+            headmask_t1_pipe.connect(
+                inputnode, "stereo_T1",
+                t1_head_mask_thr, "in_file")
 
         headmask_t1_pipe.connect(
             inputnode, ('indiv_params', parse_key, "t1_head_mask_thr"),
@@ -205,9 +224,14 @@ def _create_headmask_t1_pipe(name="headmask_t1_pipe", params={}):
                 params=parse_key(params, "t1_head_auto_mask"),
                 name="t1_head_auto_mask")
 
-        headmask_t1_pipe.connect(
-            inputnode, "stereo_T1",
-            t1_head_auto_mask, "img_file")
+        if "t1_itk_debias" in params.keys():
+            headmask_t1_pipe.connect(
+                t1_itk_debias, "cor_img_file",
+                t1_head_auto_mask, "img_file")
+        else:
+            headmask_t1_pipe.connect(
+                inputnode, "stereo_T1",
+                t1_head_auto_mask, "img_file")
 
         headmask_t1_pipe.connect(
             inputnode, ('indiv_params', parse_key, "t1_head_auto_mask"),
@@ -221,9 +245,14 @@ def _create_headmask_t1_pipe(name="headmask_t1_pipe", params={}):
                     function=apply_li_thresh),
                 name="t1_head_li_mask")
 
-        headmask_t1_pipe.connect(
-            inputnode, "stereo_T1",
-            t1_head_li_mask, "orig_img_file")
+        if "t1_itk_debias" in params.keys():
+            headmask_t1_pipe.connect(
+                t1_itk_debias, "cor_img_file",
+                t1_head_li_mask, "orig_img_file")
+        else:
+            headmask_t1_pipe.connect(
+                inputnode, "stereo_T1",
+                t1_head_li_mask, "orig_img_file")
 
     # t1_head_mask_binary
     t1_head_mask_binary = pe.Node(interface=UnaryMaths(),
