@@ -40,7 +40,7 @@
         "bet4animal":
         {
             "label": 3,
-            "f": 0.35,
+            "f": 0.3,
             "robust": false
         }
     },
