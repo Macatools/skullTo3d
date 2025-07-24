@@ -86,6 +86,9 @@
     {
         "headmask_t1_pipe":
         {
+            "t1_itk_debias":
+            {
+            },
             "t1_head_dilate":
             {
                 "operation": "modal",
@@ -100,6 +103,9 @@
         },
         "skullmask_t1_pipe":
         {
+            "t1_denoise":
+            {
+            },
             "t1_fast":
             {
                 "args": "-l 4 -O 4 -t 1",
