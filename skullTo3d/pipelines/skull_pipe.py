@@ -122,16 +122,14 @@ def _create_fullskull_mask(name="fullskull_pipe", params={}):
     fullskull_pipe.connect(
         fullskull_fill, "out_file",
         fullskull_erode, "in_file")
-    #
-    # fullskull_pipe.connect(
-    #     inputnode, ('indiv_params', parse_key, "fullskull_erode"),
-    #     fullskull_erode, "indiv_params")
-
 
     # mesh_fullskull #######
     mesh_fullskull = pe.Node(
         interface=IsoSurface(),
         name="mesh_fullskull")
+
+    mesh_fullskull.inputs.KPB = 0.0001
+    mesh_fullskull.inputs.NITER = 1000
 
     fullskull_pipe.connect(
         fullskull_erode, "out_file",
@@ -155,6 +153,9 @@ def _create_fullskull_mask(name="fullskull_pipe", params={}):
     mesh_fullskull_restrain = pe.Node(
         interface=IsoSurface(),
         name="mesh_fullskull_restrain")
+
+    mesh_fullskull_restrain.inputs.KPB = 0.0001
+    mesh_fullskull_restrain.inputs.NITER = 1000
 
     fullskull_pipe.connect(
         fullskull_restrain, "out_file",
