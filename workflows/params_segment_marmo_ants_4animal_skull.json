@@ -107,12 +107,6 @@
             {
             },
 
-            "t1_fast":
-            {
-                "args": "-l 4 -O 4 -t 1",
-                "output_biascorrected": true,
-                "output_biasfield": true
-            },
             "t1_head_erode_skin":
             {
                 "kernel_shape": "boxv",

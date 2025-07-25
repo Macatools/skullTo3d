@@ -183,7 +183,7 @@ def _create_headmask_t1_pipe(name="headmask_t1_pipe", params={}):
         t1_itk_debias = pe.Node(
                 interface=niu.Function(
                     input_names=["img_file"],
-                    output_names=["cor_img_file", "bias_img_file"],
+                    output_names=["cor_img_file", "bias_img_file", "mask_file"],
                     function=itk_debias),
                 name="t1_itk_debias")
 
@@ -855,7 +855,7 @@ def _create_petra_head_mask(name="headmask_petra_pipe", params={}):
         petra_itk_debias = pe.Node(
                 interface=niu.Function(
                     input_names=["img_file"],
-                    output_names=["cor_img_file", "bias_img_file"],
+                    output_names=["cor_img_file", "bias_img_file", "mask_file"],
                     function=itk_debias),
                 name="petra_itk_debias")
 
