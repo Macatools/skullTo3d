@@ -16,6 +16,10 @@ def update_skull_params(ssoft, params):
                 print('deleting skullmask_petra_pipe')
                 del spp["skullmask_petra_pipe"]
 
+            if "fullskullmask_petra_pipe" in spp:
+                print('deleting fullskullmask_petra_pipe')
+                del spp["fullskullmask_petra_pipe"]
+
         if "skull_t1_pipe" in params:
             spp = params["skull_t1_pipe"]
 
@@ -26,6 +30,11 @@ def update_skull_params(ssoft, params):
             if "skullmask_t1_pipe" in spp:
                 print('deleting skullmask_t1_pipe')
                 del spp["skullmask_t1_pipe"]
+
+
+            if "fullskullmask_t1_pipe" in spp:
+                print('deleting fullskullmask_t1_pipe')
+                del spp["fullskullmask_t1_pipe"]
 
         if "skull_ct_pipe" in params:
             spp = params["skull_ct_pipe"]
@@ -45,12 +54,20 @@ def update_skull_params(ssoft, params):
                 print('deleting skullmask_petra_pipe')
                 del spp["skullmask_petra_pipe"]
 
+            if "fullskullmask_petra_pipe" in spp:
+                print('deleting fullskullmask_petra_pipe')
+                del spp["fullskullmask_petra_pipe"]
+
         if "skull_t1_pipe" in params:
             spp = params["skull_t1_pipe"]
 
             if "skullmask_t1_pipe" in spp:
                 print('deleting skullmask_t1_pipe')
                 del spp["skullmask_t1_pipe"]
+
+            if "fullskullmask_t1_pipe" in spp:
+                print('deleting fullskullmask_t1_pipe')
+                del spp["fullskullmask_t1_pipe"]
 
         if "skull_ct_pipe" in params:
             spp = params["skull_ct_pipe"]
