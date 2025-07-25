@@ -457,6 +457,35 @@ def _create_skullmask_t1_pipe(name="skullmask_t1_pipe", params={}):
             t1_fast, ("partial_volume_files", get_elem, 0),
             t1_skull_mask_binary, "in_file")
 
+    elif "t1_skull_itk_debias" in params.keys():
+        # Adding early t1_debias
+        t1_skull_itk_debias = pe.Node(
+                interface=niu.Function(
+                    input_names=["img_file"],
+                    output_names=["cor_img_file", "bias_img_file", "mask_file"],
+                    function=itk_debias),
+                name="t1_skull_itk_debias")
+
+        if "t1_denoise" in params.keys():
+            skullmask_t1_pipe.connect(
+                t1_denoise, "output_image",
+                t1_skull_itk_debias, "img_file")
+        else:
+            skullmask_t1_pipe.connect(
+                inputnode, "headmasked_T1",
+                t1_skull_itk_debias, "img_file")
+
+        # fslmaths mask -mul -1 -add 1 invmask
+        t1_skull_inv = pe.Node(
+                interface=MathsCommand(),
+                name="t1_skull_inv")
+
+        t1_skull_inv.inputs.args = " -mul -1 -add 1"
+
+        skullmask_t1_pipe.connect(
+            t1_skull_itk_debias, "mask_file",
+            t1_skull_inv, "in_file")
+
     else:
         # t1_skull_li_mask
         t1_skull_li_mask = pe.Node(
