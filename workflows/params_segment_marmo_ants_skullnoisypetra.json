@@ -262,6 +262,7 @@
                 "kernel_size": 7.0
             }
         },
+
         "fullskullmask_petra_pipe":
         {
             "brainmask_expand":
