@@ -2328,9 +2328,6 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
 #         skull_ct_pipe.connect(align_ct_on_stereo_T1, "out_file",
 #                               skullmask_ct_pipe, "inputnode.realigned_ct")
 
-        skull_ct_pipe.connect(align_ct_on_stereo_T1, "out_file",
-                              skullmask_ct_pipe, "inputnode.realigned_ct")
-
         skull_ct_pipe.connect(inputnode, "indiv_params",
                               skullmask_ct_pipe, "inputnode.indiv_params")
 
