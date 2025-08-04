@@ -2183,9 +2183,10 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
                               crop_CT, 'in_file')
 
     align_ct_on_T1 = pe.Node(fsl.FLIRT(), name="align_ct_on_T1")
-    align_ct_on_T1.inputs.dof = 12
+    align_ct_on_T1.inputs.dof = 6
 
-    align_ct_on_T1.inputs.cost_func = 'mutualinfo'
+    align_ct_on_T1.inputs.cost = 'normmi'
+    #align_ct_on_T1.inputs.cost_func = 'normmi'
 
 
     if "crop_ct" in params:
@@ -2204,9 +2205,9 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
 
 
         align_ct_on_T1_2 = pe.Node(fsl.FLIRT(), name="align_ct_on_T1_2")
-        align_ct_on_T1_2.inputs.dof = 12
+        align_ct_on_T1_2.inputs.dof = 6
 
-        align_ct_on_T1_2.inputs.cost_func = 'mutualinfo'
+        align_ct_on_T1_2.inputs.cost = 'normmi'
         #
         # skull_ct_pipe.connect(
         #     align_ct_on_T1, 'out_file',
@@ -2311,6 +2312,17 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
     # skull_ct_pipe.connect(align_ct_on_stereo_T1, "out_file",
     #                       outputnode, "stereo_ct")
 
+
+    if "align_ct_on_T1_2" in params:
+        skull_ct_pipe.connect(
+            align_ct_on_T1_2, 'out_file',
+            outputnode, "stereo_ct")
+
+    else:
+        skull_ct_pipe.connect(
+            align_ct_on_T1, 'out_file',
+            outputnode, "stereo_ct")
+
     if "skullmask_ct_pipe" in params:
 
         skullmask_ct_pipe = _create_skullmask_ct_pipe(
@@ -2322,7 +2334,7 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
                               skullmask_ct_pipe, "inputnode.realigned_ct")
 
         else:
-            skull_ct_pipe.connect(align_ct_on_T1_2, 'out_file',
+            skull_ct_pipe.connect(align_ct_on_T1, 'out_file',
                               skullmask_ct_pipe, "inputnode.realigned_ct")
 #
 #         skull_ct_pipe.connect(align_ct_on_stereo_T1, "out_file",
