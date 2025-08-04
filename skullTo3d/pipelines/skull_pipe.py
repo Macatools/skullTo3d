@@ -2182,36 +2182,39 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
         skull_ct_pipe.connect(inputnode, 'ct',
                               crop_CT, 'in_file')
 
-    align_CT_on_T1 = pe.Node(fsl.FLIRT(), name="align_CT_on_T1")
-    align_CT_on_T1.inputs.dof = 12
+    align_ct_on_T1 = pe.Node(fsl.FLIRT(), name="align_ct_on_T1")
+    align_ct_on_T1.inputs.dof = 12
 
-    align_CT_on_T1.inputs.cost_func = 'mutualinfo'
+    align_ct_on_T1.inputs.cost_func = 'mutualinfo'
 
 
-    if "crop_CT" in params:
+    if "crop_ct" in params:
         skull_ct_pipe.connect(
-            crop_CT, "roi_file",
-            align_CT_on_T1, 'in_file')
+            crop_ct, "roi_file",
+            align_ct_on_T1, 'in_file')
     else:
         skull_ct_pipe.connect(
             inputnode, 'ct',
-            align_CT_on_T1, 'in_file')
+            align_ct_on_T1, 'in_file')
 
     skull_ct_pipe.connect(inputnode, "stereo_T1",
-                          align_CT_on_T1, 'reference')
+                          align_ct_on_T1, 'reference')
 
     if "align_ct_on_T1_2" in params:
 
 
-        align_ct_on_T1_2 = pe.Node(fsl.FLIRT(), name="align_CT_on_T1")
+        align_ct_on_T1_2 = pe.Node(fsl.FLIRT(), name="align_ct_on_T1_2")
         align_ct_on_T1_2.inputs.dof = 12
 
         align_ct_on_T1_2.inputs.cost_func = 'mutualinfo'
+        #
+        # skull_ct_pipe.connect(
+        #     align_ct_on_T1, 'out_file',
+        #     align_ct_on_T1_2, 'in_file')
 
-
-        if "crop_CT" in params:
+        if "crop_ct" in params:
             skull_ct_pipe.connect(
-                crop_CT, "roi_file",
+                crop_ct, "roi_file",
                 align_ct_on_T1_2, 'in_file')
         else:
             skull_ct_pipe.connect(
@@ -2222,9 +2225,9 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
             inputnode, "stereo_T1",
             align_ct_on_T1_2, 'reference')
 
-
+        # initial matrix
         skull_ct_pipe.connect(
-            align_CT_on_T1, "out_matrix_file",
+            align_ct_on_T1, "out_matrix_file",
             align_ct_on_T1_2, 'in_matrix_file')
 
 
