@@ -2203,12 +2203,24 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
     if "align_ct_on_T1_2" in params:
 
         # align_ct_on_T1
+        align_ct_on_T1_1 = pe.Node(interface=RegAladin(),
+                                   name="align_ct_on_T1_1")
+
+        align_ct_on_T1_1.inputs.rig_only_flag = True
+
+        skull_ct_pipe.connect(align_ct_on_T1, 'res_file',
+                              align_ct_on_T1_1, "flo_file")
+
+        skull_ct_pipe.connect(inputnode, "native_T1",
+                              align_ct_on_T1_1, "ref_file")
+
+        # align_ct_on_T1
         align_ct_on_T1_2 = pe.Node(interface=RegAladin(),
                                    name="align_ct_on_T1_2")
 
         align_ct_on_T1_2.inputs.rig_only_flag = True
 
-        skull_ct_pipe.connect(align_ct_on_T1, 'res_file',
+        skull_ct_pipe.connect(align_ct_on_T1_1, 'res_file',
                               align_ct_on_T1_2, "flo_file")
 
         skull_ct_pipe.connect(inputnode, "native_T1",
