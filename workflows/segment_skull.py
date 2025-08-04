@@ -840,19 +840,38 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
             main_workflow.connect(datasource, ('CT', get_first_elem),
                                   skull_ct_pipe, 'inputnode.ct')
 
-            main_workflow.connect(
-                segment_brain_pipe,
-                "outputnode.native_T1",
-                skull_ct_pipe, 'inputnode.native_T1')
 
-            if "pad_template" in params["short_preparation_pipe"].keys():
+            if "use_T2" in params["skull_ct_pipe"]:
+
                 main_workflow.connect(
-                    segment_brain_pipe, "outputnode.stereo_padded_T1",
-                    skull_ct_pipe, 'inputnode.stereo_T1')
+                    segment_brain_pipe,
+                    "outputnode.native_T2",
+                    skull_ct_pipe, 'inputnode.native_T1')
+
+                if "pad_template" in params["short_preparation_pipe"].keys():
+                    main_workflow.connect(
+                        segment_brain_pipe, "outputnode.stereo_padded_T2",
+                        skull_ct_pipe, 'inputnode.stereo_T1')
+                else:
+                    main_workflow.connect(
+                        segment_brain_pipe, "outputnode.stereo_T2",
+                        skull_ct_pipe, 'inputnode.stereo_T1')
+
             else:
+
                 main_workflow.connect(
-                    segment_brain_pipe, "outputnode.stereo_T1",
-                    skull_ct_pipe, 'inputnode.stereo_T1')
+                    segment_brain_pipe,
+                    "outputnode.native_T1",
+                    skull_ct_pipe, 'inputnode.native_T1')
+
+                if "pad_template" in params["short_preparation_pipe"].keys():
+                    main_workflow.connect(
+                        segment_brain_pipe, "outputnode.stereo_padded_T1",
+                        skull_ct_pipe, 'inputnode.stereo_T1')
+                else:
+                    main_workflow.connect(
+                        segment_brain_pipe, "outputnode.stereo_T1",
+                        skull_ct_pipe, 'inputnode.stereo_T1')
 
             main_workflow.connect(
                 segment_brain_pipe, "outputnode.native_to_stereo_trans",

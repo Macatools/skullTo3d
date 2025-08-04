@@ -298,6 +298,8 @@
 
     "skull_ct_pipe":
     {
+        "use_T2":{},
+
         "skullmask_ct_pipe":
         {
             "ct_skull_auto_mask":
