@@ -2189,9 +2189,9 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
     #align_ct_on_T1.inputs.cost_func = 'normmi'
 
 
-    if "crop_ct" in params:
+    if "crop_CT" in params:
         skull_ct_pipe.connect(
-            crop_ct, "roi_file",
+            crop_CT, "roi_file",
             align_ct_on_T1, 'in_file')
     else:
         skull_ct_pipe.connect(
@@ -2213,9 +2213,9 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
         #     align_ct_on_T1, 'out_file',
         #     align_ct_on_T1_2, 'in_file')
 
-        if "crop_ct" in params:
+        if "crop_CT" in params:
             skull_ct_pipe.connect(
-                crop_ct, "roi_file",
+                crop_CT, "roi_file",
                 align_ct_on_T1_2, 'in_file')
         else:
             skull_ct_pipe.connect(
