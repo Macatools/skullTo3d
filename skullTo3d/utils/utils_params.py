@@ -31,7 +31,6 @@ def update_skull_params(ssoft, params):
                 print('deleting skullmask_t1_pipe')
                 del spp["skullmask_t1_pipe"]
 
-
             if "fullskullmask_t1_pipe" in spp:
                 print('deleting fullskullmask_t1_pipe')
                 del spp["fullskullmask_t1_pipe"]
