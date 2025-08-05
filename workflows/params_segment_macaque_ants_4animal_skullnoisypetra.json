@@ -86,6 +86,14 @@
     {
         "headmask_t1_pipe":
         {
+            "t1_head_auto_mask":
+            {
+                "kmeans": true,
+                "operation": "lower",
+                "index": 2,
+                "sample_bins": 30,
+                "distance": 10
+            },
             "t1_head_dilate":
             {
                 "operation": "modal",
@@ -137,6 +145,28 @@
             "t1_skull_fov":
             {
                 "brainsize": 45
+            }
+        },
+
+        "fullskullmask_t1_pipe":
+        {
+            "brainmask_expand":
+            {
+                "operation": "modal",
+                "kernel_shape": "boxv",
+                "kernel_size": 11
+            },
+
+            "fullskull_dilate":
+            {
+                "operation": "modal",
+                "kernel_shape": "boxv",
+                "kernel_size": 7.0
+            },
+            "fullskull_erode":
+            {
+                "kernel_shape": "boxv",
+                "kernel_size": 7.0
             }
         }
     },
@@ -212,6 +242,29 @@
             "petra_skull_fov":
             {
                 "brainsize": 45
+            }
+        },
+
+
+        "fullskullmask_petra_pipe":
+        {
+            "brainmask_expand":
+            {
+                "operation": "modal",
+                "kernel_shape": "boxv",
+                "kernel_size": 11
+            },
+
+            "fullskull_dilate":
+            {
+                "operation": "modal",
+                "kernel_shape": "boxv",
+                "kernel_size": 7.0
+            },
+            "fullskull_erode":
+            {
+                "kernel_shape": "boxv",
+                "kernel_size": 7.0
             }
         }
     },
