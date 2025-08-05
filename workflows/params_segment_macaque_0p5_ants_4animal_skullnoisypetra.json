@@ -139,6 +139,28 @@
             {
                 "brainsize": 45
             }
+        },
+        ,
+        "fullskullmask_t1_pipe":
+        {
+            "brainmask_expand":
+            {
+                "operation": "modal",
+                "kernel_shape": "boxv",
+                "kernel_size": 11
+            },
+
+            "fullskull_dilate":
+            {
+                "operation": "modal",
+                "kernel_shape": "boxv",
+                "kernel_size": 7.0
+            },
+            "fullskull_erode":
+            {
+                "kernel_shape": "boxv",
+                "kernel_size": 7.0
+            }
         }
     },
     "skull_petra_pipe":
@@ -212,6 +234,29 @@
             "petra_skull_fov":
             {
                 "brainsize": 45
+            }
+        },
+
+
+        "fullskullmask_petra_pipe":
+        {
+            "brainmask_expand":
+            {
+                "operation": "modal",
+                "kernel_shape": "boxv",
+                "kernel_size": 11
+            },
+
+            "fullskull_dilate":
+            {
+                "operation": "modal",
+                "kernel_shape": "boxv",
+                "kernel_size": 7.0
+            },
+            "fullskull_erode":
+            {
+                "kernel_shape": "boxv",
+                "kernel_size": 7.0
             }
         }
     },
