@@ -122,17 +122,6 @@
                 "kernel_shape": "boxv",
                 "kernel_size": 9.0
             },
-            "t1_skull_gcc_erode":
-            {
-                "kernel_shape": "boxv",
-                "kernel_size": 5.0
-            },
-            "t1_skull_gcc_dilate":
-            {
-                "operation": "modal",
-                "kernel_shape": "boxv",
-                "kernel_size": 5.0
-            },
             "t1_skull_dilate":
             {
                 "operation": "modal",
