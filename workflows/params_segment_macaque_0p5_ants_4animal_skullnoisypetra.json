@@ -87,6 +87,12 @@
     {
         "headmask_t1_pipe":
         {
+            "t1_head_auto_mask":
+            {
+                "kmeans": true,
+                "operation": "lower",
+                "index": 2
+            },
             "t1_head_dilate":
             {
                 "operation": "modal",
