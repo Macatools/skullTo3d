@@ -93,7 +93,7 @@
                 "operation": "lower",
                 "index": 2,
                 "sample_bins": 30,
-                "distance": 10,
+                "distance": 10
             },
             "t1_head_dilate":
             {
