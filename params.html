@@ -317,6 +317,14 @@
     {
         &quot;headmask_t1_pipe&quot;:
         {
+            &quot;t1_head_auto_mask&quot;:
+            {
+                &quot;kmeans&quot;: true,
+                &quot;operation&quot;: &quot;lower&quot;,
+                &quot;index&quot;: 2,
+                &quot;sample_bins&quot;: 30,
+                &quot;distance&quot;: 10
+            },
             &quot;t1_head_dilate&quot;:
             {
                 &quot;operation&quot;: &quot;modal&quot;,
@@ -369,6 +377,28 @@
             {
                 &quot;brainsize&quot;: 45
             }
+        },
+
+        &quot;fullskullmask_t1_pipe&quot;:
+        {
+            &quot;brainmask_expand&quot;:
+            {
+                &quot;operation&quot;: &quot;modal&quot;,
+                &quot;kernel_shape&quot;: &quot;boxv&quot;,
+                &quot;kernel_size&quot;: 11
+            },
+
+            &quot;fullskull_dilate&quot;:
+            {
+                &quot;operation&quot;: &quot;modal&quot;,
+                &quot;kernel_shape&quot;: &quot;boxv&quot;,
+                &quot;kernel_size&quot;: 7.0
+            },
+            &quot;fullskull_erode&quot;:
+            {
+                &quot;kernel_shape&quot;: &quot;boxv&quot;,
+                &quot;kernel_size&quot;: 7.0
+            }
         }
     },
 
@@ -376,6 +406,7 @@
     {
         &quot;headmask_petra_pipe&quot;:
         {
+
             &quot;petra_head_dilate&quot;:
             {
                 &quot;operation&quot;: &quot;modal&quot;,
@@ -388,6 +419,8 @@
                 &quot;kernel_size&quot;: 7.0
             }
         },
+
+
         &quot;skullmask_petra_pipe&quot;:
         {
             &quot;petra_fast&quot;:
@@ -429,6 +462,30 @@
             &quot;petra_skull_fov&quot;:
             {
                 &quot;brainsize&quot;: 45
+            }
+        },
+
+
+
+        &quot;fullskullmask_petra_pipe&quot;:
+        {
+            &quot;brainmask_expand&quot;:
+            {
+                &quot;operation&quot;: &quot;modal&quot;,
+                &quot;kernel_shape&quot;: &quot;boxv&quot;,
+                &quot;kernel_size&quot;: 11
+            },
+
+            &quot;fullskull_dilate&quot;:
+            {
+                &quot;operation&quot;: &quot;modal&quot;,
+                &quot;kernel_shape&quot;: &quot;boxv&quot;,
+                &quot;kernel_size&quot;: 7.0
+            },
+            &quot;fullskull_erode&quot;:
+            {
+                &quot;kernel_shape&quot;: &quot;boxv&quot;,
+                &quot;kernel_size&quot;: 7.0
             }
         }
     },
@@ -901,7 +958,7 @@
       
     </p>
     <p>
-        &copy; Copyright 2025, SkullTo3d Developers (macatools). Last updated on 2025-08-04.<br/>
+        &copy; Copyright 2025, SkullTo3d Developers (macatools). Last updated on 2025-08-06.<br/>
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 8.1.3.<br/>
     </p>
   </div>
