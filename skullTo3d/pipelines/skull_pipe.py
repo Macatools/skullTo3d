@@ -1255,7 +1255,9 @@ def create_skull_megre_pipe(name="skull_megre_pipe", params={}):
                     "megre_fullskull_stl",
                     "megre_fullskull_mask",
                     "megre_fullskull_crop_stl",
-                    "megre_fullskull_crop_mask"]),
+                    "megre_fullskull_crop_mask",
+                    "robustmegre_skull_mask",
+                    "robustmegre_skull_stl"]),
         name='outputnode')
 
     print("Using average_align for av_MEGRE")
