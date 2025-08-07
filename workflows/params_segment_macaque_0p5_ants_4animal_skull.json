@@ -226,20 +226,20 @@
 
         "fullskullmask_petra_pipe":
         {
-            "brainmask_expand":
+            "petra_brainmask_expand":
             {
                 "operation": "modal",
                 "kernel_shape": "boxv",
                 "kernel_size": 11
             },
 
-            "fullskull_dilate":
+            "petra_fullskull_dilate":
             {
                 "operation": "modal",
                 "kernel_shape": "boxv",
                 "kernel_size": 7.0
             },
-            "fullskull_erode":
+            "petra_fullskull_erode":
             {
                 "kernel_shape": "boxv",
                 "kernel_size": 7.0

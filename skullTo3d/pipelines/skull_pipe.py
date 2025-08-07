@@ -41,7 +41,7 @@ from macapype.nodes.prepare import apply_li_thresh
 from macapype.utils.misc import parse_key, get_elem
 
 
-def _create_fullskull_mask(name="fullskull_pipe", params={}):
+def _create_fullskull_mask(name="fullskull_pipe", params={}, prefix = ""):
 
     print("Running fullskull_pipe with:", params)
     # Creating pipeline
@@ -57,7 +57,7 @@ def _create_fullskull_mask(name="fullskull_pipe", params={}):
     # ct_skull_mask_binary
     brainmask_binary = pe.Node(
         interface=UnaryMaths(),
-        name="brainmask_binary")
+        name=prefix + "brainmask_binary")
 
     brainmask_binary.inputs.operation = 'bin'
     brainmask_binary.inputs.output_type = 'NIFTI_GZ'
@@ -71,8 +71,8 @@ def _create_fullskull_mask(name="fullskull_pipe", params={}):
     # fullskull_dilate ####### [okey][json]
     brainmask_expand = NodeParams(
         interface=DilateImage(),
-        params=parse_key(params, "brainmask_expand"),
-        name="brainmask_expand")
+        params=parse_key(params,prefix + "brainmask_expand"),
+        name=prefix + "brainmask_expand")
 
     fullskull_pipe.connect(
         brainmask_binary, "out_file",
@@ -81,7 +81,7 @@ def _create_fullskull_mask(name="fullskull_pipe", params={}):
     # add masks
     fullskull_mask_add = pe.Node(
         interface=BinaryMaths(),
-        name="fullskull_mask_add")
+        name=prefix + "fullskull_mask_add")
 
     fullskull_mask_add.inputs.operation = 'add'
 
@@ -96,8 +96,8 @@ def _create_fullskull_mask(name="fullskull_pipe", params={}):
     # fullskull_dilate ####### [okey][json]
     fullskull_dilate = NodeParams(
         interface=DilateImage(),
-        params=parse_key(params, "fullskull_dilate"),
-        name="fullskull_dilate")
+        params=parse_key(params, prefix + "fullskull_dilate"),
+        name=prefix + "fullskull_dilate")
 
     fullskull_pipe.connect(
         fullskull_mask_add, "out_file",
@@ -106,7 +106,7 @@ def _create_fullskull_mask(name="fullskull_pipe", params={}):
     # fullskull_fill #######  [okey]
     fullskull_fill = pe.Node(
         interface=UnaryMaths(),
-        name="fullskull_fill")
+        name=prefix + "fullskull_fill")
 
     fullskull_fill.inputs.operation = 'fillh'
 
@@ -117,8 +117,8 @@ def _create_fullskull_mask(name="fullskull_pipe", params={}):
     # fullskull_erode ####### [okey][json]
     fullskull_erode = NodeParams(
         interface=ErodeImage(),
-        params=parse_key(params, "fullskull_erode"),
-        name="fullskull_erode")
+        params=parse_key(params, prefix + "fullskull_erode"),
+        name=prefix + "fullskull_erode")
 
     fullskull_pipe.connect(
         fullskull_fill, "out_file",
@@ -127,7 +127,7 @@ def _create_fullskull_mask(name="fullskull_pipe", params={}):
     # mesh_fullskull #######
     mesh_fullskull = pe.Node(
         interface=IsoSurface(),
-        name="mesh_fullskull")
+        name=prefix + "mesh_fullskull")
 
     mesh_fullskull.inputs.KPB = 0.0001
     mesh_fullskull.inputs.NITER = 1000
@@ -139,7 +139,7 @@ def _create_fullskull_mask(name="fullskull_pipe", params={}):
     # fullskull_crop
     fullskull_crop = NodeParams(
             interface=ApplyMask(),
-            params=parse_key(params, "fullskull_crop"),
+            params=parse_key(params, prefix + "fullskull_crop"),
             name="fullskull_crop")
 
     fullskull_pipe.connect(
@@ -153,7 +153,7 @@ def _create_fullskull_mask(name="fullskull_pipe", params={}):
     # mesh_fullskull_crop #######
     mesh_fullskull_crop = pe.Node(
         interface=IsoSurface(),
-        name="mesh_fullskull_crop")
+        name=prefix + "mesh_fullskull_crop")
 
     mesh_fullskull_crop.inputs.KPB = 0.0001
     mesh_fullskull_crop.inputs.NITER = 1000
@@ -1715,7 +1715,7 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
 
         fullskullmask_pipe = _create_fullskull_mask(
             name="fullskullmask_petra_pipe",
-            params=params["fullskullmask_petra_pipe"])
+            params=params["fullskullmask_petra_pipe"], suffix = "petra")
 
         skull_petra_pipe.connect(
             skullmask_pipe, "petra_skull_erode.out_file",
