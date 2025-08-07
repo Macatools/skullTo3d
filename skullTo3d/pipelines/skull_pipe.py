@@ -140,7 +140,7 @@ def _create_fullskull_mask(name="fullskull_pipe", params={}, prefix = ""):
     fullskull_crop = NodeParams(
             interface=ApplyMask(),
             params=parse_key(params, prefix + "fullskull_crop"),
-            name="fullskull_crop")
+            name=prefix + "fullskull_crop")
 
     fullskull_pipe.connect(
         fullskull_erode, "out_file",
