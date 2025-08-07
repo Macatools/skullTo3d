@@ -263,7 +263,7 @@ def _create_head_mask(name="headmask_pipe", params={}, prefix = ""):
     # mesh_head #######
     mesh_head = pe.Node(
         interface=IsoSurface(),
-        name="mesh_head")
+        name=prefix + "mesh_head")
 
     headmask_pipe.connect(
         head_erode, "out_file",
@@ -535,7 +535,7 @@ def _create_skull_mask(name="skullmask_pipe", params={}, prefix = ""):
     # mesh_skull #######
     mesh_skull = pe.Node(
         interface=IsoSurface(),
-        name="mesh_skull")
+        name=prefix + "mesh_skull")
 
     skullmask_pipe.connect(
         skull_erode, "out_file",
@@ -571,7 +571,7 @@ def _create_skull_mask(name="skullmask_pipe", params={}, prefix = ""):
         # mesh_robustskull #######
         mesh_robustskull = pe.Node(
             interface=IsoSurface(),
-            name="mesh_robustskull")
+            name=prefix + "mesh_robustskull")
 
         skullmask_pipe.connect(
             skull_clean, "gcc_nii_file",
@@ -1679,7 +1679,7 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
     skull_petra_pipe.connect(headmask_pipe, "petra_head_erode.out_file",
                              outputnode, "petra_head_mask")
 
-    skull_petra_pipe.connect(headmask_pipe, "mesh_petra_head.stl_file",
+    skull_petra_pipe.connect(headmask_pipe, "petra_mesh_head.stl_file",
                              outputnode, "petra_head_stl")
 
     # ## skull mask
@@ -1704,7 +1704,7 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
     else:
         return skull_petra_pipe
 
-    skull_petra_pipe.connect(skullmask_pipe, "mesh_petra_skull.stl_file",
+    skull_petra_pipe.connect(skullmask_pipe, "petra_mesh_skull.stl_file",
                              outputnode, "petra_skull_stl")
 
     skull_petra_pipe.connect(skullmask_pipe, "petra_skull_erode.out_file",
