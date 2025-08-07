@@ -295,7 +295,7 @@ def _create_head_mask(name="headmask_pipe", params={}, prefix = ""):
 def _create_skull_mask(name="skullmask_pipe", params={}, prefix = ""):
 
     # creating pipeline
-    skullmask_petra_pipe = pe.Workflow(name=name)
+    skullmask_pipe = pe.Workflow(name=name)
 
     # Creating input node
     inputnode = pe.Node(
