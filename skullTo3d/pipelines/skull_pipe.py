@@ -1922,7 +1922,7 @@ def create_skull_megre_pipe(name="skull_megre_pipe", params={}):
 
         fullskullmask_pipe = _create_fullskull_mask(
             name="fullskullmask_megre_pipe",
-            params=params["fullskullmask_megre_pipe"])
+            params=params["fullskullmask_megre_pipe"], prefix="megre_")
 
         skull_megre_pipe.connect(
             skullmask_pipe, "megre_skull_erode.out_file",
