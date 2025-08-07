@@ -420,6 +420,15 @@ def _create_skull_mask(name="skullmask_pipe", params={}, prefix = ""):
             skull_inv, "out_file",
             skin_masked, "in_file")
 
+    # mesh_t1_rawskull #######
+    mesh_rawskull = pe.Node(
+        IsoSurface(),
+        name=prefix+"mesh_rawskull")
+
+    skullmask_t1_pipe.connect(
+        skin_masked, "out_file",
+        mesh_rawskull, "nii_file")
+
     if prefix + "skull_gcc_erode" in params and \
             prefix + "skull_gcc_dilate" in params:
 
@@ -800,7 +809,7 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
 
     if "t1_head_erode_skin" in params["skullmask_t1_pipe"].keys():
         skull_t1_pipe.connect(
-            skullmask_t1_pipe, "t1_head_skin_masked.out_file",
+            skullmask_t1_pipe, "t1_skin_masked.out_file",
             outputnode, "t1_rawskull_mask")
 
     else:
