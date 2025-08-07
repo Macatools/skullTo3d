@@ -221,6 +221,91 @@
         }
     },
 
+    "skull_megre_pipe":
+    {
+        "headmask_megre_pipe":
+        {
+
+            "megre_head_dilate":
+            {
+                "operation": "modal",
+                "kernel_shape": "boxv",
+                "kernel_size": 7.0
+            },
+            "megre_head_erode":
+            {
+                "kernel_shape": "boxv",
+                "kernel_size": 7.0
+            }
+        },
+
+        "skullmask_megre_pipe":
+        {
+            "megre_fast":
+            {
+                "args": " -l 10",
+                "img_type": 3,
+                "output_biascorrected": true,
+                "output_biasfield": true
+            },
+            "megre_head_erode_skin":
+            {
+                "kernel_shape": "boxv",
+                "kernel_size": 9.0
+            },
+
+            "megre_skull_gcc_erode":
+            {
+                "kernel_shape": "boxv",
+                "kernel_size": 1.0
+            },
+            "megre_skull_gcc_dilate":
+            {
+                "operation": "modal",
+                "kernel_shape": "boxv",
+                "kernel_size": 1.0
+            },
+
+            "megre_skull_dilate":
+            {
+                "operation": "modal",
+                "kernel_shape": "boxv",
+                "kernel_size": 3.0
+            },
+            "megre_skull_erode":
+            {
+                "kernel_shape": "boxv",
+                "kernel_size": 3.0
+            },
+            "megre_skull_fov":
+            {
+                "brainsize": 45
+            }
+        },
+
+        "fullskullmask_megre_pipe":
+        {
+            "megre_brainmask_expand":
+            {
+                "operation": "modal",
+                "kernel_shape": "boxv",
+                "kernel_size": 11
+            },
+
+            "megre_fullskull_dilate":
+            {
+                "operation": "modal",
+                "kernel_shape": "boxv",
+                "kernel_size": 7.0
+            },
+            "megre_fullskull_erode":
+            {
+                "kernel_shape": "boxv",
+                "kernel_size": 7.0
+            }
+        }
+    },
+
     "skull_ct_pipe":
     {
         "align_ct_on_T1_2":
