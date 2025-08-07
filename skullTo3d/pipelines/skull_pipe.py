@@ -763,7 +763,7 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
         outputnode, "t1_head_mask")
 
     skull_t1_pipe.connect(
-        headmask_t1_pipe, "mesh_t1_head.stl_file",
+        headmask_t1_pipe, "t1_mesh_head.stl_file",
         outputnode, "t1_head_stl")
 
     # Creating skullmask_t1_pipe
@@ -821,7 +821,7 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
             outputnode, "robustt1_skull_mask")
 
         skull_t1_pipe.connect(
-            skullmask_t1_pipe, "mesh_robustt1_skull.stl_file",
+            skullmask_t1_pipe, "t1_mesh_robustskull.stl_file",
             outputnode, "robustt1_skull_stl")
 
     # ## skull mask
