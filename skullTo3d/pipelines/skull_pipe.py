@@ -274,7 +274,7 @@ def _create_head_mask(name="headmask_pipe", params={}, prefix = ""):
     hmasked = pe.Node(interface=ApplyMask(),
                             name=prefix + "hmasked")
 
-    if prefix + "itk_debias" in params.keys():
+    if prefix + "itkdebias" in params.keys():
 
         headmask_pipe.connect(
             itkdebias, "cor_img_file",

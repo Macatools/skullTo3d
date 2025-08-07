@@ -179,20 +179,20 @@
 
         "fullskullmask_t1_pipe":
         {
-            "brainmask_expand":
+            "t1_brainmask_expand":
             {
                 "operation": "modal",
                 "kernel_shape": "boxv",
                 "kernel_size": 11
             },
 
-            "fullskull_dilate":
+            "t1_fullskull_dilate":
             {
                 "operation": "modal",
                 "kernel_shape": "boxv",
                 "kernel_size": 7.0
             },
-            "fullskull_erode":
+            "t1_fullskull_erode":
             {
                 "kernel_shape": "boxv",
                 "kernel_size": 7.0
@@ -205,7 +205,7 @@
         "headmask_petra_pipe":
         {
 
-            "petra_itk_debias":
+            "petra_itkdebias":
             {
             },
             "petra_head_gcc_erode":
@@ -265,14 +265,14 @@
 
         "fullskullmask_petra_pipe":
         {
-            "brainmask_expand":
+            "petra_brainmask_expand":
             {
                 "operation": "modal",
                 "kernel_shape": "boxv",
                 "kernel_size": 11
             },
 
-            "fullskull_dilate":
+            "petra_fullskull_dilate":
             {
                 "operation": "modal",
                 "kernel_shape": "boxv",
@@ -290,17 +290,17 @@
     {
         "headmask_megre_pipe":
         {
-            "petra_itk_debias":
+            "megre_itkdebias":
             {
             },
 
             "comment": "0p36mm",
-            "petra_head_gcc_erode":
+            "megre_head_gcc_erode":
             {
                 "kernel_shape": "boxv",
                 "kernel_size": 1.0
             },
-            "petra_head_gcc_dilate":
+            "megre_head_gcc_dilate":
             {
                 "operation": "modal",
                 "kernel_shape": "boxv",
@@ -310,12 +310,12 @@
             "comment":{},
             "0p40mm":
             {
-                "petra_head_gcc_erode":
+                "megre_head_gcc_erode":
                 {
                     "kernel_shape": "boxv",
                     "kernel_size": 3.0
                 },
-                "petra_head_gcc_dilate":
+                "megre_head_gcc_dilate":
                 {
                     "operation": "modal",
                     "kernel_shape": "boxv",
@@ -323,13 +323,13 @@
                 }
             },
 
-            "petra_head_dilate":
+            "megre_head_dilate":
             {
                 "operation": "modal",
                 "kernel_shape": "boxv",
                 "kernel_size": 7.0
             },
-            "petra_head_erode":
+            "megre_head_erode":
             {
                 "kernel_shape": "boxv",
                 "kernel_size": 7.0
@@ -339,7 +339,7 @@
         "skullmask_megre_pipe":
         {
             "comment":{
-            "petra_fast":
+            "megre_fast":
             {
                 "bias_lowpass": 4,
                 "iters_afterbias": 4,
@@ -349,19 +349,19 @@
                 "output_biasfield": true
             }
             },
-            "petra_head_erode_skin":
+            "megre_head_erode_skin":
             {
                 "kernel_shape": "boxv",
                 "kernel_size": 5.0
             },
 
-            "petra_skull_dilate":
+            "megre_skull_dilate":
             {
                 "operation": "modal",
                 "kernel_shape": "boxv",
                 "kernel_size": 7.0
             },
-            "petra_skull_erode":
+            "megre_skull_erode":
             {
                 "kernel_shape": "boxv",
                 "kernel_size": 7.0
@@ -370,20 +370,20 @@
         "fullskullmask_megre_pipe":
         {
 
-            "brainmask_expand":
+            "megre_brainmask_expand":
             {
                 "operation": "modal",
                 "kernel_shape": "boxv",
                 "kernel_size": 11
             },
 
-            "fullskull_dilate":
+            "megre_fullskull_dilate":
             {
                 "operation": "modal",
                 "kernel_shape": "boxv",
                 "kernel_size": 7.0
             },
-            "fullskull_erode":
+            "megre_fullskull_erode":
             {
                 "kernel_shape": "boxv",
                 "kernel_size": 7.0
