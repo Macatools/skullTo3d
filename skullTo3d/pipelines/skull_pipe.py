@@ -48,7 +48,7 @@ def _create_head_mask(name="headmask_pipe", params={}, prefix = ""):
 
     # Creating input node
     inputnode = pe.Node(
-        niu.IdentityInterface(fields=['reoriented_petra',
+        niu.IdentityInterface(fields=['stereo_img',
                                       'indiv_params']),
         name='inputnode'
     )
@@ -65,7 +65,7 @@ def _create_head_mask(name="headmask_pipe", params={}, prefix = ""):
                 name=prefix + "itkdebias")
 
         headmask_pipe.connect(
-            inputnode, "reoriented_petra",
+            inputnode, "stereo_img",
             itkdebias, "img_file")
 
     # ### head mask
@@ -85,7 +85,7 @@ def _create_head_mask(name="headmask_pipe", params={}, prefix = ""):
         else:
 
             headmask_pipe.connect(
-                inputnode, "reoriented_petra",
+                inputnode, "stereo_img",
                 head_mask_thr, "in_file")
 
         headmask_pipe.connect(
@@ -111,7 +111,7 @@ def _create_head_mask(name="headmask_pipe", params={}, prefix = ""):
         else:
 
             headmask_pipe.connect(
-                inputnode, "reoriented_petra",
+                inputnode, "stereo_img",
                 head_auto_mask, "img_file")
 
         headmask_pipe.connect(
@@ -135,7 +135,7 @@ def _create_head_mask(name="headmask_pipe", params={}, prefix = ""):
         else:
 
             headmask_pipe.connect(
-                inputnode, "reoriented_petra",
+                inputnode, "stereo_img",
                 head_li_mask, "orig_img_file")
 
     # head_mask_binary
@@ -282,7 +282,7 @@ def _create_head_mask(name="headmask_pipe", params={}, prefix = ""):
     else:
 
         headmask_pipe.connect(
-            inputnode, "reoriented_petra",
+            inputnode, "stereo_img",
             hmasked, "in_file")
 
     headmask_pipe.connect(
@@ -299,7 +299,7 @@ def _create_skull_mask(name="skullmask_pipe", params={}, prefix = ""):
 
     # Creating input node
     inputnode = pe.Node(
-        niu.IdentityInterface(fields=['headmasked_petra',
+        niu.IdentityInterface(fields=['headmasked_img',
                                       "headmask",
                                       'indiv_params']),
         name='inputnode'
@@ -313,7 +313,7 @@ def _create_skull_mask(name="skullmask_pipe", params={}, prefix = ""):
                                    name='denoise')
 
         skullmask_pipe.connect(
-            inputnode, "headmasked_petra",
+            inputnode, "headmasked_img",
             denoise, "input_image")
 
         skullmask_pipe.connect(
@@ -336,7 +336,7 @@ def _create_skull_mask(name="skullmask_pipe", params={}, prefix = ""):
                 fast, "in_files")
         else:
             skullmask_pipe.connect(
-                inputnode, "headmasked_petra",
+                inputnode, "headmasked_img",
                 fast, "in_files")
 
         # skull_mask_binary
@@ -366,7 +366,7 @@ def _create_skull_mask(name="skullmask_pipe", params={}, prefix = ""):
                 skull_li_mask, "orig_img_file")
         else:
             skullmask_pipe.connect(
-                inputnode, "headmasked_petra",
+                inputnode, "headmasked_img",
                 skull_li_mask, "orig_img_file")
 
         # fslmaths mask -mul -1 -add 1 invmask
@@ -741,7 +741,7 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
             prefix="t1_")
 
         skull_t1_pipe.connect(inputnode, "stereo_T1",
-                              headmask_t1_pipe, "inputnode.stereo_T1")
+                              headmask_t1_pipe, "inputnode.stereo_img")
 
         skull_t1_pipe.connect(inputnode, "indiv_params",
                               headmask_t1_pipe, "inputnode.indiv_params")
@@ -774,7 +774,7 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
             prefix="t1_")
 
         skull_t1_pipe.connect(headmask_t1_pipe, "t1_hmasked.out_file",
-                              skullmask_t1_pipe, "inputnode.headmasked_T1")
+                              skullmask_t1_pipe, "inputnode.headmasked_img")
 
         skull_t1_pipe.connect(headmask_t1_pipe, "t1_head_erode.out_file",
                               skullmask_t1_pipe, "inputnode.headmask")
@@ -946,15 +946,15 @@ def create_autonomous_skull_petra_pipe(name="skull_petra_pipe", params={}):
         if "crop_petra" in params:
             skull_petra_pipe.connect(
                 crop_petra, "out_file",
-                headmask_pipe, "inputnode.reoriented_petra")
+                headmask_pipe, "inputnode.stereo_img")
         elif "avg_reorient_pipe" in params.keys():
             skull_petra_pipe.connect(
                 av_PETRA, 'outputnode.std_img',
-                headmask_pipe, "inputnode.reoriented_petra")
+                headmask_pipe, "inputnode.stereo_img")
         else:
             skull_petra_pipe.connect(
                 av_PETRA, 'avg_img',
-                headmask_pipe, "inputnode.reoriented_petra")
+                headmask_pipe, "inputnode.stereo_img")
 
         skull_petra_pipe.connect(inputnode, "indiv_params",
                                  headmask_pipe, "inputnode.indiv_params")
@@ -977,7 +977,7 @@ def create_autonomous_skull_petra_pipe(name="skull_petra_pipe", params={}):
 
         skull_petra_pipe.connect(
             headmask_pipe, "petra_hmasked.out_file",
-            skullmask_pipe, "inputnode.headmasked_petra")
+            skullmask_pipe, "inputnode.headmasked_img")
 
         skull_petra_pipe.connect(
             headmask_pipe, "petra_head_erode.out_file",
@@ -1124,7 +1124,7 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
         # TODO
         skull_petra_pipe.connect(
             align_petra_on_stereo, "out_file",
-            headmask_pipe, "inputnode.reoriented_petra")
+            headmask_pipe, "inputnode.stereo_img")
 
         skull_petra_pipe.connect(
             inputnode, "indiv_params",
@@ -1148,7 +1148,7 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
 
         skull_petra_pipe.connect(
             headmask_pipe, "petra_hmasked.out_file",
-            skullmask_pipe, "inputnode.headmasked_petra")
+            skullmask_pipe, "inputnode.headmasked_img")
 
         skull_petra_pipe.connect(
             headmask_pipe, "petra_head_erode.out_file",
@@ -1332,7 +1332,7 @@ def create_skull_megre_pipe(name="skull_megre_pipe", params={}):
 
         skull_megre_pipe.connect(
             align_megre_on_stereo_T1,  "out_file",
-            headmask_pipe, "inputnode.reoriented_petra")
+            headmask_pipe, "inputnode.stereo_img")
 
         skull_megre_pipe.connect(inputnode, "indiv_params",
                                  headmask_pipe, "inputnode.indiv_params")
@@ -1355,7 +1355,7 @@ def create_skull_megre_pipe(name="skull_megre_pipe", params={}):
 
         skull_megre_pipe.connect(
             headmask_pipe, "megre_hmasked.out_file",
-            skullmask_pipe, "inputnode.headmasked_petra")
+            skullmask_pipe, "inputnode.headmasked_img")
 
         skull_megre_pipe.connect(
             headmask_pipe, "megre_head_erode.out_file",
