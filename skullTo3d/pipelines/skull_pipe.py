@@ -735,7 +735,7 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
 
     # Creating headmask_t1_pipe
     if "headmask_t1_pipe" in params:
-        headmask_t1_pipe = _create_head_mask_pipe(
+        headmask_t1_pipe = _create_head_mask(
             name="headmask_t1_pipe",
             params=params["headmask_t1_pipe"],
             prefix="t1_")
@@ -768,7 +768,7 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
 
     # Creating skullmask_t1_pipe
     if "skullmask_t1_pipe" in params:
-        skullmask_t1_pipe = _create_skull_mask_pipe(
+        skullmask_t1_pipe = _create_skull_mask(
             name="skullmask_t1_pipe",
             params=params["skullmask_t1_pipe"],
             prefix="t1_")
