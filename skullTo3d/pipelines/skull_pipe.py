@@ -425,7 +425,7 @@ def _create_skull_mask(name="skullmask_pipe", params={}, prefix = ""):
         IsoSurface(),
         name=prefix+"mesh_rawskull")
 
-    skullmask_t1_pipe.connect(
+    skullmask_pipe.connect(
         skin_masked, "out_file",
         mesh_rawskull, "nii_file")
 
