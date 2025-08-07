@@ -1176,6 +1176,16 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
     skull_petra_pipe.connect(skullmask_pipe, "petra_skull_erode.out_file",
                              outputnode, "petra_skull_mask")
 
+    if "petra_skull_fov" in params["skullmask_petra_pipe"].keys():
+
+        skull_petra_pipe.connect(
+            skullmask_pipe, "petra_skull_fov.out_roi",
+            outputnode, "robustpetra_skull_mask")
+
+        skull_petra_pipe.connect(
+            skullmask_pipe, "petra_mesh_robustskull.stl_file",
+            outputnode, "robustpetra_skull_stl")
+
     # ## skull mask
     if "fullskullmask_petra_pipe" in params:
 
@@ -1197,16 +1207,6 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
 
     else:
         return skull_petra_pipe
-
-    if "petra_skull_fov" in params.keys():
-
-        skull_petra_pipe.connect(
-            skullmask_pipe, "petra_skull_fov.out_roi",
-            outputnode, "robustpetra_skull_mask")
-
-        skull_petra_pipe.connect(
-            skullmask_pipe, "petra_mesh_robustskull.stl_file",
-            outputnode, "robustpetra_skull_stl")
 
     # outputnode
     skull_petra_pipe.connect(fullskullmask_pipe,
@@ -1250,8 +1250,10 @@ def create_skull_megre_pipe(name="skull_megre_pipe", params={}):
     outputnode = pe.Node(
         niu.IdentityInterface(
             fields=["stereo_megre",
-                    "megre_head_mask", "megre_head_stl",
-                    "megre_skull_stl", "megre_skull_mask",
+                    "megre_head_mask",
+                    "megre_head_stl",
+                    "megre_skull_stl",
+                    "megre_skull_mask",
                     "megre_fullskull_stl",
                     "megre_fullskull_mask",
                     "megre_fullskull_crop_stl",
@@ -1385,7 +1387,7 @@ def create_skull_megre_pipe(name="skull_megre_pipe", params={}):
     skull_megre_pipe.connect(skullmask_pipe, "megre_mesh_skull.stl_file",
                              outputnode, "megre_skull_stl")
 
-    if "megre_skull_fov" in params.keys():
+    if "megre_skull_fov" in params["skullmask_megre_pipe"].keys():
 
         skull_megre_pipe.connect(
             skullmask_pipe, "megre_skull_fov.out_roi",
