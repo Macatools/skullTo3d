@@ -1732,23 +1732,6 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
     else:
         return skull_petra_pipe
 
-    # outputnode
-    skull_petra_pipe.connect(fullskullmask_pipe,
-                             "fullskull_erode.out_file",
-                             outputnode, "petra_fullskull_mask")
-
-    skull_petra_pipe.connect(fullskullmask_pipe,
-                             "mesh_fullskull.stl_file",
-                             outputnode, "petra_fullskull_stl")
-
-    skull_petra_pipe.connect(fullskullmask_pipe,
-                             "fullskull_crop.out_file",
-                             outputnode, "petra_fullskull_crop_mask")
-
-    skull_petra_pipe.connect(fullskullmask_pipe,
-                             "mesh_fullskull_crop.stl_file",
-                             outputnode, "petra_fullskull_crop_stl")
-
     if "petra_skull_fov" in params.keys():
 
         skull_petra_pipe.connect(
@@ -1758,6 +1741,23 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
         skull_petra_pipe.connect(
             skullmask_pipe, "mesh_robustpetra_skull.stl_file",
             outputnode, "robustpetra_skull_stl")
+
+    # outputnode
+    skull_petra_pipe.connect(fullskullmask_pipe,
+                              "petra_fullskull_erode.out_file",
+                             outputnode, "petra_fullskull_mask")
+
+    skull_petra_pipe.connect(fullskullmask_pipe,
+                              "petra_mesh_fullskull.stl_file",
+                             outputnode, "petra_fullskull_stl")
+
+    skull_petra_pipe.connect(fullskullmask_pipe,
+                             "petra_fullskull_crop.out_file",
+                             outputnode, "petra_fullskull_crop_mask")
+
+    skull_petra_pipe.connect(fullskullmask_pipe,
+                             "petra_mesh_fullskull_crop.stl_file",
+                             outputnode, "petra_fullskull_crop_stl")
 
     return skull_petra_pipe
 
