@@ -1205,7 +1205,7 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
             outputnode, "robustpetra_skull_mask")
 
         skull_petra_pipe.connect(
-            skullmask_pipe, "mesh_robustpetra_skull.stl_file",
+            skullmask_pipe, "petra_mesh_robustskull.stl_file",
             outputnode, "robustpetra_skull_stl")
 
     # outputnode
@@ -1382,6 +1382,16 @@ def create_skull_megre_pipe(name="skull_megre_pipe", params={}):
 
     skull_megre_pipe.connect(skullmask_pipe, "megre_mesh_skull.stl_file",
                              outputnode, "megre_skull_stl")
+
+    if "megre_skull_fov" in params.keys():
+
+        skull_megre_pipe.connect(
+            skullmask_pipe, "megre_skull_fov.out_roi",
+            outputnode, "robustmegre_skull_mask")
+
+        skull_megre_pipe.connect(
+            skullmask_pipe, "megre_mesh_robustskull.stl_file",
+            outputnode, "robustmegre_skull_stl")
 
     # ## skull mask
     if "fullskullmask_megre_pipe" in params:
