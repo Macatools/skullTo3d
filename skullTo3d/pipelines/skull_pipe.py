@@ -53,20 +53,20 @@ def _create_head_mask(name="headmask_pipe", params={}, prefix = ""):
         name='inputnode'
     )
 
-    if prefix + "itk_debias" in params.keys():
+    if prefix + "itkdebias" in params.keys():
         # Adding early debias
-        itk_debias = pe.Node(
+        itkdebias = pe.Node(
                 interface=niu.Function(
                     input_names=["img_file"],
                     output_names=["cor_img_file",
                                   "bias_img_file",
                                   "mask_file"],
                     function=itk_debias),
-                name=prefix + "itk_debias")
+                name=prefix + "itkdebias")
 
         headmask_pipe.connect(
             inputnode, "reoriented_petra",
-            itk_debias, "img_file")
+            itkdebias, "img_file")
 
     # ### head mask
     # headmask_threshold
@@ -77,10 +77,10 @@ def _create_head_mask(name="headmask_pipe", params={}, prefix = ""):
             params=parse_key(params, 'head_mask_thr'),
             name=prefix + "head_mask_thr")
 
-        if prefix + "itk_debias" in params.keys():
+        if prefix + "itkdebias" in params.keys():
 
             headmask_pipe.connect(
-                itk_debias, "cor_img_file",
+                itkdebias, "cor_img_file",
                 head_mask_thr, "in_file")
         else:
 
@@ -103,10 +103,10 @@ def _create_head_mask(name="headmask_pipe", params={}, prefix = ""):
                 params=parse_key(params, prefix + "head_auto_mask"),
                 name=prefix + "head_auto_mask")
 
-        if prefix + "itk_debias" in params.keys():
+        if prefix + "itkdebias" in params.keys():
 
             headmask_pipe.connect(
-                itk_debias, "cor_img_file",
+                itkdebias, "cor_img_file",
                 head_auto_mask, "img_file")
         else:
 
@@ -127,10 +127,10 @@ def _create_head_mask(name="headmask_pipe", params={}, prefix = ""):
                     function=apply_li_thresh),
                 name=prefix + "head_li_mask")
 
-        if prefix + "itk_debias" in params.keys():
+        if prefix + "itkdebias" in params.keys():
 
             headmask_pipe.connect(
-                itk_debias, "cor_img_file",
+                itkdebias, "cor_img_file",
                 head_li_mask, "orig_img_file")
         else:
 
@@ -277,7 +277,7 @@ def _create_head_mask(name="headmask_pipe", params={}, prefix = ""):
     if prefix + "itk_debias" in params.keys():
 
         headmask_pipe.connect(
-            itk_debias, "cor_img_file",
+            itkdebias, "cor_img_file",
             hmasked, "in_file")
     else:
 
