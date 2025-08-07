@@ -825,6 +825,7 @@ def create_skull_t1_pipe(name="skull_t1_pipe", params={}):
                 outputnode, "t1_rawskull_mask")
 
     if "t1_skull_fov" in params["skullmask_t1_pipe"].keys():
+
         skull_t1_pipe.connect(
             skullmask_t1_pipe, "t1_skull_fov.out_roi",
             outputnode, "robustt1_skull_mask")
