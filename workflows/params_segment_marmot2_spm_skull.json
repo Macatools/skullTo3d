@@ -134,20 +134,20 @@
         },
         "fullskullmask_t1_pipe":
         {
-            "brainmask_expand":
+            "t1_brainmask_expand":
             {
                 "operation": "modal",
                 "kernel_shape": "boxv",
                 "kernel_size": 11
             },
 
-            "fullskull_dilate":
+            "t1_fullskull_dilate":
             {
                 "operation": "modal",
                 "kernel_shape": "boxv",
                 "kernel_size": 7.0
             },
-            "fullskull_erode":
+            "t1_fullskull_erode":
             {
                 "kernel_shape": "boxv",
                 "kernel_size": 7.0
