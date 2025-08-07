@@ -1715,7 +1715,7 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
 
         fullskullmask_pipe = _create_fullskull_mask(
             name="fullskullmask_petra_pipe",
-            params=params["fullskullmask_petra_pipe"], suffix = "petra")
+            params=params["fullskullmask_petra_pipe"], prefix = "petra_")
 
         skull_petra_pipe.connect(
             skullmask_pipe, "petra_skull_erode.out_file",
