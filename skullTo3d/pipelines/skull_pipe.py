@@ -1669,13 +1669,17 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
             # align_ct_on_T1
             aladin_CT_on_T1 = pe.Node(
                 interface=RegAladin(),
-                name="align_ct_on_T1")
+                name="aladin_CT_on_T1")
 
             aladin_CT_on_T1.inputs.rig_only_flag = True
 
             skull_ct_pipe.connect(
                 crop_CT, "roi_file",
                 aladin_CT_on_T1, "flo_file")
+
+            skull_ct_pipe.connect(
+                inputnode, "native_T1",
+                aladin_CT_on_T1, "ref_file")
 
         else:
 
@@ -1714,7 +1718,7 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
 
         if "aladin_CT_on_T1" in params:
             skull_ct_pipe.connect(
-                aladin_CT_on_T1, 'out_file',
+                aladin_CT_on_T1, 'res_file',
                 outputnode, "stereo_ct")
         else:
 
@@ -1737,14 +1741,9 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
 
         align_ct_on_T1.inputs.rig_only_flag = True
 
-        if "crop_CT" in params:
-            skull_ct_pipe.connect(
-                crop_CT, "roi_file",
-                align_ct_on_T1, "flo_file")
-        else:
-            skull_ct_pipe.connect(
-                inputnode, 'ct',
-                align_ct_on_T1, "flo_file")
+        skull_ct_pipe.connect(
+            inputnode, 'ct',
+            align_ct_on_T1, "flo_file")
 
         skull_ct_pipe.connect(
             inputnode, "native_T1",
@@ -1806,7 +1805,7 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
             if "aladin_CT_on_T1" in params:
 
                 skull_ct_pipe.connect(
-                    aladin_CT_on_T1, 'out_file',
+                    aladin_CT_on_T1, 'res_file',
                     skullmask_ct_pipe, "inputnode.realigned_ct")
             else:
                 if "align_ct_on_T1_2" in params:
