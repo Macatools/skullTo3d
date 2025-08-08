@@ -328,7 +328,7 @@
             {
                 "operation": "modal",
                 "kernel_shape": "boxv",
-                "kernel_size": 11
+                "kernel_size": 15
             },
 
             "megre_fullskull_dilate":
