@@ -1804,15 +1804,21 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
 
         if "crop_CT" in params:
 
-            if "align_ct_on_T1_2" in params:
-                skull_ct_pipe.connect(
-                    align_ct_on_T1_2, 'out_file',
-                    skullmask_ct_pipe, "inputnode.realigned_ct")
+            if "aladin_CT_on_T1" in params:
 
-            else:
                 skull_ct_pipe.connect(
-                    align_ct_on_T1, 'out_file',
+                    aladin_CT_on_T1, 'out_file',
                     skullmask_ct_pipe, "inputnode.realigned_ct")
+            else
+                if "align_ct_on_T1_2" in params:
+                    skull_ct_pipe.connect(
+                        align_ct_on_T1_2, 'out_file',
+                        skullmask_ct_pipe, "inputnode.realigned_ct")
+
+                else:
+                    skull_ct_pipe.connect(
+                        align_ct_on_T1, 'out_file',
+                        skullmask_ct_pipe, "inputnode.realigned_ct")
         else:
 
             skull_ct_pipe.connect(align_ct_on_stereo_T1, "out_file",
