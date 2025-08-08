@@ -1681,6 +1681,38 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
                 inputnode, "native_T1",
                 aladin_CT_on_T1, "ref_file")
 
+
+            # aladin_CT_on_T1_2
+            aladin_CT_on_T1_2 = pe.Node(
+                interface=RegAladin(),
+                name="aladin_CT_on_T1_2")
+
+            aladin_CT_on_T1_2.inputs.rig_only_flag = True
+
+            skull_ct_pipe.connect(
+                aladin_CT_on_T1, "res_file",
+                aladin_CT_on_T1_2, "flo_file")
+
+            skull_ct_pipe.connect(
+                inputnode, "native_T1",
+                aladin_CT_on_T1_2, "ref_file")
+
+            # aladin_CT_on_T1_3
+            aladin_CT_on_T1_3 = pe.Node(
+                interface=RegAladin(),
+                name="aladin_CT_on_T1_3")
+
+            aladin_CT_on_T1_3.inputs.rig_only_flag = True
+
+            skull_ct_pipe.connect(
+                aladin_CT_on_T1_2, "res_file",
+                aladin_CT_on_T1_3, "flo_file")
+
+            skull_ct_pipe.connect(
+                inputnode, "native_T1",
+                aladin_CT_on_T1_3, "ref_file")
+
+
         else:
 
             align_ct_on_T1 = pe.Node(fsl.FLIRT(), name="align_ct_on_T1")
@@ -1805,7 +1837,7 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
             if "aladin_CT_on_T1" in params:
 
                 skull_ct_pipe.connect(
-                    aladin_CT_on_T1, 'res_file',
+                    aladin_CT_on_T1_3, 'res_file',
                     skullmask_ct_pipe, "inputnode.realigned_ct")
             else:
                 if "align_ct_on_T1_2" in params:
