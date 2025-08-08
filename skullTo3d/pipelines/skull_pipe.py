@@ -1750,7 +1750,7 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
 
         if "aladin_CT_on_T1" in params:
             skull_ct_pipe.connect(
-                aladin_CT_on_T1, 'res_file',
+                aladin_CT_on_T1_3, 'res_file',
                 outputnode, "stereo_ct")
         else:
 
