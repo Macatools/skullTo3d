@@ -1678,7 +1678,7 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
                 aladin_CT_on_T1, "flo_file")
 
             skull_ct_pipe.connect(
-                inputnode, "native_T1",
+                inputnode, "stereo_T1",
                 aladin_CT_on_T1, "ref_file")
 
 
@@ -1694,7 +1694,7 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
                 aladin_CT_on_T1_2, "flo_file")
 
             skull_ct_pipe.connect(
-                inputnode, "native_T1",
+                inputnode, "stereo_T1",
                 aladin_CT_on_T1_2, "ref_file")
 
             # aladin_CT_on_T1_3
@@ -1709,7 +1709,7 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
                 aladin_CT_on_T1_3, "flo_file")
 
             skull_ct_pipe.connect(
-                inputnode, "native_T1",
+                inputnode, "stereo_T1",
                 aladin_CT_on_T1_3, "ref_file")
 
 
