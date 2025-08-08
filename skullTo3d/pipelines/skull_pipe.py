@@ -1664,48 +1664,70 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
         skull_ct_pipe.connect(inputnode, 'ct',
                               crop_CT, 'in_file')
 
-        align_ct_on_T1 = pe.Node(fsl.FLIRT(), name="align_ct_on_T1")
-        align_ct_on_T1.inputs.dof = 6
+        if "aladin_CT_on_T1" in params:
 
-        align_ct_on_T1.inputs.cost = 'normmi'
+        # align_ct_on_T1
+        aladin_CT_on_T1 = pe.Node(
+            interface=RegAladin(),
+            name="align_ct_on_T1")
+
+        aladin_CT_on_T1.inputs.rig_only_flag = True
 
         skull_ct_pipe.connect(
             crop_CT, "roi_file",
-            align_ct_on_T1, 'in_file')
+            aladin_CT_on_T1, "flo_file")
 
-        skull_ct_pipe.connect(
-            inputnode, "stereo_T1",
-            align_ct_on_T1, 'reference')
+        else:
 
-        if "align_ct_on_T1_2" in params:
+            align_ct_on_T1 = pe.Node(fsl.FLIRT(), name="align_ct_on_T1")
+            align_ct_on_T1.inputs.dof = 6
 
-            align_ct_on_T1_2 = pe.Node(fsl.FLIRT(), name="align_ct_on_T1_2")
-            align_ct_on_T1_2.inputs.dof = 6
-
-            align_ct_on_T1_2.inputs.cost = 'normmi'
+            align_ct_on_T1.inputs.cost = 'normmi'
 
             skull_ct_pipe.connect(
                 crop_CT, "roi_file",
-                align_ct_on_T1_2, 'in_file')
+                align_ct_on_T1, 'in_file')
 
             skull_ct_pipe.connect(
                 inputnode, "stereo_T1",
-                align_ct_on_T1_2, 'reference')
+                align_ct_on_T1, 'reference')
 
-            # initial matrix
-            skull_ct_pipe.connect(
-                align_ct_on_T1, "out_matrix_file",
-                align_ct_on_T1_2, 'in_matrix_file')
+            if "align_ct_on_T1_2" in params:
 
-        if "align_ct_on_T1_2" in params:
+                align_ct_on_T1_2 = pe.Node(fsl.FLIRT(), name="align_ct_on_T1_2")
+                align_ct_on_T1_2.inputs.dof = 6
+
+                align_ct_on_T1_2.inputs.cost = 'normmi'
+
+                skull_ct_pipe.connect(
+                    crop_CT, "roi_file",
+                    align_ct_on_T1_2, 'in_file')
+
+                skull_ct_pipe.connect(
+                    inputnode, "stereo_T1",
+                    align_ct_on_T1_2, 'reference')
+
+                # initial matrix
+                skull_ct_pipe.connect(
+                    align_ct_on_T1, "out_matrix_file",
+                    align_ct_on_T1_2, 'in_matrix_file')
+
+        if "aladin_CT_on_T1" in params:
+
             skull_ct_pipe.connect(
-                align_ct_on_T1_2, 'out_file',
+                aladin_CT_on_T1, 'out_file',
                 outputnode, "stereo_ct")
-
         else:
-            skull_ct_pipe.connect(
-                align_ct_on_T1, 'out_file',
-                outputnode, "stereo_ct")
+
+            if "align_ct_on_T1_2" in params:
+                skull_ct_pipe.connect(
+                    align_ct_on_T1_2, 'out_file',
+                    outputnode, "stereo_ct")
+
+            else:
+                skull_ct_pipe.connect(
+                    align_ct_on_T1, 'out_file',
+                    outputnode, "stereo_ct")
 
     else:
 
