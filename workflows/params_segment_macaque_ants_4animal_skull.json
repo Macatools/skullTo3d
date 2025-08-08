@@ -155,7 +155,7 @@
             {
                 "operation": "modal",
                 "kernel_shape": "boxv",
-                "kernel_size": 15
+                "kernel_size": 20
             },
 
             "t1_fullskull_dilate":
@@ -243,7 +243,7 @@
             {
                 "operation": "modal",
                 "kernel_shape": "boxv",
-                "kernel_size": 15
+                "kernel_size": 20
             },
 
             "petra_fullskull_dilate":
@@ -328,7 +328,7 @@
             {
                 "operation": "modal",
                 "kernel_shape": "boxv",
-                "kernel_size": 15
+                "kernel_size": 20
             },
 
             "megre_fullskull_dilate":
