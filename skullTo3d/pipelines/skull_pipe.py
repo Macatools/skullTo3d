@@ -983,7 +983,7 @@ def create_autonomous_skull_petra_pipe(name="skull_petra_pipe", params={}):
     skull_petra_pipe.connect(headmask_pipe, "petra_head_erode.out_file",
                              outputnode, "petra_head_mask")
 
-    skull_petra_pipe.connect(headmask_pipe, "mesh_petra_head.stl_file",
+    skull_petra_pipe.connect(headmask_pipe, "petra_mesh_head.stl_file",
                              outputnode, "petra_head_stl")
 
     # ## skull mask
@@ -1008,7 +1008,7 @@ def create_autonomous_skull_petra_pipe(name="skull_petra_pipe", params={}):
     else:
         return skull_petra_pipe
 
-    skull_petra_pipe.connect(skullmask_pipe, "mesh_petra_skull.stl_file",
+    skull_petra_pipe.connect(skullmask_pipe, "petra_mesh_skull.stl_file",
                              outputnode, "petra_skull_stl")
 
     skull_petra_pipe.connect(skullmask_pipe, "petra_skull_erode.out_file",
