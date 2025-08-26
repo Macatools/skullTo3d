@@ -317,14 +317,6 @@
     {
         &quot;headmask_t1_pipe&quot;:
         {
-            &quot;t1_head_auto_mask&quot;:
-            {
-                &quot;kmeans&quot;: true,
-                &quot;operation&quot;: &quot;lower&quot;,
-                &quot;index&quot;: 2,
-                &quot;sample_bins&quot;: 30,
-                &quot;distance&quot;: 10
-            },
             &quot;t1_head_dilate&quot;:
             {
                 &quot;operation&quot;: &quot;modal&quot;,
@@ -381,20 +373,20 @@
 
         &quot;fullskullmask_t1_pipe&quot;:
         {
-            &quot;brainmask_expand&quot;:
+            &quot;t1_brainmask_expand&quot;:
             {
                 &quot;operation&quot;: &quot;modal&quot;,
                 &quot;kernel_shape&quot;: &quot;boxv&quot;,
-                &quot;kernel_size&quot;: 11
+                &quot;kernel_size&quot;: 15
             },
 
-            &quot;fullskull_dilate&quot;:
+            &quot;t1_fullskull_dilate&quot;:
             {
                 &quot;operation&quot;: &quot;modal&quot;,
                 &quot;kernel_shape&quot;: &quot;boxv&quot;,
                 &quot;kernel_size&quot;: 7.0
             },
-            &quot;fullskull_erode&quot;:
+            &quot;t1_fullskull_erode&quot;:
             {
                 &quot;kernel_shape&quot;: &quot;boxv&quot;,
                 &quot;kernel_size&quot;: 7.0
@@ -469,20 +461,105 @@
 
         &quot;fullskullmask_petra_pipe&quot;:
         {
-            &quot;brainmask_expand&quot;:
+            &quot;petra_brainmask_expand&quot;:
             {
                 &quot;operation&quot;: &quot;modal&quot;,
                 &quot;kernel_shape&quot;: &quot;boxv&quot;,
-                &quot;kernel_size&quot;: 11
+                &quot;kernel_size&quot;: 15.0
             },
 
-            &quot;fullskull_dilate&quot;:
+            &quot;petra_fullskull_dilate&quot;:
             {
                 &quot;operation&quot;: &quot;modal&quot;,
                 &quot;kernel_shape&quot;: &quot;boxv&quot;,
                 &quot;kernel_size&quot;: 7.0
             },
-            &quot;fullskull_erode&quot;:
+            &quot;petra_fullskull_erode&quot;:
+            {
+                &quot;kernel_shape&quot;: &quot;boxv&quot;,
+                &quot;kernel_size&quot;: 7.0
+            }
+        }
+    },
+
+    &quot;skull_megre_pipe&quot;:
+    {
+        &quot;headmask_megre_pipe&quot;:
+        {
+
+            &quot;megre_head_dilate&quot;:
+            {
+                &quot;operation&quot;: &quot;modal&quot;,
+                &quot;kernel_shape&quot;: &quot;boxv&quot;,
+                &quot;kernel_size&quot;: 7.0
+            },
+            &quot;megre_head_erode&quot;:
+            {
+                &quot;kernel_shape&quot;: &quot;boxv&quot;,
+                &quot;kernel_size&quot;: 7.0
+            }
+        },
+
+        &quot;skullmask_megre_pipe&quot;:
+        {
+            &quot;megre_fast&quot;:
+            {
+                &quot;args&quot;: &quot; -l 10&quot;,
+                &quot;img_type&quot;: 3,
+                &quot;output_biascorrected&quot;: true,
+                &quot;output_biasfield&quot;: true
+            },
+            &quot;megre_head_erode_skin&quot;:
+            {
+                &quot;kernel_shape&quot;: &quot;boxv&quot;,
+                &quot;kernel_size&quot;: 9.0
+            },
+
+            &quot;megre_skull_gcc_erode&quot;:
+            {
+                &quot;kernel_shape&quot;: &quot;boxv&quot;,
+                &quot;kernel_size&quot;: 1.0
+            },
+            &quot;megre_skull_gcc_dilate&quot;:
+            {
+                &quot;operation&quot;: &quot;modal&quot;,
+                &quot;kernel_shape&quot;: &quot;boxv&quot;,
+                &quot;kernel_size&quot;: 1.0
+            },
+
+            &quot;megre_skull_dilate&quot;:
+            {
+                &quot;operation&quot;: &quot;modal&quot;,
+                &quot;kernel_shape&quot;: &quot;boxv&quot;,
+                &quot;kernel_size&quot;: 3.0
+            },
+            &quot;megre_skull_erode&quot;:
+            {
+                &quot;kernel_shape&quot;: &quot;boxv&quot;,
+                &quot;kernel_size&quot;: 3.0
+            },
+            &quot;megre_skull_fov&quot;:
+            {
+                &quot;brainsize&quot;: 45
+            }
+        },
+
+        &quot;fullskullmask_megre_pipe&quot;:
+        {
+            &quot;megre_brainmask_expand&quot;:
+            {
+                &quot;operation&quot;: &quot;modal&quot;,
+                &quot;kernel_shape&quot;: &quot;boxv&quot;,
+                &quot;kernel_size&quot;: 15.0
+            },
+
+            &quot;megre_fullskull_dilate&quot;:
+            {
+                &quot;operation&quot;: &quot;modal&quot;,
+                &quot;kernel_shape&quot;: &quot;boxv&quot;,
+                &quot;kernel_size&quot;: 7.0
+            },
+            &quot;megre_fullskull_erode&quot;:
             {
                 &quot;kernel_shape&quot;: &quot;boxv&quot;,
                 &quot;kernel_size&quot;: 7.0
@@ -958,7 +1035,7 @@
       
     </p>
     <p>
-        &copy; Copyright 2025, SkullTo3d Developers (macatools). Last updated on 2025-08-06.<br/>
+        &copy; Copyright 2025, SkullTo3d Developers (macatools). Last updated on 2025-08-26.<br/>
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 8.1.3.<br/>
     </p>
   </div>
