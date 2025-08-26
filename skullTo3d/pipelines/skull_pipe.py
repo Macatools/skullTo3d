@@ -41,7 +41,7 @@ from macapype.nodes.prepare import apply_li_thresh
 from macapype.utils.misc import parse_key, get_elem
 
 
-def _create_head_mask(name="headmask_pipe", params={}, prefix = ""):
+def _create_head_mask(name="headmask_pipe", params={}, prefix=""):
 
     # creating pipeline
     headmask_pipe = pe.Workflow(name=name)
@@ -139,8 +139,9 @@ def _create_head_mask(name="headmask_pipe", params={}, prefix = ""):
                 head_li_mask, "orig_img_file")
 
     # head_mask_binary
-    head_mask_binary = pe.Node(interface=UnaryMaths(),
-                                     name=prefix + "head_mask_binary")
+    head_mask_binary = pe.Node(
+        interface=UnaryMaths(),
+        name=prefix + "head_mask_binary")
 
     head_mask_binary.inputs.operation = 'bin'
     head_mask_binary.inputs.output_type = 'NIFTI_GZ'
@@ -160,7 +161,8 @@ def _create_head_mask(name="headmask_pipe", params={}, prefix = ""):
             head_li_mask, "lithr_img_file",
             head_mask_binary, "in_file")
 
-    if prefix + "head_gcc_erode" in params and prefix + "head_gcc_dilate" in params:
+    if prefix + "head_gcc_erode" in params and \
+            prefix + "head_gcc_dilate" in params:
 
         # #### gcc erode gcc and dilate back
         # head_gcc_erode
@@ -174,7 +176,8 @@ def _create_head_mask(name="headmask_pipe", params={}, prefix = ""):
             head_gcc_erode, "in_file")
 
         headmask_pipe.connect(
-                inputnode, ('indiv_params', parse_key, prefix + "head_gcc_erode"),
+                inputnode,
+                ('indiv_params', parse_key, prefix + "head_gcc_erode"),
                 head_gcc_erode, "indiv_params")
 
         # head_mask_binary_clean1
@@ -223,7 +226,9 @@ def _create_head_mask(name="headmask_pipe", params={}, prefix = ""):
         params=parse_key(params, prefix + "head_dilate"),
         name=prefix + "head_dilate")
 
-    if prefix + "head_gcc_erode" in params and prefix + "head_gcc_dilate" in params:
+    if prefix + "head_gcc_erode" in params and \
+            prefix + "head_gcc_dilate" in params:
+
         headmask_pipe.connect(
             head_gcc_dilate, "out_file",
             head_dilate, "in_file")
@@ -238,7 +243,7 @@ def _create_head_mask(name="headmask_pipe", params={}, prefix = ""):
 
     # head_fill
     head_fill = pe.Node(interface=UnaryMaths(),
-                              name=prefix + "head_fill")
+                        name=prefix + "head_fill")
 
     head_fill.inputs.operation = 'fillh'
 
@@ -248,8 +253,8 @@ def _create_head_mask(name="headmask_pipe", params={}, prefix = ""):
 
     # head_erode ####### [okey][json]
     head_erode = NodeParams(interface=ErodeImage(),
-                                  params=parse_key(params, prefix + "head_erode"),
-                                  name=prefix + "head_erode")
+                            params=parse_key(params, prefix + "head_erode"),
+                            name=prefix + "head_erode")
 
     headmask_pipe.connect(
         head_fill, "out_file",
@@ -272,10 +277,9 @@ def _create_head_mask(name="headmask_pipe", params={}, prefix = ""):
     # ### Masking with head mask
     # hmasked ####### [okey]
     hmasked = pe.Node(interface=ApplyMask(),
-                            name=prefix + "hmasked")
+                      name=prefix + "hmasked")
 
     if prefix + "itkdebias" in params.keys():
-
         headmask_pipe.connect(
             itkdebias, "cor_img_file",
             hmasked, "in_file")
@@ -292,7 +296,7 @@ def _create_head_mask(name="headmask_pipe", params={}, prefix = ""):
     return headmask_pipe
 
 
-def _create_skull_mask(name="skullmask_pipe", params={}, prefix = ""):
+def _create_skull_mask(name="skullmask_pipe", params={}, prefix=""):
 
     # creating pipeline
     skullmask_pipe = pe.Workflow(name=name)
@@ -309,8 +313,8 @@ def _create_skull_mask(name="skullmask_pipe", params={}, prefix = ""):
 
         # N4 intensity normalization over T1
         denoise = NodeParams(DenoiseImage(),
-                                   params=parse_key(params, prefix + "denoise"),
-                                   name='denoise')
+                             params=parse_key(params, prefix + "denoise"),
+                             name='denoise')
 
         skullmask_pipe.connect(
             inputnode, "headmasked_img",
@@ -327,8 +331,8 @@ def _create_skull_mask(name="skullmask_pipe", params={}, prefix = ""):
     if prefix + "fast" in params.keys():
 
         fast = NodeParams(interface=FAST(),
-                                params=parse_key(params, prefix + "fast"),
-                                name=prefix + "fast")
+                          params=parse_key(params, prefix + "fast"),
+                          name=prefix + "fast")
 
         if prefix + "denoise" in params.keys():
             skullmask_pipe.connect(
@@ -399,7 +403,7 @@ def _create_skull_mask(name="skullmask_pipe", params={}, prefix = ""):
     # ### Masking with head mask or skin_erode_head_mask
     # skin_masked ####### [okey]
     skin_masked = pe.Node(interface=ApplyMask(),
-                                name=prefix + "skin_masked")
+                          name=prefix + "skin_masked")
 
     if prefix + "head_erode_skin" in params.keys():
         skullmask_pipe.connect(
@@ -476,7 +480,8 @@ def _create_skull_mask(name="skullmask_pipe", params={}, prefix = ""):
             skull_gcc_dilate, "in_file")
 
         skullmask_pipe.connect(
-            inputnode, ('indiv_params', parse_key, prefix + "skull_gcc_dilate"),
+            inputnode,
+            ('indiv_params', parse_key, prefix + "skull_gcc_dilate"),
             skull_gcc_dilate, "indiv_params")
 
     else:
@@ -521,7 +526,7 @@ def _create_skull_mask(name="skullmask_pipe", params={}, prefix = ""):
 
     # skull_fill #######  [okey]
     skull_fill = pe.Node(interface=UnaryMaths(),
-                               name=prefix + "skull_fill")
+                         name=prefix + "skull_fill")
 
     skull_fill.inputs.operation = 'fillh'
 
@@ -591,7 +596,7 @@ def _create_skull_mask(name="skullmask_pipe", params={}, prefix = ""):
     return skullmask_pipe
 
 
-def _create_fullskull_mask(name="fullskull_pipe", params={}, prefix = ""):
+def _create_fullskull_mask(name="fullskull_pipe", params={}, prefix=""):
 
     print("Running fullskull_pipe with:", params)
     # Creating pipeline
@@ -621,7 +626,7 @@ def _create_fullskull_mask(name="fullskull_pipe", params={}, prefix = ""):
     # fullskull_dilate ####### [okey][json]
     brainmask_expand = NodeParams(
         interface=DilateImage(),
-        params=parse_key(params,prefix + "brainmask_expand"),
+        params=parse_key(params, prefix + "brainmask_expand"),
         name=prefix + "brainmask_expand")
 
     fullskull_pipe.connect(
@@ -951,11 +956,11 @@ def create_autonomous_skull_petra_pipe(name="skull_petra_pipe", params={}):
     # ## headmask
     if "headmask_petra_pipe" in params:
 
-        headmask_pipe = _create_petra_head_mask(
+        headmask_pipe = _create_head_mask(
             name="headmask_petra_pipe",
-            params=params["headmask_petra_pipe"])
-        # TODO
+            params=params["headmask_petra_pipe"], prefix="petra_")
 
+        # TODO
         if "crop_petra" in params:
             skull_petra_pipe.connect(
                 crop_petra, "out_file",
@@ -984,9 +989,9 @@ def create_autonomous_skull_petra_pipe(name="skull_petra_pipe", params={}):
     # ## skull mask
     if "skullmask_petra_pipe" in params:
 
-        skullmask_pipe = _create_petra_skull_mask(
+        skullmask_pipe = _create_skull_mask(
             name="skullmask_petra_pipe",
-            params=params["skullmask_petra_pipe"])
+            params=params["skullmask_petra_pipe"], prefix="petra_")
 
         skull_petra_pipe.connect(
             headmask_pipe, "petra_hmasked.out_file",
@@ -1133,7 +1138,7 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
 
         headmask_pipe = _create_head_mask(
             name="headmask_petra_pipe",
-            params=params["headmask_petra_pipe"], prefix = "petra_")
+            params=params["headmask_petra_pipe"], prefix="petra_")
         # TODO
         skull_petra_pipe.connect(
             align_petra_on_stereo, "out_file",
@@ -1157,7 +1162,7 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
 
         skullmask_pipe = _create_skull_mask(
             name="skullmask_petra_pipe",
-            params=params["skullmask_petra_pipe"], prefix = "petra_")
+            params=params["skullmask_petra_pipe"], prefix="petra_")
 
         skull_petra_pipe.connect(
             headmask_pipe, "petra_hmasked.out_file",
@@ -1195,7 +1200,8 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
 
         fullskullmask_pipe = _create_fullskull_mask(
             name="fullskullmask_petra_pipe",
-            params=params["fullskullmask_petra_pipe"], prefix = "petra_")
+            params=params["fullskullmask_petra_pipe"],
+            prefix="petra_")
 
         skull_petra_pipe.connect(
             skullmask_pipe, "petra_skull_erode.out_file",
@@ -1214,11 +1220,11 @@ def create_skull_petra_pipe(name="skull_petra_pipe", params={}):
 
     # outputnode
     skull_petra_pipe.connect(fullskullmask_pipe,
-                              "petra_fullskull_erode.out_file",
+                             "petra_fullskull_erode.out_file",
                              outputnode, "petra_fullskull_mask")
 
     skull_petra_pipe.connect(fullskullmask_pipe,
-                              "petra_mesh_fullskull.stl_file",
+                             "petra_mesh_fullskull.stl_file",
                              outputnode, "petra_fullskull_stl")
 
     skull_petra_pipe.connect(fullskullmask_pipe,
@@ -1345,7 +1351,8 @@ def create_skull_megre_pipe(name="skull_megre_pipe", params={}):
 
         headmask_pipe = _create_head_mask(
             name="headmask_megre_pipe",
-            params=params["headmask_megre_pipe"], prefix = "megre_")
+            params=params["headmask_megre_pipe"],
+            prefix="megre_")
 
         skull_megre_pipe.connect(
             align_megre_on_stereo_T1,  "out_file",
@@ -1368,7 +1375,8 @@ def create_skull_megre_pipe(name="skull_megre_pipe", params={}):
 
         skullmask_pipe = _create_skull_mask(
             name="skullmask_megre_pipe",
-            params=params["skullmask_megre_pipe"], prefix = "megre_")
+            params=params["skullmask_megre_pipe"],
+            prefix="megre_")
 
         skull_megre_pipe.connect(
             headmask_pipe, "megre_hmasked.out_file",
@@ -1424,10 +1432,12 @@ def create_skull_megre_pipe(name="skull_megre_pipe", params={}):
         return skull_megre_pipe
 
     # outputnode
-    skull_megre_pipe.connect(fullskullmask_pipe, "megre_fullskull_erode.out_file",
+    skull_megre_pipe.connect(fullskullmask_pipe,
+                             "megre_fullskull_erode.out_file",
                              outputnode, "megre_fullskull_mask")
 
-    skull_megre_pipe.connect(fullskullmask_pipe, "megre_mesh_fullskull.stl_file",
+    skull_megre_pipe.connect(fullskullmask_pipe,
+                             "megre_mesh_fullskull.stl_file",
                              outputnode, "megre_fullskull_stl")
 
     skull_megre_pipe.connect(fullskullmask_pipe,
@@ -1684,7 +1694,6 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
                 inputnode, "stereo_T1",
                 aladin_CT_on_T1, "ref_file")
 
-
             # aladin_CT_on_T1_2
             aladin_CT_on_T1_2 = pe.Node(
                 interface=RegAladin(),
@@ -1715,7 +1724,6 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
                 inputnode, "stereo_T1",
                 aladin_CT_on_T1_3, "ref_file")
 
-
         else:
 
             align_ct_on_T1 = pe.Node(fsl.FLIRT(), name="align_ct_on_T1")
@@ -1733,7 +1741,8 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
 
             if "align_ct_on_T1_2" in params:
 
-                align_ct_on_T1_2 = pe.Node(fsl.FLIRT(), name="align_ct_on_T1_2")
+                align_ct_on_T1_2 = pe.Node(fsl.FLIRT(),
+                                           name="align_ct_on_T1_2")
                 align_ct_on_T1_2.inputs.dof = 6
 
                 align_ct_on_T1_2.inputs.cost = 'normmi'
