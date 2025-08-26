@@ -631,23 +631,25 @@ def rename_all_skull_t1_derivatives(params, main_workflow,
                 rename_t1_rawskull_mask, 'out_file',
                 datasink, '@t1_rawskull_mask')
 
-            # rename t1_rawskull_stl
-            rename_t1_rawskull_stl = pe.Node(
-                niu.Rename(),
-                name="rename_t1_rawskull_stl")
+            if "t1_mesh_rawskull" in params["skullmask_t1_pipe"].keys():
 
-            rename_t1_rawskull_stl.inputs.format_string = \
-                pref_deriv + "_desc-t1_rawskullmask"
-            rename_t1_rawskull_stl.inputs.parse_string = parse_str
-            rename_t1_rawskull_stl.inputs.keep_ext = True
+                # rename t1_rawskull_stl
+                rename_t1_rawskull_stl = pe.Node(
+                    niu.Rename(),
+                    name="rename_t1_rawskull_stl")
 
-            main_workflow.connect(
-                skull_t1_pipe, 'outputnode.t1_rawskull_stl',
-                rename_t1_rawskull_stl, 'in_file')
+                rename_t1_rawskull_stl.inputs.format_string = \
+                    pref_deriv + "_desc-t1_rawskullmask"
+                rename_t1_rawskull_stl.inputs.parse_string = parse_str
+                rename_t1_rawskull_stl.inputs.keep_ext = True
 
-            main_workflow.connect(
-                rename_t1_rawskull_stl, 'out_file',
-                datasink, '@t1_rawskull_stl')
+                main_workflow.connect(
+                    skull_t1_pipe, 'outputnode.t1_rawskull_stl',
+                    rename_t1_rawskull_stl, 'in_file')
+
+                main_workflow.connect(
+                    rename_t1_rawskull_stl, 'out_file',
+                    datasink, '@t1_rawskull_stl')
 
             if "t1_skull_fov" in params["skull_t1_pipe"]["skullmask_t1_pipe"]:
 
