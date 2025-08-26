@@ -631,7 +631,7 @@ def rename_all_skull_t1_derivatives(params, main_workflow,
                 rename_t1_rawskull_mask, 'out_file',
                 datasink, '@t1_rawskull_mask')
 
-            pss = params["skullmask_t1_pipe"]["skullmask_t1_pipe"]
+            pss = params["skull_t1_pipe"]["skullmask_t1_pipe"]
             if "t1_mesh_rawskull" in pss.keys():
 
                 # rename t1_rawskull_stl
