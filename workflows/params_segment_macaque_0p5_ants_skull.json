@@ -92,6 +92,14 @@
     {
         "headmask_t1_pipe":
         {
+            "t1_head_auto_mask":
+            {
+                "kmeans": true,
+                "operation": "lower",
+                "index": 2,
+                "sample_bins": 30,
+                "distance": 10
+            },
             "t1_head_dilate":
             {
                 "operation": "modal",
@@ -119,17 +127,6 @@
                 "kernel_shape": "boxv",
                 "kernel_size": 9.0
             },
-            "t1_skull_gcc_erode":
-            {
-                "kernel_shape": "boxv",
-                "kernel_size": 5.0
-            },
-            "t1_skull_gcc_dilate":
-            {
-                "operation": "modal",
-                "kernel_shape": "boxv",
-                "kernel_size": 5.0
-            },
             "t1_skull_dilate":
             {
                 "operation": "modal",
@@ -150,20 +147,20 @@
 
         "fullskullmask_t1_pipe":
         {
-            "brainmask_expand":
+            "t1_brainmask_expand":
             {
                 "operation": "modal",
                 "kernel_shape": "boxv",
                 "kernel_size": 11
             },
 
-            "fullskull_dilate":
+            "t1_fullskull_dilate":
             {
                 "operation": "modal",
                 "kernel_shape": "boxv",
                 "kernel_size": 7.0
             },
-            "fullskull_erode":
+            "t1_fullskull_erode":
             {
                 "kernel_shape": "boxv",
                 "kernel_size": 7.0
@@ -174,6 +171,7 @@
     {
         "headmask_petra_pipe":
         {
+
             "petra_head_dilate":
             {
                 "operation": "modal",
@@ -233,20 +231,20 @@
 
         "fullskullmask_petra_pipe":
         {
-            "brainmask_expand":
+            "petra_brainmask_expand":
             {
                 "operation": "modal",
                 "kernel_shape": "boxv",
                 "kernel_size": 11
             },
 
-            "fullskull_dilate":
+            "petra_fullskull_dilate":
             {
                 "operation": "modal",
                 "kernel_shape": "boxv",
                 "kernel_size": 7.0
             },
-            "fullskull_erode":
+            "petra_fullskull_erode":
             {
                 "kernel_shape": "boxv",
                 "kernel_size": 7.0
