@@ -27,16 +27,16 @@ def update_skull_params(ssoft, params):
             if "headmask_megre_pipe" in smp:
 
                 print('deleting headmask_megre_pipe')
-                del spp["headmask_megre_pipe"]
+                del smp["headmask_megre_pipe"]
 
             if "skullmask_megre_pipe" in smp:
 
                 print('deleting skullmask_megre_pipe')
-                del spp["skullmask_megre_pipe"]
+                del smp["skullmask_megre_pipe"]
 
             if "fullskullmask_megre_pipe" in smp:
                 print('deleting fullskullmask_megre_pipe')
-                del spp["fullskullmask_megre_pipe"]
+                del smp["fullskullmask_megre_pipe"]
 
         if "skull_t1_pipe" in params:
             spp = params["skull_t1_pipe"]
@@ -81,11 +81,11 @@ def update_skull_params(ssoft, params):
             if "skullmask_megre_pipe" in smp:
 
                 print('deleting skullmask_megre_pipe')
-                del spp["skullmask_megre_pipe"]
+                del smp["skullmask_megre_pipe"]
 
             if "fullskullmask_megre_pipe" in smp:
                 print('deleting fullskullmask_megre_pipe')
-                del spp["fullskullmask_megre_pipe"]
+                del smp["fullskullmask_megre_pipe"]
 
         if "skull_t1_pipe" in params:
             spp = params["skull_t1_pipe"]
