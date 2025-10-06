@@ -1813,7 +1813,7 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
             name="align_ct_on_stereo_T1")
 
         skull_ct_pipe.connect(
-            align_ct_on_T1_2, 'res_file',
+            aladin_CT_on_T1_2, 'res_file',
             align_ct_on_stereo_T1, "flo_file")
 
         skull_ct_pipe.connect(
