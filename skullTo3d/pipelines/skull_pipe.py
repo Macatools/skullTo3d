@@ -1780,7 +1780,7 @@ def create_skull_ct_pipe(name="skull_ct_pipe", params={}):
         # align_ct_on_T1
         aladin_CT_on_T1 = pe.Node(
             interface=RegAladin(),
-            name="align_ct_on_T1")
+            name="aladin_CT_on_T1")
 
         aladin_CT_on_T1.inputs.rig_only_flag = True
 
