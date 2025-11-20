@@ -112,23 +112,23 @@ def update_skull_params(ssoft, params):
         if "skull_petra_pipe" in params:
             spp = params["skull_petra_pipe"]
 
-            if "skullmask_petra_pipe" in spp:
-                print('deleting skullmask_petra_pipe')
-                del spp["skullmask_petra_pipe"]
+            if "fullskullmask_petra_pipe" in spp:
+                print('deleting fullskullmask_petra_pipe')
+                del spp["fullskullmask_petra_pipe"]
 
         if "skull_megre_pipe" in params:
             smp = params["skull_megre_pipe"]
 
-            if "skullmask_megre_pipe" in smp:
-                print('deleting skullmask_megre_pipe')
-                del smp["skullmask_megre_pipe"]
+            if "fullskullmask_megre_pipe" in smp:
+                print('deleting fullskullmask_megre_pipe')
+                del smp["fullskullmask_megre_pipe"]
 
         if "skull_t1_pipe" in params:
             spp = params["skull_t1_pipe"]
 
-            if "skullmask_t1_pipe" in spp:
-                print('deleting skullmask_t1_pipe')
-                del spp["skullmask_t1_pipe"]
+            if "fullskullmask_t1_pipe" in spp:
+                print('deleting fullskullmask_t1_pipe')
+                del spp["fullskullmask_t1_pipe"]
 
     # if no brain seg mask, removed fullskullmask
     if "noseg" in ssoft or "prep" in ssoft:
