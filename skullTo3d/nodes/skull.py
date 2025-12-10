@@ -142,6 +142,4 @@ def mask_auto_img(img_file, operation, index, nb_bins= 30, num_clusters=3):
                                affine=img_nii.affine)
     nib.save(mask_img, mask_img_file)
 
-    f.close()
-
     return mask_img_file
