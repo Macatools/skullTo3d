@@ -89,11 +89,8 @@
         {
             "t1_head_auto_mask":
             {
-                "kmeans": true,
                 "operation": "lower",
-                "index": 2,
-                "sample_bins": 30,
-                "distance": 10
+                "index": 2
             },
             "t1_head_dilate":
             {
@@ -356,9 +353,6 @@
         {
             "ct_skull_auto_mask":
             {
-                "kmeans": true,
-                "sample_bins": 30,
-                "distance": 10,
                 "operation": "lower",
                 "index": 2
             },
@@ -382,9 +376,6 @@
         {
             "ct_skull_auto_mask":
             {
-                "kmeans": true,
-                "sample_bins": 30,
-                "distance": 10,
                 "operation": "lower",
                 "index": 2
             },

@@ -306,9 +306,6 @@
         {
             "ct_skull_auto_mask":
             {
-                "kmeans": true,
-                "sample_bins": 30,
-                "distance": 10,
                 "operation": "lower",
                 "index": 2
             },

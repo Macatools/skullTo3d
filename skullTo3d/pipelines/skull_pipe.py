@@ -117,7 +117,7 @@ def _create_head_mask(name="headmask_pipe", params={}, prefix=""):
         head_auto_mask = NodeParams(
                 interface=niu.Function(
                     input_names=["img_file", "operation",
-                                 "index", "sample_bins", "distance", "kmeans"],
+                                 "index"],
                     output_names=["mask_img_file"],
                     function=mask_auto_img),
                 params=parse_key(params, prefix + "head_auto_mask"),
@@ -658,7 +658,7 @@ def _create_skullmask_ct_pipe(name="skullmask_ct_pipe", params={}):
         ct_skull_auto_mask = NodeParams(
                 interface=niu.Function(
                     input_names=["img_file", "operation",
-                                 "index", "sample_bins", "distance", "kmeans"],
+                                 "index"],
                     output_names=["mask_img_file"],
                     function=mask_auto_img),
                 params=parse_key(params, "ct_skull_auto_mask"),
