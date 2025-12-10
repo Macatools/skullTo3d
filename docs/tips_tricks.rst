@@ -1,7 +1,9 @@
+:orphan:
+
 .. _tips_tricks:
 
 Tips and tricks
-***************
+_______________
 
 CT images registration to MRI (be it T1w or T2w) can be somehow tricky.
 
