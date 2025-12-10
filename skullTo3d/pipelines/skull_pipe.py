@@ -79,7 +79,6 @@ def _create_head_mask(name="headmask_pipe", params={}, prefix=""):
         fast_debias.inputs.output_biasfield = True
         fast_debias.inputs.img_type = 3
 
-
         headmask_pipe.connect(
             inputnode, "stereo_img",
             fast_debias, "in_files")
