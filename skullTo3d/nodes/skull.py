@@ -1,11 +1,9 @@
-def mask_auto_img(img_file, operation, index, nb_bins= 30, num_clusters=3):
+def mask_auto_img(img_file, operation, index, sample_bins=30, num_clusters=3):
 
     import os
     import numpy as np
     import nibabel as nib
     import matplotlib.pyplot as plt
-
-    from scipy.signal import find_peaks
 
     from sklearn.cluster import KMeans
 
@@ -25,7 +23,7 @@ def mask_auto_img(img_file, operation, index, nb_bins= 30, num_clusters=3):
     print("X max : ", np.max(X))
 
     print("Round X max : ", np.round(np.max(X)))
-    nb_bins = (np.rint((np.max(X) - np.min(X))/30)).astype(int)
+    nb_bins = (np.rint((np.max(X) - np.min(X))/sample_bins)).astype(int)
     print("Nb bins: ", nb_bins)
 
     # Create a histogram
@@ -46,7 +44,6 @@ def mask_auto_img(img_file, operation, index, nb_bins= 30, num_clusters=3):
     assert operation in ["higher", "interval", "lower"], \
         "Error in operation {}".format(operation)
 
-
     with open(os.path.abspath("kmeans.log"), "w+") as g:
 
         g.write("Running Kmeans with : {} {} {}\n".format(
@@ -62,7 +59,7 @@ def mask_auto_img(img_file, operation, index, nb_bins= 30, num_clusters=3):
 
         # Split data into groups based on cluster labels
         groups = [X[cluster_labels == i].flatten()
-                    for i in range(num_clusters)]
+                  for i in range(num_clusters)]
 
         avail_operations = ["lower", "interval", "higher"]
 
@@ -107,8 +104,8 @@ def mask_auto_img(img_file, operation, index, nb_bins= 30, num_clusters=3):
         min_thresh = np.amin(groups[index_sorted[index]])
         max_thresh = np.amax(groups[index_sorted[index]])
 
-        g.write("Min/max mid group : {} {}\n".format(min_thresh,
-                                                        max_thresh))
+        g.write("Min/max mid group : {} {}\n".format(
+            min_thresh, max_thresh))
 
         if operation == "lower":
             g.write("Filtering with lower threshold {}\n".format(min_thresh))
@@ -124,7 +121,7 @@ def mask_auto_img(img_file, operation, index, nb_bins= 30, num_clusters=3):
                     min_thresh, max_thresh))
 
             fiter_array = np.logical_and(min_thresh < img_arr,
-                                            img_arr < max_thresh)
+                                         img_arr < max_thresh)
 
     new_mask_data[fiter_array] = img_arr[fiter_array]
 
@@ -132,7 +129,6 @@ def mask_auto_img(img_file, operation, index, nb_bins= 30, num_clusters=3):
           "After filter: ", np.sum(new_mask_data != 0.0))
 
     # saving mask as nii
-
     path, fname, ext = split_f(img_file)
 
     mask_img_file = os.path.abspath(fname + "_autothresh" + ext)
