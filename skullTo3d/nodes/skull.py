@@ -1,4 +1,4 @@
-def mask_auto_img(img_file, operation, index):
+def mask_auto_img(img_file, operation, index, nb_bins= 30, num_clusters=3):
 
     import os
     import numpy as np
