@@ -97,16 +97,6 @@ def mask_auto_img(img_file, operation, index,
 
     from nipype.utils.filemanip import split_filename as split_f
 
-    log_file = os.path.abspath("local_minima.log")
-
-    f = open(log_file, "w+")
-
-    print("Running local minimas with : kmeans=",
-          kmeans, operation, index, sample_bins, distance)
-
-    f.write("Running local minimas with : kmeans={} {} {} {} {}\n".format(
-        kmeans, operation, index, sample_bins, distance))
-
     img_nii = nib.load(img_file)
     img_arr = np.array(img_nii.dataobj)
 
@@ -124,10 +114,6 @@ def mask_auto_img(img_file, operation, index,
     nb_bins = (np.rint((np.max(X) - np.min(X))/sample_bins)).astype(int)
     print("Nb bins: ", nb_bins)
 
-    f.write("X shape : {}\n".format(X.shape))
-    f.write("X max : {}\n".format(np.round(np.max(X))))
-    f.write("Nb bins: {}\n".format(nb_bins))
-
     # Create a histogram
     hist, bins, _ = plt.hist(X, bins=nb_bins,
                              alpha=0.5, color='b', label='Histogram')
@@ -140,19 +126,6 @@ def mask_auto_img(img_file, operation, index,
     plt.savefig(os.path.abspath('histogram.png'))
     plt.clf()
 
-    # Find local minima in the histogram
-    peaks, _ = find_peaks(-hist, distance=distance)
-    # Use negative histogram for minima
-
-    print("peaks indexes :", peaks)
-
-    print("peak_hist :", hist[peaks])
-    print("peak_bins :", bins[peaks])
-
-    f.write("peaks indexes : {}\n".format(peaks))
-    f.write("peak_hist : {}\n".format(hist[peaks]))
-    f.write("peak_bins : {}\n".format(bins[peaks]))
-
     # filtering
     new_mask_data = np.zeros(img_arr.shape, dtype=img_arr.dtype)
 
@@ -160,112 +133,84 @@ def mask_auto_img(img_file, operation, index,
         "Error in operation {}".format(operation)
 
 
-    print("kmeans=True, Skipping local minima")
-    f.write("kmeans=True, Skipping local minima\n")
+    with open(os.path.abspath("kmeans.log"), "w+") as g:
 
-    print("Running Kmeans with interval index {}\n".format(index))
-    f.write("Running Kmeans with interval index {}\n".format(index))
+        g.write("Running Kmeans with : {} {} {}\n".format(
+            operation, index, num_clusters))
 
+        # Reshape data to a 1D array (required by k-means)
+        X = np.copy(img_arr).flatten().reshape(-1, 1)
 
-    g = open(os.path.abspath("kmeans.log"), "w+")
+        kmeans = KMeans(n_clusters=num_clusters, random_state=0)
 
-    print("Running Kmeans with : ", operation, index, num_clusters)
+        # Fit the model to the data and predict cluster labels
+        cluster_labels = kmeans.fit_predict(X)
 
-    g.write("Running Kmeans with : {} {} {}\n".format(
-        operation, index, num_clusters))
+        # Split data into groups based on cluster labels
+        groups = [X[cluster_labels == i].flatten()
+                    for i in range(num_clusters)]
 
-    # Reshape data to a 1D array (required by k-means)
-    X = np.copy(img_arr).flatten().reshape(-1, 1)
+        avail_operations = ["lower", "interval", "higher"]
 
-    kmeans = KMeans(n_clusters=num_clusters, random_state=0)
+        assert operation in avail_operations, "Error, \
+            {} is not in {}".format(operation, avail_operations)
 
-    # Fit the model to the data and predict cluster labels
-    cluster_labels = kmeans.fit_predict(X)
+        assert 0 <= index and index < num_clusters, "Error \
+            with index {}".format(index)
 
-    # Split data into groups based on cluster labels
-    groups = [X[cluster_labels == i].flatten()
-                for i in range(num_clusters)]
+        # We must define : the minimum of the second group for the headmask
+        # we create minimums array, we sort and then take the middle value
+        minimums_array = np.array([np.amin(group) for group in groups])
+        min_sorted = np.sort(minimums_array)
 
-    avail_operations = ["lower", "interval", "higher"]
+        g.write("Cluster Min : {}\n".format(
+            " ".join(str(val) for val in min_sorted)))
 
-    assert operation in avail_operations, "Error, \
-        {} is not in {}".format(operation, avail_operations)
+        # We must define : the maximum of the second group for the headmask
+        # we create maximums array, we sort and then take the middle value
+        maximums_array = np.array([np.amax(group) for group in groups])
+        max_sorted = np.sort(maximums_array)
 
-    assert 0 <= index and index < num_clusters, "Error \
-        with index {}".format(index)
+        g.write("Cluster Max : {}\n".format(
+            " ".join(str(val) for val in max_sorted)))
 
-    # We must define : the minimum of the second group for the headmask
-    # we create minimums array, we sort and then take the middle value
-    minimums_array = np.array([np.amin(group) for group in groups])
-    min_sorted = np.sort(minimums_array)
+        # We must define :  mean of the second group for the skull extraction
+        # we create means array, we sort and then take the middle value
+        means_array = np.array([sum(group)/len(group) for group in groups])
+        mean_sorted = np.sort(means_array)
 
-    print("Cluster Min : {}".format(
-        " ".join(str(val) for val in min_sorted)))
-    g.write("Cluster Min : {}\n".format(
-        " ".join(str(val) for val in min_sorted)))
+        index_sorted = np.argsort(means_array)
 
-    # We must define : the maximum of the second group for the headmask
-    # we create maximums array, we sort and then take the middle value
-    maximums_array = np.array([np.amax(group) for group in groups])
-    max_sorted = np.sort(maximums_array)
+        g.write("Cluster Mean : {}\n".format(
+            " ".join(str(int(val)) for val in mean_sorted)))
 
-    print("Cluster Max : {}".format(
-        " ".join(str(val) for val in max_sorted)))
-    g.write("Cluster Max : {}\n".format(
-        " ".join(str(val) for val in max_sorted)))
+        g.write("Cluster Indexes = {}\n".format(
+            " ".join(str(int(val)) for val in index_sorted)))
 
-    # We must define :  mean of the second group for the skull extraction
-    # we create means array, we sort and then take the middle value
-    means_array = np.array([sum(group)/len(group) for group in groups])
-    mean_sorted = np.sort(means_array)
+        g.write("Indexed cluster ({}): {}\n".format(
+            index, index_sorted[index]))
 
-    index_sorted = np.argsort(means_array)
+        min_thresh = np.amin(groups[index_sorted[index]])
+        max_thresh = np.amax(groups[index_sorted[index]])
 
-    print("Cluster Mean : {}".format(
-        " ".join(str(int(val)) for val in mean_sorted)))
-    g.write("Cluster Mean : {}\n".format(
-        " ".join(str(int(val)) for val in mean_sorted)))
+        g.write("Min/max mid group : {} {}\n".format(min_thresh,
+                                                        max_thresh))
 
-    print("Cluster Indexes = {}".format(
-        " ".join(str(int(val)) for val in index_sorted)))
-    g.write("Cluster Indexes = {}\n".format(
-        " ".join(str(int(val)) for val in index_sorted)))
+        if operation == "lower":
+            g.write("Filtering with lower threshold {}\n".format(min_thresh))
+            fiter_array = min_thresh < img_arr
 
-    print("Indexed cluster ({}): {}".format(
-        index, index_sorted[index]))
-    g.write("Indexed cluster ({}): {}\n".format(
-        index, index_sorted[index]))
+        elif operation == "higher":
+            g.write("Filtering with higher threshold {}\n".format(max_thresh))
+            fiter_array = img_arr < max_thresh
 
-    min_thresh = np.amin(groups[index_sorted[index]])
-    max_thresh = np.amax(groups[index_sorted[index]])
+        elif operation == "interval":
+            g.write(
+                "Filtering between lower {} and higher {}\n".format(
+                    min_thresh, max_thresh))
 
-    print("Min/max mid group : {} {}".format(min_thresh,
-                                                max_thresh))
-    g.write("Min/max mid group : {} {}\n".format(min_thresh,
-                                                    max_thresh))
-
-    if operation == "lower":
-        print("Filtering with lower threshold {}".format(min_thresh))
-        g.write("Filtering with lower threshold {}\n".format(min_thresh))
-        fiter_array = min_thresh < img_arr
-
-    elif operation == "higher":
-        print("Filtering with higher threshold {}".format(max_thresh))
-        g.write("Filtering with higher threshold {}\n".format(max_thresh))
-        fiter_array = img_arr < max_thresh
-
-    elif operation == "interval":
-        print(
-            "Filtering between lower {} and higher {}".format(
-                min_thresh, max_thresh))
-        g.write(
-            "Filtering between lower {} and higher {}\n".format(
-                min_thresh, max_thresh))
-
-        fiter_array = np.logical_and(min_thresh < img_arr,
-                                        img_arr < max_thresh)
-
-    g.close()
+            fiter_array = np.logical_and(min_thresh < img_arr,
+                                            img_arr < max_thresh)
 
     new_mask_data[fiter_array] = img_arr[fiter_array]
 
