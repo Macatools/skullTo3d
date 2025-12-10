@@ -73,17 +73,8 @@ mandatory parameters
   For ``-soft`` value, it is possible to add some key words (e.g. ``-soft ANTS_robustreg_prep``) all these options are available (to place after SPM or ANTS, e.g) and will change the brain extraction:
 
   * ``_4animal`` :  will use bet4animal (FSL) for brain extraction, for faster computation (by default atlas_brex is used)
-  * ``_quick`` : will use hd-bet (Deep Learning) for brain extraction, for faster computation (by default atlas_brex is used)
-
-  **NB:** hd-bet requires a specific version of macapype/skullTo3d, not available by default
-
-|
-
-  This option should be used if the coregistration to template in preparation is not performed correctly:
-
-  * ``_robustreg`` (at the end) to have a more robust registration (in two steps)
-
-|
+  * ``_quick`` : will use hd-bet (Deep Learning) for brain extraction, for faster computation (by default atlas_brex is used) **NB:** hd-bet requires a specific version of macapype/skullTo3d, not available by default
+  * ``_robustreg`` (at the end) to have a more robust registration (in two steps) . This option should be used if the coregistration to template in preparation is not performed correctly
 
   Finally, these option are available (to place after SPM or ANTS) and will modify the parameters but can be launched in sequence:
 
@@ -91,19 +82,11 @@ mandatory parameters
   * ``_prep`` (at the end) will perform data preparation (no brain extraction and segmentation)
   * ``_noseg`` (at the end) will perform data preparation and brain extraction (no segmentation)
 
-|
+  *  ``_skull`` after SPM or ANTS if you want to process skull or angio *specific to skullTo3d*; otherwise the main pipelines of macapype will be launched (only brain segmentation will be performed) **NB:** ``_skullnoisypetra`` instead of ``_skull`` available for macaque with issues on petra **NB:** ``-soft skull`` without processing brain is possible, but is still experimental. It only works if ``-skull_dt CT petra`` and -deriv -padback are NOT defined
 
-  **Some options are specific to skullTo3d:**
-
-  *  ``_skull`` after SPM or ANTS if you want to process skull or angio *specific to skullTo3d*; otherwise the main pipelines of macapype will be launched (only brain segmentation will be performed)
-
-  **NB :** ``_skullnoisypetra`` instead of ``_skull`` available for macaque with issues on petra
-
-  **NB :** ``-soft skull`` without processing brain is possible, but is still experimental. It only works if ``-skull_dt CT petra`` and ``-deriv`` and ``-padback`` are NOT defined
-
-  * ``_noskullmask`` (at the end) will perform realignement to stereo and headmask (only realignement for CT)
   * ``_noheadmask`` (at the end) will perform only realignement to stereo
-
+  * ``_noskullmask`` (at the end) will perform realignement to stereo and compute headmask (only realignement for CT)
+  * ``_nofullskullmask`` (at the end) will not perform fullskullmask (only realignement for CT)
 
 --------------------
 exclusive parameters
@@ -113,8 +96,8 @@ exclusive parameters
 * ``-params`` : *(mandatory if -species is omitted)* a json file specifiying the global parameters of the analysis. See :ref:`Parameters <params>` for more details
 * ``-species`` : *(mandatory if -params is omitted)* followed the NHP species corresponding to the image, e.g. {macaque | marmo }
 
-**NB** marmoT2 can be used for segmenting from the T2w image (by default, T1w is used for marmo)
-**NB** macaque_0p5 is available to use downsampled template (faster results)
+**NB:** marmoT2 can be used for segmenting from the T2w image (by default, T1w is used for marmo)
+**NB:** macaque_0p5 is available to use downsampled template (faster results)
 
 -------------------
 optional parameters
