@@ -43,6 +43,8 @@ See :ref:`Commands <command>` for a description on the avalaible command paramet
 
 If ``-deriv``` is provided, see :ref:`Derivatives <derivatives>` for a descrition of the outputs
 
+Also, check :ref:`Tips and Tricks <tips_tricks>` on how to format images to improve quality of registration between images and segmentation
+
 
 Table of contents
 ******************
@@ -57,6 +59,7 @@ Table of contents
     derivatives
     params
     indiv_params
+    tips_tricks
 
 
 
