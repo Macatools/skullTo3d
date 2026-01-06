@@ -1,7 +1,7 @@
 {
     "general":
     {
-        "template_name": "MBM_v3.0.1_6seg_stereoINT"
+        "template_name": "template_MBM_space-stereoINTv2"
     },
     "short_preparation_pipe":
     {
@@ -16,14 +16,6 @@
             {
                 "rig_only_flag":true
             }
-        },
-        "pad_template":
-        {
-            "operation" : "PadImage",
-            "op2" : "90"
-        },
-        "denoise":
-        {
         },
         "fast":
         {
@@ -45,16 +37,12 @@
     },
     "brain_segment_pipe":
     {
-        "reg":
+        "reg_f3d":
         {
-            "n": 2,
-            "m": "ref",
-            "dof": 12
         },
         "segment_atropos_pipe":
         {
             "use_priors":0.0,
-
             "Atropos":
             {
                 "dimension": 3
@@ -157,6 +145,11 @@
         "headmask_petra_pipe":
         {
             "petra_itkdebias":{},
+            "petra_head_auto_mask":
+            {
+                "operation": "lower",
+                "index": 1
+            },
             "petra_head_dilate":
             {
                 "operation": "modal",
@@ -294,6 +287,11 @@
                 "kernel_size": 7.0
             }
         }
+            "petra_head_auto_mask":
+            {
+                "operation": "lower",
+                "index": 1
+            },
     },
 
     "skull_ct_pipe":
