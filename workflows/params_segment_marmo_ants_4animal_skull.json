@@ -287,11 +287,6 @@
                 "kernel_size": 7.0
             }
         }
-            "petra_head_auto_mask":
-            {
-                "operation": "lower",
-                "index": 1
-            },
     },
 
     "skull_ct_pipe":
