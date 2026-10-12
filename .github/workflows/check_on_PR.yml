@@ -53,7 +53,7 @@ jobs:
 
       - name: Download dataset
         run: |
-            curl https://amubox.univ-amu.fr/public.php/dav/files/7tf4ooJsyjHfSbG --output skullTo3d_CI_v2.zip
+            curl https://zenodo.org/records/23318591/files/skullTo3d_CI_v2.zip?download=1 --output skullTo3d_CI_v2.zip
             unzip -o skullTo3d_CI_v2.zip -d skullTo3d_CI_v2
 
       - name: Running all test pipelines (macaque_0p5 ANTS)
