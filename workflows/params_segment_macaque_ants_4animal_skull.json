@@ -53,7 +53,9 @@
         {
             "n": 2,
             "m": "ref",
-            "dof": 12
+            "dof": 12,
+            "k": true
+
         },
         "segment_atropos_pipe":
         {
