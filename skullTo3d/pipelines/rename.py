@@ -439,7 +439,10 @@ def rename_all_skull_petra_derivatives(params, main_workflow,
 
                 rename_robustpetra_fullskull_stl.inputs.format_string = \
                     pref_deriv + "_desc-robustpetra_fullskullmask"
-                rename_robustpetra_fullskull_stl.inputs.parse_string = parse_str
+
+                rename_robustpetra_fullskull_stl.inputs.parse_string = \
+                    parse_str
+
                 rename_robustpetra_fullskull_stl.inputs.keep_ext = True
 
                 main_workflow.connect(
@@ -451,23 +454,24 @@ def rename_all_skull_petra_derivatives(params, main_workflow,
                     datasink, '@robustpetra_fullskull_stl')
 
                 # rename stereo_robustpetra_fullskull_mask
-                rename_stereo_robustpetra_fullskull_mask = pe.Node(
-                    niu.Rename(), name="rename_stereo_robustpetra_fullskullmask")
+                rename_ste_robpetra_fullskull_mask = pe.Node(
+                    niu.Rename(),
+                    name="rename_stereo_robustpetra_fullskullmask")
 
-                rename_stereo_robustpetra_fullskull_mask.inputs.format_string = \
+                rename_ste_robpetra_fullskull_mask.inputs.format_string = \
                     pref_deriv + "_space-stereo_desc-robustpetra_fullskullmask"
 
-                rename_stereo_robustpetra_fullskull_mask.inputs.parse_string = \
+                rename_ste_robpetra_fullskull_mask.inputs.parse_string = \
                     parse_str
 
-                rename_stereo_robustpetra_fullskull_mask.inputs.keep_ext = True
+                rename_ste_robpetra_fullskull_mask.inputs.keep_ext = True
 
                 main_workflow.connect(
                     skull_petra_pipe, 'outputnode.robustpetra_fullskull_mask',
-                    rename_stereo_robustpetra_fullskull_mask, 'in_file')
+                    rename_ste_robpetra_fullskull_mask, 'in_file')
 
                 main_workflow.connect(
-                    rename_stereo_robustpetra_fullskull_mask, 'out_file',
+                    rename_ste_robpetra_fullskull_mask, 'out_file',
                     datasink, '@stereo_robustpetra_fullskullmask')
 
 
