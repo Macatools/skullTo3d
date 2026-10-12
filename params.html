@@ -8,13 +8,14 @@
     <title>Parameters &#8212; SkullTo3d 0.1 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="_static/bootstrap-sphinx.css?v=284a2d1d" />
-    <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css?v=c83e6b79" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-rendered-html.css?v=1277b6f3" />
     <script src="_static/documentation_options.js?v=2709fde1"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/sg-tags.js?v=d80f6fa4"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Individual Parameters" href="indiv_params.html" />
@@ -630,155 +631,155 @@
 <p>For advanced user, it is however possible to pass the pipeline sequence as a params.json file. In this case all further alteration will be canceled.</p>
 <p>Here is json file with all possible nodes to be tuned; Some node are optional, some nodes are exclusive with each other (XOR). All parameters given here are give as examples and may vary</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-    <span class="s2">&quot;skull_t1_pipe&quot;</span><span class="p">:</span>
+    <span class="s2">"skull_t1_pipe"</span><span class="p">:</span>
     <span class="p">{</span>
-        <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;will be removed if option _noheadmask or _noskullmask is provided in -soft)&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;headmask_t1_pipe&quot;</span><span class="p">:</span>
+        <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"will be removed if option _noheadmask or _noskullmask is provided in -soft)"</span><span class="p">,</span>
+        <span class="s2">"headmask_t1_pipe"</span><span class="p">:</span>
         <span class="p">{</span>
-            <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;the following nodes are mutually exclusive, but are mandatory if headmask_t1_pipe is defined&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;t1_head_li_mask&quot;</span><span class="p">:</span>
+            <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"the following nodes are mutually exclusive, but are mandatory if headmask_t1_pipe is defined"</span><span class="p">,</span>
+            <span class="s2">"t1_head_li_mask"</span><span class="p">:</span>
             <span class="p">{</span>
-                <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;DEFAULT (do not need to be specied in params)&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="s2">&quot;Uses threshold_li from skimage.filters (from macapype, also used in remove_capsule_pipe)&quot;</span><span class="p">,</span>
+                <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"DEFAULT (do not need to be specied in params)"</span><span class="p">,</span>
+                <span class="s2">"params"</span><span class="p">:</span> <span class="s2">"Uses threshold_li from skimage.filters (from macapype, also used in remove_capsule_pipe)"</span><span class="p">,</span>
 
-                <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;No argument&quot;</span>
+                <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"No argument"</span>
 
             <span class="p">},</span>
-            <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;OR&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;t1_head_mask_thr&quot;</span><span class="p">:</span>
+            <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"OR"</span><span class="p">,</span>
+            <span class="s2">"t1_head_mask_thr"</span><span class="p">:</span>
             <span class="p">{</span>
-                <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;OPTIONAL&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="s2">&quot;Threshold (FSL)&quot;</span><span class="p">,</span>
+                <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"OPTIONAL"</span><span class="p">,</span>
+                <span class="s2">"params"</span><span class="p">:</span> <span class="s2">"Threshold (FSL)"</span><span class="p">,</span>
 
-                <span class="s2">&quot;thr&quot;</span><span class="p">:</span> <span class="s2">&quot;300&quot;</span>
+                <span class="s2">"thr"</span><span class="p">:</span> <span class="s2">"300"</span>
 
             <span class="p">},</span>
-            <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;OR&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;t1_head_auto_mask&quot;</span><span class="p">:</span>
+            <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"OR"</span><span class="p">,</span>
+            <span class="s2">"t1_head_auto_mask"</span><span class="p">:</span>
             <span class="p">{</span>
-                <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;OPTIONAL&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="s2">&quot;mask_auto_img (python)&quot;</span><span class="p">,</span>
+                <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"OPTIONAL"</span><span class="p">,</span>
+                <span class="s2">"params"</span><span class="p">:</span> <span class="s2">"mask_auto_img (python)"</span><span class="p">,</span>
 
-                <span class="s2">&quot;kmeans&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
-                <span class="s2">&quot;operation&quot;</span><span class="p">:</span> <span class="s2">&quot;lower&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;index&quot;</span><span class="p">:</span> <span class="mi">2</span>
+                <span class="s2">"kmeans"</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+                <span class="s2">"operation"</span><span class="p">:</span> <span class="s2">"lower"</span><span class="p">,</span>
+                <span class="s2">"index"</span><span class="p">:</span> <span class="mi">2</span>
             <span class="p">},</span>
 
-            <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;The following 2 nodes are OPTIONAL either have to be both defined or none of them&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;allows to cut some elements before gcc is applied&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;are used in -soft _skullnoisypetra&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;t1_head_gcc_erode&quot;</span><span class="p">:</span>
+            <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"The following 2 nodes are OPTIONAL either have to be both defined or none of them"</span><span class="p">,</span>
+            <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"allows to cut some elements before gcc is applied"</span><span class="p">,</span>
+            <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"are used in -soft _skullnoisypetra"</span><span class="p">,</span>
+            <span class="s2">"t1_head_gcc_erode"</span><span class="p">:</span>
             <span class="p">{</span>
-                <span class="s2">&quot;kernel_shape&quot;</span><span class="p">:</span> <span class="s2">&quot;boxv&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;kernel_size&quot;</span><span class="p">:</span> <span class="mf">3.0</span>
+                <span class="s2">"kernel_shape"</span><span class="p">:</span> <span class="s2">"boxv"</span><span class="p">,</span>
+                <span class="s2">"kernel_size"</span><span class="p">:</span> <span class="mf">3.0</span>
             <span class="p">},</span>
-            <span class="s2">&quot;t1_head_gcc_dilate&quot;</span><span class="p">:</span>
+            <span class="s2">"t1_head_gcc_dilate"</span><span class="p">:</span>
             <span class="p">{</span>
-                <span class="s2">&quot;operation&quot;</span><span class="p">:</span> <span class="s2">&quot;modal&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;kernel_shape&quot;</span><span class="p">:</span> <span class="s2">&quot;boxv&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;kernel_size&quot;</span><span class="p">:</span> <span class="mf">3.0</span>
+                <span class="s2">"operation"</span><span class="p">:</span> <span class="s2">"modal"</span><span class="p">,</span>
+                <span class="s2">"kernel_shape"</span><span class="p">:</span> <span class="s2">"boxv"</span><span class="p">,</span>
+                <span class="s2">"kernel_size"</span><span class="p">:</span> <span class="mf">3.0</span>
             <span class="p">},</span>
 
-            <span class="s2">&quot;t1_head_dilate&quot;</span><span class="p">:</span>
+            <span class="s2">"t1_head_dilate"</span><span class="p">:</span>
             <span class="p">{</span>
 
-                <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="s2">&quot;DilateImage (FSL)&quot;</span><span class="p">,</span>
+                <span class="s2">"params"</span><span class="p">:</span> <span class="s2">"DilateImage (FSL)"</span><span class="p">,</span>
 
-                <span class="s2">&quot;operation&quot;</span> <span class="p">:</span> <span class="s2">&quot;modal&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;kernel_shape&quot;</span> <span class="p">:</span> <span class="s2">&quot;boxv&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;kernel_size&quot;</span> <span class="p">:</span> <span class="mf">13.0</span>
+                <span class="s2">"operation"</span> <span class="p">:</span> <span class="s2">"modal"</span><span class="p">,</span>
+                <span class="s2">"kernel_shape"</span> <span class="p">:</span> <span class="s2">"boxv"</span><span class="p">,</span>
+                <span class="s2">"kernel_size"</span> <span class="p">:</span> <span class="mf">13.0</span>
             <span class="p">},</span>
-            <span class="s2">&quot;t1_head_erode&quot;</span><span class="p">:</span>
+            <span class="s2">"t1_head_erode"</span><span class="p">:</span>
             <span class="p">{</span>
 
-                <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="s2">&quot;ErodeImage (FSL)&quot;</span><span class="p">,</span>
+                <span class="s2">"params"</span><span class="p">:</span> <span class="s2">"ErodeImage (FSL)"</span><span class="p">,</span>
 
-                <span class="s2">&quot;kernel_shape&quot;</span> <span class="p">:</span> <span class="s2">&quot;boxv&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;kernel_size&quot;</span> <span class="p">:</span> <span class="mf">13.0</span>
+                <span class="s2">"kernel_shape"</span> <span class="p">:</span> <span class="s2">"boxv"</span><span class="p">,</span>
+                <span class="s2">"kernel_size"</span> <span class="p">:</span> <span class="mf">13.0</span>
             <span class="p">}</span>
         <span class="p">},</span>
 
-        <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;will be removed if option _noskullmask is provided in -soft)&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;skullmask_t1_pipe&quot;</span><span class="p">:</span>
+        <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"will be removed if option _noskullmask is provided in -soft)"</span><span class="p">,</span>
+        <span class="s2">"skullmask_t1_pipe"</span><span class="p">:</span>
         <span class="p">{</span>
 
-            <span class="s2">&quot;t1_fast&quot;</span><span class="p">:</span>
+            <span class="s2">"t1_fast"</span><span class="p">:</span>
             <span class="p">{</span>
-                <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="s2">&quot;FAST (FSL)&quot;</span><span class="p">,</span>
+                <span class="s2">"params"</span><span class="p">:</span> <span class="s2">"FAST (FSL)"</span><span class="p">,</span>
             <span class="p">},</span>
 
 
-            <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;The following 2 nodes are OPTIONAL and mutually exclusive&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;If not defined fast pve_0 is used as mask for skull&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;t1_skull_auto_mask&quot;</span><span class="p">:</span>
+            <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"The following 2 nodes are OPTIONAL and mutually exclusive"</span><span class="p">,</span>
+            <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"If not defined fast pve_0 is used as mask for skull"</span><span class="p">,</span>
+            <span class="s2">"t1_skull_auto_mask"</span><span class="p">:</span>
             <span class="p">{</span>
-                <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;OPTIONAL&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="s2">&quot;mask_auto_img (python)&quot;</span><span class="p">,</span>
+                <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"OPTIONAL"</span><span class="p">,</span>
+                <span class="s2">"params"</span><span class="p">:</span> <span class="s2">"mask_auto_img (python)"</span><span class="p">,</span>
 
-                <span class="s2">&quot;kmeans&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
-                <span class="s2">&quot;operation&quot;</span><span class="p">:</span> <span class="s2">&quot;lower&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;index&quot;</span><span class="p">:</span> <span class="mi">2</span>
+                <span class="s2">"kmeans"</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+                <span class="s2">"operation"</span><span class="p">:</span> <span class="s2">"lower"</span><span class="p">,</span>
+                <span class="s2">"index"</span><span class="p">:</span> <span class="mi">2</span>
             <span class="p">},</span>
-            <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;OR&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;t1_skull_mask_thr&quot;</span><span class="p">:</span>
+            <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"OR"</span><span class="p">,</span>
+            <span class="s2">"t1_skull_mask_thr"</span><span class="p">:</span>
             <span class="p">{</span>
-                <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;OPTIONAL&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="s2">&quot;Threshold (FSL)&quot;</span><span class="p">,</span>
+                <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"OPTIONAL"</span><span class="p">,</span>
+                <span class="s2">"params"</span><span class="p">:</span> <span class="s2">"Threshold (FSL)"</span><span class="p">,</span>
 
-                <span class="s2">&quot;thr&quot;</span><span class="p">:</span> <span class="s2">&quot;300&quot;</span>
+                <span class="s2">"thr"</span><span class="p">:</span> <span class="s2">"300"</span>
 
-            <span class="p">},</span>
-
-            <span class="s2">&quot;t1_head_erode_skin&quot;</span><span class="p">:</span>
-            <span class="p">{</span>
-
-                <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;OPTIONAL&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="s2">&quot;ErodeImage (FSL)&quot;</span><span class="p">,</span>
-
-                <span class="s2">&quot;kernel_shape&quot;</span> <span class="p">:</span> <span class="s2">&quot;boxv&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;kernel_size&quot;</span> <span class="p">:</span> <span class="mf">14.0</span>
             <span class="p">},</span>
 
+            <span class="s2">"t1_head_erode_skin"</span><span class="p">:</span>
+            <span class="p">{</span>
 
-            <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;The following 2 nodes are OPTIONAL either have to be both defined or none of them&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;allows to cut some elements before gcc is applied&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;are used in -soft _skullnoisypetra&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;t1_skull_gcc_erode&quot;</span><span class="p">:</span>
-            <span class="p">{</span>
-                <span class="s2">&quot;kernel_shape&quot;</span><span class="p">:</span> <span class="s2">&quot;boxv&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;kernel_size&quot;</span><span class="p">:</span> <span class="mf">3.0</span>
-            <span class="p">},</span>
-            <span class="s2">&quot;t1_skull_gcc_dilate&quot;</span><span class="p">:</span>
-            <span class="p">{</span>
-                <span class="s2">&quot;operation&quot;</span><span class="p">:</span> <span class="s2">&quot;modal&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;kernel_shape&quot;</span><span class="p">:</span> <span class="s2">&quot;boxv&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;kernel_size&quot;</span><span class="p">:</span> <span class="mf">3.0</span>
+                <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"OPTIONAL"</span><span class="p">,</span>
+                <span class="s2">"params"</span><span class="p">:</span> <span class="s2">"ErodeImage (FSL)"</span><span class="p">,</span>
+
+                <span class="s2">"kernel_shape"</span> <span class="p">:</span> <span class="s2">"boxv"</span><span class="p">,</span>
+                <span class="s2">"kernel_size"</span> <span class="p">:</span> <span class="mf">14.0</span>
             <span class="p">},</span>
 
 
-
-            <span class="s2">&quot;t1_skull_dilate&quot;</span><span class="p">:</span>
+            <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"The following 2 nodes are OPTIONAL either have to be both defined or none of them"</span><span class="p">,</span>
+            <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"allows to cut some elements before gcc is applied"</span><span class="p">,</span>
+            <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"are used in -soft _skullnoisypetra"</span><span class="p">,</span>
+            <span class="s2">"t1_skull_gcc_erode"</span><span class="p">:</span>
             <span class="p">{</span>
-                <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="s2">&quot;DilateImage (FSL)&quot;</span><span class="p">,</span>
-
-                <span class="s2">&quot;operation&quot;</span> <span class="p">:</span> <span class="s2">&quot;modal&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;kernel_shape&quot;</span> <span class="p">:</span> <span class="s2">&quot;boxv&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;kernel_size&quot;</span> <span class="p">:</span> <span class="mf">13.0</span>
+                <span class="s2">"kernel_shape"</span><span class="p">:</span> <span class="s2">"boxv"</span><span class="p">,</span>
+                <span class="s2">"kernel_size"</span><span class="p">:</span> <span class="mf">3.0</span>
             <span class="p">},</span>
-            <span class="s2">&quot;t1_skull_erode&quot;</span><span class="p">:</span>
+            <span class="s2">"t1_skull_gcc_dilate"</span><span class="p">:</span>
             <span class="p">{</span>
-                <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="s2">&quot;ErodeImage (FSL)&quot;</span><span class="p">,</span>
-
-                <span class="s2">&quot;kernel_shape&quot;</span> <span class="p">:</span> <span class="s2">&quot;boxv&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;kernel_size&quot;</span> <span class="p">:</span> <span class="mf">13.0</span>
+                <span class="s2">"operation"</span><span class="p">:</span> <span class="s2">"modal"</span><span class="p">,</span>
+                <span class="s2">"kernel_shape"</span><span class="p">:</span> <span class="s2">"boxv"</span><span class="p">,</span>
+                <span class="s2">"kernel_size"</span><span class="p">:</span> <span class="mf">3.0</span>
             <span class="p">},</span>
 
-            <span class="s2">&quot;t1_skull_fov&quot;</span><span class="p">:</span>
-            <span class="p">{</span>
-                <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;OPTIONAL&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="s2">&quot;RobustFOV (FSL)&quot;</span><span class="p">,</span>
 
-                <span class="s2">&quot;brainsize&quot;</span> <span class="p">:</span> <span class="s2">&quot;45&quot;</span><span class="p">,</span>
+
+            <span class="s2">"t1_skull_dilate"</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="s2">"params"</span><span class="p">:</span> <span class="s2">"DilateImage (FSL)"</span><span class="p">,</span>
+
+                <span class="s2">"operation"</span> <span class="p">:</span> <span class="s2">"modal"</span><span class="p">,</span>
+                <span class="s2">"kernel_shape"</span> <span class="p">:</span> <span class="s2">"boxv"</span><span class="p">,</span>
+                <span class="s2">"kernel_size"</span> <span class="p">:</span> <span class="mf">13.0</span>
+            <span class="p">},</span>
+            <span class="s2">"t1_skull_erode"</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="s2">"params"</span><span class="p">:</span> <span class="s2">"ErodeImage (FSL)"</span><span class="p">,</span>
+
+                <span class="s2">"kernel_shape"</span> <span class="p">:</span> <span class="s2">"boxv"</span><span class="p">,</span>
+                <span class="s2">"kernel_size"</span> <span class="p">:</span> <span class="mf">13.0</span>
+            <span class="p">},</span>
+
+            <span class="s2">"t1_skull_fov"</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"OPTIONAL"</span><span class="p">,</span>
+                <span class="s2">"params"</span><span class="p">:</span> <span class="s2">"RobustFOV (FSL)"</span><span class="p">,</span>
+
+                <span class="s2">"brainsize"</span> <span class="p">:</span> <span class="s2">"45"</span><span class="p">,</span>
             <span class="p">}</span>
         <span class="p">},</span>
 
@@ -786,237 +787,237 @@
 
 
 
-    <span class="s2">&quot;skull_ct_pipe&quot;</span><span class="p">:</span>
+    <span class="s2">"skull_ct_pipe"</span><span class="p">:</span>
     <span class="p">{</span>
-        <span class="s2">&quot;align_ct_on_T1_2&quot;</span><span class="p">:</span>
+        <span class="s2">"align_ct_on_T1_2"</span><span class="p">:</span>
         <span class="p">{</span>
 
-            <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;OPTIONAL&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;Cannot be modified&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="s2">&quot;RegAladin (NiftyReg)&quot;</span>
+            <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"OPTIONAL"</span><span class="p">,</span>
+            <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"Cannot be modified"</span><span class="p">,</span>
+            <span class="s2">"params"</span><span class="p">:</span> <span class="s2">"RegAladin (NiftyReg)"</span>
 
         <span class="p">},</span>
 
-        <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;will be removed if option _noheadmask or _noskullmask is provided in -soft)&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;skullmask_ct_pipe&quot;</span><span class="p">:</span>
+        <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"will be removed if option _noheadmask or _noskullmask is provided in -soft)"</span><span class="p">,</span>
+        <span class="s2">"skullmask_ct_pipe"</span><span class="p">:</span>
         <span class="p">{</span>
-            <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;the following nodes are mutually exclusive, but are mandatory if skullmask_ct_pipe is defined &quot;</span><span class="p">,</span>
+            <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"the following nodes are mutually exclusive, but are mandatory if skullmask_ct_pipe is defined "</span><span class="p">,</span>
 
-            <span class="s2">&quot;ct_head_mask_thr&quot;</span><span class="p">:</span>
+            <span class="s2">"ct_head_mask_thr"</span><span class="p">:</span>
             <span class="p">{</span>
-                <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="s2">&quot;Threshold (FSL)&quot;</span><span class="p">,</span>
+                <span class="s2">"params"</span><span class="p">:</span> <span class="s2">"Threshold (FSL)"</span><span class="p">,</span>
 
-                <span class="s2">&quot;thr&quot;</span><span class="p">:</span> <span class="s2">&quot;300&quot;</span>
+                <span class="s2">"thr"</span><span class="p">:</span> <span class="s2">"300"</span>
 
             <span class="p">},</span>
-            <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;OR&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;ct_head_auto_mask&quot;</span><span class="p">:</span>
+            <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"OR"</span><span class="p">,</span>
+            <span class="s2">"ct_head_auto_mask"</span><span class="p">:</span>
             <span class="p">{</span>
-                <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="s2">&quot;mask_auto_img (python)&quot;</span><span class="p">,</span>
+                <span class="s2">"params"</span><span class="p">:</span> <span class="s2">"mask_auto_img (python)"</span><span class="p">,</span>
 
-                <span class="s2">&quot;kmeans&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
-                <span class="s2">&quot;operation&quot;</span><span class="p">:</span> <span class="s2">&quot;lower&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;index&quot;</span><span class="p">:</span> <span class="mi">2</span>
+                <span class="s2">"kmeans"</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+                <span class="s2">"operation"</span><span class="p">:</span> <span class="s2">"lower"</span><span class="p">,</span>
+                <span class="s2">"index"</span><span class="p">:</span> <span class="mi">2</span>
             <span class="p">},</span>
 
-            <span class="s2">&quot;ct_skull_dilate&quot;</span><span class="p">:</span>
+            <span class="s2">"ct_skull_dilate"</span><span class="p">:</span>
             <span class="p">{</span>
-                <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="s2">&quot;DilateImage (FSL)&quot;</span><span class="p">,</span>
+                <span class="s2">"params"</span><span class="p">:</span> <span class="s2">"DilateImage (FSL)"</span><span class="p">,</span>
 
-                <span class="s2">&quot;operation&quot;</span> <span class="p">:</span> <span class="s2">&quot;modal&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;kernel_shape&quot;</span> <span class="p">:</span> <span class="s2">&quot;boxv&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;kernel_size&quot;</span> <span class="p">:</span> <span class="mf">13.0</span>
+                <span class="s2">"operation"</span> <span class="p">:</span> <span class="s2">"modal"</span><span class="p">,</span>
+                <span class="s2">"kernel_shape"</span> <span class="p">:</span> <span class="s2">"boxv"</span><span class="p">,</span>
+                <span class="s2">"kernel_size"</span> <span class="p">:</span> <span class="mf">13.0</span>
             <span class="p">},</span>
-            <span class="s2">&quot;ct_skull_erode&quot;</span><span class="p">:</span>
+            <span class="s2">"ct_skull_erode"</span><span class="p">:</span>
             <span class="p">{</span>
-                <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="s2">&quot;ErodeImage (FSL)&quot;</span><span class="p">,</span>
+                <span class="s2">"params"</span><span class="p">:</span> <span class="s2">"ErodeImage (FSL)"</span><span class="p">,</span>
 
-                <span class="s2">&quot;kernel_shape&quot;</span> <span class="p">:</span> <span class="s2">&quot;boxv&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;kernel_size&quot;</span> <span class="p">:</span> <span class="mf">13.0</span>
+                <span class="s2">"kernel_shape"</span> <span class="p">:</span> <span class="s2">"boxv"</span><span class="p">,</span>
+                <span class="s2">"kernel_size"</span> <span class="p">:</span> <span class="mf">13.0</span>
             <span class="p">}</span>
     <span class="p">},</span>
 
-    <span class="s2">&quot;skull_petra_pipe&quot;</span><span class="p">:</span>
+    <span class="s2">"skull_petra_pipe"</span><span class="p">:</span>
     <span class="p">{</span>
 
-        <span class="s2">&quot;avg_reorient_pipe&quot;</span><span class="p">:</span>
+        <span class="s2">"avg_reorient_pipe"</span><span class="p">:</span>
         <span class="p">{</span>
-            <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;OPTIONAL&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="s2">&quot;see corresponding doc in short_preparation_pipe in macapype&quot;</span>
+            <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"OPTIONAL"</span><span class="p">,</span>
+            <span class="s2">"params"</span><span class="p">:</span> <span class="s2">"see corresponding doc in short_preparation_pipe in macapype"</span>
 
         <span class="p">},</span>
 
-        <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;will be removed if option _noheadmask or _noskullmask is provided in -soft)&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;headmask_petra_pipe&quot;</span><span class="p">:</span>
+        <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"will be removed if option _noheadmask or _noskullmask is provided in -soft)"</span><span class="p">,</span>
+        <span class="s2">"headmask_petra_pipe"</span><span class="p">:</span>
         <span class="p">{</span>
 
-            <span class="s2">&quot;petra_itk_debias&quot;</span><span class="p">:</span>
+            <span class="s2">"petra_itk_debias"</span><span class="p">:</span>
             <span class="p">{</span>
-                <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;OPTIONAL&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="s2">&quot;SimpleITK N4BiasFieldCorrectionImageFilter dirty wrap (defined in macapype.nodes.correc_bias)&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;TODO: Should be made a proper nipype node&quot;</span><span class="p">,</span>
+                <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"OPTIONAL"</span><span class="p">,</span>
+                <span class="s2">"params"</span><span class="p">:</span> <span class="s2">"SimpleITK N4BiasFieldCorrectionImageFilter dirty wrap (defined in macapype.nodes.correc_bias)"</span><span class="p">,</span>
+                <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"TODO: Should be made a proper nipype node"</span><span class="p">,</span>
 
             <span class="p">},</span>
 
 
-            <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;the following nodes are mutually exclusive, but are mandatory if headmask_t1_pipe is defined&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;petra_head_li_mask&quot;</span><span class="p">:</span>
+            <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"the following nodes are mutually exclusive, but are mandatory if headmask_t1_pipe is defined"</span><span class="p">,</span>
+            <span class="s2">"petra_head_li_mask"</span><span class="p">:</span>
             <span class="p">{</span>
-                <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;DEFAULT (do not need to be specied in params)&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="s2">&quot;Uses threshold_li from skimage.filters (from macapype, also used in remove_capsule_pipe)&quot;</span><span class="p">,</span>
+                <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"DEFAULT (do not need to be specied in params)"</span><span class="p">,</span>
+                <span class="s2">"params"</span><span class="p">:</span> <span class="s2">"Uses threshold_li from skimage.filters (from macapype, also used in remove_capsule_pipe)"</span><span class="p">,</span>
 
-                <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;No argument&quot;</span>
+                <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"No argument"</span>
 
             <span class="p">},</span>
-            <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;OR&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;petra_head_mask_thr&quot;</span><span class="p">:</span>
+            <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"OR"</span><span class="p">,</span>
+            <span class="s2">"petra_head_mask_thr"</span><span class="p">:</span>
             <span class="p">{</span>
-                <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="s2">&quot;Threshold (FSL)&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;thr&quot;</span><span class="p">:</span> <span class="s2">&quot;300&quot;</span>
+                <span class="s2">"params"</span><span class="p">:</span> <span class="s2">"Threshold (FSL)"</span><span class="p">,</span>
+                <span class="s2">"thr"</span><span class="p">:</span> <span class="s2">"300"</span>
             <span class="p">},</span>
-            <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;OR&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;petra_head_auto_mask&quot;</span><span class="p">:</span>
+            <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"OR"</span><span class="p">,</span>
+            <span class="s2">"petra_head_auto_mask"</span><span class="p">:</span>
             <span class="p">{</span>
-                <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="s2">&quot;mask_auto_img (python)&quot;</span><span class="p">,</span>
+                <span class="s2">"params"</span><span class="p">:</span> <span class="s2">"mask_auto_img (python)"</span><span class="p">,</span>
 
-                <span class="s2">&quot;kmeans&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
-                <span class="s2">&quot;operation&quot;</span><span class="p">:</span> <span class="s2">&quot;lower&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;index&quot;</span><span class="p">:</span> <span class="mi">2</span>
-            <span class="p">},</span>
-
-
-            <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;The following 2 nodes are OPTIONAL either have to be both defined or none of them&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;allows to cut some elements before gcc is applied&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;are used in -soft _skullnoisypetra&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;petra_head_gcc_erode&quot;</span><span class="p">:</span>
-            <span class="p">{</span>
-                <span class="s2">&quot;kernel_shape&quot;</span><span class="p">:</span> <span class="s2">&quot;boxv&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;kernel_size&quot;</span><span class="p">:</span> <span class="mf">3.0</span>
-            <span class="p">},</span>
-            <span class="s2">&quot;petra_head_gcc_dilate&quot;</span><span class="p">:</span>
-            <span class="p">{</span>
-                <span class="s2">&quot;operation&quot;</span><span class="p">:</span> <span class="s2">&quot;modal&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;kernel_shape&quot;</span><span class="p">:</span> <span class="s2">&quot;boxv&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;kernel_size&quot;</span><span class="p">:</span> <span class="mf">3.0</span>
+                <span class="s2">"kmeans"</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+                <span class="s2">"operation"</span><span class="p">:</span> <span class="s2">"lower"</span><span class="p">,</span>
+                <span class="s2">"index"</span><span class="p">:</span> <span class="mi">2</span>
             <span class="p">},</span>
 
-            <span class="s2">&quot;petra_head_dilate&quot;</span><span class="p">:</span>
+
+            <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"The following 2 nodes are OPTIONAL either have to be both defined or none of them"</span><span class="p">,</span>
+            <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"allows to cut some elements before gcc is applied"</span><span class="p">,</span>
+            <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"are used in -soft _skullnoisypetra"</span><span class="p">,</span>
+            <span class="s2">"petra_head_gcc_erode"</span><span class="p">:</span>
             <span class="p">{</span>
-
-                <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="s2">&quot;DilateImage (FSL)&quot;</span><span class="p">,</span>
-
-                <span class="s2">&quot;operation&quot;</span> <span class="p">:</span> <span class="s2">&quot;modal&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;kernel_shape&quot;</span> <span class="p">:</span> <span class="s2">&quot;boxv&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;kernel_size&quot;</span> <span class="p">:</span> <span class="mf">13.0</span>
+                <span class="s2">"kernel_shape"</span><span class="p">:</span> <span class="s2">"boxv"</span><span class="p">,</span>
+                <span class="s2">"kernel_size"</span><span class="p">:</span> <span class="mf">3.0</span>
             <span class="p">},</span>
-            <span class="s2">&quot;petra_head_erode&quot;</span><span class="p">:</span>
+            <span class="s2">"petra_head_gcc_dilate"</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="s2">"operation"</span><span class="p">:</span> <span class="s2">"modal"</span><span class="p">,</span>
+                <span class="s2">"kernel_shape"</span><span class="p">:</span> <span class="s2">"boxv"</span><span class="p">,</span>
+                <span class="s2">"kernel_size"</span><span class="p">:</span> <span class="mf">3.0</span>
+            <span class="p">},</span>
+
+            <span class="s2">"petra_head_dilate"</span><span class="p">:</span>
             <span class="p">{</span>
 
-                <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="s2">&quot;ErodeImage (FSL)&quot;</span><span class="p">,</span>
+                <span class="s2">"params"</span><span class="p">:</span> <span class="s2">"DilateImage (FSL)"</span><span class="p">,</span>
 
-                <span class="s2">&quot;kernel_shape&quot;</span> <span class="p">:</span> <span class="s2">&quot;boxv&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;kernel_size&quot;</span> <span class="p">:</span> <span class="mf">13.0</span>
+                <span class="s2">"operation"</span> <span class="p">:</span> <span class="s2">"modal"</span><span class="p">,</span>
+                <span class="s2">"kernel_shape"</span> <span class="p">:</span> <span class="s2">"boxv"</span><span class="p">,</span>
+                <span class="s2">"kernel_size"</span> <span class="p">:</span> <span class="mf">13.0</span>
+            <span class="p">},</span>
+            <span class="s2">"petra_head_erode"</span><span class="p">:</span>
+            <span class="p">{</span>
+
+                <span class="s2">"params"</span><span class="p">:</span> <span class="s2">"ErodeImage (FSL)"</span><span class="p">,</span>
+
+                <span class="s2">"kernel_shape"</span> <span class="p">:</span> <span class="s2">"boxv"</span><span class="p">,</span>
+                <span class="s2">"kernel_size"</span> <span class="p">:</span> <span class="mf">13.0</span>
             <span class="p">}</span>
         <span class="p">},</span>
 
-        <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;will be removed if option _noskullmask is provided in -soft)&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;skullmask_petra_pipe&quot;</span><span class="p">:</span>
+        <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"will be removed if option _noskullmask is provided in -soft)"</span><span class="p">,</span>
+        <span class="s2">"skullmask_petra_pipe"</span><span class="p">:</span>
         <span class="p">{</span>
 
-            <span class="s2">&quot;petra_fast&quot;</span><span class="p">:</span>
+            <span class="s2">"petra_fast"</span><span class="p">:</span>
             <span class="p">{</span>
-                <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="s2">&quot;FAST (FSL)&quot;</span><span class="p">,</span>
+                <span class="s2">"params"</span><span class="p">:</span> <span class="s2">"FAST (FSL)"</span><span class="p">,</span>
             <span class="p">},</span>
 
 
-            <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;The following 2 nodes are OPTIONAL and mutually exclusive&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;If not defined fast pve_0 is used as mask for skull&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;petra_skull_auto_mask&quot;</span><span class="p">:</span>
+            <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"The following 2 nodes are OPTIONAL and mutually exclusive"</span><span class="p">,</span>
+            <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"If not defined fast pve_0 is used as mask for skull"</span><span class="p">,</span>
+            <span class="s2">"petra_skull_auto_mask"</span><span class="p">:</span>
             <span class="p">{</span>
-                <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;OPTIONAL&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="s2">&quot;mask_auto_img (python)&quot;</span><span class="p">,</span>
+                <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"OPTIONAL"</span><span class="p">,</span>
+                <span class="s2">"params"</span><span class="p">:</span> <span class="s2">"mask_auto_img (python)"</span><span class="p">,</span>
 
-                <span class="s2">&quot;kmeans&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
-                <span class="s2">&quot;operation&quot;</span><span class="p">:</span> <span class="s2">&quot;lower&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;index&quot;</span><span class="p">:</span> <span class="mi">2</span>
+                <span class="s2">"kmeans"</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+                <span class="s2">"operation"</span><span class="p">:</span> <span class="s2">"lower"</span><span class="p">,</span>
+                <span class="s2">"index"</span><span class="p">:</span> <span class="mi">2</span>
             <span class="p">},</span>
-            <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;OR&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;petra_skull_mask_thr&quot;</span><span class="p">:</span>
+            <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"OR"</span><span class="p">,</span>
+            <span class="s2">"petra_skull_mask_thr"</span><span class="p">:</span>
             <span class="p">{</span>
-                <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;OPTIONAL&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="s2">&quot;Threshold (FSL)&quot;</span><span class="p">,</span>
+                <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"OPTIONAL"</span><span class="p">,</span>
+                <span class="s2">"params"</span><span class="p">:</span> <span class="s2">"Threshold (FSL)"</span><span class="p">,</span>
 
-                <span class="s2">&quot;thr&quot;</span><span class="p">:</span> <span class="s2">&quot;300&quot;</span>
+                <span class="s2">"thr"</span><span class="p">:</span> <span class="s2">"300"</span>
 
-            <span class="p">},</span>
-
-            <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;The following 2 nodes are OPTIONAL either have to be both defined or none of them&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;allows to cut some elements before gcc is applied&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;are used in -soft _skullnoisypetra&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;petra_skull_gcc_erode&quot;</span><span class="p">:</span>
-            <span class="p">{</span>
-                <span class="s2">&quot;kernel_shape&quot;</span><span class="p">:</span> <span class="s2">&quot;boxv&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;kernel_size&quot;</span><span class="p">:</span> <span class="mf">3.0</span>
-            <span class="p">},</span>
-            <span class="s2">&quot;petra_skull_gcc_dilate&quot;</span><span class="p">:</span>
-            <span class="p">{</span>
-                <span class="s2">&quot;operation&quot;</span><span class="p">:</span> <span class="s2">&quot;modal&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;kernel_shape&quot;</span><span class="p">:</span> <span class="s2">&quot;boxv&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;kernel_size&quot;</span><span class="p">:</span> <span class="mf">3.0</span>
             <span class="p">},</span>
 
-            <span class="s2">&quot;petra_head_erode_skin&quot;</span><span class="p">:</span>
+            <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"The following 2 nodes are OPTIONAL either have to be both defined or none of them"</span><span class="p">,</span>
+            <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"allows to cut some elements before gcc is applied"</span><span class="p">,</span>
+            <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"are used in -soft _skullnoisypetra"</span><span class="p">,</span>
+            <span class="s2">"petra_skull_gcc_erode"</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="s2">"kernel_shape"</span><span class="p">:</span> <span class="s2">"boxv"</span><span class="p">,</span>
+                <span class="s2">"kernel_size"</span><span class="p">:</span> <span class="mf">3.0</span>
+            <span class="p">},</span>
+            <span class="s2">"petra_skull_gcc_dilate"</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="s2">"operation"</span><span class="p">:</span> <span class="s2">"modal"</span><span class="p">,</span>
+                <span class="s2">"kernel_shape"</span><span class="p">:</span> <span class="s2">"boxv"</span><span class="p">,</span>
+                <span class="s2">"kernel_size"</span><span class="p">:</span> <span class="mf">3.0</span>
+            <span class="p">},</span>
+
+            <span class="s2">"petra_head_erode_skin"</span><span class="p">:</span>
             <span class="p">{</span>
 
-                <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;OPTIONAL&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="s2">&quot;ErodeImage (FSL)&quot;</span><span class="p">,</span>
+                <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"OPTIONAL"</span><span class="p">,</span>
+                <span class="s2">"params"</span><span class="p">:</span> <span class="s2">"ErodeImage (FSL)"</span><span class="p">,</span>
 
-                <span class="s2">&quot;kernel_shape&quot;</span> <span class="p">:</span> <span class="s2">&quot;boxv&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;kernel_size&quot;</span> <span class="p">:</span> <span class="mf">14.0</span>
+                <span class="s2">"kernel_shape"</span> <span class="p">:</span> <span class="s2">"boxv"</span><span class="p">,</span>
+                <span class="s2">"kernel_size"</span> <span class="p">:</span> <span class="mf">14.0</span>
             <span class="p">},</span>
 
 
-            <span class="s2">&quot;petra_skull_dilate&quot;</span><span class="p">:</span>
+            <span class="s2">"petra_skull_dilate"</span><span class="p">:</span>
             <span class="p">{</span>
-                <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="s2">&quot;DilateImage (FSL)&quot;</span><span class="p">,</span>
+                <span class="s2">"params"</span><span class="p">:</span> <span class="s2">"DilateImage (FSL)"</span><span class="p">,</span>
 
-                <span class="s2">&quot;operation&quot;</span> <span class="p">:</span> <span class="s2">&quot;modal&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;kernel_shape&quot;</span> <span class="p">:</span> <span class="s2">&quot;boxv&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;kernel_size&quot;</span> <span class="p">:</span> <span class="mf">13.0</span>
+                <span class="s2">"operation"</span> <span class="p">:</span> <span class="s2">"modal"</span><span class="p">,</span>
+                <span class="s2">"kernel_shape"</span> <span class="p">:</span> <span class="s2">"boxv"</span><span class="p">,</span>
+                <span class="s2">"kernel_size"</span> <span class="p">:</span> <span class="mf">13.0</span>
             <span class="p">},</span>
-            <span class="s2">&quot;petra_skull_erode&quot;</span><span class="p">:</span>
+            <span class="s2">"petra_skull_erode"</span><span class="p">:</span>
             <span class="p">{</span>
-                <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="s2">&quot;ErodeImage (FSL)&quot;</span><span class="p">,</span>
+                <span class="s2">"params"</span><span class="p">:</span> <span class="s2">"ErodeImage (FSL)"</span><span class="p">,</span>
 
-                <span class="s2">&quot;kernel_shape&quot;</span> <span class="p">:</span> <span class="s2">&quot;boxv&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;kernel_size&quot;</span> <span class="p">:</span> <span class="mf">13.0</span>
+                <span class="s2">"kernel_shape"</span> <span class="p">:</span> <span class="s2">"boxv"</span><span class="p">,</span>
+                <span class="s2">"kernel_size"</span> <span class="p">:</span> <span class="mf">13.0</span>
             <span class="p">},</span>
 
-            <span class="s2">&quot;petra_skull_fov&quot;</span><span class="p">:</span>
+            <span class="s2">"petra_skull_fov"</span><span class="p">:</span>
             <span class="p">{</span>
-                <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;OPTIONAL&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="s2">&quot;RobustFOV (FSL)&quot;</span><span class="p">,</span>
+                <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"OPTIONAL"</span><span class="p">,</span>
+                <span class="s2">"params"</span><span class="p">:</span> <span class="s2">"RobustFOV (FSL)"</span><span class="p">,</span>
 
-                <span class="s2">&quot;brainsize&quot;</span> <span class="p">:</span> <span class="s2">&quot;45&quot;</span><span class="p">,</span>
+                <span class="s2">"brainsize"</span> <span class="p">:</span> <span class="s2">"45"</span><span class="p">,</span>
             <span class="p">},</span>
     <span class="p">},</span>
 
 
-    <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;Still optional, should be used with caution&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;angio_pipe&quot;</span><span class="p">:</span>
+    <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"Still optional, should be used with caution"</span><span class="p">,</span>
+    <span class="s2">"angio_pipe"</span><span class="p">:</span>
     <span class="p">{</span>
 
-            <span class="s2">&quot;angio_mask_thr&quot;</span><span class="p">:</span>
+            <span class="s2">"angio_mask_thr"</span><span class="p">:</span>
             <span class="p">{</span>
-                <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="s2">&quot;Threshold (FSL)&quot;</span><span class="p">,</span>
+                <span class="s2">"params"</span><span class="p">:</span> <span class="s2">"Threshold (FSL)"</span><span class="p">,</span>
 
-                <span class="s2">&quot;thr&quot;</span><span class="p">:</span> <span class="s2">&quot;300&quot;</span>
+                <span class="s2">"thr"</span><span class="p">:</span> <span class="s2">"300"</span>
 
             <span class="p">},</span>
-            <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;OR&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;angio_auto_mask&quot;</span><span class="p">:</span>
+            <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"OR"</span><span class="p">,</span>
+            <span class="s2">"angio_auto_mask"</span><span class="p">:</span>
             <span class="p">{</span>
-                <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="s2">&quot;FAST (FSL)&quot;</span>
+                <span class="s2">"params"</span><span class="p">:</span> <span class="s2">"FAST (FSL)"</span>
 
 
             <span class="p">}</span>
@@ -1040,7 +1041,7 @@
       
     </p>
     <p>
-        &copy; Copyright 2026, SkullTo3d Developers (macatools). Last updated on 2026-01-09.<br/>
+        &copy; Copyright 2026, SkullTo3d Developers (macatools). Last updated on 2026-10-12.<br/>
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 8.1.3.<br/>
     </p>
   </div>

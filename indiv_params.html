@@ -8,13 +8,14 @@
     <title>Individual Parameters &#8212; SkullTo3d 0.1 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="_static/bootstrap-sphinx.css?v=284a2d1d" />
-    <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css?v=c83e6b79" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-rendered-html.css?v=1277b6f3" />
     <script src="_static/documentation_options.js?v=2709fde1"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/sg-tags.js?v=d80f6fa4"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Tips and tricks" href="tips_tricks.html" />
@@ -239,227 +240,227 @@
 <p>Here is json file with all possible nodes to be tuned in indiv_params; In particular, the specifications of sub- and ses- are mandatory before the specification of nodes; Also note that, as for <a class="reference external" href="https://macatools.github.io/macapype/indiv_params.html">macapype individual paramters</a>, the nodes are specified directly, without specifiying the sub-pipelines they belong to.</p>
 <p>Please refer to the <a class="reference external" href="params">parameter page</a> for more explanation on the possible structure of nodes.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-    <span class="s2">&quot;sub-test&quot;</span><span class="p">:</span>
+    <span class="s2">"sub-test"</span><span class="p">:</span>
     <span class="p">{</span>
-        <span class="s2">&quot;ses-01&quot;</span><span class="p">:</span>
+        <span class="s2">"ses-01"</span><span class="p">:</span>
         <span class="p">{</span>
-            <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;corresponds to skull_t1_pipe (skull_pipe.py)&quot;</span><span class="p">,</span>
+            <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"corresponds to skull_t1_pipe (skull_pipe.py)"</span><span class="p">,</span>
 
-            <span class="s2">&quot;t1_head_mask_thr&quot;</span><span class="p">:</span>
+            <span class="s2">"t1_head_mask_thr"</span><span class="p">:</span>
             <span class="p">{</span>
-                <span class="s2">&quot;thr&quot;</span><span class="p">:</span> <span class="s2">&quot;300&quot;</span>
+                <span class="s2">"thr"</span><span class="p">:</span> <span class="s2">"300"</span>
 
             <span class="p">},</span>
-            <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;OR&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;t1_head_auto_mask&quot;</span><span class="p">:</span>
+            <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"OR"</span><span class="p">,</span>
+            <span class="s2">"t1_head_auto_mask"</span><span class="p">:</span>
             <span class="p">{</span>
-                <span class="s2">&quot;kmeans&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
-                <span class="s2">&quot;operation&quot;</span><span class="p">:</span> <span class="s2">&quot;lower&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;index&quot;</span><span class="p">:</span> <span class="mi">2</span>
+                <span class="s2">"kmeans"</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+                <span class="s2">"operation"</span><span class="p">:</span> <span class="s2">"lower"</span><span class="p">,</span>
+                <span class="s2">"index"</span><span class="p">:</span> <span class="mi">2</span>
             <span class="p">},</span>
 
-            <span class="s2">&quot;t1_head_dilate&quot;</span><span class="p">:</span>
+            <span class="s2">"t1_head_dilate"</span><span class="p">:</span>
             <span class="p">{</span>
-                <span class="s2">&quot;operation&quot;</span> <span class="p">:</span> <span class="s2">&quot;modal&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;kernel_shape&quot;</span> <span class="p">:</span> <span class="s2">&quot;boxv&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;kernel_size&quot;</span> <span class="p">:</span> <span class="mf">13.0</span>
+                <span class="s2">"operation"</span> <span class="p">:</span> <span class="s2">"modal"</span><span class="p">,</span>
+                <span class="s2">"kernel_shape"</span> <span class="p">:</span> <span class="s2">"boxv"</span><span class="p">,</span>
+                <span class="s2">"kernel_size"</span> <span class="p">:</span> <span class="mf">13.0</span>
             <span class="p">},</span>
-            <span class="s2">&quot;t1_head_erode&quot;</span><span class="p">:</span>
+            <span class="s2">"t1_head_erode"</span><span class="p">:</span>
             <span class="p">{</span>
-                <span class="s2">&quot;kernel_shape&quot;</span> <span class="p">:</span> <span class="s2">&quot;boxv&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;kernel_size&quot;</span> <span class="p">:</span> <span class="mf">13.0</span>
-            <span class="p">},</span>
-
-            <span class="s2">&quot;t1_debias&quot;</span><span class="p">:</span>
-            <span class="p">{</span>
-                <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;if t1_debias is defined in params&quot;</span>
+                <span class="s2">"kernel_shape"</span> <span class="p">:</span> <span class="s2">"boxv"</span><span class="p">,</span>
+                <span class="s2">"kernel_size"</span> <span class="p">:</span> <span class="mf">13.0</span>
             <span class="p">},</span>
 
-            <span class="s2">&quot;t1_fast&quot;</span><span class="p">:</span>
+            <span class="s2">"t1_debias"</span><span class="p">:</span>
             <span class="p">{</span>
+                <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"if t1_debias is defined in params"</span>
             <span class="p">},</span>
 
-
-            <span class="s2">&quot;t1_skull_auto_mask&quot;</span><span class="p">:</span>
-            <span class="p">{</span>
-                <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;if t1_skull_auto_mask is defined in params&quot;</span><span class="p">,</span>
-
-                <span class="s2">&quot;kmeans&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
-                <span class="s2">&quot;operation&quot;</span><span class="p">:</span> <span class="s2">&quot;lower&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;index&quot;</span><span class="p">:</span> <span class="mi">2</span>
-            <span class="p">},</span>
-            <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;OR&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;t1_skull_mask_thr&quot;</span><span class="p">:</span>
-            <span class="p">{</span>
-                <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;if t1_skull_mask_thr is defined in params&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;thr&quot;</span><span class="p">:</span> <span class="s2">&quot;300&quot;</span>
-
-            <span class="p">},</span>
-
-            <span class="s2">&quot;t1_head_erode_skin&quot;</span><span class="p">:</span>
-            <span class="p">{</span>
-
-                <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;if t1_head_erode_skin is defined in params&quot;</span><span class="p">,</span>
-
-                <span class="s2">&quot;kernel_shape&quot;</span> <span class="p">:</span> <span class="s2">&quot;boxv&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;kernel_size&quot;</span> <span class="p">:</span> <span class="mf">14.0</span>
-            <span class="p">},</span>
-            <span class="s2">&quot;t1_skull_dilate&quot;</span><span class="p">:</span>
-            <span class="p">{</span>
-                <span class="s2">&quot;operation&quot;</span> <span class="p">:</span> <span class="s2">&quot;modal&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;kernel_shape&quot;</span> <span class="p">:</span> <span class="s2">&quot;boxv&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;kernel_size&quot;</span> <span class="p">:</span> <span class="mf">13.0</span>
-            <span class="p">},</span>
-            <span class="s2">&quot;t1_skull_erode&quot;</span><span class="p">:</span>
-            <span class="p">{</span>
-                <span class="s2">&quot;kernel_shape&quot;</span> <span class="p">:</span> <span class="s2">&quot;boxv&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;kernel_size&quot;</span> <span class="p">:</span> <span class="mf">13.0</span>
-            <span class="p">},</span>
-            <span class="s2">&quot;t1_skull_fov&quot;</span><span class="p">:</span>
-            <span class="p">{</span>
-                <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;if t1_skull_fov is defined in params&quot;</span><span class="p">,</span>
-
-                <span class="s2">&quot;brainsize&quot;</span><span class="p">:</span> <span class="mi">45</span>
-            <span class="p">},</span>
-
-
-            <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;corresponds to skull_ct_pipe (skull_pipe.py)&quot;</span><span class="p">,</span>
-
-            <span class="s2">&quot;ct_head_mask_thr&quot;</span><span class="p">:</span>
-            <span class="p">{</span>
-                <span class="s2">&quot;thr&quot;</span><span class="p">:</span> <span class="s2">&quot;300&quot;</span>
-
-            <span class="p">},</span>
-            <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;OR&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;ct_head_auto_mask&quot;</span><span class="p">:</span>
-            <span class="p">{</span>
-                <span class="s2">&quot;kmeans&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
-                <span class="s2">&quot;operation&quot;</span><span class="p">:</span> <span class="s2">&quot;lower&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;index&quot;</span><span class="p">:</span> <span class="mi">2</span>
-            <span class="p">},</span>
-
-            <span class="s2">&quot;ct_skull_dilate&quot;</span><span class="p">:</span>
-            <span class="p">{</span>
-                <span class="s2">&quot;operation&quot;</span> <span class="p">:</span> <span class="s2">&quot;modal&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;kernel_shape&quot;</span> <span class="p">:</span> <span class="s2">&quot;boxv&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;kernel_size&quot;</span> <span class="p">:</span> <span class="mf">13.0</span>
-            <span class="p">},</span>
-            <span class="s2">&quot;ct_skull_erode&quot;</span><span class="p">:</span>
-            <span class="p">{</span>
-                <span class="s2">&quot;kernel_shape&quot;</span> <span class="p">:</span> <span class="s2">&quot;boxv&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;kernel_size&quot;</span> <span class="p">:</span> <span class="mf">13.0</span>
-            <span class="p">},</span>
-
-            <span class="s2">&quot;ct_skull_fov&quot;</span><span class="p">:</span>
-            <span class="p">{</span>
-                <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;if ct_skull_fov is defined in params&quot;</span><span class="p">,</span>
-
-                <span class="s2">&quot;brainsize&quot;</span><span class="p">:</span> <span class="mi">45</span>
-            <span class="p">},</span>
-
-
-            <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;corresponds to skull_petra_pipe (skull_pipe.py)&quot;</span><span class="p">,</span>
-
-            <span class="s2">&quot;avg_reorient_pipe&quot;</span><span class="p">:</span>
-            <span class="p">{</span>
-
-                <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;if avg_reorient_pipe is defined in params&quot;</span><span class="p">,</span>
-
-            <span class="p">},</span>
-
-            <span class="s2">&quot;petra_head_mask_thr&quot;</span><span class="p">:</span>
-            <span class="p">{</span>
-                <span class="s2">&quot;thr&quot;</span><span class="p">:</span> <span class="s2">&quot;300&quot;</span>
-
-            <span class="p">},</span>
-            <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;OR&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;petra_head_auto_mask&quot;</span><span class="p">:</span>
-            <span class="p">{</span>
-                <span class="s2">&quot;kmeans&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
-                <span class="s2">&quot;operation&quot;</span><span class="p">:</span> <span class="s2">&quot;lower&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;index&quot;</span><span class="p">:</span> <span class="mi">2</span>
-            <span class="p">},</span>
-
-
-            <span class="s2">&quot;petra_head_dilate&quot;</span><span class="p">:</span>
-            <span class="p">{</span>
-                <span class="s2">&quot;operation&quot;</span> <span class="p">:</span> <span class="s2">&quot;modal&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;kernel_shape&quot;</span> <span class="p">:</span> <span class="s2">&quot;boxv&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;kernel_size&quot;</span> <span class="p">:</span> <span class="mf">13.0</span>
-            <span class="p">},</span>
-            <span class="s2">&quot;petra_head_erode&quot;</span><span class="p">:</span>
-            <span class="p">{</span>
-                <span class="s2">&quot;kernel_shape&quot;</span> <span class="p">:</span> <span class="s2">&quot;boxv&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;kernel_size&quot;</span> <span class="p">:</span> <span class="mf">13.0</span>
-            <span class="p">},</span>
-
-            <span class="s2">&quot;petra_debias&quot;</span><span class="p">:</span>
-            <span class="p">{</span>
-                <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;if petra_debias is defined in params&quot;</span>
-            <span class="p">},</span>
-
-            <span class="s2">&quot;petra_fast&quot;</span><span class="p">:</span>
+            <span class="s2">"t1_fast"</span><span class="p">:</span>
             <span class="p">{</span>
             <span class="p">},</span>
 
 
-            <span class="s2">&quot;petra_skull_auto_mask&quot;</span><span class="p">:</span>
+            <span class="s2">"t1_skull_auto_mask"</span><span class="p">:</span>
             <span class="p">{</span>
-                <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;if petra_skull_auto_mask is defined in params&quot;</span><span class="p">,</span>
+                <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"if t1_skull_auto_mask is defined in params"</span><span class="p">,</span>
 
-                <span class="s2">&quot;kmeans&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
-                <span class="s2">&quot;operation&quot;</span><span class="p">:</span> <span class="s2">&quot;lower&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;index&quot;</span><span class="p">:</span> <span class="mi">2</span>
+                <span class="s2">"kmeans"</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+                <span class="s2">"operation"</span><span class="p">:</span> <span class="s2">"lower"</span><span class="p">,</span>
+                <span class="s2">"index"</span><span class="p">:</span> <span class="mi">2</span>
             <span class="p">},</span>
-            <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;OR&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;petra_skull_mask_thr&quot;</span><span class="p">:</span>
+            <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"OR"</span><span class="p">,</span>
+            <span class="s2">"t1_skull_mask_thr"</span><span class="p">:</span>
             <span class="p">{</span>
-                <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;if petra_skull_mask_thr is defined in params&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;thr&quot;</span><span class="p">:</span> <span class="s2">&quot;300&quot;</span>
+                <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"if t1_skull_mask_thr is defined in params"</span><span class="p">,</span>
+                <span class="s2">"thr"</span><span class="p">:</span> <span class="s2">"300"</span>
 
-            <span class="p">},</span>
-
-            <span class="s2">&quot;petra_head_erode_skin&quot;</span><span class="p">:</span>
-            <span class="p">{</span>
-
-                <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;if petra_head_erode_skin is defined in params&quot;</span><span class="p">,</span>
-
-                <span class="s2">&quot;kernel_shape&quot;</span> <span class="p">:</span> <span class="s2">&quot;boxv&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;kernel_size&quot;</span> <span class="p">:</span> <span class="mf">14.0</span>
             <span class="p">},</span>
 
-
-            <span class="s2">&quot;petra_skull_dilate&quot;</span><span class="p">:</span>
+            <span class="s2">"t1_head_erode_skin"</span><span class="p">:</span>
             <span class="p">{</span>
-                <span class="s2">&quot;operation&quot;</span> <span class="p">:</span> <span class="s2">&quot;modal&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;kernel_shape&quot;</span> <span class="p">:</span> <span class="s2">&quot;boxv&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;kernel_size&quot;</span> <span class="p">:</span> <span class="mf">13.0</span>
+
+                <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"if t1_head_erode_skin is defined in params"</span><span class="p">,</span>
+
+                <span class="s2">"kernel_shape"</span> <span class="p">:</span> <span class="s2">"boxv"</span><span class="p">,</span>
+                <span class="s2">"kernel_size"</span> <span class="p">:</span> <span class="mf">14.0</span>
             <span class="p">},</span>
-            <span class="s2">&quot;petra_skull_erode&quot;</span><span class="p">:</span>
+            <span class="s2">"t1_skull_dilate"</span><span class="p">:</span>
             <span class="p">{</span>
-                <span class="s2">&quot;kernel_shape&quot;</span> <span class="p">:</span> <span class="s2">&quot;boxv&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;kernel_size&quot;</span> <span class="p">:</span> <span class="mf">13.0</span>
+                <span class="s2">"operation"</span> <span class="p">:</span> <span class="s2">"modal"</span><span class="p">,</span>
+                <span class="s2">"kernel_shape"</span> <span class="p">:</span> <span class="s2">"boxv"</span><span class="p">,</span>
+                <span class="s2">"kernel_size"</span> <span class="p">:</span> <span class="mf">13.0</span>
             <span class="p">},</span>
-
-            <span class="s2">&quot;petra_skull_fov&quot;</span><span class="p">:</span>
+            <span class="s2">"t1_skull_erode"</span><span class="p">:</span>
             <span class="p">{</span>
-                <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;if petra_skull_fov is defined in params&quot;</span><span class="p">,</span>
+                <span class="s2">"kernel_shape"</span> <span class="p">:</span> <span class="s2">"boxv"</span><span class="p">,</span>
+                <span class="s2">"kernel_size"</span> <span class="p">:</span> <span class="mf">13.0</span>
+            <span class="p">},</span>
+            <span class="s2">"t1_skull_fov"</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"if t1_skull_fov is defined in params"</span><span class="p">,</span>
 
-                <span class="s2">&quot;brainsize&quot;</span><span class="p">:</span> <span class="mi">45</span>
+                <span class="s2">"brainsize"</span><span class="p">:</span> <span class="mi">45</span>
             <span class="p">},</span>
 
 
-            <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;corresponds to angio_pipe (angio_pipe.py)&quot;</span><span class="p">,</span>
+            <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"corresponds to skull_ct_pipe (skull_pipe.py)"</span><span class="p">,</span>
 
-            <span class="s2">&quot;angio_mask_thr&quot;</span><span class="p">:</span>
+            <span class="s2">"ct_head_mask_thr"</span><span class="p">:</span>
             <span class="p">{</span>
-                <span class="s2">&quot;thr&quot;</span><span class="p">:</span> <span class="s2">&quot;300&quot;</span>
+                <span class="s2">"thr"</span><span class="p">:</span> <span class="s2">"300"</span>
 
             <span class="p">},</span>
-            <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;OR&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;angio_auto_mask&quot;</span><span class="p">:</span>
+            <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"OR"</span><span class="p">,</span>
+            <span class="s2">"ct_head_auto_mask"</span><span class="p">:</span>
             <span class="p">{</span>
-                <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="s2">&quot;FAST (FSL)&quot;</span>
+                <span class="s2">"kmeans"</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+                <span class="s2">"operation"</span><span class="p">:</span> <span class="s2">"lower"</span><span class="p">,</span>
+                <span class="s2">"index"</span><span class="p">:</span> <span class="mi">2</span>
+            <span class="p">},</span>
+
+            <span class="s2">"ct_skull_dilate"</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="s2">"operation"</span> <span class="p">:</span> <span class="s2">"modal"</span><span class="p">,</span>
+                <span class="s2">"kernel_shape"</span> <span class="p">:</span> <span class="s2">"boxv"</span><span class="p">,</span>
+                <span class="s2">"kernel_size"</span> <span class="p">:</span> <span class="mf">13.0</span>
+            <span class="p">},</span>
+            <span class="s2">"ct_skull_erode"</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="s2">"kernel_shape"</span> <span class="p">:</span> <span class="s2">"boxv"</span><span class="p">,</span>
+                <span class="s2">"kernel_size"</span> <span class="p">:</span> <span class="mf">13.0</span>
+            <span class="p">},</span>
+
+            <span class="s2">"ct_skull_fov"</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"if ct_skull_fov is defined in params"</span><span class="p">,</span>
+
+                <span class="s2">"brainsize"</span><span class="p">:</span> <span class="mi">45</span>
+            <span class="p">},</span>
+
+
+            <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"corresponds to skull_petra_pipe (skull_pipe.py)"</span><span class="p">,</span>
+
+            <span class="s2">"avg_reorient_pipe"</span><span class="p">:</span>
+            <span class="p">{</span>
+
+                <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"if avg_reorient_pipe is defined in params"</span><span class="p">,</span>
+
+            <span class="p">},</span>
+
+            <span class="s2">"petra_head_mask_thr"</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="s2">"thr"</span><span class="p">:</span> <span class="s2">"300"</span>
+
+            <span class="p">},</span>
+            <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"OR"</span><span class="p">,</span>
+            <span class="s2">"petra_head_auto_mask"</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="s2">"kmeans"</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+                <span class="s2">"operation"</span><span class="p">:</span> <span class="s2">"lower"</span><span class="p">,</span>
+                <span class="s2">"index"</span><span class="p">:</span> <span class="mi">2</span>
+            <span class="p">},</span>
+
+
+            <span class="s2">"petra_head_dilate"</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="s2">"operation"</span> <span class="p">:</span> <span class="s2">"modal"</span><span class="p">,</span>
+                <span class="s2">"kernel_shape"</span> <span class="p">:</span> <span class="s2">"boxv"</span><span class="p">,</span>
+                <span class="s2">"kernel_size"</span> <span class="p">:</span> <span class="mf">13.0</span>
+            <span class="p">},</span>
+            <span class="s2">"petra_head_erode"</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="s2">"kernel_shape"</span> <span class="p">:</span> <span class="s2">"boxv"</span><span class="p">,</span>
+                <span class="s2">"kernel_size"</span> <span class="p">:</span> <span class="mf">13.0</span>
+            <span class="p">},</span>
+
+            <span class="s2">"petra_debias"</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"if petra_debias is defined in params"</span>
+            <span class="p">},</span>
+
+            <span class="s2">"petra_fast"</span><span class="p">:</span>
+            <span class="p">{</span>
+            <span class="p">},</span>
+
+
+            <span class="s2">"petra_skull_auto_mask"</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"if petra_skull_auto_mask is defined in params"</span><span class="p">,</span>
+
+                <span class="s2">"kmeans"</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+                <span class="s2">"operation"</span><span class="p">:</span> <span class="s2">"lower"</span><span class="p">,</span>
+                <span class="s2">"index"</span><span class="p">:</span> <span class="mi">2</span>
+            <span class="p">},</span>
+            <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"OR"</span><span class="p">,</span>
+            <span class="s2">"petra_skull_mask_thr"</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"if petra_skull_mask_thr is defined in params"</span><span class="p">,</span>
+                <span class="s2">"thr"</span><span class="p">:</span> <span class="s2">"300"</span>
+
+            <span class="p">},</span>
+
+            <span class="s2">"petra_head_erode_skin"</span><span class="p">:</span>
+            <span class="p">{</span>
+
+                <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"if petra_head_erode_skin is defined in params"</span><span class="p">,</span>
+
+                <span class="s2">"kernel_shape"</span> <span class="p">:</span> <span class="s2">"boxv"</span><span class="p">,</span>
+                <span class="s2">"kernel_size"</span> <span class="p">:</span> <span class="mf">14.0</span>
+            <span class="p">},</span>
+
+
+            <span class="s2">"petra_skull_dilate"</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="s2">"operation"</span> <span class="p">:</span> <span class="s2">"modal"</span><span class="p">,</span>
+                <span class="s2">"kernel_shape"</span> <span class="p">:</span> <span class="s2">"boxv"</span><span class="p">,</span>
+                <span class="s2">"kernel_size"</span> <span class="p">:</span> <span class="mf">13.0</span>
+            <span class="p">},</span>
+            <span class="s2">"petra_skull_erode"</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="s2">"kernel_shape"</span> <span class="p">:</span> <span class="s2">"boxv"</span><span class="p">,</span>
+                <span class="s2">"kernel_size"</span> <span class="p">:</span> <span class="mf">13.0</span>
+            <span class="p">},</span>
+
+            <span class="s2">"petra_skull_fov"</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"if petra_skull_fov is defined in params"</span><span class="p">,</span>
+
+                <span class="s2">"brainsize"</span><span class="p">:</span> <span class="mi">45</span>
+            <span class="p">},</span>
+
+
+            <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"corresponds to angio_pipe (angio_pipe.py)"</span><span class="p">,</span>
+
+            <span class="s2">"angio_mask_thr"</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="s2">"thr"</span><span class="p">:</span> <span class="s2">"300"</span>
+
+            <span class="p">},</span>
+            <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"OR"</span><span class="p">,</span>
+            <span class="s2">"angio_auto_mask"</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="s2">"params"</span><span class="p">:</span> <span class="s2">"FAST (FSL)"</span>
             <span class="p">}</span>
         <span class="p">}</span>
     <span class="p">}</span>
@@ -481,7 +482,7 @@
       
     </p>
     <p>
-        &copy; Copyright 2026, SkullTo3d Developers (macatools). Last updated on 2026-01-09.<br/>
+        &copy; Copyright 2026, SkullTo3d Developers (macatools). Last updated on 2026-10-12.<br/>
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 8.1.3.<br/>
     </p>
   </div>
