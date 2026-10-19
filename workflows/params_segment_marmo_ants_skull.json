@@ -1,7 +1,7 @@
 {
     "general":
     {
-        "template_name": "MBM_v3.0.1_6seg_stereoINT"
+        "template_name": "template_MBM_space-stereoINTv2"
     },
     "short_preparation_pipe":
     {
@@ -16,14 +16,6 @@
             {
                 "rig_only_flag":true
             }
-        },
-        "pad_template":
-        {
-            "operation" : "PadImage",
-            "op2" : "90"
-        },
-        "denoise":
-        {
         },
         "fast":
         {
