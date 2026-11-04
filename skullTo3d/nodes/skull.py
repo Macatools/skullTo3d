@@ -139,3 +139,62 @@ def mask_auto_img(img_file, operation, index, sample_bins=30, num_clusters=3):
     nib.save(mask_img, mask_img_file)
 
     return mask_img_file
+
+
+
+def apply_masked_li_thresh(orig_img_file, mask_file):
+
+    import os
+    from skimage.filters import threshold_li
+    import nibabel as nib
+    import numpy as np
+
+    from nipype.utils.filemanip import split_filename as split_f
+
+    # orig image
+    orig_img = nib.load(orig_img_file)
+
+    data_orig = orig_img.get_fdata()
+    header_orig = orig_img.header
+    affine_orig = orig_img.affine
+
+    print("Orig img shape:", data_orig.shape)
+
+    print("Min/max values orig img :", np.min(data_orig), np.max(data_orig))
+
+    lithresh = threshold_li(data_orig)
+
+    print(lithresh)
+
+    # redaing mask
+    mask_img = nib.load(mask_file)
+
+    data_mask = mask_img.get_fdata()
+
+    masked_orig_data = data_orig[data_mask != 0]
+
+    # li_thresh with mask_data
+    lithresh = threshold_li(masked_orig_data)
+
+    print(lithresh)
+
+    img_lithresh_data = data_orig.astype(np.int16)
+
+    img_lithresh_data[data_orig <= lithresh] = 0
+    img_lithresh_data[lithresh < data_orig] = 1
+
+
+    print("Min/max values after lithresh:", np.min(img_lithresh_data),
+          np.max(img_lithresh_data))
+
+    # saving lithresh image
+    fpath, fname, ext = split_f(orig_img_file)
+    lithr_img_file = os.path.abspath(fname + "_lithresh" + ext)
+    img_lithresh = nib.Nifti1Image(img_lithresh_data,
+                                   affine=affine_orig,
+                                   header=header_orig)
+    nib.save(img_lithresh, lithr_img_file)
+
+    return lithr_img_file
+
+

@@ -1134,10 +1134,11 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
             pref_deriv = "sub-%(sub)s_ses-%(ses)s"
             parse_str = r"sub-(?P<sub>\w*)_ses-(?P<ses>\w*)_.*"
 
-        rename_all_brain_derivatives(
-            params, main_workflow, segment_brain_pipe,
-            datasink, pref_deriv, parse_str, pad, ssoft,
-            brain_dt)
+        if len(brain_dt):
+            rename_all_brain_derivatives(
+                params, main_workflow, segment_brain_pipe,
+                datasink, pref_deriv, parse_str, pad, ssoft,
+                brain_dt)
 
         if "petra" in skull_dt and "skull_petra_pipe" in params.keys():
             rename_all_skull_petra_derivatives(
@@ -1374,32 +1375,34 @@ def create_main_workflow(cmd, data_dir, process_dir, soft, species, subjects,
     params["full_command"] = cmd
 
     # saving real params.json
-    real_params_file = op.join(process_dir, wf_name, "real_params.json")
+    real_params_file = op.join(process_dir, wf_name, "real_params0.json")
 
     if os.path.exists(real_params_file):
         counter = 0
         while os.path.exists(real_params_file):
+            counter += 1
             real_params_file = op.join(
                 process_dir, wf_name, f"real_params{counter}.json")
-            counter += 1
 
     with open(real_params_file, 'w+') as fp:
         json.dump(params, fp, sort_keys=True, indent=4)
 
     if deriv:
+
         try:
             os.makedirs(op.join(process_dir, datasink_name))
         except OSError:
             print("process_dir {} already exists".format(process_dir))
 
         real_params_file = op.join(process_dir,
-                                   datasink_name, "real_params.json")
+                                   datasink_name, "real_params0.json")
+
         if os.path.exists(real_params_file):
             counter = 0
             while os.path.exists(real_params_file):
-                real_params_file = op.join(
-                    process_dir, wf_name, f"real_params{counter}.json")
                 counter += 1
+                real_params_file = op.join(process_dir,
+                    datasink_name, f"real_params{counter}.json")
 
         with open(real_params_file, 'w+') as fp:
             json.dump(params, fp, sort_keys=True, indent=4)
